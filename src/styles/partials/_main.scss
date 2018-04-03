@@ -1,0 +1,258 @@
+.main {
+    width: calc( 100% - #{$sidebar-expanded});
+    position: fixed;
+    .login &,
+    .print & {
+        opacity: 1;
+    }
+    @media screen and (max-width: $desktop-min) {
+        width: calc( 100% - #{$sidebar-collapsed});
+        &:before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba($color-black, 0.5);
+            z-index: 110;
+            transition: opacity $transition-time;
+        }
+    }
+    .collapsed & {
+        overflow: auto;
+        &:before {
+            opacity: 0;
+            width: calc( 100% - #{$sidebar-collapsed});
+            pointer-events: none;
+        }
+    }
+    height: 100vh;
+    padding-top: $header-height;
+    // transition: $transition-time/2;
+    .collapsed & {
+        width: calc( 100% - #{$sidebar-collapsed});
+    }
+    .content {
+        position: relative;
+        height: calc( 100vh - (2 * #{$padding}) - #{$header-height});
+        background: rgba($color-dark-gray, 0.8);
+        box-shadow: 0 0 10px rgba($color-black, 0.5);
+        border-radius: 2px;
+        overflow: hidden;
+        padding-bottom: $padding * 4;
+        > header {
+            position: relative;
+            z-index: 103;
+            padding: 0 $padding;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: $content-header-height;
+            box-shadow: 0 2px 20px rgba($color-dark-gray, 0.8);
+            @media screen and (max-width: $desktop-min) {
+                display: block;
+                height: 100px;
+                text-align: center;
+                h2 {
+                    margin: 0 auto;
+                    justify-content: center;
+                }
+                > nav {
+                    display: block;
+                    margin: 0 auto;
+                }
+            }
+            h2.title {
+                font-size: 28px;
+                color: $color-accent;
+                display: flex;
+                align-items: center;
+                text-transform: uppercase;
+                margin: 0 auto 0 0;
+                letter-spacing: 1px;
+                .detail {
+                    font-size: 18px;
+                    color: $color-white;
+                    margin-left: $padding;
+                    text-transform: none;
+                }
+            }
+            @media screen and (max-width: $desktop-min) {
+                padding: 5px 10px;
+                height: 80px;
+                h2.title {
+                    height: 40px;
+                    display: block;
+                    text-align: left;
+                    font-size: 24px;
+                    margin-left: 10px;
+                    margin-top: -2px;
+                    .detail {
+                        margin-left: 10px;
+                        font-size: 18px;
+                    }
+                }
+            }
+        }
+        &.none {
+            display: none;
+        }
+        @media screen and (max-width: $desktop-min) {
+            height: calc( 100vh - #{$header-height});
+        }
+        &:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            height: 3*$padding;
+            left: 0;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba($color-dark-gray, 0) 0%, rgba($color-dark-gray, 0.5) 100%);
+        }
+    }
+    @media print {
+        width: 100%;
+    }
+}
+
+.pagination {
+    display: none;
+    margin-left: -10px;
+    margin-top: 4px;
+    z-index: 300;
+    a {
+        display: inline-block;
+        margin-right: 10px;
+        line-height: 55px;
+        padding: 0;
+        vertical-align: middle;
+        cursor: pointer;
+        text-align: center;
+        i {
+            display: flex;
+            font-size: 30px;
+            color: #666666;
+            text-align: center;
+            border-radius: 17px;
+        }
+        &:hover i {
+            color: $color-white;
+        }
+    }
+    .MONTH & {
+        display: inline-block;
+    }
+    @media screen and (max-width: $desktop-min) {
+        position: absolute;
+        left: 23px;
+        top: 7px;
+        a {
+            i {
+                font-size: 24px;
+            }
+        }
+    }
+}
+
+.content-frame {
+    background: url('/images/bg-starburst-alt.png') left top fixed;
+    overflow-y: auto;
+    min-height: calc(100vh - #{$header-height});
+    padding: $padding;
+    @media screen and (max-width: $desktop-min) {
+        padding: 0;
+    }
+}
+
+.MONTH {
+    #trigger-TIMELINE {
+        display: none;
+    }
+    @media screen and (max-width: $desktop-min) {
+        h2.title {
+            padding-left: 60px;
+        }
+    }
+}
+
+.preloader {
+    position: absolute;
+    width: 200px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    svg {
+        width: 100%;
+        height: auto;
+    }
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: .2;
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: .2;
+    }
+}
+
+
+// .event {
+//    &:before {
+//         content: '';
+//         display: inline-block;
+//         position: absolute;
+//         right: 0;
+//         top: 0;
+//         padding: 1px 5px;
+//         min-width: 100px;
+//         text-align: right;
+//         margin: 10px;
+//         white-space: nowrap;
+//         font-size: 9px;
+//         background: $color-dark-gray;
+//         border-right: solid 5px black;
+//         letter-spacing: 1px;
+//     }
+
+//     &.RATE:before {
+//         content: 'Rate';
+//         border-right-color: $color-Rate;
+//     }
+
+//     &.PACKAGE:before {
+//         content: 'Package';
+//         border-right-color: $color-Package;
+//     }
+
+//     &.REWARDS:before {
+//         content: 'Rewards';
+//         border-right-color: $color-Rewards;
+//     }
+
+//     &.OPENING:before {
+//         content: 'Opening';
+//         border-right-color: $color-Opening;
+//     }
+
+//     &.BRANDING:before {
+//         content: 'Branding';
+//         border-right-color: $color-Branding;
+//     }
+
+//     &.OTHER-PROMOTION:before {
+//         content: 'Other';
+//         border-right-color: $color-Other;
+//     }
+
+//     &.NO-PROMOTION:before {
+//         content: 'No Promotion';
+//         border-right-color: $color-No-Promotion;
+//     }
+// }

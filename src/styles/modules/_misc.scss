@@ -1,0 +1,138 @@
+@include selection($selection-bg: #333, $selection-c: #fff, $selection-ts: none);
+
+/** initial setup **/
+
+.nano {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 101;
+}
+
+.nano > .nano-content {
+    position: absolute;
+    overflow: scroll;
+    overflow-x: hidden;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transition: $transition-time;
+}
+
+.nano > .nano-content:focus {
+    outline: thin dotted;
+}
+
+.nano > .nano-content::-webkit-scrollbar {
+    display: none;
+}
+
+.has-scrollbar > .nano-content::-webkit-scrollbar {
+    display: block;
+}
+
+.nano > .nano-pane {
+    z-index: 200;
+    background: rgba($color-black, .25);
+    position: absolute;
+    width: $padding/2;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    visibility: hidden\9;
+    /* Target only IE7 and IE8 with this hack */
+    opacity: .01;
+    -webkit-transition: .2s;
+    -moz-transition: .2s;
+    -o-transition: .2s;
+    transition: .2s;
+    // -moz-border-radius    : 5px;
+    // -webkit-border-radius : 5px;
+    // border-radius         : 5px;
+}
+
+.nano > .nano-pane > .nano-slider {
+    background: darken($color-light-gray, 10%);
+    background: rgba(darken($color-light-gray, 10%), .5);
+    position: relative;
+    margin: 0 1px;
+    // transition: $transition-time;
+    // -moz-border-radius    : 3px;
+    // -webkit-border-radius : 3px;
+    // border-radius         : 3px;
+}
+
+.nano:hover > .nano-pane,
+.nano-pane.active,
+.nano-pane.flashed {
+    visibility: visible\9;
+    /* Target only IE7 and IE8 with this hack */
+    opacity: 0.99;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.tooltips,
+.tooltips-US,
+.tooltips-US-WEST,
+.tooltips-US-EAST,
+.tooltips-CALA,
+.tooltips-CANADA,
+.tooltips-MEA,
+.tooltips-GLOBAL,
+.tooltips-light {
+    border-radius: 2px;
+    border: 0;
+    background: $color-darkish-gray;
+    color: $color-white;
+    .tooltipster-content {
+        max-width: 400px;
+        font-size: 12px;
+        letter-spacing: 1px;
+        line-height: 16px;
+        padding: 8px 10px;
+        box-shadow: 0 2px 20px rgba($color-darker-gray, 0.5);
+    }
+}
+
+.tooltipster-arrow {
+    z-index: 10;
+}
+
+.tooltips-light {
+    background: $color-lightest-gray;
+    color: $color-dark-gray;
+}
+
+
+.tooltips-US {
+    background: $color-US;
+}
+
+.tooltips-US-EAST {
+    background: $color-US-EAST;
+}
+
+.tooltips-US-WEST {
+    background: $color-US-WEST;
+}
+
+.tooltips-CALA {
+    background: $color-CALA;
+}
+
+.tooltips-CANADA {
+    background: $color-CANADA;
+}
+
+.tooltips-MEA {
+    background: $color-PORTFOLIO;
+}
+
+.tooltips-GLOBAL {
+    background: $color-BRAND;
+}

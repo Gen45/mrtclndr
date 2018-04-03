@@ -1,0 +1,625 @@
+.grid-view {
+    height: calc( 100% - #{$header-height});
+    overflow-y: scroll;
+    .events-wrapper {
+        min-height: 100%;
+        padding: $padding/2;
+        max-width: 100%;
+        margin: 0 auto;
+        // display: flex;
+        z-index: 101;
+        // height: 100vh;
+        // overflow: scroll;
+        // flex-wrap: wrap;
+        // align-items: flex-start;
+    }
+    .event-timeline,
+    .months-bar {
+        display: none;
+    }
+    .event {
+        background: $color-white;
+        margin: $padding/2;
+        position: relative;
+        vertical-align: top;
+        // transition: $transition-time;
+        display: inline-block;
+        color: $color-dark-gray;
+        overflow: hidden;
+        // height: 450px;
+
+        .event-inner {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        .event-channels {
+            // align-self: flex-start;
+            background: inherit;
+            // overflow: hidden;
+            span {
+                min-height: $event-card-header;
+                height: auto;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                color: $color-white;
+                align-items: center;
+                background: inherit;
+                &.channels {
+                    // overflow: hidden;
+                    max-width: 100%;
+                    &.other-channels {
+                        max-width: calc(100% - 45px);
+                    }
+                }
+                &.more {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 30px;
+                }
+            }
+            i {
+                background: inherit;
+                min-width: $event-card-header;
+                height: $event-card-header;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 14px;
+                transition: $transition-time / 2;
+                position: relative;
+                &:hover {
+                    background: rgba($color-darker-gray, 0.2);
+                }
+            }
+        }
+        .event-info {
+            position: relative;
+            text-align: center;
+            line-height: 1.3;
+
+            flex-grow: 1;
+            padding: $padding;
+            padding-top: $padding*3;
+            padding-bottom: $padding/2;
+
+            .event-date {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+            }
+
+            .info-wrapper {
+                margin: 0 auto;
+                max-width: 240px;
+            }
+            .more {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                opacity: 0;
+                transform: scale(0.5);
+                transition: opacity $transition-time/2;
+                &:after {
+                    content: '\e99d';
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    width: 30px;
+                    height: 30px;
+                    color: $color-lighter-gray;
+                    font: normal normal normal 16px/1 'Nucleo Mini';
+                    line-height: 30px;
+                    vertical-align: middle;
+                    text-align: center;
+                    transition: $transition-time/2;
+                }
+                &:hover {
+                    &:after {
+                        color: $color-light-gray;
+                        // transform: scale( 1.2);
+                        cursor: pointer;
+                    }
+                }
+            }
+            @media screen and (max-width: $desktop-min) {
+                padding: $padding/2;
+                padding-top: $padding*1.5;
+            }
+        }
+        .brands {
+            min-height: 50px;
+            position: relative;
+            background: $color-medium-gray;
+            width: 100%;
+            padding: $padding/4;
+            display: flex;
+            align-items: center;
+            // align-self: flex-end;
+            justify-content: center;
+            flex-wrap: wrap;
+            .brand {
+                display: flex;
+
+                svg, img {
+                    position: relative;
+                    height: 45px;
+                    width: auto;
+
+                    .st0 {
+                        fill: $color-black;
+                    }
+                }
+            }
+        }
+        .event-dates {
+            // position: absolute;
+            position: relative;
+            top: $padding/3;
+            // top: $event-card-header + $padding/3;
+            width: 100%;
+            z-index: 1;
+            .start,
+            .end {
+                content: '';
+                position: absolute;
+                font-size: 10px;
+                text-align: center;
+                white-space: nowrap;
+                text-transform: uppercase;
+                color: $color-medium-gray;
+                font-weight: 400;
+                strong {
+                    font-size: 50%;
+                    display: block;
+                    line-height: 1;
+                    font-weight: normal;
+                    color: $color-light-gray;
+                }
+            }
+            .start {
+                content: attr(data-date-start);
+                left: $padding/2;
+                right: auto;
+                font-size: 100%;
+                text-align: left;
+            }
+            .end {
+                content: attr(data-date-end);
+                right: $padding/2;
+                left: auto;
+                font-size: 100%;
+                text-align: right;
+            }
+            &.event-dates__STAY {
+                top: 40px;
+            }
+
+            $arrow-length: 100px;
+
+            &:before {
+                content: '';
+                position: absolute;
+                width: calc(100% - #{$arrow-length * 2});
+                height: 15px;
+                border-top: 1px solid lightgray;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 20px;
+            }
+            &:after {
+                content: '';
+                position: absolute;
+                width: 6px;
+                height: 6px;
+                top: 17px;
+                right: $arrow-length;
+                transform:  rotate(45deg);
+                border-top: 1px solid lightgray;
+                border-right: 1px solid lightgray;
+            }
+        }
+        &:hover {
+            .more {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    }
+    .US .event-channels {
+        background: $color-US;
+    }
+    .US-WEST .event-channels {
+        background: $color-US-WEST;
+    }
+    .US-EAST .event-channels {
+        background: $color-US-EAST;
+    }
+    .CALA .event-channels {
+        background: $color-CALA;
+    }
+    .CANADA .event-channels {
+        background: $color-CANADA;
+    }
+    .BRAND .event-channels {
+        background: $color-BRAND;
+    }
+    .PORTFOLIO .event-channels {
+        background: $color-PORTFOLIO;
+    }
+    .LOYALTY .event-channels {
+        background: $color-LOYALTY;
+    }
+    // RESPONSIVE CARD SIZES
+    .event {
+        // SIDEBAR COLLAPSED
+        .collapsed & {
+            @media screen and (min-width: 940px) and (max-width: 1149px) {
+                width: calc( ( 100% - #{$padding}) / 4 - #{$padding});
+            }
+            @media screen and (min-width: 1150px) and (max-width: 1599px) {
+                width: calc( ( 100% - #{$padding}) / 5 - #{$padding});
+            }
+            @media screen and (min-width: 1600px) and (max-width: 2199px) {
+                width: calc( ( 100% - #{$padding}) / 6 - #{$padding});
+            }
+            @media screen and (min-width: 2200px) and (max-width: 9000px) {
+                width: calc( ( 100% - #{$padding}) / 7 - #{$padding});
+            }
+        }
+        // SIDEBAR EXPANDED
+        @media screen and (max-width: 499px) {
+            width: calc( ( 100% - #{$padding}) / 1 - #{$padding});
+        }
+        @media screen and (min-width: 500px) and (max-width: 749px) {
+            width: calc( ( 100% - #{$padding}) / 2 - #{$padding});
+        }
+        @media screen and (min-width: 750px) and (max-width: 939px) {
+            width: calc( ( 100% - #{$padding}) / 3 - #{$padding});
+        }
+        @media screen and (min-width: 940px) and (max-width: 1149px) {
+            width: calc( ( 100% - #{$padding}) / 2 - #{$padding});
+        }
+        @media screen and (min-width: 1150px) and (max-width: 1599px) {
+            width: calc( ( 100% - #{$padding}) / 3 - #{$padding});
+        }
+        @media screen and (min-width: 1600px) and (max-width: 2199px) {
+            width: calc( ( 100% - #{$padding}) / 4 - #{$padding});
+        }
+        @media screen and (min-width: 2200px) and (max-width: 9000px) {
+            width: calc( ( 100% - #{$padding}) / 5 - #{$padding});
+        }
+    }
+    //
+    .event {
+        cursor: pointer;
+        // transition: $transition-time/2;
+        box-shadow: 0 0 0;
+        transform: scale(1);
+        // .elevated & {
+        //     filter: blur(1px);
+        // }
+        .close-button {
+            display: none;
+        }
+        &.elevated {
+            z-index: 101;
+            transform: scale(1.075);
+            box-shadow: 0 0 50px;
+            opacity: 1;
+            overflow: visible;
+            .more {
+                opacity: 1;
+                transform: scale(1);
+            }
+            .close-button {
+                display: block;
+                position: absolute;
+                right: 0;
+                bottom: 100%;
+                margin-bottom: 5px;
+                width: 16px;
+                height: 16px;
+                cursor: pointer;
+                &:before {
+                    content: '\e6ad';
+                    font: normal normal normal 16px/1 'Nucleo Outline';
+                    position: absolute;
+                    color: $color-white;
+                    width: 16px;
+                    height: 16px;
+                    top: 0;
+                    left: 0;
+                }
+            }
+        }
+        &.deselevation {
+            z-index: 100;
+        }
+    }
+    .nano {
+        height: calc( 100% + 20px);
+    }
+}
+
+.overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 90;
+    pointer-events: none;
+    background: rgba( $color-dark-gray, 0);
+    transition: $transition-time/2;
+    &.active {
+        background: rgba( $color-dark-gray, 0.8);
+        pointer-events: auto;
+        cursor: pointer;
+    }
+}
+
+.event-info {
+    .activity {
+        margin-bottom: $padding/2;
+        .grid-view & {
+            font-size: 18px;
+        }
+    }
+    .timeframe {
+        font-size: 12px;
+        color: $color-medium-gray;
+        margin-bottom: $padding;
+    }
+    .tags {
+        display: inline-block;
+        width: auto;
+        margin-bottom: $padding - $padding/4;
+    }
+    .tag {
+        display: inline-block;
+        padding: $padding/6 $padding/3;
+        border-radius: $padding;
+        margin-bottom: $padding/4;
+        background: $color-lightest-gray;
+        color: $color-medium-gray;
+        font-size: 12px;
+        cursor: default;
+
+
+        &.landing-page {
+
+            color: white;
+
+            a {
+                text-decoration: none;
+                color: white;
+            }
+
+            .US & {
+                background: $color-US;
+            }
+            .US-WEST & {
+                background: $color-US-WEST;
+            }
+            .US-EAST & {
+                background: $color-US-EAST;
+            }
+            .CALA & {
+                background: $color-CALA;
+            }
+            .CANADA & {
+                background: $color-CANADA;
+            }
+            .PORTFOLIO & {
+                background: $color-PORTFOLIO;
+            }
+            .LOYALTY & {
+                background: $color-LOYALTY;
+            }
+            .BRAND & {
+                background: $color-BRAND;
+            }
+        }
+    }
+    .grid-view & {
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+    @media screen and (max-width: $desktop-min) {
+        .activity {
+            margin-bottom: $padding/4;
+        }
+        .timeframe {
+            margin-bottom: $padding/2;
+        }
+        .tags {
+            margin-bottom: $padding - $padding/8;
+        }
+        .tag {
+            margin-bottom: $padding/8;
+        }
+    }
+}
+
+.grid-view .event.elevated .event-info i.more:after {
+    transform: rotate(180deg);
+}
+
+.grid-view .event.MULTIDATE .event-info {
+    padding-top: 90px;
+}
+
+.brands {
+    // margin-bottom: $padding;
+}
+
+.tabs {
+    // margin: 0 #{-$padding};
+    font-size: 12px;
+    text-align: center;
+    display: none;
+    // .elevated & {
+    //     display: block;
+    // }
+    ul {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        font-size: 10px;
+        font-weight: 400;
+        li.tab-trigger {
+            cursor: pointer;
+            list-style-type: none;
+            display: inline-block;
+            text-transform: uppercase;
+            width: 50%;
+            margin: 0 -2px;
+            padding: $padding/4;
+            border-bottom: 1px solid $color-lightest-gray;
+            line-height: 130%;
+            transition: $transition-time;
+            &:not(.active):hover {
+                border-color: darken($color-lightest-gray, 10%);
+            }
+            &.active {
+                .US & {
+                    border-color: $color-US;
+                }
+                .US-WEST & {
+                    border-color: $color-US-WEST;
+                }
+                .US-EAST & {
+                    border-color: $color-US-EAST;
+                }
+                .CALA & {
+                    border-color: $color-CALA;
+                }
+                .CANADA & {
+                    border-color: $color-CANADA;
+                }
+                .PORTFOLIO & {
+                    border-color: $color-PORTFOLIO;
+                }
+                .LOYALTY & {
+                    border-color: $color-LOYALTY;
+                }
+                .BRAND & {
+                    border-color: $color-BRAND;
+                }
+            }
+        }
+    }
+    .tab-content {
+        padding: 15px 20px 25px;// $padding;
+        text-align: justify;
+        display: none;
+        line-height: 1.5;
+        &.active {
+            display: block;
+        }
+        &.t2 {
+            text-align: center;
+        }
+    }
+    .contact {
+        border-top: 1px solid $color-lightest-gray;
+        padding: $padding/4 $padding;
+        text-align: center;
+        display: block;
+        background: linear-gradient(to bottom, rgba($color-lightest-gray, 0.5) 0%, rgba($color-lightest-gray, 0) 30%, rgba($color-lightest-gray, 0) 100%);
+        p {
+            vertical-align: middle;
+        }
+        a {
+            text-decoration: none;
+            color: $color-dark-gray;
+            &:hover {
+                text-decoration: underline;
+                .US & {
+                    color: $color-US;
+                }
+                .US-WEST & {
+                    color: $color-US-WEST;
+                }
+                .US-EAST & {
+                    color: $color-US-EAST;
+                }
+                .CALA & {
+                    color: $color-CALA;
+                }
+                .CANADA & {
+                    color: $color-CANADA;
+                }
+                .PORTFOLIO & {
+                    color: $color-PORTFOLIO;
+                }
+                .LOYALTY & {
+                    color: $color-LOYALTY;
+                }
+                .BRAND & {
+                    color: $color-BRAND;
+                }
+            }
+        }
+        .US & {
+            border-color: lighten($color-US, 30%);
+        }
+        .US-WEST & {
+            border-color: lighten($color-US-WEST, 30%);
+        }
+        .US-EAST & {
+            border-color: lighten($color-US-EAST, 30%);
+        }
+        .CALA & {
+            border-color: lighten($color-CALA, 30%);
+        }
+        .CANADA & {
+            border-color: lighten($color-CANADA, 30%);
+        }
+        .PORTFOLIO & {
+            border-color: lighten($color-PORTFOLIO, 30%);
+        }
+        .LOYALTY & {
+            border-color: lighten($color-LOYALTY, 30%);
+        }
+        .BRAND & {
+            border-color: lighten($color-BRAND, 30%);
+        }
+        i {
+            margin-right: 5px;
+            .US & {
+                color: $color-US;
+            }
+            .US-WEST & {
+                color: $color-US-WEST;
+            }
+            .US-EAST & {
+                color: $color-US-EAST;
+            }
+            .CALA & {
+                color: $color-CALA;
+            }
+            .CANADA & {
+                color: $color-CANADA;
+            }
+            .PORTFOLIO & {
+                color: $color-PORTFOLIO;
+            }
+            .LOYALTY & {
+                color: $color-LOYALTY;
+            }
+            .BRAND & {
+                color: $color-BRAND;
+            }
+        }
+    }
+}

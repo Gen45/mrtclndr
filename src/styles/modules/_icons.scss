@@ -1,0 +1,13 @@
+.icon {
+	width: $icon-wrapper;
+	height: $icon-wrapper;
+	min-width: $icon-wrapper;
+	min-height: $icon-wrapper;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	&.icon-circle {
+		border: 1px solid $color-white;
+		border-radius: $icon-wrapper/2;
+	}
+}

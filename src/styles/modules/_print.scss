@@ -1,0 +1,373 @@
+@media print {
+    #trigger-CLOSEPRINT,
+    #trigger-PRINT {
+        display: none !important;
+    }
+}
+
+.print {
+    body {
+        font: 300 16px/1.6 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
+    }
+    * {
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        // overflow: visible !important;
+    }
+    a,
+    a:visited {
+        //
+    }
+    a[href]:after {
+        // content: " (" attr(href) ")";
+    }
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        // page-break-inside: avoid;
+    }
+    thead {
+        display: table-header-group;
+    }
+    tr,
+    img {
+        // page-break-inside: avoid;
+    }
+    img {
+        max-width: 100% !important;
+    }
+    @page {
+        margin: 0.5cm;
+    }
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+    h2,
+    h3 {
+        // page-break-after: avoid;
+    }
+    // THEME STYLES
+    background: transparent !important;
+    height: auto;
+    #trigger-CLOSEPRINT {
+        display: inline-block;
+        margin-left: 10px;
+        &:hover {
+            color: white !important;
+            i:before {
+                color: white !important;
+            }
+        }
+    }
+    .main {
+        .header {
+            width: 100%;
+            background: white;
+            z-index: 9000;
+            .title {
+                display: none;
+            }
+            .cls-1,
+            .cls-2 {
+                fill: black;
+            }
+            .logo {
+                margin-left: 20px;
+                // width: 30px;
+                overflow: hidden;
+            }
+        }
+        height: auto;
+        position: relative;
+        width: 100%;
+        top: 0px;
+        &:before {
+            background-color: transparent;
+        }
+        .content-frame {
+            padding: 0;
+            background: transparent;
+            // overflow: scroll;
+            height: auto;
+            min-height: 0;
+        }
+        .content {
+            height: auto;
+            background: transparent;
+            > header {
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 50px;
+                z-index: 9000;
+                .main-filters {
+                    .nav-trigger {
+                        // display: none;
+                        &.active {
+                            display: inline-block;
+                            border-bottom: solid 2px black;
+                            &:after {
+                                display: none;
+                            }
+                        }
+                    }
+                    .tools {
+                        display: none;
+                    }
+                }
+            }
+            .months-bar {
+                position: fixed;
+                top: 50px;
+                width: 100%;
+                background: white;
+                z-index: 9000;
+            }
+            .nano {
+                height: auto;
+                .months-lines {
+                    background: transparent;
+                }
+                .nano-content {
+                    height: auto;
+                    position: relative;
+                }
+            }
+            &.grid-view {
+                .event {
+                    border: solid 1px gray;
+                    // border-top: none;
+                    position: relative;
+                    page-break-inside: avoid;
+                    // page-break-before: auto;
+                    // page-break-after: auto;
+                    width: calc( ( 100% - #{$padding}) / 3 - #{$padding});
+                    .event-channels {
+                        background-color: transparent;
+                        .channels {
+                            .icon {
+                                width: 20px;
+                                height: 20px;
+                                font-size: 10px;
+                            }
+                        }
+                    }
+                    &.US-WEST .event-channels {
+                        border-top: solid 5px $color-US-WEST;
+                    }
+                    &.US-EAST .event-channels {
+                        border-top: solid 5px $color-US-EAST;
+                    }
+                    &.CALA .event-channels {
+                        border-top: solid 5px $color-CALA;
+                    }
+                    &.CANADA .event-channels {
+                        border-top: solid 5px $color-CANADA;
+                    }
+                    &.GLOBAL .event-channels {
+                        border-top: solid 5px $color-BRAND;
+                    }
+                    .tabs {
+                        display: block;
+                        .tab-trigger {
+                            br {
+                                display: none;
+                            }
+                        }
+                        .tab-content {
+                            display: inline-block;
+                            margin: 0;
+                            width: 49%;
+                            vertical-align: top;
+                            padding: 10px;
+                            p {
+                                line-height: 1.1;
+                            }
+                        }
+                    }
+                }
+            }
+            &.timeline-view {
+                .event {
+
+                    height: 65px;
+
+                    .event-info {
+                        position: relative;
+                        background-color: white;
+                        min-width: 0;
+                        border: solid 1px $color-lighter-gray;
+                        page-break-inside: avoid;
+                        .timeframe,
+                        .tags,
+                        .more {
+                            display: none;
+                        }
+                        &:after {
+                            display: none;
+                        }
+                    }
+                    // page-break-inside: avoid;
+                    // page-break-after: always;
+                }
+                .months-lines {
+                    .line {
+                        background-color: transparent;
+                        border-left-color: $color-lighter-gray;
+                        border-width: 2px;
+                        &:last-child {
+                            border-right-color: $color-lighter-gray;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .sidebar {
+        position: relative;
+        width: 70%;
+        // max-width: 600px;
+        margin: 10px auto;
+        display: inline-block;
+        // border: dashed 1px gray;
+        background: white;
+        page-break-inside: avoid;
+        page-break-before: auto;
+        page-break-after: avoid;
+        overflow: hidden !important;
+
+        footer {
+            display: none;
+        }
+
+        > header {
+            background-color: transparent;
+            span.icon-circle {
+                display: none;
+            }
+        }
+        .filter {
+            width: 100%;
+            header {
+                background: white;
+                color: $color-black;
+                height: 30px;
+            }
+            .content {
+                width: 100%;
+            }
+            .brand-filters {
+                height: auto;
+                
+                .brand-category {
+                    display: inline;
+
+                    h4 {
+                        display: none;
+                    }
+                }
+                &:before {
+                    display: none;
+                }
+
+                .filter-tag {
+                    border: 1px solid $color-medium-gray;
+                }
+
+                input + label {
+                    border: none;
+                }
+            }
+            .filter-tag {
+                // width: auto;
+                padding: 0;
+                margin: 0;
+                margin-bottom: 5px;
+
+                // height: 30px;
+                // background-color: $color-medium-gray;
+                background: $color-white;
+                color: $color-black;
+                &.US {
+                    input:checked + label {
+                        border: solid 2px $color-US !important;
+                    }
+                }
+                &.CALA {
+                    input:checked + label {
+                        border: solid 2px $color-CALA !important;
+                    }
+                }
+                &.CANADA {
+                    input:checked + label {
+                        border: solid 2px $color-CANADA !important;
+                    }
+                }
+                &.GLOBAL {
+                    input:checked + label {
+                        border: solid 2px $color-BRAND !important;
+                    }
+                }
+            }
+            input + label {
+                background-color: transparent;
+                // color: $color-white !important;
+                color: $color-black !important;
+                border: 1px solid $color-medium-gray;
+                .st1 {
+                    fill: $color-light-gray;
+                }
+            }
+            input:checked + label {
+                background-color: transparent;
+                display: block;
+                color: black !important;
+                border: solid 1px $color-light-gray !important;
+                i:before {
+                    color: $color-black;
+                }
+                .st1 {
+                    fill: $color-black;
+                }
+            }
+        }
+        .nano-content {
+            position: relative;
+        }
+    }
+
+    .filter {
+        br {
+            display: none;
+        }
+    }
+    #view {
+        &:after {
+            display: none;
+        }
+    }
+    .brand-category {
+        .filter-tag {
+
+            svg .st0 {
+                fill: $color-black;
+            }
+        }
+    }
+
+    input.search-box {
+        background: $color-white;
+    }
+}

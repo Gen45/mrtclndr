@@ -1,0 +1,74 @@
+// COLORS
+$color-black: 				#161616;
+$color-dark-gray: 			#333333;
+$color-darker-gray:			darken($color-dark-gray, 3%);
+$color-darkish-gray:		#595959;
+$color-medium-gray: 		#666666;
+$color-light-gray: 			#999999;
+$color-lighter-gray: 		#c2c2c2;
+$color-lightest-gray: 		#f5f5f5;
+$color-green:				#0fe50f; // green
+$color-white: 				#ffffff;
+$color-accent: 				#e4144a; // marriott red
+$color-US:					#4399c4; // blue
+$color-US-WEST:				#3b79cb; // blue
+$color-US-EAST:				#3dc7ca; // blue
+$color-CALA:				#70cb74; // green
+$color-CANADA:				#e85858; // pink
+$color-BRAND:				#ab528d; // purple
+$color-PORTFOLIO:			#f49140; // orange
+$color-LOYALTY:				#4b4eb2; // blue
+
+$color-success: 			#70cb74;
+
+$color-Rate: #49d135;
+$color-Package: #8152ee;
+$color-Rewards: #d0d135;
+$color-Opening: #ee8e52;
+$color-Branding: #9ed037;
+$color-Other: #3d3d3d;
+$color-No-Promotion: #858585;
+
+
+// LAYOUT
+$padding: 					20px;
+$content-header-height:	 	60px;
+
+// BREAKPOINTS
+$desktop-min: 				940px;
+$tablet-max: 				939px;
+$tablet-min: 				680px;
+$phone-max: 				679px;
+$phone-min: 				480px;
+
+// TIMELINE
+$months-bar-height:			25px;
+$triangle-size:				5px;
+$event-timeline-weight:	 	10px;
+$event-timeline-text: 		$event-timeline-weight;
+$event-timiline-info-box:	30px;
+$event-info-bg:				rgba($color-dark-gray, 0.3); //$color-white; //darken($color-white, 5);
+
+// CARDS
+$event-card-header: 		30px;
+
+// ICONS
+$icon-wrapper:				30px;
+
+// TYPOGRAPHY
+$type-date:					10px;
+$type-event_title:			21px;
+
+// HEADER
+$header-height:				50px;
+
+// SIDEBAR
+$sidebar-expanded:			300px;
+$sidebar-collapsed:			1px; //50px;
+$filter-header-height: 	 	50px;
+
+// FILTER TAGS
+$filter-tag-height:			24px;
+
+// TRANSITIONS
+$transition-time:			0.5s;

@@ -1,0 +1,61 @@
+[{
+    "class": "BRAND_COM",
+    "name": "Brand.com",
+    "icon": "nc-icon-mini media-2_radio",
+    "title": "Brand.com"
+  },
+  {
+    "class": "EVENTS",
+    "name": "Events",
+    "icon": "nc-icon-mini ui-1_calendar-57",
+    "title": "Events"
+  },
+  {
+    "class": "MEDIA",
+    "name": "Media",
+    "icon": "nc-icon-mini media-2_speaker-01",
+    "title": "Media"
+  },
+  {
+    "class": "CONTENT",
+    "name": "Content",
+    "icon": "nc-icon-mini business_cheque",
+    "title": "Content"
+  },
+  {
+    "class": "DIRECT_MAIL",
+    "name": "Direct Mail",
+    "icon": "nc-icon-mini ui-1_send",
+    "title": "Direct Mail"
+  },
+  {
+    "class": "EMAIL",
+    "name": "Email",
+    "icon": "nc-icon-mini ui-1_email-84",
+    "title": "Email"
+  },
+  {
+    "class": "ON_PROPERTY",
+    "name": "On Property",
+    "icon": "nc-icon-mini travel_hotel",
+    "title": "On Property"
+  },
+  {
+    "class": "PR",
+    "name": "Public Relations",
+    "icon": "nc-icon-mini users_multiple-11",
+    "title": "Public Relations"
+  },
+  {
+    "class": "SOCIAL",
+    "name": "Social",
+    "icon": "nc-icon-mini ui-2_like",
+    "title": "Social Media"
+  },
+  {
+    "class": "OTHER_CHANNELS",
+    "name": "Other Channels",
+    "icon": "nc-icon-mini ui-2_menu-dots",
+    "title": ""
+  }
+]

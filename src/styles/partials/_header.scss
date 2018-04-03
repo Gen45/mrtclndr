@@ -1,0 +1,64 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: $header-height;
+    background: $color-black;
+    width: calc( 100% - #{$sidebar-expanded});
+    z-index: 1;
+    padding-bottom: 2px;
+    // transition: $transition-time/2;
+
+    .login & {
+        // opacity: 0;
+    }
+    .collapsed & {
+        width: calc( 100% - #{$sidebar-collapsed});
+        // transition: $transition-time/2;
+    }
+    h1 {
+        display: inline-block;
+        margin: 0 24px;
+        border-left: 1px solid $color-white;
+        height: 36px;
+        line-height: 36px;
+        padding-left: $padding;
+        white-space: nowrap;
+        //
+        @media only screen and (max-width: 360px) {
+            margin: 0 12px;
+            padding-left: $padding/2;
+            font-size: 24px;
+        }
+    }
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    position: relative;
+    display: inline-block;
+    top: 0;
+    left: 0;
+    width: 170px;
+    height: 100%;
+    margin: 0;
+    margin-left: $padding;
+    padding-right: $padding;
+    padding-top: 9px;
+    line-height: $header-height;
+    vertical-align: middle;
+    a {
+        height: 100%;
+    }
+    svg {
+        width: 170px;
+        height: auto;
+    }
+    //
+    @media only screen and (max-width:500px) {
+        margin-left: 20px;
+        width: 30px;
+        overflow: hidden;
+    }
+}

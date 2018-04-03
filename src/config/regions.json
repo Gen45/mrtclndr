@@ -1,0 +1,9 @@
+{
+  "PORTFOLIO": true,
+  "BRAND": true,
+  "LOYALTY": true,
+  "US-EAST": true,
+  "US-WEST": false,
+  "CANADA": true,
+  "CALA": true
+}
