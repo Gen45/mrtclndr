@@ -8,7 +8,7 @@ class Regions extends Component {
     this.props.updateRegion(region, event.target.checked);
   };
 
-  render(props) {
+  render() {
 
     return (<div className="filter filter-wrap-regions">
       <header>
@@ -23,7 +23,7 @@ class Regions extends Component {
             const region = r.toUpperCase();
             const active = this.props.regions[r];
             return (<span key={i} className={`filter-tag region-filters ${region}`}>
-              <input type="checkbox" id={`filter-${region}`} defaultChecked={active} onChange={(event)=>{ this.handleChange(event, region, active) }}/>
+              <input type="checkbox" id={`filter-${region}`} checked={active} onChange={(event)=>{ this.handleChange(event, region, active) }}/>
               <label htmlFor={`filter-${region}`}>{region}</label>
             </span>)
           })

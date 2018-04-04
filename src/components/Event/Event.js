@@ -1,98 +1,82 @@
 import React, {Component} from 'react';
-// import LazyLoad from 'react-lazy-load';
 
 import Header from './Header';
 import Brands from './Brands';
-
-const EventDate = (props) => {
-  const stay = props.type === 'stay'
-    ? 'event-dates__STAY'
-    : '';
-
-  return (<div className={`event-dates ${stay}`}>
-    <span className="start">
-      <strong>{`${props.type} start`}</strong>
-      {props.start}
-    </span>
-    <span className="end">
-      <strong>{`${props.type} end`}</strong>
-      {props.end}
-    </span>
-  </div>);
-}
+import Dates from './Dates';
 
 class Event extends Component {
 
   render() {
 
-    const channels = {
-      "EVENTS": this.props.event["Events"],
-      "MEDIA": this.props.event["Media"],
-      "CONTENT": this.props.event["Content"],
-      "DIRECT_MAIL": this.props.event["Direct Mail"],
-      "EMAIL": this.props.event["Email"],
-      "ON_PROPERTY": this.props.event["On Property"],
-      "BRAND_COM": this.props.event["Brand-dot-Com"],
-      "LOYALTY-OFFER": this.props.event["Loyalty"],
-      "PR": this.props.event["PR"],
-      "SOCIAL": this.props.event["Social"]
-    }
-
-    const id = this.props.event["Id"];
-    const region = this.props.event["Owner SubRegion"];
-    const campaignName = this.props.event["Campaign Name"];
-    const dates = {
-      sell: {
-        start: this.props.event["Sell Start Date"],
-        end: this.props.event["Sell End Date"]
+    const event = {
+      channels: {
+        "EVENTS": this.props.event["Events"],
+        "MEDIA": this.props.event["Media"],
+        "CONTENT": this.props.event["Content"],
+        "DIRECT_MAIL": this.props.event["Direct Mail"],
+        "EMAIL": this.props.event["Email"],
+        "ON_PROPERTY": this.props.event["On Property"],
+        "BRAND_COM": this.props.event["Brand-dot-Com"],
+        "LOYALTY-OFFER": this.props.event["Loyalty"],
+        "PR": this.props.event["PR"],
+        "SOCIAL": this.props.event["Social"]
       },
-      stay: {
-        start: this.props.event["Stay Start Date"],
-        end: this.props.event["Stay End Date"]
-      }
+      otherChannels: this.props.event["Other Channels"],
+      id: this.props.event["Id"],
+      owner: {
+        name: this.props.event["Owner"]
+      },
+      region: this.props.event["Owner SubRegion"],
+      campaignName: this.props.event["Campaign Name"],
+      campaignGroup: this.props.event["Campaign Group"],
+      segment: this.props.event["Segment"],
+      market: this.props.event["Entire US"],
+      programType: this.props.event["Program Type"],
+      description: this.props.event["Description"],
+      dates: {
+        sell: {
+          start: this.props.event["Sell Start Date"],
+          end: this.props.event["Sell End Date"]
+        },
+        stay: {
+          start: this.props.event["Stay Start Date"],
+          end: this.props.event["Stay End Date"]
+        },
+        multidate() {
+          return (this.sell.start !== this.stay.start || this.sell.end !== this.stay.end)
+        }
+      },
+      brands: this.props.event["Brand"].split(',')
     }
-    const multidate = (dates.sell.start !== dates.stay.start || dates.sell.end !== dates.stay.end);
-    const brands = this.props.event["Brand"].split(',');
 
-    return (
-      <div id={id} className={`event ${region} ${multidate
-        ? "MULTIDATE"
+    return (<div id={event.id} className={`event ${this.props.view}-view ${event.region}${event.dates.multidate()
+        ? " MULTIDATE"
         : ''}`}>
 
       <div className="close-button"/>
 
-
       <div className="event-inner">
+        <Header channels={event.channels} otherChannels={event.otherChannels}/>
 
-        <Header channels={channels} otherChannels={this.props.event["Other Channels"]}/>
         <div className="event-info">
-
-          {
-            multidate
-              ? <div className="event-date">
-                  <EventDate start={dates.sell.start} end={dates.sell.end} type="sell"/>
-                  <EventDate start={dates.stay.start} end={dates.stay.end} type="stay"/>
-                </div>
-              : <div className="event-date">
-                  <EventDate start={dates.sell.start} end={dates.sell.end} type="sell & stay"/>
-                </div>
-          }
+          <Dates dates={event.dates}/>
 
           <div className="info-wrapper">
             <p className="activity">
-              {campaignName}
+              {event.campaignName}
             </p>
             <p className="timeframe">Leisure</p>
             <p className="tags">
-              <span className="tag regions-involved "><i className="nc-icon-mini business_globe"/>
-                Destination Cluster</span>
-              <span className="tag major-markets-involved "><i className="nc-icon-mini business_stock"/>
-                n/a</span>
+              <span className="tag regions-involved "><i className="nc-icon-mini business_globe"/>{" "}
+                {event.campaignGroup}</span>{" "}
+              <span className="tag major-markets-involved "><i className="nc-icon-mini business_stock"/>{" "}
+                n/a</span>{" "}
               <span className="tag major-markets-involved ">
-                {/* <i class="nc-icon-mini business_stock"></i> */}
-                Cluster</span>
-              <span className="tag partner-type "><i className="nc-icon-mini business_briefcase-25"/>
-                Field Marketing</span>
+                {event.segment}</span>{" "}
+              {
+                event.programType && <span className="tag partner-type "><i className="nc-icon-mini business_briefcase-25"/>{" "}
+                    {event.programType}</span>
+              }
             </p>
           </div>
           <i className="more"/>
@@ -101,13 +85,13 @@ class Event extends Component {
         <div className="tabs">
           <div className="tab-content t1 active">
             <p>
-              {this.props.event["Description"]}
+              {event.description}
             </p>
           </div>
-          <p className="contact " data-title="Maria Dellacamera"><i className="nc-icon-mini users_circle-09"/> {this.props.event["Owner"]}</p>
+          <p className="contact " title={event.owner.name}><i className="nc-icon-mini users_circle-09"/> {event.owner.name}</p>
         </div>
 
-        <Brands brands={brands}/>
+        <Brands brands={event.brands}/>
       </div>
 
       <div className="timeline-wrapper">

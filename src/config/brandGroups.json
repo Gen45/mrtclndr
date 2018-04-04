@@ -1,0 +1,9 @@
+{
+  "luxury": ["RC", "SR", "JW", "LC", "BL", "WH", "ED"],
+  "premium": ["MH", "SI", "MVC", "DE", "LM", "WI", "AK", "DH", "RH", "TP", "GH"],
+  "select": ["CY", "FP", "SH", "PH", "FI", "AC", "AL", "OX"],
+  "LongerStays": ["MEA", "RI", "TPS", "EL"],
+  "Rewards": ["MR", "RCR", "SPG"],
+  "other": ["PM", "UN", "NONE"],
+  "unbranded": ["TREMONT", "GX"]
+}

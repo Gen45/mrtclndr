@@ -1,9 +1,9 @@
 {
-  "PORTFOLIO": true,
-  "BRAND": true,
-  "LOYALTY": true,
-  "US-EAST": true,
-  "US-WEST": false,
-  "CANADA": true,
-  "CALA": true
+  "PORTFOLIO": {"name": "PORTFOLIO"},
+  "BRAND": {"name": "BRAND"},
+  "LOYALTY": {"name": "LOYALTY"},
+  "US-EAST": {"name": "US EAST"},
+  "US-WEST": {"name": "US WEST"},
+  "CANADA": {"name": "CANADA"},
+  "CALA": {"name": "CALA"}
 }

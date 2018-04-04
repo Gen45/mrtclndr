@@ -1,39 +1,119 @@
 {
-  "AC": "AC Hotels Marriott",
-  "AL": "Aloft",
-  "AK": "Autograph Collection Hotels",
-  "BL": "Bvlgari",
-  "CY": "Courtyard Marriott",
-  "DE": "Delta Hotels and Resorts",
-  "DH": "Design Hotels",
-  "ED": "Edition",
-  "EL": "Element",
-  "FI": "Fairfield Inn Marriott",
-  "FP": "Four Points",
-  "GH": "Gaylord Hotels",
-  "JW": "JW Marriott",
-  "LM": "Le Meridien",
-  "MEA": "Marriott Executive Apartments",
-  "MHR": "Marriott Hotels & Resorts",
-  "MH": "Marriott Hotels",
-  "MR": "Marriott Rewards",
-  "MVC": "Marriott Vacation Club",
-  "OX": "Moxy Hotels",
-  "PM": "Portfolio Marketing",
-  "PH": "Protea Hotels",
-  "RH": "Renaissance Hotels",
-  "RI": "Residence Inn Marriott",
-  "SI": "Sheraton",
-  "SH": "Springhill Suites Marriott",
-  "SR": "St Regis",
-  "SPG": "Starwood preferred Guests",
-  "LC": "The Luxury Collection",
-  "RC": "The Ritz-Carlton",
-  "RCR": "The Ritz-Carlton Rewards",
-  "TPS": "Towneplace Suites Marriott",
-  "TP": "Tribute Portfolio",
-  "WH": "W Hotels",
-  "WI": "Westin",
-  "UN": "unbranded",
-  "NONE": "no-branding"
+  "AC": {
+    "name": "AC Hotels Marriott"
+  },
+  "AL": {
+    "name": "Aloft"
+  },
+  "AK": {
+    "name": "Autograph Collection Hotels"
+  },
+  "BL": {
+    "name": "Bvlgari"
+  },
+  "CY": {
+    "name": "Courtyard Marriott"
+  },
+  "DE": {
+    "name": "Delta Hotels and Resorts"
+  },
+  "DH": {
+    "name": "Design Hotels"
+  },
+  "ED": {
+    "name": "Edition"
+  },
+  "EL": {
+    "name": "Element"
+  },
+  "FI": {
+    "name": "Fairfield Inn Marriott"
+  },
+  "FP": {
+    "name": "Four Points"
+  },
+  "GH": {
+    "name": "Gaylord Hotels"
+  },
+  "JW": {
+    "name": "JW Marriott"
+  },
+  "LM": {
+    "name": "Le Meridien"
+  },
+  "MEA": {
+    "name": "Marriott Executive Apartments"
+  },
+  "MHR": {
+    "name": "Marriott Hotels & Resorts"
+  },
+  "MH": {
+    "name": "Marriott Hotels"
+  },
+  "MR": {
+    "name": "Marriott Rewards"
+  },
+  "MVC": {
+    "name": "Marriott Vacation Club"
+  },
+  "OX": {
+    "name": "Moxy Hotels"
+  },
+  "PM": {
+    "name": "Portfolio Marketing"
+  },
+  "PH": {
+    "name": "Protea Hotels"
+  },
+  "RH": {
+    "name": "Renaissance Hotels"
+  },
+  "RI": {
+    "name": "Residence Inn Marriott"
+  },
+  "SI": {
+    "name": "Sheraton"
+  },
+  "SH": {
+    "name": "Springhill Suites Marriott"
+  },
+  "SR": {
+    "name": "St Regis"
+  },
+  "SPG": {
+    "name": "Starwood preferred Guests"
+  },
+  "LC": {
+    "name": "The Luxury Collection"
+  },
+  "RC": {
+    "name": "The Ritz-Carlton"
+  },
+  "RCR": {
+    "name": "The Ritz-Carlton Rewards"
+  },
+  "TPS": {
+    "name": "Towneplace Suites Marriott"
+  },
+  "TP": {
+    "name": "Tribute Portfolio"
+  },
+  "WH": {
+    "name": "W Hotels"
+  },
+  "WI": {
+    "name": "Westin"
+  },
+  "UN": {
+    "name": "unbranded"
+  },
+  "NONE": {
+    "name": "no-branding"
+  },
+  "TREMONT": {
+    "name": "Tremont"
+  },
+  "GX": {
+    "name": "unbranded"
+  }
 }

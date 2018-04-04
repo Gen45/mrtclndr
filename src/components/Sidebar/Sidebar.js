@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 
 import Search from './Search';
 import Regions from './Regions';
+// import Brands from './Brands';
+import Offers from './Offers';
+// import Channels from './Channels';
 
 class Sidebar extends Component {
 
@@ -20,14 +23,9 @@ class Sidebar extends Component {
 
                 <Search />
                 <Regions title={"Regions"} regions={this.props.regions} titleIcon={"nc-icon-outline travel_world"} updateRegion={this.props.updateRegion}/>
-                {/* <Brands /> */}
-                {/* <Offers /> */}
+                {/* <Brands title={"Brands"} brands={this.props.brands} titleIcon={"nc-icon-outline objects_diamond"} updateBrands={this.props.updateBrands}/> */}
+                <Offers title={"Offers"} offers={this.props.offers} titleIcon={"nc-icon-outline ui-1_check-circle-07"} updateOffer={this.props.updateOffer}/>
                 {/* <Channels /> */}
-
-                {/* <?php include "_sidebar/_regions.php"; ?>
-                <?php include "_sidebar/_brands.php"; ?>
-                <?php include "_sidebar/_offers.php"; ?>
-                <?php include "_sidebar/_channels.php"; ?> */}
             </div>
         </div>
 

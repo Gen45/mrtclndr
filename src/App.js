@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-// import {Scrollbars} from 'react-custom-scrollbars';
+import {Scrollbars} from 'react-custom-scrollbars';
 import _ from 'lodash';
 // import Masonry from 'react-masonry-component';
-import ReactList from 'react-list';
-// import MasonryInfiniteScroller from 'react-masonry-infinite';
+// import ReactList from 'react-list';
 // import moment from 'moment';
 
 // STYLES
@@ -11,55 +10,42 @@ import './styles/style.css';
 
 // DATA
 import eventsData from './config/events.json';
-import regions from './config/regions.json';
+import defaultState from './config/defaultState.json';
 
 // LOCAL COMPONENTS
+import EventsWrapper from './components/Event/EventsWrapper';
 import Navigation from './components/Navigation';
 import Header from './components/Header';
 import MonthBar from './components/MonthBar';
 import MonthLines from './components/MonthLines';
 import Sidebar from './components/Sidebar/Sidebar';
-import Event from './components/Event/Event';
+// import Event from './components/Event/Event';
 
 class App extends Component {
 
-  state = {
-    view: "grid",
-    year: "2018",
-    time: "YEARS",
-    regions: regions
+  state = { ...defaultState  };
+  events =  {};
+
+  componentWillMount = () => {
+    this.updateEventList();
   }
 
-  masonryOptions = {
-    transitionDuration: 0
-  }
-
-  componentWillMount() {
+  prepareEventList = () => {
     this.events =
      _.sortBy(
        eventsData.filter(e => {
       return this.activeFilter(this.state.regions).indexOf(e["Owner SubRegion"]) >= 0
     })
     , "Owner SubRegion");
-    console.log(this.events)
   }
 
-  componentWillUpdate() {
-    this.events =
-     _.sortBy(
-       eventsData.filter(e => {
-      return this.activeFilter(this.state.regions).indexOf(e["Owner SubRegion"]) >= 0
-    })
-    , "Owner SubRegion");
-    console.log(this.events)
-  }
+  updateEventList = () => {
+    this.prepareEventList();
+    this.setState({ events : this.events });
+  };
 
   activeFilter = (filterType) => {
     return Object.keys(filterType).filter((f, i) => filterType[f] === true)
-  };
-
-  renderItem = (index, key) => {
-    return <Event key={key} event={this.events[index]}/>
   };
 
   viewSwitcher = (view) => {
@@ -70,10 +56,16 @@ class App extends Component {
 
   updateRegion = (region, active) => {
     let regions = this.state.regions;
-    // console.log({regions})
     regions[region] = active;
-    // console.log({regions})
     this.setState({regions: regions});
+    this.updateEventList();
+  };
+
+  updateOffer = (offer, active) => {
+    let offers = this.state.offers;
+    offers[offer] = active;
+    this.setState({offers: offers});
+    this.updateEventList();
   };
 
   render(props) {
@@ -81,67 +73,33 @@ class App extends Component {
     return (<div className="App">
       <main id="main" className="main" role="main">
         <Header/>
-
         <div className="content-frame">
           <div id="view" className={`content ${this.state.view}-view`}>
-
             <Navigation segment={this.state.time} year={this.state.year} viewSwitcher={this.viewSwitcher}/>
-
             <MonthBar/>
-
             <div className="nano">
               <MonthLines/>
-              <div className="overlay"></div>
-
-              {/* <Scrollbars
+              <div className="overlay" />
+              <Scrollbars
                 thumbMinSize={100}
                 universal={true}
                 style={{
                   height: '100%'
-                }}> */}
-
-                <div className="events-wrapper" ref={(ref) => {
-                    this.eventsWrapper = ref
-                  }}>
-
-
-                  {/* <Masonry
-                      // className={'my-gallery-class'} // default ''
-                      // elementType={'ul'} // default 'div'
-                      options={this.masonryOptions} // default {}
-                      disableImagesLoaded={false} // default false
-                      updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
-                  >
-                    {
-                      Object.keys(this.events).map( (k,i) => this.renderItem(k, i) )
-                    }
-                  </Masonry> */}
-
-
-
-                  {/* {
-                    Object.keys(this.events).map( (k,i) => this.renderItem(k, i) )
-                  } */}
-
-                  <ReactList
-                    itemRenderer={this.renderItem}
-                    length={this.events.length}
-                    type='variable'
-                  />
-
-
-                </div>
-              {/* </Scrollbars> */}
-
-
-
+                }}>
+                <EventsWrapper events={this.state.events} view={this.state.view} />
+              </Scrollbars>
             </div>
           </div>
         </div>
       </main>
-
-      <Sidebar regions={this.state.regions} updateRegion={this.updateRegion}/>
-
+      <Sidebar
+        regions={this.state.regions}
+        updateRegion={this.updateRegion}
+        brands={this.state.brands}
+        updateBrand={this.updateBrand}
+        offers={this.state.offers}
+        updateOffer={this.updateOffer}
+      />
     </div>);
   }
 }
