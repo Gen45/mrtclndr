@@ -29,11 +29,7 @@ class Offers extends Component {
           })
         }
       </div>
-
       <Footer />
-
-
-
     </div>)
   }
 }

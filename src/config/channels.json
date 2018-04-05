@@ -1,61 +1,51 @@
 [{
-    "class": "BRAND_COM",
+    "key": "BRAND_COM",
     "name": "Brand.com",
-    "icon": "nc-icon-mini media-2_radio",
-    "title": "Brand.com"
+    "icon": "nc-icon-mini media-2_radio"
   },
   {
-    "class": "EVENTS",
+    "key": "EVENTS",
     "name": "Events",
-    "icon": "nc-icon-mini ui-1_calendar-57",
-    "title": "Events"
+    "icon": "nc-icon-mini ui-1_calendar-57"
   },
   {
-    "class": "MEDIA",
+    "key": "MEDIA",
     "name": "Media",
-    "icon": "nc-icon-mini media-2_speaker-01",
-    "title": "Media"
+    "icon": "nc-icon-mini media-2_speaker-01"
   },
   {
-    "class": "CONTENT",
+    "key": "CONTENT",
     "name": "Content",
-    "icon": "nc-icon-mini business_cheque",
-    "title": "Content"
+    "icon": "nc-icon-mini business_cheque"
   },
   {
-    "class": "DIRECT_MAIL",
+    "key": "DIRECT_MAIL",
     "name": "Direct Mail",
-    "icon": "nc-icon-mini ui-1_send",
-    "title": "Direct Mail"
+    "icon": "nc-icon-mini ui-1_send"
   },
   {
-    "class": "EMAIL",
+    "key": "EMAIL",
     "name": "Email",
-    "icon": "nc-icon-mini ui-1_email-84",
-    "title": "Email"
+    "icon": "nc-icon-mini ui-1_email-84"
   },
   {
-    "class": "ON_PROPERTY",
+    "key": "ON_PROPERTY",
     "name": "On Property",
-    "icon": "nc-icon-mini travel_hotel",
-    "title": "On Property"
+    "icon": "nc-icon-mini travel_hotel"
   },
   {
-    "class": "PR",
+    "key": "PR",
     "name": "Public Relations",
-    "icon": "nc-icon-mini users_multiple-11",
-    "title": "Public Relations"
+    "icon": "nc-icon-mini users_multiple-11"
   },
   {
-    "class": "SOCIAL",
+    "key": "SOCIAL",
     "name": "Social",
-    "icon": "nc-icon-mini ui-2_like",
-    "title": "Social Media"
+    "icon": "nc-icon-mini ui-2_like"
   },
   {
-    "class": "OTHER_CHANNELS",
+    "key": "OTHER_CHANNELS",
     "name": "Other Channels",
-    "icon": "nc-icon-mini ui-2_menu-dots",
-    "title": ""
+    "icon": "nc-icon-mini ui-2_menu-dots"
   }
 ]

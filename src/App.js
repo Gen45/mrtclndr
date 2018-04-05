@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
-import _ from 'lodash';
+// import _ from 'lodash';
 // import Masonry from 'react-masonry-component';
 // import ReactList from 'react-list';
 // import moment from 'moment';
@@ -9,7 +9,7 @@ import _ from 'lodash';
 import './styles/style.css';
 
 // DATA
-import eventsData from './config/events.json';
+import eventsData from './config/eventsData';
 import defaultState from './config/defaultState.json';
 
 // LOCAL COMPONENTS
@@ -21,28 +21,37 @@ import MonthLines from './components/MonthLines';
 import Sidebar from './components/Sidebar/Sidebar';
 // import Event from './components/Event/Event';
 
+  // console.log(typeOf eventsData());
+
+ console.log( eventsData() );
+
 class App extends Component {
 
-  state = { ...defaultState  };
-  events =  {};
+  state = { ...defaultState };
+  events = eventsData();
 
   componentWillMount = () => {
     this.updateEventList();
   }
 
-  prepareEventList = () => {
-    this.events =
-     _.sortBy(
-       eventsData.filter(e => {
-      return this.activeFilter(this.state.regions).indexOf(e["Owner SubRegion"]) >= 0
-    })
-    , "Owner SubRegion");
+  prepareEventList = (events, filter, field) => {
+     // _.sortBy(
+    return events.filter(e => {
+        return this.activeFilter(filter).indexOf(e[field]) >= 0
+      });
+    // , field);
   }
 
   updateEventList = () => {
-    this.prepareEventList();
-    this.setState({ events : this.events });
+    let events = [];
+    events = this.prepareEventList(this.events, this.state.regions, "region");
+    // events = this.prepareEventList(events, this.state.offers, "Offer");
+    this.setState({ events : events });
   };
+
+  // updateActiveEvents = (events, filters) => {
+  //   return activeEvents;
+  // }
 
   activeFilter = (filterType) => {
     return Object.keys(filterType).filter((f, i) => filterType[f] === true)
