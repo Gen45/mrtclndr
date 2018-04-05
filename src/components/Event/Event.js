@@ -69,7 +69,7 @@ class Event extends Component {
       <div className="timeline-wrapper timeline-2">
         <div className="event-timeline" data-start={230} data-end={232} style={{
             left: '31.5068%',
-            width: '0.273973%'
+            width: '12.273973%'
           }}>
           <i className="start" data-day={19} data-month={8} data-year={17}/>
           <i className="end" data-day={21} data-month={8} data-year={17}/>

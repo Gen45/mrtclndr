@@ -23,7 +23,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 
   // console.log(typeOf eventsData());
 
- console.log( eventsData() );
+ // console.log( eventsData() );
 
 class App extends Component {
 
@@ -45,8 +45,8 @@ class App extends Component {
   updateEventList = () => {
     let events = [];
     events = this.prepareEventList(this.events, this.state.regions, "region");
-    // events = this.prepareEventList(events, this.state.offers, "Offer");
-    this.setState({ events : events });
+    events = this.prepareEventList(events, this.state.offers, "offer");
+    this.setState({ events });
   };
 
   // updateActiveEvents = (events, filters) => {

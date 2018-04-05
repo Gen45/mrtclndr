@@ -1,12 +1,20 @@
 import events from './events.json';
-// import offers from './offers.json';
+import offers from './offers.json';
 // import channels from './channels.json';
 // import regions from './regions.json';
 // import brands from './brands.json';
 
+const getOffer = (offer, offers) => {
+ const o =  Object.keys(offers).filter( key => offers[key]["name"] === offer)[0];
+ return  o !== undefined && o !== "none" ? o : 'NO-PROMOTION';
+
+}
+
+
+
 const eventsData = () => {
   return events.map(e => {
-    let event = {};
+    // let event = {};
 
     return {
       id: e["Id"],
@@ -18,7 +26,7 @@ const eventsData = () => {
       segment: e["Segment"],
       market: e["Entire US"],
       programType: e["Program Type"],
-      offer: e["Offer"],
+      offer: getOffer(e["Offer"], offers),
       channels: {
         "EVENTS": e["Events"],
         "MEDIA": e["Media"],

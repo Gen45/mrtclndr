@@ -1,41 +1,42 @@
-[{
-    "key": "RATE",
+{
+  "RATE":
+  {
     "name": "Rate Only"
   },
+  "REWARDS":
   {
-    "key": "REWARDS",
     "name": "Rewards"
   },
+  "PACKAGE":
   {
-    "key": "PACKAGE",
     "name": "Package"
   },
+  "OPENING":
   {
-    "key": "OPENING",
     "name": "Hotel Opening"
   },
+  "BRANDING":
   {
-    "key": "BRANDING",
     "name": "Other Brand Package"
   },
+  "LOYALTY-OFFER":
   {
-    "key": "LOYALTY OFFER",
     "name": "Loyalty Offers (MI, RC & SW)"
   },
+  "PARTNERSHIP":
   {
-    "key": "PARTNERSHIP",
     "name": "Partnership (Credit Card, Airlines)"
   },
+  "MULTIPLE":
   {
-    "key": "MULTIPLE",
     "name": "Multiple Offers"
   },
+  "OTHER-PROMOTION":
   {
-    "key": "OTHER PROMOTION",
     "name": "Other Brand Package"
   },
+  "NO-PROMOTION":
   {
-    "key": "NO PROMOTION",
     "name": "No Offer"
   }
-]
+}

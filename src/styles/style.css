@@ -976,6 +976,7 @@ span.filter-category.time-filters.time {
       border-top: 1px solid #666666; }
 
 .timeline-wrapper {
+  width: 100%;
   position: absolute;
   bottom: 0px;
   height: 10px; }
