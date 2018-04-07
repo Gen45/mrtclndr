@@ -20,7 +20,7 @@ const eventsData = () => {
       description: e["Description"],
       campaignGroup: e["Campaign Group"],
       segment: e["Segment"],
-      market: e["Entire US"],
+      market: e["Destination - Featured Market"],
       programType: e["Program Type"],
       offer: getOffer(e["Offer"], offers),
       channels: {
@@ -47,9 +47,6 @@ const eventsData = () => {
         stay: {
           start: e["Stay Start Date"],
           end: e["Stay End Date"]
-        },
-        multidate() {
-          return (this.sell.start !== this.stay.start || this.sell.end !== this.stay.end)
         }
       }
     }

@@ -1,5 +1,7 @@
 import React from 'react';
 
+
+
 const EventDate = (props) => {
   const stay = props.type === 'stay'
     ? 'event-dates__STAY'

@@ -1,48 +1,41 @@
 import React, {Component} from 'react';
-import moment from 'moment';
 
+import {cleanDate, dayOfYear, daysOfYear, day, month, year} from '../../helpers/dates';
 
 export class Timeline extends Component {
 
-  daysOfYear = (date) => {
-    return moment("12/31/" + moment(date, "MM/DD/YY").format('YY'), "MM/DD/YY").dayOfYear()
-  };
-
-  getLineStart = (date) => {
-    // TODO make the 2 in this formula a variable for number of years
-    return  moment(date, "MM/DD/YY").dayOfYear() * ((100 / 2) / this.daysOfYear(date));
-  };
-
-  getLineWidth = (startDate, endDate) => {
-    return this.getLineStart(endDate) - this.getLineStart(startDate);
-  };
+  // TODO make the 2 in this formula a variable for number of years
+  getLineStart = date => dayOfYear(date) * ((100 / 2) / daysOfYear(date));
+  getLineWidth = dates => this.getLineStart(dates.end) - this.getLineStart(dates.start);
+  oneMonth = dates => dates.start === dates.end ? ' one-month' : '';
+  dotted = dates => cleanDate(dates.start, 'start').clean || cleanDate(dates.end, 'end').clean ? ' dotted' : '';
+  timeline2 = multidate => multidate ? ' timeline-2' : '';
 
   render() {
 
-    const dates = this.props.dates;
+    const dates = {start: cleanDate(this.props.dates.start, 'start').date,
+                    end: cleanDate(this.props.dates.end, 'end').date};
 
-    return (<div className={`timeline-wrapper ${this.props.multidate
-        ? "  timeline-2"
-        : ''}`}>
+    return (<div className={`timeline-wrapper ${this.timeline2(this.props.multidate)}`}>
       <div
-        className="event-timeline"
+        className={`event-timeline ${this.oneMonth(dates)} ${this.dotted(dates)}`.trim()}
         // data-start={moment(dates.start, "MM/DD/YY").dayOfYear()}
         // data-end={moment(dates.end, "MM/DD/YY").dayOfYear()}
         style={{
           left: this.getLineStart(dates.start) + '%',
-          width: this.getLineWidth(dates.start, dates.end) + '%'
+          width: this.getLineWidth(dates) + '%'
         }}>
         <i className="start"
           // data-date={dates.start}
-          data-day={moment(dates.start, "MM/DD/YY").format('DD')}
-          data-month={moment(dates.start, "MM/DD/YY").format('MM')}
-          data-year={moment(dates.start, "MM/DD/YY").format('YY')}
+          data-day={day(dates.start)}
+          data-month={month(dates.start)}
+          data-year={year(dates.start)}
         />
         <i className="end"
           // data-date={dates.end}
-          data-day={moment(dates.end, "MM/DD/YY").format('DD')}
-          data-month={moment(dates.end, "MM/DD/YY").format('MM')}
-          data-year={moment(dates.end, "MM/DD/YY").format('YY')}
+          data-day={day(dates.end)}
+          data-month={month(dates.end)}
+          data-year={year(dates.end)}
         />
       </div>
     </div>)
