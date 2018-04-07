@@ -9,7 +9,6 @@ const Brand = (props) =>
 
 class Brands extends Component {
   render() {
-
     const brands = this.props.brands;
 
     return (

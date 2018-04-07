@@ -5,7 +5,7 @@ import Footer from './Footer';
 class Brands extends Component {
 
   handleChange = (event, brand, active) => {
-    this.props.updateBrands(brand, event.target.checked);
+    this.props.updateFilters(brand, "brands", event.target.checked);
   };
 
   render() {

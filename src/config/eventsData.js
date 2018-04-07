@@ -7,15 +7,11 @@ import offers from './offers.json';
 const getOffer = (offer, offers) => {
  const o =  Object.keys(offers).filter( key => offers[key]["name"] === offer)[0];
  return  o !== undefined && o !== "none" ? o : 'NO-PROMOTION';
-
 }
 
-
-
 const eventsData = () => {
-  return events.map(e => {
-    // let event = {};
 
+  return events.map(e => {
     return {
       id: e["Id"],
       region: e["Owner SubRegion"],

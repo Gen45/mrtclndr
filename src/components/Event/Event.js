@@ -3,17 +3,20 @@ import React, {Component} from 'react';
 import Header from './Header';
 import Brands from './Brands';
 import Dates from './Dates';
+import Timelines from './Timelines';
 
 class Event extends Component {
+
+  getEventClassName = (view, event) => {
+    return `event ${view}-view ${event.region}${event.dates.multidate() ? " MULTIDATE" : " SINGLEDATE"} ${event.dates.multidate()}`;
+  };
 
   render() {
 
     const view = this.props.view;
     const event = this.props.event;
 
-    return (<div id={event.id} className={`event ${view}-view ${event.region}${event.dates.multidate()
-        ? " MULTIDATE"
-        : ''}`}>
+    return (<div id={event.id} className={this.getEventClassName(view, event)}>
 
       {/* <div className="close-button"/> */}
 
@@ -41,7 +44,7 @@ class Event extends Component {
               }
             </p>
           </div>
-          <i className="more"/>
+          {/* <i className="more"/> */}
         </div>
 
         <div className="tabs">
@@ -56,25 +59,7 @@ class Event extends Component {
         <Brands brands={event.brands}/>
       </div>
 
-      <div className="timeline-wrapper">
-        <div className="event-timeline one-month" data-start={232} data-end={232} style={{
-            left: '31.7808%',
-            width: '0%'
-          }}>
-          <i className="start" data-day={21} data-month={8} data-year={17}/>
-          <i className="end" data-day={21} data-month={8} data-year={17}/>
-        </div>
-      </div>
-
-      <div className="timeline-wrapper timeline-2">
-        <div className="event-timeline" data-start={230} data-end={232} style={{
-            left: '31.5068%',
-            width: '12.273973%'
-          }}>
-          <i className="start" data-day={19} data-month={8} data-year={17}/>
-          <i className="end" data-day={21} data-month={8} data-year={17}/>
-        </div>
-      </div>
+      <Timelines dates={event.dates}/>
 
     </div>)
   }

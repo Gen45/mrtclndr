@@ -1,9 +1,34 @@
 {
-  "PORTFOLIO": {"name": "PORTFOLIO"},
-  "BRAND": {"name": "BRAND"},
-  "LOYALTY": {"name": "LOYALTY"},
-  "US-EAST": {"name": "US EAST"},
-  "US-WEST": {"name": "US WEST"},
-  "CANADA": {"name": "CANADA"},
-  "CALA": {"name": "CALA"}
+  "US": {
+    "name": "US",
+    "color": "#4399c4"
+  },
+  "US-WEST": {
+    "name": "US WEST",
+    "color": "#3b79cb"
+  },
+  "US-EAST": {
+    "name": "US EAST",
+    "color": "#3dc7ca"
+  },
+  "CALA": {
+    "name": "CALA",
+    "color": "#70cb74"
+  },
+  "CANADA": {
+    "name": "CANADA",
+    "color": "#e85858"
+  },
+  "BRAND": {
+    "name": "BRAND",
+    "color": "#ab528d"
+  },
+  "PORTFOLIO": {
+    "name": "PORTFOLIO",
+    "color": "#f49140"
+  },
+  "LOYALTY": {
+    "name": "LOYALTY",
+    "color": "#4b4eb2"
+  }
 }

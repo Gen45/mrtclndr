@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
 
 import Search from './Search';
-import Regions from './Regions';
-// import Brands from './Brands';
-import Offers from './Offers';
-// import Channels from './Channels';
+import Filter from './Filter';
 
 class Sidebar extends Component {
 
-  render(props) {
+  render() {
 
     return (
       <aside className="sidebar">
@@ -22,10 +19,20 @@ class Sidebar extends Component {
             <div className="scroll-wrapper nano-content">
 
                 <Search />
-                <Regions title={"Regions"} regions={this.props.regions} titleIcon={"nc-icon-outline travel_world"} updateRegion={this.props.updateRegion}/>
-                {/* <Brands title={"Brands"} brands={this.props.brands} titleIcon={"nc-icon-outline objects_diamond"} updateBrands={this.props.updateBrands}/> */}
-                <Offers title={"Offers"} offers={this.props.offers} titleIcon={"nc-icon-outline ui-1_check-circle-07"} updateOffer={this.props.updateOffer}/>
-                {/* <Channels /> */}
+                <Filter
+                  title={"Regions"}
+                  filterName={"regions"}
+                  filters={this.props.regions}
+                  titleIcon={"nc-icon-outline travel_world"}
+                  updateFilter={this.props.updateFilter}
+                />
+                <Filter
+                  title={"Offers"}
+                  filterName={"offers"}
+                  titleIcon={"nc-icon-outline ui-1_check-circle-07"}
+                  filters={this.props.offers}
+                  updateFilter={this.props.updateFilter}/>
+
             </div>
         </div>
 
