@@ -11,7 +11,7 @@ import defaultState from './config/defaultState.json';
 
 // LOCAL COMPONENTS
 import Header from './components/Header';
-import Navigation from './components/Navigation';
+import ToolBar from './components/ToolBar/ToolBar';
 import MonthBar from './components/MonthBar';
 import MonthLines from './components/MonthLines';
 import EventsWrapper from './components/Event/EventsWrapper';
@@ -70,7 +70,7 @@ class App extends Component {
         <Header/>
         <div className="content-frame">
           <div id="view" className={`content ${this.state.view}-view`}>
-            <Navigation segment={this.state.time} year={this.state.year} viewSwitcher={this.viewSwitcher}/>
+            <ToolBar defaultTime={this.state.time} viewSwitcher={this.viewSwitcher}/>
             <MonthBar/>
             <div className="nano">
               <MonthLines/>

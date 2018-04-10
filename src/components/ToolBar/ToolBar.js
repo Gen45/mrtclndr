@@ -1,14 +1,18 @@
 import React, {Component} from 'react';
 
-class Navigation extends Component {
+class ToolBar extends Component {
 
   handleButton = (e, payload) => {
     e.preventDefault();
-
     payload();
   };
 
+
+
   render() {
+
+    // const mode = this.props.defaultTime;
+
     return (
       <header>
       <span className="pagination">
@@ -20,8 +24,8 @@ class Navigation extends Component {
         </a>
       </span>
       <h2 className="title">
-        <span className="segment">{this.props.segment}</span>
-        <span className="detail">{this.props.year}</span>
+        <span className="segment">{this.props.defaultTime.mode}</span>
+        <span className="detail">{this.props.defaultTime.firstYear}</span>
       </h2>
       <nav className="main-filters">
         {/* <span className="filter-category time-filters time">
@@ -214,10 +218,11 @@ class Navigation extends Component {
           <a className="nav-trigger" onClick={(e) => this.handleButton(e, (p) => this.props.viewSwitcher("grid"))}><i className="nc-icon-mini ui-2_grid-square"/></a>
           <a className="nav-trigger" onClick={(e) => this.handleButton(e, (p) => this.props.viewSwitcher("timeline"))}><i className="nc-icon-mini ui-2_menu-35"/></a>
         </span>
+
       </nav>
 
     </header>)
   }
 }
 
-export default Navigation;
+export default ToolBar;

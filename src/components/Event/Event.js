@@ -1,22 +1,38 @@
 import React, {Component} from 'react';
 
+import {year, isMultidate} from '../../helpers/dates';
+
 import Header from './Header';
 import Brands from './Brands';
 import Dates from './Dates';
 import Timelines from './Timelines';
 
+//
+// $year_classes = $start_sell_date_obj->{'year'};
+// if ( $year_classes == $end_sell_date_obj->{'year'}) {
+// $year_classes = 'YEAR-'. $year_classes;
+// } else {
+// $year_classes = "YEAR-". $start_sell_date_obj->{'year'} . " YEAR-" . $end_sell_date_obj->{'year'};
+// }
+
+
+
+
+
 class Event extends Component {
 
-  getEventClassName = (view, event) => {
-    return `event ${view}-view ${event.region}${event.dates.multidate() ? " MULTIDATE" : " SINGLEDATE"} ${event.dates.multidate()}`;
-  };
+  getYearClasses = (dates) => [year(dates.sell.start), year(dates.sell.end), year(dates.stay.start), year(dates.stay.end)]
+                                .filter( (value, index, self) => self.indexOf(value) === index )
+                                .reduce( (classes, year) => `${classes} YEAR-${year}`, '');
+
+  getEventClassName = (view, region, dates) => `event ${view}-view ${region}${isMultidate(dates) ? " MULTIDATE" : " SINGLEDATE"} ${this.getYearClasses(dates)}`;
 
   render() {
 
     const view = this.props.view;
     const event = this.props.event;
 
-    return (<div id={event.id} className={this.getEventClassName(view, event)}>
+    return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates)}>
 
       {/* <div className="close-button"/> */}
 

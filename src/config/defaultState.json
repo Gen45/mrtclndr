@@ -1,7 +1,6 @@
 {
-  "year": 2018,
   "view": "timeline",
-  "time": "YEARS",
+  "time": {"mode": "2Y", "firstYear": 2017},
   "regions": {
     "PORTFOLIO": true,
     "BRAND": true,

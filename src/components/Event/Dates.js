@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+import {isMultidate} from '../../helpers/dates';
 
 const EventDate = (props) => {
   const stay = props.type === 'stay'
@@ -22,7 +22,7 @@ const EventDate = (props) => {
 const Dates = (props) => {
 
   return (
-    props.dates.multidate()
+    isMultidate(props.dates)
     ? <div className="event-date">
       <EventDate start={props.dates.sell.start} end={props.dates.sell.end} type="sell"/>
       <EventDate start={props.dates.stay.start} end={props.dates.stay.end} type="stay"/>

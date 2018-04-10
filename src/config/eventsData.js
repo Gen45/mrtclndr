@@ -3,14 +3,20 @@ import offers from './offers.json';
 // import channels from './channels.json';
 // import regions from './regions.json';
 // import brands from './brands.json';
+import {year} from './defaultState';
 
-const getOffer = (offer, offers) => {
- const o =  Object.keys(offers).filter( key => offers[key]["name"] === offer)[0];
- return  o !== undefined && o !== "none" ? o : 'NO-PROMOTION';
+import {getEarlierDate} from '../helpers/dates';
+
+export const getOffer = (offer, offers) => {
+  const o = Object.keys(offers).filter(key => offers[key]["name"] === offer)[0];
+  return o !== undefined && o !== "none"
+    ? o
+    : 'NO-PROMOTION';
 }
 
-const eventsData = () => {
 
+
+const eventsData = () => {
   return events.map(e => {
     return {
       id: e["Id"],
@@ -20,7 +26,7 @@ const eventsData = () => {
       description: e["Description"],
       campaignGroup: e["Campaign Group"],
       segment: e["Segment"],
-      market: e["Destination - Featured Market"],
+      market: e["Entire US"],
       programType: e["Program Type"],
       offer: getOffer(e["Offer"], offers),
       channels: {
@@ -48,7 +54,8 @@ const eventsData = () => {
           start: e["Stay Start Date"],
           end: e["Stay End Date"]
         }
-      }
+      },
+      earlierDate: getEarlierDate([e["Sell Start Date"], e["Stay Start Date"]], year)
     }
   });
 }
