@@ -3,7 +3,7 @@ import offers from './offers.json';
 // import channels from './channels.json';
 // import regions from './regions.json';
 // import brands from './brands.json';
-import {year} from './defaultState';
+// import {year} from './defaultState';
 
 import {getEarlierDate} from '../helpers/dates';
 
@@ -55,7 +55,7 @@ const eventsData = () => {
           end: e["Stay End Date"]
         }
       },
-      earlierDate: getEarlierDate([e["Sell Start Date"], e["Stay Start Date"]], year)
+      earlierDate: getEarlierDate([e["Sell Start Date"], e["Stay Start Date"]])
     }
   });
 }

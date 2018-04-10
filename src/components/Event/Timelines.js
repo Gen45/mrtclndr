@@ -10,10 +10,15 @@ import {
   isMultidate
 } from '../../helpers/dates';
 
+import {time} from '../../config/defaultState';
+
 export class Timeline extends Component {
 
   // TODO make the 2 in this formula a variable for number of years
-  getLineStart = date => dayOfYear(date) * ((100 / 2) / daysOfYear(date));
+  // "01/15/17"
+  getLineStart = date => ((year(date) - time.firstYear) * daysOfYear('01/01/'+time.firstYear) + dayOfYear(date)) * ((100 / 2) / daysOfYear(date));  
+
+  // getLineStart = date => dayOfYear(date) * ((100 / 2) / daysOfYear(date));
 
   getLineWidth = dates => this.getLineStart(dates.end) - this.getLineStart(dates.start);
 
@@ -63,7 +68,7 @@ class Timelines extends Component {
 
     return (
       <div className="timelines">
-        <Timeline dates={dates.sell}/> 
+        <Timeline dates={dates.sell}/>
         {isMultidate(dates) &&
           <Timeline dates={dates.stay} multidate={true}/>}
       </div>)

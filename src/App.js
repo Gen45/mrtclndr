@@ -20,8 +20,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 class App extends Component {
 
   state = {
-    ...defaultState,
-    sortBy: ["region", "offer"]
+    ...defaultState
   };
   events = eventsData();
 

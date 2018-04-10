@@ -1,6 +1,7 @@
 {
   "view": "timeline",
-  "time": {"mode": "2Y", "firstYear": 2017},
+  "time": {"mode": "2Y", "firstYear": 17},
+  "sortBy": ["earlierDate", "region", "offer"],
   "regions": {
     "PORTFOLIO": true,
     "BRAND": true,
