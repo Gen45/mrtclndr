@@ -101,7 +101,7 @@ class App extends Component {
             <div className={`overlay ${this.state.modal
                 ? 'active'
                 : ''}`}/>
-            <ToolBar defaultTime={this.state.time} viewSwitcher={this.viewSwitcher}/>
+            <ToolBar defaultTime={this.state.time} viewSwitcher={this.viewSwitcher} view={this.state.view} />
             <MonthBar/>
             <div className="nano">
               <MonthLines/>

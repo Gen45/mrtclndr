@@ -3,13 +3,17 @@ import moment from 'moment';
 import times from 'lodash/times';
 // import _ from 'lodash';
 
-export const day = date => moment(date, "MM/DD/YY").format('DD');
-export const month = date => moment(date, "MM/DD/YY").format('MM');
-export const year = date => moment(date, "MM/DD/YY").format('YY');
-export const thisYear = () => moment().format('YY');
+const FORMAT = "MM/DD/YY";
 
-export const cleanDate = (date, dateType) => {
-  // const date = moment(dateIn).format('MM/DD/YY');
+export const day = date => moment(date, FORMAT).format('DD');
+export const month = date => moment(date, FORMAT).format('MM');
+export const year = date => moment(date, FORMAT).format('YY');
+export const thisYear = () => moment().format('YY');
+export const today = () => moment().format(FORMAT);
+export const add = (date, amount, type) => moment(date, FORMAT).add(amount, type).format(FORMAT);
+
+export const cleanDate = (dateIn, dateType) => {
+  const date = moment(dateIn, FORMAT).format(FORMAT);
   return date === "Invalid date"
     ? dateType === 'start'
       ? {
@@ -26,8 +30,9 @@ export const cleanDate = (date, dateType) => {
     };
 }
 
-export const dayOfYear = date => moment(date, "MM/DD/YY").dayOfYear();
-export const daysOfYear = date => moment("12/31/" + moment(date, "MM/DD/YY").format('YY'), "MM/DD/YY").dayOfYear();
+export const daysInMonth = date => moment(date, FORMAT).daysInMonth();
+export const dayOfYear = date => moment(date, FORMAT).dayOfYear();
+export const daysOfYear = date => moment("12/31/" + moment(date, FORMAT).format('YY'), FORMAT).dayOfYear();
 
 export const isMultidate = (dates) => ((dates.sell.start !== dates.stay.start) || (dates.sell.end !== dates.stay.end)) && (dates.stay.start !== "" && dates.stay.end !== "");
 

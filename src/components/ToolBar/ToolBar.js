@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
 
+// time modes: YEARS, YEAR-17, YEAR-18, MONTH, Q1, Q2, Q3, Q4
+
+const Title = (props) => {
+  return (<h2 className="title">
+    <span className="segment">{props.defaultTime.mode}</span>
+    <span className="detail">{props.defaultTime.firstYear}</span>
+  </h2>)}
+
 class ToolBar extends Component {
 
   handleButton = (e, payload) => {
@@ -7,11 +15,9 @@ class ToolBar extends Component {
     payload();
   };
 
-
+  isActive = (prop, target) => prop === target ? 'active' : '';
 
   render() {
-
-    // const mode = this.props.defaultTime;
 
     return (
       <header>
@@ -23,10 +29,8 @@ class ToolBar extends Component {
           <i className="nc-icon-outline arrows-1_minimal-right"></i>
         </a>
       </span>
-      <h2 className="title">
-        <span className="segment">{this.props.defaultTime.mode}</span>
-        <span className="detail">{this.props.defaultTime.firstYear}</span>
-      </h2>
+      <Title defaultTime={this.props.defaultTime}/>
+
       <nav className="main-filters">
         {/* <span className="filter-category time-filters time">
           <a id="trigger-time-tools" className="nav-trigger"><i className="nc-icon-mini ui-1_calendar-57"/>
@@ -208,15 +212,15 @@ class ToolBar extends Component {
               Email</a>
           </div>
         </span> */}
-        {/* <span className="filter-category validity">
+        <span className="filter-category validity">
           <a id="trigger-PAST" className="nav-trigger f-trigger" data-target=".PAST-EVENT"><i className="nc-icon-mini arrows-2_cross-left" data-view-type="timeline-view"/></a>
           <a id="trigger-ALL" className="nav-trigger f-trigger active" data-target="data-target"><i className="nc-icon-mini design_window-responsive" data-view-type="timeline-view"/></a>
           <a id="trigger-FUTURE" className="nav-trigger f-trigger " data-target=".FUTURE-EVENT"><i className="nc-icon-mini arrows-2_cross-right" data-view-type="timeline-view"/></a>
-        </span> */}
+        </span>
 
         <span className="filter-category">
-          <a className="nav-trigger" onClick={(e) => this.handleButton(e, (p) => this.props.viewSwitcher("grid"))}><i className="nc-icon-mini ui-2_grid-square"/></a>
-          <a className="nav-trigger" onClick={(e) => this.handleButton(e, (p) => this.props.viewSwitcher("timeline"))}><i className="nc-icon-mini ui-2_menu-35"/></a>
+          <a className={`nav-trigger ${this.isActive(this.props.view,'grid')}`} onClick={(e) => this.handleButton(e, (p) => this.props.viewSwitcher("grid"))}><i className="nc-icon-mini ui-2_grid-square"/></a>
+          <a className={`nav-trigger ${this.isActive(this.props.view,'timeline')}`} onClick={(e) => this.handleButton(e, (p) => this.props.viewSwitcher("timeline"))}><i className="nc-icon-mini ui-2_menu-35"/></a>
         </span>
 
       </nav>
