@@ -151,6 +151,11 @@
                     transform: rotate(-180deg);
                 }
             }
+            & > .content {
+              height: 0;
+              overflow: hidden;
+              padding: 0 !important;
+            }
             &:hover {
                 footer {
                     height: 0;
@@ -194,7 +199,7 @@
 }
 
 .brand-category {
-    display: none;
+    // display: none;
     h4 {
         text-align: center;
         margin: 10px auto 5px;

@@ -1,119 +1,158 @@
 {
   "AC": {
-    "name": "AC Hotels Marriott"
+    "name": "AC Hotels Marriott",
+    "image": "images/brands/brand_AC.svg"
   },
   "AL": {
-    "name": "Aloft"
+    "name": "Aloft",
+    "image": "images/brands/brand_AL.svg"
   },
   "AK": {
-    "name": "Autograph Collection Hotels"
+    "name": "Autograph Collection Hotels",
+    "image": "images/brands/brand_AK.svg"
   },
   "BL": {
-    "name": "Bvlgari"
+    "name": "Bvlgari",
+    "image": "images/brands/brand_BL.svg"
   },
   "CY": {
-    "name": "Courtyard Marriott"
+    "name": "Courtyard Marriott",
+    "image": "images/brands/brand_CY.svg"
   },
   "DE": {
-    "name": "Delta Hotels and Resorts"
+    "name": "Delta Hotels and Resorts",
+    "image": "images/brands/brand_DE.svg"
   },
   "DH": {
-    "name": "Design Hotels"
+    "name": "Design Hotels",
+    "image": "images/brands/brand_DH.svg"
   },
   "ED": {
-    "name": "Edition"
+    "name": "Edition",
+    "image": "images/brands/brand_ED.svg"
   },
   "EL": {
-    "name": "Element"
+    "name": "Element",
+    "image": "images/brands/brand_EL.svg"
   },
   "FI": {
-    "name": "Fairfield Inn Marriott"
+    "name": "Fairfield Inn Marriott",
+    "image": "images/brands/brand_FI.svg"
   },
   "FP": {
-    "name": "Four Points"
+    "name": "Four Points",
+    "image": "images/brands/brand_FP.svg"
   },
   "GH": {
-    "name": "Gaylord Hotels"
+    "name": "Gaylord Hotels",
+    "image": "images/brands/brand_GH.svg"
   },
   "JW": {
-    "name": "JW Marriott"
+    "name": "JW Marriott",
+    "image": "images/brands/brand_JW.svg"
   },
   "LM": {
-    "name": "Le Meridien"
+    "name": "Le Meridien",
+    "image": "images/brands/brand_LM.svg"
   },
   "MEA": {
-    "name": "Marriott Executive Apartments"
+    "name": "Marriott Executive Apartments",
+    "image": "images/brands/brand_MEA.svg"
   },
   "MHR": {
-    "name": "Marriott Hotels & Resorts"
+    "name": "Marriott Hotels & Resorts",
+    "image": "images/brands/brand_MHR.svg"
   },
   "MH": {
-    "name": "Marriott Hotels"
+    "name": "Marriott Hotels",
+    "image": "images/brands/brand_MH.svg"
   },
   "MR": {
-    "name": "Marriott Rewards"
+    "name": "Marriott Rewards",
+    "image": "images/brands/brand_MR.svg"
   },
   "MVC": {
-    "name": "Marriott Vacation Club"
+    "name": "Marriott Vacation Club",
+    "image": "images/brands/brand_MVC.svg"
   },
   "OX": {
-    "name": "Moxy Hotels"
+    "name": "Moxy Hotels",
+    "image": "images/brands/brand_OX.svg"
   },
   "PM": {
-    "name": "Portfolio Marketing"
+    "name": "Portfolio Marketing",
+    "image": "images/brands/brand_PM.svg"
   },
   "PH": {
-    "name": "Protea Hotels"
+    "name": "Protea Hotels",
+    "image": "images/brands/brand_PH.svg"
   },
   "RH": {
-    "name": "Renaissance Hotels"
+    "name": "Renaissance Hotels",
+    "image": "images/brands/brand_RH.svg"
   },
   "RI": {
-    "name": "Residence Inn Marriott"
+    "name": "Residence Inn Marriott",
+    "image": "images/brands/brand_RI.svg"
   },
   "SI": {
-    "name": "Sheraton"
+    "name": "Sheraton",
+    "image": "images/brands/brand_SI.svg"
   },
   "SH": {
-    "name": "Springhill Suites Marriott"
+    "name": "Springhill Suites Marriott",
+    "image": "images/brands/brand_SH.svg"
   },
   "SR": {
-    "name": "St Regis"
+    "name": "St Regis",
+    "image": "images/brands/brand_SR.svg"
   },
   "SPG": {
-    "name": "Starwood preferred Guests"
+    "name": "Starwood preferred Guests",
+    "image": "images/brands/brand_SPG.svg"
   },
   "LC": {
-    "name": "The Luxury Collection"
+    "name": "The Luxury Collection",
+    "image": "images/brands/brand_LC.svg"
   },
   "RC": {
-    "name": "The Ritz-Carlton"
+    "name": "The Ritz-Carlton",
+    "image": "images/brands/brand_RC.svg"
   },
   "RCR": {
-    "name": "The Ritz-Carlton Rewards"
+    "name": "The Ritz-Carlton Rewards",
+    "image": "images/brands/brand_RCR.svg"
   },
   "TPS": {
-    "name": "Towneplace Suites Marriott"
+    "name": "Towneplace Suites Marriott",
+    "image": "images/brands/brand_TPS.svg"
   },
   "TP": {
-    "name": "Tribute Portfolio"
+    "name": "Tribute Portfolio",
+    "image": "images/brands/brand_TP.svg"
   },
   "WH": {
-    "name": "W Hotels"
+    "name": "W Hotels",
+    "image": "images/brands/brand_WH.svg"
   },
   "WI": {
-    "name": "Westin"
+    "name": "Westin",
+    "image": "images/brands/brand_WI.svg"
   },
   "UN": {
-    "name": "unbranded"
+    "name": "unbranded",
+    "image": "images/brands/brand_UN.svg"
   },
   "NONE": {
-    "name": "no-branding"
+    "name": "no-branding",
+    "image": "images/brands/brand_NONE.svg"
   },
   "TREMONT": {
-    "name": "Tremont"
+    "name": "Tremont",
+    "image": "images/brands/brand_TREMONT.svg"
   },
   "GX": {
-    "name": "unbranded"
+    "name": "unbranded",
+    "image": "images/brands/brand_GX.svg"
   }
 }

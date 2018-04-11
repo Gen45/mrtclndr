@@ -1,9 +1,26 @@
 {
-  "luxury": ["RC", "SR", "JW", "LC", "BL", "WH", "ED"],
-  "premium": ["MH", "SI", "MVC", "DE", "LM", "WI", "AK", "DH", "RH", "TP", "GH"],
-  "select": ["CY", "FP", "SH", "PH", "FI", "AC", "AL", "OX"],
-  "LongerStays": ["MEA", "RI", "TPS", "EL"],
-  "Rewards": ["MR", "RCR", "SPG"],
-  "other": ["PM", "UN", "NONE"],
-  "unbranded": ["TREMONT", "GX"]
+  "luxury": {
+    "name": "Luxury",
+    "brands": ["RC", "SR", "JW", "LC", "BL", "WH", "ED"]
+  },
+  "premium": {
+    "name": "Premium",
+    "brands": ["MH", "SI", "MVC", "DE", "LM", "WI", "AK", "DH", "RH", "TP", "GH"]
+  },
+  "select": {
+    "name": "Select",
+    "brands": ["CY", "FP", "SH", "PH", "FI", "AC", "AL", "OX"]
+  },
+  "LongerStays": {
+    "name": "Long S.",
+    "brands": ["MEA", "RI", "TPS", "EL"]
+  },
+  "Rewards": {
+    "name": "Rewards",
+    "brands": ["MR", "RCR", "SPG"]
+  },
+  "other": {
+    "name": "Other",
+    "brands": ["PM", "UN", "NONE"]
+  }
 }

@@ -7,17 +7,32 @@ import offers from './offers.json';
 
 import {getEarlierDate} from '../helpers/dates';
 
-export const getOffer = (offer, offers) => {
-  const o = Object.keys(offers).filter(key => offers[key]["name"] === offer)[0];
+const getOffer = (offer, offers) => {
+  const o = Object.keys(offers).filter(key => offers[key]["name"].toUpperCase() === offer.toUpperCase())[0];
   return o !== undefined && o !== "none"
     ? o
     : 'NO-PROMOTION';
 }
 
-
+const cleanChannels = channels => Object.keys(channels).filter(c => channels[c] !== null );
 
 const eventsData = () => {
+
   return events.map(e => {
+
+    const eventChannels = {
+      "EVENTS": e["Events"],
+      "MEDIA": e["Media"],
+      "CONTENT": e["Content"],
+      "DIRECT_MAIL": e["Direct Mail"],
+      "EMAIL": e["Email"],
+      "ON_PROPERTY": e["On Property"],
+      "BRAND_COM": e["Brand-dot-Com"],
+      "PR": e["PR"],
+      "SOCIAL": e["Social"],
+      "OTHER_CHANNELS": e["Other Channels"],
+    };
+
     return {
       id: e["Id"],
       region: e["Owner SubRegion"],
@@ -29,18 +44,7 @@ const eventsData = () => {
       market: e["Entire US"],
       programType: e["Program Type"],
       offer: getOffer(e["Offer"], offers),
-      channels: {
-        "EVENTS": e["Events"],
-        "MEDIA": e["Media"],
-        "CONTENT": e["Content"],
-        "DIRECT_MAIL": e["Direct Mail"],
-        "EMAIL": e["Email"],
-        "ON_PROPERTY": e["On Property"],
-        "BRAND_COM": e["Brand-dot-Com"],
-        "LOYALTY-OFFER": e["Loyalty"],
-        "PR": e["PR"],
-        "SOCIAL": e["Social"]
-      },
+      channels: cleanChannels(eventChannels),
       otherChannels: e["Other Channels"],
       owner: {
         name: e["Owner"]

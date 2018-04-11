@@ -1,6 +1,9 @@
 {
   "view": "timeline",
-  "time": {"mode": "2Y", "firstYear": 17},
+  "time": {
+    "mode": "2Y",
+    "firstYear": 17
+  },
   "sortBy": ["earlierDate", "region", "offer"],
   "regions": {
     "PORTFOLIO": true,
@@ -27,7 +30,6 @@
     "JW": true,
     "LM": true,
     "MEA": true,
-    "MHR": true,
     "MH": true,
     "MR": true,
     "MVC": true,
@@ -52,7 +54,7 @@
   },
   "offers": {
     "RATE": true,
-    "REWARDS": true,
+    "REWARDS-OFFER": true,
     "PACKAGE": true,
     "OPENING": true,
     "BRANDING": true,
@@ -61,5 +63,18 @@
     "MULTIPLE": true,
     "OTHER-PROMOTION": true,
     "NO-PROMOTION": true
+  },
+  "channels": {
+    "BRAND_COM": true,
+    "EVENTS": true,
+    "MEDIA": true,
+    "CONTENT": true,
+    "DIRECT_MAIL": true,
+    "EMAIL": true,
+    "ON_PROPERTY": true,
+    "PR": true,
+    "SOCIAL": true,
+    "OTHER_CHANNELS": true,
+    "NO_CHANNEL": true
   }
 }

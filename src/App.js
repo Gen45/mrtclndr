@@ -15,12 +15,16 @@ import ToolBar from './components/ToolBar/ToolBar';
 import MonthBar from './components/MonthBar';
 import MonthLines from './components/MonthLines';
 import EventsWrapper from './components/Event/EventsWrapper';
+import Event from './components/Event/Event';
 import Sidebar from './components/Sidebar/Sidebar';
 
 class App extends Component {
 
   state = {
-    ...defaultState
+    ...defaultState,
+    collapsed: false,
+    modal: false,
+    modalEvent: null
   };
   events = eventsData();
 
@@ -28,25 +32,28 @@ class App extends Component {
     this.updateEventList();
   }
 
+  activeFilter = (filterType) => {
+    return Object.keys(filterType).filter((f, i) => filterType[f] === true)
+  };
+
   prepareEventList = (events, filter, field) => {
-    return events.filter(e => {
-      return this.activeFilter(filter).indexOf(e[field]) >= 0
-    });
+    return events.filter(e => this.activeFilter(filter).indexOf(e[field]) >= 0);
+  };
+
+  prepareEventListMulti = (events, filter, field) => {
+    const ev = events.filter(e => e[field].reduce((x, c) => x || (this.activeFilter(filter).indexOf(c) >= 0), false));
+    // console.log(ev.length);
+    return ev;
   };
 
   updateEventList = () => {
     let events = [];
     events = this.prepareEventList(this.events, this.state.regions, "region");
     events = this.prepareEventList(events, this.state.offers, "offer");
-    // console.log(events, this.state.sortBy);
-
-    events = sortBy(events, this.state.sortBy, ['asc']);
-    // console.log(events);
+    events = this.prepareEventListMulti(events, this.state.channels, "channels");
+    events = this.prepareEventListMulti(events, this.state.brands, "brands");
+    events = sortBy(events, this.state.sortBy, ['desc']);
     this.setState({events});
-  };
-
-  activeFilter = (filterType) => {
-    return Object.keys(filterType).filter((f, i) => filterType[f] === true)
   };
 
   viewSwitcher = (view) => {
@@ -62,28 +69,57 @@ class App extends Component {
     this.updateEventList();
   };
 
+  handleCollapse = () => {
+    const collapsed = !this.state.collapsed;
+    this.setState({collapsed});
+  };
+
+  handleOpenModal = (id) => {
+    const modalEvent = Object.values(this.state.events).filter(e => e['id'] === id)[0];
+    this.setState({modal: true, modalEvent});
+  };
+
+  handleCloseModal = () => {
+    this.setState({modal: false, modalEvent: null});
+  };
+
+  componentDidUpdate() {
+    // console.log('app updated');
+  }
+
   render(props) {
 
-    return (<div className="App">
+    return (<div className={`App ${this.state.collapsed
+        ? 'collapsed'
+        : ''} ${this.state.modal
+          ? 'modal-on'
+          : ''}`}>
       <main id="main" className="main" role="main">
         <Header/>
         <div className="content-frame">
           <div id="view" className={`content ${this.state.view}-view`}>
+            <div className={`overlay ${this.state.modal
+                ? 'active'
+                : ''}`}/>
             <ToolBar defaultTime={this.state.time} viewSwitcher={this.viewSwitcher}/>
             <MonthBar/>
             <div className="nano">
               <MonthLines/>
-              <div className="overlay"/>
               <Scrollbars thumbMinSize={100} universal={true} style={{
                   height: '100%'
                 }}>
-                <EventsWrapper events={this.state.events} view={this.state.view}/>
+                <EventsWrapper events={this.state.events} view={this.state.view} handleOpenModal={this.handleOpenModal}/>
               </Scrollbars>
             </div>
           </div>
+          {
+            this.state.modal && <div className="modal grid-view">
+                <Event event={this.state.modalEvent} view='grid' elevated={true} modal={this.state.modal} handleCloseModal={this.handleCloseModal}/>
+              </div>
+          }
         </div>
       </main>
-      <Sidebar regions={this.state.regions} updateRegion={this.updateRegion} brands={this.state.brands} updateBrand={this.updateBrand} offers={this.state.offers} updateOffer={this.updateOffer} updateFilter={this.updateFilter}/>
+      <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} handleCollapse={this.handleCollapse}/>
     </div>);
   }
 }

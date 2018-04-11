@@ -7,52 +7,66 @@ import Brands from './Brands';
 import Dates from './Dates';
 import Timelines from './Timelines';
 
-//
-// $year_classes = $start_sell_date_obj->{'year'};
-// if ( $year_classes == $end_sell_date_obj->{'year'}) {
-// $year_classes = 'YEAR-'. $year_classes;
-// } else {
-// $year_classes = "YEAR-". $start_sell_date_obj->{'year'} . " YEAR-" . $end_sell_date_obj->{'year'};
-// }
-
-
-
-
-
 class Event extends Component {
 
-  getYearClasses = (dates) => [year(dates.sell.start), year(dates.sell.end), year(dates.stay.start), year(dates.stay.end)]
-                                .filter( (value, index, self) => self.indexOf(value) === index )
-                                .reduce( (classes, year) => `${classes} YEAR-${year}`, '');
+  componentDidUpdate() {
+    // console.log('event updated');
+  }
 
-  getEventClassName = (view, region, dates) => `event ${view}-view ${region}${isMultidate(dates) ? " MULTIDATE" : " SINGLEDATE"} ${this.getYearClasses(dates)}`;
+  getYearClasses = (dates) => [
+    year(dates.sell.start),
+    year(dates.sell.end),
+    year(dates.stay.start),
+    year(dates.stay.end)
+  ].filter((value, index, self) => self.indexOf(value) === index).reduce((classes, year) => `${classes} YEAR-${year}`, '');
+
+  getEventClassName = (view, region, dates, elevated, modal) => `event
+    ${view}-view
+    ${region}${isMultidate(dates)
+    ? " MULTIDATE"
+    : " SINGLEDATE"} ${this.getYearClasses(dates)}
+    ${elevated
+      ? " elevated"
+      : ""}
+      ${modal
+        ? " modal-event"
+        : ""} `;
+
+  handleOpenModal = (e, id) => {
+    e.preventDefault();
+    !this.props.elevated && this.props.handleOpenModal(id);
+  };
 
   render() {
 
     const view = this.props.view;
     const event = this.props.event;
 
-    return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates)}>
+    return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates, this.props.elevated, this.props.modal)}>
 
-      {/* <div className="close-button"/> */}
+      <div className="close-button" onClick={() => {
+          this.props.handleCloseModal();
+        }}/>
 
       <div className="event-inner">
         <Header channels={event.channels} otherChannels={event.otherChannels}/>
 
-        <div className="event-info">
+        <div className="event-info" onClick={(e) => {
+            this.handleOpenModal(e, event['id']);
+          }}>
           <Dates dates={event.dates}/>
 
           <div className="info-wrapper">
             <p className="activity">
               {event.campaignName}
             </p>
-            <p className="timeframe">Leisure</p>
+            <p className="timeframe">{event.segment}</p>
             <p className="tags">
-              <span className="tag regions-involved "><i className="nc-icon-mini business_globe"/>{" "}
+              <span className="tag"><i className="nc-icon-mini business_globe"/>{" "}
                 {event.campaignGroup}</span>{" "}
-              <span className="tag major-markets-involved "><i className="nc-icon-mini business_stock"/>{" "}
-                n/a</span>{" "}
-              <span className="tag major-markets-involved ">
+              <span className="tag"><i className="nc-icon-mini business_stock"/>{" "}
+                {event.market}</span>{" "}
+              <span className="tag">
                 {event.segment}</span>{" "}
               {
                 event.programType && <span className="tag partner-type "><i className="nc-icon-mini business_briefcase-25"/>{" "}
@@ -60,19 +74,21 @@ class Event extends Component {
               }
             </p>
           </div>
-          {/* <i className="more"/> */}
+          <i className="more"/>
         </div>
 
         <div className="tabs">
-          <div className="tab-content t1 active">
-            <p>
+          <div className={`tab-content t1 ${this.props.elevated
+              ? " active"
+              : ""}`}>
+            <p className="description">
               {event.description}
             </p>
+            <p className="contact " title={event.owner.name}><i className="nc-icon-mini users_circle-09"/> {event.owner.name}</p>
+            <Brands brands={event.brands}/>
           </div>
-          <p className="contact " title={event.owner.name}><i className="nc-icon-mini users_circle-09"/> {event.owner.name}</p>
         </div>
 
-        <Brands brands={event.brands}/>
       </div>
 
       <Timelines dates={event.dates}/>

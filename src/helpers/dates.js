@@ -8,7 +8,6 @@ export const month = date => moment(date, "MM/DD/YY").format('MM');
 export const year = date => moment(date, "MM/DD/YY").format('YY');
 export const thisYear = () => moment().format('YY');
 
-
 export const cleanDate = (date, dateType) => {
   // const date = moment(dateIn).format('MM/DD/YY');
   return date === "Invalid date"
@@ -32,18 +31,12 @@ export const daysOfYear = date => moment("12/31/" + moment(date, "MM/DD/YY").for
 
 export const isMultidate = (dates) => ((dates.sell.start !== dates.stay.start) || (dates.sell.end !== dates.stay.end)) && (dates.stay.start !== "" && dates.stay.end !== "");
 
-export const getEarlierDate = dates =>
-  dates
-    .filter( d => d !== '' )
-    .map(date => {
-      const offset = year(date) - thisYear();
-      return times(
-        Math.abs(offset),
-        i => Number(thisYear()) + Math.sign(offset) * (i + 1)
-      )
-        .map(y => Math.sign(offset) * daysOfYear(thisYear() + y))
-        .reduce((y, sum) => {
-          return y + sum;
-        }, dayOfYear(date));
-    })
-    .reduce((date, earlier) => (date < earlier ? date : earlier), 100000);
+export const getEarlierDate = dates => dates.filter(d => d !== '').map(date => {
+  const offset = year(date) - thisYear();
+  return times(Math.abs(offset), i => Number(thisYear()) + Math.sign(offset) * (i + 1)).map(y => Math.sign(offset) * daysOfYear(thisYear() + y)).reduce((y, sum) => {
+    return y + sum;
+  }, dayOfYear(date));
+}).reduce((date, earlier) => (
+  date < earlier
+  ? date
+  : earlier), 100000);
