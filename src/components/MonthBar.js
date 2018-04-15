@@ -2,6 +2,11 @@ import React, {Component} from 'react';
 
 class MonthBar extends Component {
 
+  handleClick = (event, ym) => {
+    event.preventDefault();
+    console.log(`${ym.year}-${ym.month}`);
+  };
+
   render() {
     const months = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
     const years = [17, 18];
@@ -18,7 +23,7 @@ class MonthBar extends Component {
 
     return (<div className="months-bar">
       {
-        yearsMonths(years, months).map((ym, key) => <a key={key} className={`${ym.month}-${ym.year}`}>{ym.month[0]}<span className="hidden-mobile">{ym.month.slice(1)}</span>
+        yearsMonths(years, months).map((ym, key) => <a key={key} className={`${ym.month}-${ym.year}`} onClick={(e) => this.handleClick(e, ym)}>{ym.month[0]}<span className="hidden-mobile">{ym.month.slice(1)}</span>
         </a>)
       }
     </div>)

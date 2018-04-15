@@ -4,10 +4,11 @@ import channelsInfo from '../../config/channels.json';
 class Header extends Component {
   render() {
 
+    const putColor = color => color ? {backgroundColor: color}: {};
     const channels = this.props.channels;
 
     return (
-      <header className="event-channels">
+      <header className="event-channels" style={putColor(this.props.color)}>
         <span className="channels">
 
           {channels.map(c => c !== "OTHER_CHANNELS" && <i key={c}

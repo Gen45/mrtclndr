@@ -5,7 +5,7 @@ import offers from './offers.json';
 // import brands from './brands.json';
 // import {year} from './defaultState';
 
-import {getEarlierDate} from '../helpers/dates';
+import {getExtreme} from '../helpers/dates';
 
 const getOffer = (offer, offers) => {
   const o = Object.keys(offers).filter(key => offers[key]["name"].toUpperCase() === offer.toUpperCase())[0];
@@ -59,7 +59,8 @@ const eventsData = () => {
           end: e["Stay End Date"]
         }
       },
-      earlierDate: getEarlierDate([e["Sell Start Date"], e["Stay Start Date"]])
+      earlierDay: getExtreme([e["Sell Start Date"], e["Stay Start Date"]], 'left'),
+      latestDay: getExtreme([e["Sell End Date"], e["Stay End Date"]], 'right')
     }
   });
 }

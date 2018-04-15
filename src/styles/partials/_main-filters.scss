@@ -6,7 +6,7 @@
         display: inline-block;
         font-size: 14px;
         margin: 0 $padding/4;
-        margin-right: -4px;
+        // margin-right: -4px;
         line-height: 1;
         vertical-align: middle;
         padding: $padding/4;
@@ -198,8 +198,13 @@
         }
     }
     .filter-category {
+        display: inline-block;
         position: relative;
         margin-left: $padding/2;
+
+        .inner {
+          position: relative;
+        }
         //
         .filter-header {
             color: $color-medium-gray;
@@ -239,18 +244,18 @@
 
 .share-tools,
 .sort-tools,
-.time-tools {
-    opacity: 0;
-    // overflow: hidden;
-    width: 0;
+.time-tools,
+.trigger-box-children {
+    opacity: 1;
     position: absolute;
     height: auto;
     display: block;
-    // right: 0;
-    top: -300px;
+    right: -5px;
+    top: -5px;
     background: rgba(lighten($color-darker-gray, 4%), 0.98);
     box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.2);
     border-radius: 3px;
+        width: 250px;
     padding: $padding;
     z-index: 999;
     transition: opacity 0.3s ease 0, width 0 ease 0;
@@ -258,26 +263,38 @@
         font-size: 10px;
         margin: 5px 0;
     }
-    &.active {
-        top: 0;
-        width: 250px;
-        opacity: 1;
-        transition: opacity 0.3s ease 0, width 0 ease 0.3s;
-    }
     br {
         height: 5px;
     }
     a {
         display: block;
-        // width: 100%;
         margin-bottom: 10px !important;
     }
 
+    .trigger-box-children-enter {
+      opacity: 0.01;
+    }
+
+    .trigger-box-children-enter.trigger-box-children-enter-active {
+      opacity: 1;
+      transition: opacity 500ms ease-in;
+    }
+
+    .trigger-box-children-leave {
+      opacity: 1;
+    }
+
+    .trigger-box-children-leave.trigger-box-children-leave-active {
+      opacity: 0.01;
+      transition: opacity 300ms ease-in;
+    }
+
+
     .close-button {
-        display: none;
+        // display: none;
         position: absolute;
-        right: 0px;
-        top: 5px;
+        right: 10px; //0px;
+        top: 10px;
         margin-bottom: 5px;
         width: 26px;
         height: 26px;
@@ -292,7 +309,8 @@
             width: 26px;
             height: 26px;
             top: 0;
-            left: 0;
+            right: 0;
+            text-align: right;
         }
         @media screen and (max-width: $desktop-min) {
             display: block;

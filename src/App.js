@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
-import sortBy from 'lodash/sortBy';
+import orderBy from 'lodash/orderBy';
+// import groupBy from 'lodash/groupBy';
 
 // STYLES
 import './styles/style.css';
@@ -17,6 +18,7 @@ import MonthLines from './components/MonthLines';
 import EventsWrapper from './components/Event/EventsWrapper';
 import Event from './components/Event/Event';
 import Sidebar from './components/Sidebar/Sidebar';
+import OutsideAlerter from './components/Helpers/OutsideAlerter';
 
 class App extends Component {
 
@@ -30,6 +32,10 @@ class App extends Component {
 
   componentWillMount() {
     this.updateEventList();
+  }
+
+  componentWillUpdate() {
+    // this.updateEventList();
   }
 
   activeFilter = (filterType) => {
@@ -52,15 +58,19 @@ class App extends Component {
     events = this.prepareEventList(events, this.state.offers, "offer");
     events = this.prepareEventListMulti(events, this.state.channels, "channels");
     events = this.prepareEventListMulti(events, this.state.brands, "brands");
-    events = sortBy(events, this.state.sortBy, ['desc']);
+    events = orderBy(events, this.state.sortBy, this.state.orderBy);
     this.setState({events});
   };
 
-  viewSwitcher = (view) => {
-    if (this.state.view !== view) {
-      this.setState({view});
-    }
+  updateEventOrder = (newOrder) => {
+    let events = orderBy(this.state.events, newOrder.sortBy, newOrder.orderBy);
+    this.setState({events, ...newOrder});
   };
+
+  stateUpdate = newState => this.setState({
+    ...this.state,
+    ...newState
+  });
 
   updateFilter = (filter, filterName, active) => {
     let filters = this.state[filterName];
@@ -101,7 +111,13 @@ class App extends Component {
             <div className={`overlay ${this.state.modal
                 ? 'active'
                 : ''}`}/>
-            <ToolBar defaultTime={this.state.time} viewSwitcher={this.viewSwitcher} view={this.state.view} />
+            <ToolBar
+              defaultTime={this.state.time}
+              stateUpdate={this.stateUpdate}
+              view={this.state.view}
+              sortByType={this.state.sortByType}
+              updateEventOrder={this.updateEventOrder}
+            />
             <MonthBar/>
             <div className="nano">
               <MonthLines/>
@@ -114,7 +130,9 @@ class App extends Component {
           </div>
           {
             this.state.modal && <div className="modal grid-view">
-                <Event event={this.state.modalEvent} view='grid' elevated={true} modal={this.state.modal} handleCloseModal={this.handleCloseModal}/>
+                <OutsideAlerter event={this.handleCloseModal}>
+                  <Event event={this.state.modalEvent} view='grid' elevated={true} modal={this.state.modal} handleCloseModal={this.handleCloseModal}/>
+                </OutsideAlerter>
               </div>
           }
         </div>

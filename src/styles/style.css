@@ -503,6 +503,31 @@ textarea:focus, input:focus, button:focus {
   100% {
     opacity: .2; } }
 
+.activity span.offer-dot {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 10px;
+  border-radius: 10px; }
+  .RATE .activity span.offer-dot {
+    background-color: #49d135; }
+  .PACKAGE .activity span.offer-dot {
+    background-color: #8152ee; }
+  .REWARDS-OFFER .activity span.offer-dot {
+    background-color: #d0d135; }
+  .OPENING .activity span.offer-dot {
+    background-color: #ee8e52; }
+  .BRANDING .activity span.offer-dot {
+    background-color: #9ed037; }
+  .LOYALTY-OFFER .activity span.offer-dot {
+    background-color: #9ed037; }
+  .PARTNERSHIP .activity span.offer-dot {
+    background-color: #9ed037; }
+  .OTHER-PROMOTION .activity span.offer-dot {
+    background-color: #3d3d3d; }
+  .NO-PROMOTION .activity span.offer-dot {
+    background-color: #858585; }
+
 .main-filters {
   display: inline-block;
   cursor: pointer; }
@@ -511,7 +536,6 @@ textarea:focus, input:focus, button:focus {
     display: inline-block;
     font-size: 14px;
     margin: 0 5px;
-    margin-right: -4px;
     line-height: 1;
     vertical-align: middle;
     padding: 5px;
@@ -649,8 +673,11 @@ textarea:focus, input:focus, button:focus {
         background: #e4144a;
         color: #ffffff; }
   .main-filters .filter-category {
+    display: inline-block;
     position: relative;
     margin-left: 10px; }
+    .main-filters .filter-category .inner {
+      position: relative; }
     .main-filters .filter-category .filter-header {
       color: #666666;
       white-space: nowrap;
@@ -680,47 +707,67 @@ textarea:focus, input:focus, button:focus {
 
 .share-tools,
 .sort-tools,
-.time-tools {
-  opacity: 0;
-  width: 0;
+.time-tools,
+.trigger-box-children {
+  opacity: 1;
   position: absolute;
   height: auto;
   display: block;
-  top: -300px;
+  right: -5px;
+  top: -5px;
   background: rgba(54, 54, 54, 0.98);
   box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.2);
   border-radius: 3px;
+  width: 250px;
   padding: 20px;
   z-index: 999;
   transition: opacity 0.3s ease 0, width 0 ease 0; }
   .share-tools h4,
   .sort-tools h4,
-  .time-tools h4 {
+  .time-tools h4,
+  .trigger-box-children h4 {
     font-size: 10px;
     margin: 5px 0; }
-  .share-tools.active,
-  .sort-tools.active,
-  .time-tools.active {
-    top: 0;
-    width: 250px;
-    opacity: 1;
-    transition: opacity 0.3s ease 0, width 0 ease 0.3s; }
   .share-tools br,
   .sort-tools br,
-  .time-tools br {
+  .time-tools br,
+  .trigger-box-children br {
     height: 5px; }
   .share-tools a,
   .sort-tools a,
-  .time-tools a {
+  .time-tools a,
+  .trigger-box-children a {
     display: block;
     margin-bottom: 10px !important; }
+  .share-tools .trigger-box-children-enter,
+  .sort-tools .trigger-box-children-enter,
+  .time-tools .trigger-box-children-enter,
+  .trigger-box-children .trigger-box-children-enter {
+    opacity: 0.01; }
+  .share-tools .trigger-box-children-enter.trigger-box-children-enter-active,
+  .sort-tools .trigger-box-children-enter.trigger-box-children-enter-active,
+  .time-tools .trigger-box-children-enter.trigger-box-children-enter-active,
+  .trigger-box-children .trigger-box-children-enter.trigger-box-children-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in; }
+  .share-tools .trigger-box-children-leave,
+  .sort-tools .trigger-box-children-leave,
+  .time-tools .trigger-box-children-leave,
+  .trigger-box-children .trigger-box-children-leave {
+    opacity: 1; }
+  .share-tools .trigger-box-children-leave.trigger-box-children-leave-active,
+  .sort-tools .trigger-box-children-leave.trigger-box-children-leave-active,
+  .time-tools .trigger-box-children-leave.trigger-box-children-leave-active,
+  .trigger-box-children .trigger-box-children-leave.trigger-box-children-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in; }
   .share-tools .close-button,
   .sort-tools .close-button,
-  .time-tools .close-button {
-    display: none;
+  .time-tools .close-button,
+  .trigger-box-children .close-button {
     position: absolute;
-    right: 0px;
-    top: 5px;
+    right: 10px;
+    top: 10px;
     margin-bottom: 5px;
     width: 26px;
     height: 26px;
@@ -728,7 +775,8 @@ textarea:focus, input:focus, button:focus {
     cursor: pointer; }
     .share-tools .close-button:before,
     .sort-tools .close-button:before,
-    .time-tools .close-button:before {
+    .time-tools .close-button:before,
+    .trigger-box-children .close-button:before {
       content: '\e6ad';
       font: normal normal normal 16px/1 'Nucleo Outline';
       position: absolute;
@@ -736,11 +784,13 @@ textarea:focus, input:focus, button:focus {
       width: 26px;
       height: 26px;
       top: 0;
-      left: 0; }
+      right: 0;
+      text-align: right; }
     @media screen and (max-width: 940px) {
       .share-tools .close-button,
       .sort-tools .close-button,
-      .time-tools .close-button {
+      .time-tools .close-button,
+      .trigger-box-children .close-button {
         display: block; } }
 
 .time-tools a {

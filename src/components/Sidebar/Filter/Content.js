@@ -4,11 +4,11 @@ class Content extends Component {
 
   render() {
 
-    // console.log(this.props.filters);
     const filterCategories = this.props.filterCategories
       ? this.props.filterCategories
       : [];
-    // console.log(filterCategories);
+
+    const putColor = color => color ? {backgroundColor: color, borderColor: color}: {};
 
     return (<div className={`content${this.props.inner
         ? '-inner'
@@ -21,15 +21,18 @@ class Content extends Component {
           const filterIcon = this.props.filterInfo[r]["icon"] || false;
           const filterImage = this.props.filterInfo[r]["image"] || false;
           const active = this.props.filters[r];
+          const color = this.props.filterInfo[r]["color"] || false;
+
+          // console.log(color, putColor(color));
 
           // if (this.props.filterCategories.indexOf(r) )
-          return (filterCategories.indexOf(r) > -1 || filterCategories.length == 0)
-            ? <span key={i} className={`filter-tag ${filter}`}>
+          return (filterCategories.indexOf(r) > -1 || filterCategories.length === 0)
+            ? <span key={i} className={`filter-tag`}>
                 <input type="checkbox" id={`filter-${filter}`} checked={active} onChange={(event) => {
                     this.props.handleChange(event, filter, active)
                   }}/>
 
-                <label htmlFor={`filter-${filter}`}>{filterIcon && <i className={filterIcon}/>}{" "}
+                <label htmlFor={`filter-${filter}`} style={putColor(color)} >{filterIcon && <i className={filterIcon} />}{" "}
                   {
                     filterImage
                       ? <img src={filterImage} alt=""/>
@@ -38,7 +41,6 @@ class Content extends Component {
                 </label>
               </span>
             : null;
-
         })
       }
     </div>)

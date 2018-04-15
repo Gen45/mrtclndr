@@ -7,6 +7,8 @@ import Brands from './Brands';
 import Dates from './Dates';
 import Timelines from './Timelines';
 
+import regionInfo from '../../config/regions.json';
+
 class Event extends Component {
 
   componentDidUpdate() {
@@ -20,17 +22,8 @@ class Event extends Component {
     year(dates.stay.end)
   ].filter((value, index, self) => self.indexOf(value) === index).reduce((classes, year) => `${classes} YEAR-${year}`, '');
 
-  getEventClassName = (view, region, dates, elevated, modal) => `event
-    ${view}-view
-    ${region}${isMultidate(dates)
-    ? " MULTIDATE"
-    : " SINGLEDATE"} ${this.getYearClasses(dates)}
-    ${elevated
-      ? " elevated"
-      : ""}
-      ${modal
-        ? " modal-event"
-        : ""} `;
+  getEventClassName = (view, region, dates, elevated, modal) =>
+  `event ${view}-view ${isMultidate(dates) ? " MULTIDATE" : " SINGLEDATE"} ${this.getYearClasses(dates)} ${elevated ? " elevated" : ""} ${modal ? " modal-event" : ""} ${this.props.event.offer}`;
 
   handleOpenModal = (e, id) => {
     e.preventDefault();
@@ -41,24 +34,27 @@ class Event extends Component {
 
     const view = this.props.view;
     const event = this.props.event;
+    const regionColor = regionInfo[this.props.event["region"]].color;
 
-    return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates, this.props.elevated, this.props.modal)}>
+    console.log(regionColor);
+
+    return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates, this.props.elevated, this.props.modal)} onClick={(e) => {
+        this.handleOpenModal(e, event['id']);
+      }}>
 
       <div className="close-button" onClick={() => {
           this.props.handleCloseModal();
         }}/>
 
       <div className="event-inner">
-        <Header channels={event.channels} otherChannels={event.otherChannels}/>
+        <Header channels={event.channels} otherChannels={event.otherChannels} color={regionColor} />
 
-        <div className="event-info" onClick={(e) => {
-            this.handleOpenModal(e, event['id']);
-          }}>
+        <div className={`event-info ${this.props.event.offer}`}>
           <Dates dates={event.dates}/>
 
           <div className="info-wrapper">
             <p className="activity">
-              {event.campaignName}
+              <span className="offer-dot" title={event.offer} />{event.campaignName}
             </p>
             <p className="timeframe">{event.segment}</p>
             <p className="tags">
@@ -91,7 +87,7 @@ class Event extends Component {
 
       </div>
 
-      <Timelines dates={event.dates}/>
+      <Timelines dates={event.dates} color={regionColor} />
 
     </div>)
   }

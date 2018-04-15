@@ -202,10 +202,9 @@
     }
 }
 
-
+//
 // .event {
 //    &:before {
-//         content: '';
 //         display: inline-block;
 //         position: absolute;
 //         right: 0;
@@ -220,39 +219,95 @@
 //         border-right: solid 5px black;
 //         letter-spacing: 1px;
 //     }
-
-//     &.RATE:before {
+//
+//     &.RATE:first-child:before {
 //         content: 'Rate';
 //         border-right-color: $color-Rate;
 //     }
-
-//     &.PACKAGE:before {
+//
+//     &.PACKAGE:first-child:before {
 //         content: 'Package';
 //         border-right-color: $color-Package;
 //     }
-
-//     &.REWARDS:before {
+//
+//     &.REWARDS:first-child:before {
 //         content: 'Rewards';
 //         border-right-color: $color-Rewards;
 //     }
-
-//     &.OPENING:before {
+//
+//     &.OPENING:first-child:before {
 //         content: 'Opening';
 //         border-right-color: $color-Opening;
 //     }
-
-//     &.BRANDING:before {
+//
+//     &.BRANDING:first-child:before {
 //         content: 'Branding';
 //         border-right-color: $color-Branding;
 //     }
-
-//     &.OTHER-PROMOTION:before {
+//
+//     &.LOYALTY-OFFER:first-child:before {
+//         content: 'Loyalty';
+//         border-right-color: $color-Branding;
+//     }
+//
+//     &.PARTNERSHIP:first-child:before {
+//         content: 'Partnership';
+//         border-right-color: $color-Branding;
+//     }
+//
+//     &.OTHER-PROMOTION:first-child:before {
 //         content: 'Other';
 //         border-right-color: $color-Other;
 //     }
-
-//     &.NO-PROMOTION:before {
+//
+//     &.NO-PROMOTION:first-child:before {
 //         content: 'No Promotion';
 //         border-right-color: $color-No-Promotion;
 //     }
 // }
+
+
+.activity span.offer-dot {
+  // content: '';
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 10px;
+  border-radius: 10px;
+
+  .RATE & {
+      background-color: $color-Rate;
+  }
+
+  .PACKAGE & {
+      background-color: $color-Package;
+  }
+
+  .REWARDS-OFFER & {
+      background-color: $color-Rewards;
+  }
+
+  .OPENING & {
+      background-color: $color-Opening;
+  }
+
+  .BRANDING & {
+      background-color: $color-Branding;
+  }
+
+  .LOYALTY-OFFER & {
+      background-color: $color-Branding;
+  }
+
+  .PARTNERSHIP & {
+      background-color: $color-Branding;
+  }
+
+  .OTHER-PROMOTION & {
+      background-color: $color-Other;
+  }
+
+  .NO-PROMOTION & {
+      background-color: $color-No-Promotion;
+  }
+}

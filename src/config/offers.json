@@ -1,42 +1,52 @@
 {
   "RATE":
   {
-    "name": "Rate Only"
+    "name": "Rate Only",
+    "color": "#49d135"
   },
   "REWARDS-OFFER":
   {
-    "name": "Rewards"
+    "name": "Rewards",
+    "color": "#8152ee"
   },
   "PACKAGE":
   {
-    "name": "Package"
+    "name": "Package",
+    "color": "#d0d135"
   },
   "OPENING":
   {
-    "name": "Hotel Opening"
+    "name": "Hotel Opening",
+    "color": "#ee8e52"
   },
   "BRANDING":
   {
-    "name": "Other Brand Package"
+    "name": "Other Brand Package",
+    "color": "#9ed037"
   },
   "LOYALTY-OFFER":
   {
-    "name": "Loyalty Offers (MI, RC & SW)"
+    "name": "Loyalty Offers (MI, RC & SW)",
+    "color": "#3d3dfd"
   },
   "PARTNERSHIP":
   {
-    "name": "Partnership (Credit Card, Airlines)"
+    "name": "Partnership (Credit Card, Airlines)",
+    "color": "#850505"
   },
   "MULTIPLE":
   {
-    "name": "Multiple Offers"
+    "name": "Multiple Offers",
+    "color": "#9ed037"
   },
   "OTHER-PROMOTION":
   {
-    "name": "Other Brand Package"
+    "name": "Other Brand Package",
+    "color": "#3d3d0d"
   },
   "NO-PROMOTION":
   {
-    "name": "No Offer"
+    "name": "No Offer",
+    "color": "#850585"
   }
 }

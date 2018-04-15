@@ -4,7 +4,10 @@
     "mode": "2Y",
     "firstYear": 17
   },
-  "sortBy": ["earlierDate", "region", "offer"],
+  "sortBy": ["earlierDay", "latestDay", "region", "offer"],
+  "orderBy": ["asc"],
+  "groupBy": "offer",
+  "sortByType": "dateASC",
   "regions": {
     "PORTFOLIO": true,
     "BRAND": true,
