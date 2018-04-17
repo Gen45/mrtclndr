@@ -49,23 +49,28 @@ class ToolBar extends Component {
 
         <FilterCategory>
           <TriggerBox title="Sort" icon="nc-icon-mini design_bullet-list-67">
-            <h4>Order by Date</h4>
-            <Trigger propState={this.props.sortByType} propStateValue='dateASC' icon='nc-icon-mini arrows-1_small-triangle-up'
-              payload={() => this.props.updateEventOrder({sortBy: ['earlierDay','offer'], orderBy: ['asc','asc'], sortByType: 'dateASC'})}>
-              DATE ASC
+            <h4>Group by</h4>
+            <Trigger propState={this.props.groupByType} propStateValue='date' icon='nc-icon-mini ui-1_calendar-57'
+              payload={() => this.props.updateEventOrder({sortBy: ['earlierDay','offer','region'], orderBy: this.props.orderBy, groupByType: 'date'})}>
+              DATE
             </Trigger>
-            <Trigger propState={this.props.sortByType} propStateValue='dateDESC' icon='nc-icon-mini arrows-1_small-triangle-down'
-              payload={() => this.props.updateEventOrder({sortBy: ['earlierDay','offer'], orderBy: ['desc','asc'], sortByType: 'dateDESC'})}>
-              DATE DESC
+            <Trigger propState={this.props.groupByType} propStateValue='offer' icon='nc-icon-outline ui-1_check-circle-07'
+              payload={() => this.props.updateEventOrder({sortBy: ['offer','earlierDay','region'], orderBy: this.props.orderBy, groupByType: 'offer'})}>
+              OFFER
             </Trigger>
-            <h4>Order by Offer</h4>
-            <Trigger propState={this.props.sortByType} propStateValue='offerASC' icon='nc-icon-mini arrows-1_small-triangle-up'
-              payload={() => this.props.updateEventOrder({sortBy: ['offer','earlierDay'], orderBy: ['asc','asc'], sortByType: 'offerASC'})}>
-              OFFER ASC
+            <Trigger propState={this.props.groupByType} propStateValue='region' icon='nc-icon-outline travel_world'
+              payload={() => this.props.updateEventOrder({sortBy: ['region','earlierDay','offer'], orderBy: this.props.orderBy, groupByType: 'region'})}>
+              REGION
             </Trigger>
-            <Trigger propState={this.props.sortByType} propStateValue='offerDESC' icon='nc-icon-mini arrows-1_small-triangle-down'
-              payload={() => this.props.updateEventOrder({sortBy: ['offer','earlierDay'], orderBy: ['asc','desc'], sortByType: 'offerDESC'})}>
-              OFFER DESC
+
+            <h4>Direction</h4>
+            <Trigger propState={this.props.orderDirection} propStateValue='ASCENDING' icon='nc-icon-mini arrows-1_small-triangle-up'
+              payload={() => this.props.updateEventOrder({sortBy: this.props.sortBy, orderBy: ['asc','asc','asc'], orderDirection: 'ASCENDING'})}>
+              ASC
+            </Trigger>
+            <Trigger propState={this.props.orderDirection} propStateValue='DESCENDING' icon='nc-icon-mini arrows-1_small-triangle-down'
+              payload={() => this.props.updateEventOrder({sortBy: this.props.sortBy, orderBy: ['desc','desc','desc'], orderDirection: 'DESCENDING'})}>
+              DESC
             </Trigger>
           </TriggerBox>
         </FilterCategory>

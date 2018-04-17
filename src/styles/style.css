@@ -1031,34 +1031,13 @@ span.filter-category.time-filters.time {
 .timeline-wrapper {
   position: absolute;
   bottom: 0px;
-  height: 10px; }
-  .YEAR .timeline-wrapper,
-  .YEAR-18 .timeline-wrapper,
-  .YEAR-17 .timeline-wrapper,
-  .Q1-18 .timeline-wrapper,
-  .Q2-18 .timeline-wrapper,
-  .Q3-18 .timeline-wrapper,
-  .Q4-18 .timeline-wrapper,
-  .Q1-17 .timeline-wrapper,
-  .Q2-17 .timeline-wrapper,
-  .Q3-17 .timeline-wrapper,
-  .Q4-17 .timeline-wrapper {
-    width: calc(100% - 80px);
-    left: 40px; }
-    @media screen and (max-width: 940px) {
-      .YEAR .timeline-wrapper,
-      .YEAR-18 .timeline-wrapper,
-      .YEAR-17 .timeline-wrapper,
-      .Q1-18 .timeline-wrapper,
-      .Q2-18 .timeline-wrapper,
-      .Q3-18 .timeline-wrapper,
-      .Q4-18 .timeline-wrapper,
-      .Q1-17 .timeline-wrapper,
-      .Q2-17 .timeline-wrapper,
-      .Q3-17 .timeline-wrapper,
-      .Q4-17 .timeline-wrapper {
-        width: calc(100% - 20px);
-        left: 10px; } }
+  height: 10px;
+  width: calc(100% - 80px);
+  left: 40px; }
+  @media screen and (max-width: 940px) {
+    .timeline-wrapper {
+      width: calc(100% - 20px);
+      left: 10px; } }
   .main.Q1-18 .timeline-wrapper,
   .main.Q2-18 .timeline-wrapper,
   .main.Q3-18 .timeline-wrapper,
@@ -1481,7 +1460,7 @@ body.activity-type .activity-type-group {
   .grid-view .event-timeline,
   .grid-view .months-bar {
     display: none; }
-  .grid-view.event {
+  .grid-view .event {
     background: #ffffff;
     margin: 10px;
     position: relative;
@@ -1490,20 +1469,20 @@ body.activity-type .activity-type-group {
     color: #333333;
     overflow: hidden;
     height: 300px; }
-    .grid-view.event.modal-event {
+    .grid-view .event.modal-event {
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
       height: auto; }
-    .grid-view.event .event-inner {
+    .grid-view .event .event-inner {
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-between; }
-    .grid-view.event .event-channels {
+    .grid-view .event .event-channels {
       background: inherit; }
-      .grid-view.event .event-channels span {
+      .grid-view .event .event-channels span {
         min-height: 30px;
         height: auto;
         display: flex;
@@ -1512,16 +1491,16 @@ body.activity-type .activity-type-group {
         color: #ffffff;
         align-items: center;
         background: inherit; }
-        .grid-view.event .event-channels span.channels {
+        .grid-view .event .event-channels span.channels {
           max-width: 100%; }
-          .grid-view.event .event-channels span.channels.other-channels {
+          .grid-view .event .event-channels span.channels.other-channels {
             max-width: calc(100% - 45px); }
-        .grid-view.event .event-channels span.more {
+        .grid-view .event .event-channels span.more {
           position: absolute;
           top: 0;
           right: 0;
           width: 30px; }
-      .grid-view.event .event-channels i {
+      .grid-view .event .event-channels i {
         background: inherit;
         min-width: 30px;
         height: 30px;
@@ -1531,24 +1510,24 @@ body.activity-type .activity-type-group {
         font-size: 14px;
         transition: 0.1s;
         position: relative; }
-        .grid-view.event .event-channels i:hover {
+        .grid-view .event .event-channels i:hover {
           background: rgba(43, 43, 43, 0.2); }
-    .grid-view.event .event-info {
+    .grid-view .event .event-info {
       position: relative;
       text-align: center;
       line-height: 1.3;
       flex-grow: 1;
       padding: 60px 20px 10px;
       padding-top: 90px; }
-      .grid-view.event .event-info .event-date {
+      .grid-view .event .event-info .event-date {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%; }
-      .grid-view.event .event-info .info-wrapper {
+      .grid-view .event .event-info .info-wrapper {
         margin: 0 auto;
         max-width: 240px; }
-      .grid-view.event .event-info .more {
+      .grid-view .event .event-info .more {
         position: absolute;
         bottom: 0;
         right: 0;
@@ -1558,7 +1537,7 @@ body.activity-type .activity-type-group {
         opacity: 0;
         transform: scale(0.5);
         transition: opacity 0.1s; }
-        .grid-view.event .event-info .more:after {
+        .grid-view .event .event-info .more:after {
           content: '\e99d';
           position: absolute;
           bottom: 0;
@@ -1571,10 +1550,10 @@ body.activity-type .activity-type-group {
           vertical-align: middle;
           text-align: center;
           transition: 0.1s; }
-        .grid-view.event .event-info .more:hover:after {
+        .grid-view .event .event-info .more:hover:after {
           color: #999999;
           cursor: pointer; }
-    .grid-view.event .brands {
+    .grid-view .event .brands {
       min-height: 50px;
       position: relative;
       background: #666666;
@@ -1584,23 +1563,23 @@ body.activity-type .activity-type-group {
       align-items: center;
       justify-content: center;
       flex-wrap: wrap; }
-      .grid-view.event .brands .brand {
+      .grid-view .event .brands .brand {
         display: flex; }
-        .grid-view.event .brands .brand img,
-        .grid-view.event .brands .brand svg {
+        .grid-view .event .brands .brand img,
+        .grid-view .event .brands .brand svg {
           position: relative;
           height: 45px;
           width: auto; }
-          .grid-view.event .brands .brand img .st0,
-          .grid-view.event .brands .brand svg .st0 {
+          .grid-view .event .brands .brand img .st0,
+          .grid-view .event .brands .brand svg .st0 {
             fill: #161616; }
-    .grid-view.event .event-dates {
+    .grid-view .event .event-dates {
       position: relative;
       top: 6.66667px;
       width: 100%;
       z-index: 1; }
-      .grid-view.event .event-dates .end,
-      .grid-view.event .event-dates .start {
+      .grid-view .event .event-dates .end,
+      .grid-view .event .event-dates .start {
         content: '';
         position: absolute;
         font-size: 10px;
@@ -1609,28 +1588,28 @@ body.activity-type .activity-type-group {
         text-transform: uppercase;
         color: #666666;
         font-weight: 400; }
-        .grid-view.event .event-dates .end strong,
-        .grid-view.event .event-dates .start strong {
+        .grid-view .event .event-dates .end strong,
+        .grid-view .event .event-dates .start strong {
           font-size: 50%;
           display: block;
           line-height: 1;
           font-weight: normal;
           color: #999999; }
-      .grid-view.event .event-dates .start {
+      .grid-view .event .event-dates .start {
         content: attr(data-date-start);
         left: 10px;
         right: auto;
         font-size: 100%;
         text-align: left; }
-      .grid-view.event .event-dates .end {
+      .grid-view .event .event-dates .end {
         content: attr(data-date-end);
         right: 10px;
         left: auto;
         font-size: 100%;
         text-align: right; }
-      .grid-view.event .event-dates.event-dates__STAY {
+      .grid-view .event .event-dates.event-dates__STAY {
         top: 40px; }
-      .grid-view.event .event-dates:before {
+      .grid-view .event .event-dates:before {
         content: '';
         position: absolute;
         width: calc(100% - 200px);
@@ -1639,7 +1618,7 @@ body.activity-type .activity-type-group {
         left: 50%;
         transform: translateX(-50%);
         top: 20px; }
-      .grid-view.event .event-dates:after {
+      .grid-view .event .event-dates:after {
         content: '';
         position: absolute;
         width: 6px;
@@ -1649,83 +1628,67 @@ body.activity-type .activity-type-group {
         transform: rotate(45deg);
         border-top: 1px solid lightgray;
         border-right: 1px solid lightgray; }
-    .grid-view.event:hover .more {
+    .grid-view .event:hover .more {
       opacity: 1;
       transform: scale(1); }
-  .grid-view .US .event-channels {
-    background: #4399c4; }
-  .grid-view .US-WEST .event-channels {
-    background: #3b79cb; }
-  .grid-view .US-EAST .event-channels {
-    background: #3dc7ca; }
-  .grid-view .CALA .event-channels {
-    background: #70cb74; }
-  .grid-view .CANADA .event-channels {
-    background: #e85858; }
-  .grid-view .BRAND .event-channels {
-    background: #ab528d; }
-  .grid-view .PORTFOLIO .event-channels {
-    background: #f49140; }
-  .grid-view .LOYALTY .event-channels {
-    background: #4b4eb2; }
   @media screen and (min-width: 1px) and (max-width: 419px) {
-    .collapsed .grid-view.event {
+    .collapsed .grid-view .event {
       width: calc(100% / 1 - 20px); } }
   @media screen and (min-width: 420px) and (max-width: 940px) {
-    .collapsed .grid-view.event {
+    .collapsed .grid-view .event {
       width: calc(100% / 2 - 20px); } }
   @media screen and (min-width: 940px) and (max-width: 1149px) {
-    .collapsed .grid-view.event {
+    .collapsed .grid-view .event {
       width: calc(100% / 3 - 20px); } }
   @media screen and (min-width: 1150px) and (max-width: 1599px) {
-    .collapsed .grid-view.event {
+    .collapsed .grid-view .event {
       width: calc(100% / 4 - 20px); } }
   @media screen and (min-width: 1600px) and (max-width: 2199px) {
-    .collapsed .grid-view.event {
+    .collapsed .grid-view .event {
       width: calc(100% / 6 - 20px); } }
   @media screen and (min-width: 2200px) and (max-width: 9000px) {
-    .collapsed .grid-view.event {
+    .collapsed .grid-view .event {
       width: calc(100% / 7 - 20px); } }
   @media screen and (max-width: 1px) and (max-width: 499px) {
-    .grid-view.event {
+    .grid-view .event {
       width: calc(100% / 1 - 20px); } }
   @media screen and (min-width: 500px) and (max-width: 749px) {
-    .grid-view.event {
+    .grid-view .event {
       width: calc(100% / 1 - 20px); } }
   @media screen and (min-width: 750px) and (max-width: 939px) {
-    .grid-view.event {
+    .grid-view .event {
       width: calc(100% / 2 - 20px); } }
   @media screen and (min-width: 940px) and (max-width: 1149px) {
-    .grid-view.event {
+    .grid-view .event {
       width: calc(100% / 2 - 20px); } }
   @media screen and (min-width: 1150px) and (max-width: 1449px) {
-    .grid-view.event {
+    .grid-view .event {
       width: calc(100% / 3 - 20px); } }
   @media screen and (min-width: 1450px) and (max-width: 1799px) {
-    .grid-view.event {
+    .grid-view .event {
       width: calc(100% / 4 - 20px); } }
   @media screen and (min-width: 1800px) and (max-width: 2199px) {
-    .grid-view.event {
+    .grid-view .event {
       width: calc(100% / 5 - 20px); } }
   @media screen and (min-width: 2200px) and (max-width: 9000px) {
-    .grid-view.event {
+    .grid-view .event {
       width: calc(100% / 6 - 20px); } }
-  .grid-view.event {
+  .grid-view .event {
     cursor: pointer;
     box-shadow: 0 0 0;
     transform: scale(1); }
-    .grid-view.event .close-button {
+    .grid-view .event .close-button {
       display: none; }
-    .grid-view.event.elevated {
+    .grid-view .event.elevated {
       z-index: 101;
       transform: scale(1.075);
       box-shadow: 0 0 50px;
       opacity: 1;
       overflow: visible; }
-      .grid-view.event.elevated .more {
+      .grid-view .event.elevated .more {
         opacity: 1;
         transform: scale(1); }
-      .grid-view.event.elevated .close-button {
+      .grid-view .event.elevated .close-button {
         display: block;
         position: absolute;
         right: 0;
@@ -1734,7 +1697,7 @@ body.activity-type .activity-type-group {
         width: 16px;
         height: 16px;
         cursor: pointer; }
-        .grid-view.event.elevated .close-button:before {
+        .grid-view .event.elevated .close-button:before {
           content: '\e6ad';
           font: normal normal normal 16px/1 'Nucleo Outline';
           position: absolute;
@@ -1743,7 +1706,7 @@ body.activity-type .activity-type-group {
           height: 16px;
           top: 0;
           left: 0; }
-    .grid-view.event.deselevation {
+    .grid-view .event.deselevation {
       z-index: 100; }
   .grid-view .nano {
     height: calc(100% + 20px); }

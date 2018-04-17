@@ -2,12 +2,14 @@
   "view": "timeline",
   "time": {
     "mode": "2Y",
-    "firstYear": 17
+    "firstYear": 18,
+    "numerOfYears": 2
   },
   "sortBy": ["earlierDay", "latestDay", "region", "offer"],
   "orderBy": ["asc"],
   "groupBy": "offer",
-  "sortByType": "dateASC",
+  "groupByType": "date",
+  "orderDirection": "ASCENDING",
   "regions": {
     "PORTFOLIO": true,
     "BRAND": true,

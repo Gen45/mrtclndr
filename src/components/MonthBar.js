@@ -9,7 +9,7 @@ class MonthBar extends Component {
 
   render() {
     const months = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
-    const years = [17, 18];
+    const years = [this.props.time.firstYear, this.props.time.firstYear + 1];
 
     const yearsMonths = (years, months) => {
       let yearsMonths = [];

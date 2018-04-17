@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import Button from './Button';
+
 class Content extends Component {
 
   render() {
@@ -7,8 +9,6 @@ class Content extends Component {
     const filterCategories = this.props.filterCategories
       ? this.props.filterCategories
       : [];
-
-    const putColor = color => color ? {backgroundColor: color, borderColor: color}: {};
 
     return (<div className={`content${this.props.inner
         ? '-inner'
@@ -23,23 +23,8 @@ class Content extends Component {
           const active = this.props.filters[r];
           const color = this.props.filterInfo[r]["color"] || false;
 
-          // console.log(color, putColor(color));
-
-          // if (this.props.filterCategories.indexOf(r) )
           return (filterCategories.indexOf(r) > -1 || filterCategories.length === 0)
-            ? <span key={i} className={`filter-tag`}>
-                <input type="checkbox" id={`filter-${filter}`} checked={active} onChange={(event) => {
-                    this.props.handleChange(event, filter, active)
-                  }}/>
-
-                <label htmlFor={`filter-${filter}`} style={putColor(color)} >{filterIcon && <i className={filterIcon} />}{" "}
-                  {
-                    filterImage
-                      ? <img src={filterImage} alt=""/>
-                      : filterName
-                  }
-                </label>
-              </span>
+            ? <Button key={i} prefix="filter" filter={filter} filterName={filterName} active={active} handleChange={this.props.handleChange} color={color} filterIcon={filterIcon} filterImage={filterImage} />
             : null;
         })
       }

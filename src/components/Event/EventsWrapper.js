@@ -6,7 +6,7 @@ import Event from './Event';
 class EventsWrapper extends Component {
 
   render() {
-    return (<div className="events-wrapper">
+    return (<div className={`events-wrapper`}>
 
       <ReactList
         key={this.props.view}

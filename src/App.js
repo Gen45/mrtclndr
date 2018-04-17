@@ -20,6 +20,9 @@ import Event from './components/Event/Event';
 import Sidebar from './components/Sidebar/Sidebar';
 import OutsideAlerter from './components/Helpers/OutsideAlerter';
 
+const Overlay = (props) =>
+<div className={`overlay ${props.hasModal()}`}/>
+
 class App extends Component {
 
   state = {
@@ -64,7 +67,10 @@ class App extends Component {
 
   updateEventOrder = (newOrder) => {
     let events = orderBy(this.state.events, newOrder.sortBy, newOrder.orderBy);
-    this.setState({events, ...newOrder});
+    this.setState({
+      events,
+      ...newOrder
+    });
   };
 
   stateUpdate = newState => this.setState({
@@ -99,28 +105,36 @@ class App extends Component {
 
   render(props) {
 
-    return (<div className={`App ${this.state.collapsed
+    const appClass = () => {
+      return `App ${this.state.collapsed
         ? 'collapsed'
         : ''} ${this.state.modal
           ? 'modal-on'
-          : ''}`}>
+          : ''}`
+    }
+
+    const hasModal = () => this.state.modal
+      ? 'active'
+      : '';
+
+    const Modal = () => {
+      return this.state.modal && <div className="modal grid-view">
+        <OutsideAlerter event={this.handleCloseModal}>
+          <Event event={this.state.modalEvent} view='grid' elevated={true} modal={this.state.modal} handleCloseModal={this.handleCloseModal}/>
+        </OutsideAlerter>
+      </div>
+    };
+
+    return (<div className={appClass()}>
       <main id="main" className="main" role="main">
         <Header/>
         <div className="content-frame">
           <div id="view" className={`content ${this.state.view}-view`}>
-            <div className={`overlay ${this.state.modal
-                ? 'active'
-                : ''}`}/>
-            <ToolBar
-              defaultTime={this.state.time}
-              stateUpdate={this.stateUpdate}
-              view={this.state.view}
-              sortByType={this.state.sortByType}
-              updateEventOrder={this.updateEventOrder}
-            />
-            <MonthBar/>
+            <Overlay hasModal={hasModal} />
+            <ToolBar defaultTime={this.state.time} stateUpdate={this.stateUpdate} view={this.state.view} groupByType={this.state.groupByType} orderDirection={this.state.orderDirection} sortBy={this.state.sortBy} orderBy={this.state.orderBy} updateEventOrder={this.updateEventOrder}/>
+            <MonthBar time={this.state.time}/>
             <div className="nano">
-              <MonthLines/>
+              <MonthLines time={this.state.time}/>
               <Scrollbars thumbMinSize={100} universal={true} style={{
                   height: '100%'
                 }}>
@@ -128,13 +142,7 @@ class App extends Component {
               </Scrollbars>
             </div>
           </div>
-          {
-            this.state.modal && <div className="modal grid-view">
-                <OutsideAlerter event={this.handleCloseModal}>
-                  <Event event={this.state.modalEvent} view='grid' elevated={true} modal={this.state.modal} handleCloseModal={this.handleCloseModal}/>
-                </OutsideAlerter>
-              </div>
-          }
+          <Modal />
         </div>
       </main>
       <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} handleCollapse={this.handleCollapse}/>

@@ -42,8 +42,7 @@ export class Timeline extends Component {
       end: cleanDate(this.props.dates.end, 'end').date
     };
 
-    const putColor = color => color ? {backgroundColor: color}: {};
-    const color = this.props.color;
+      const color = this.props.color;
 
     return (<div className={`timeline-wrapper ${this.timeline2(this.props.multidate)}`}>
       <div className={`event-timeline ${this.oneMonth(dates)} ${this.dotted(dates)}`.trim()}

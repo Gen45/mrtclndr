@@ -17,7 +17,7 @@
     display: none;
   }
 
-  &.event {
+  .event {
     background: $color-white;
     margin: $padding/2;
     position: relative;
@@ -260,39 +260,8 @@
     }
   }
 
-  .US .event-channels {
-    background: $color-US;
-  }
-
-  .US-WEST .event-channels {
-    background: $color-US-WEST;
-  }
-
-  .US-EAST .event-channels {
-    background: $color-US-EAST;
-  }
-
-  .CALA .event-channels {
-    background: $color-CALA;
-  }
-
-  .CANADA .event-channels {
-    background: $color-CANADA;
-  }
-
-  .BRAND .event-channels {
-    background: $color-BRAND;
-  }
-
-  .PORTFOLIO .event-channels {
-    background: $color-PORTFOLIO;
-  }
-
-  .LOYALTY .event-channels {
-    background: $color-LOYALTY;
-  }
   // RESPONSIVE CARD SIZES
-  &.event {
+  .event {
     // SIDEBAR COLLAPSED
     .collapsed & {
       @media screen and (min-width: 1px) and (max-width: 419px) {
@@ -341,7 +310,7 @@
     }
   }
   //
-  &.event {
+  .event {
     cursor: pointer;
     // transition: $transition-time/2;
     box-shadow: 0 0 0;

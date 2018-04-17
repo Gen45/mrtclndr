@@ -8,6 +8,7 @@ import Dates from './Dates';
 import Timelines from './Timelines';
 
 import regionInfo from '../../config/regions.json';
+import offerInfo from '../../config/offers.json';
 
 class Event extends Component {
 
@@ -15,15 +16,15 @@ class Event extends Component {
     // console.log('event updated');
   }
 
-  getYearClasses = (dates) => [
-    year(dates.sell.start),
-    year(dates.sell.end),
-    year(dates.stay.start),
-    year(dates.stay.end)
-  ].filter((value, index, self) => self.indexOf(value) === index).reduce((classes, year) => `${classes} YEAR-${year}`, '');
+  // getYearClasses = (dates) => [
+  //   year(dates.sell.start),
+  //   year(dates.sell.end),
+  //   year(dates.stay.start),
+  //   year(dates.stay.end)
+  // ].filter((value, index, self) => self.indexOf(value) === index).reduce((classes, year) => `${classes} YEAR-${year}`, '');
 
   getEventClassName = (view, region, dates, elevated, modal) =>
-  `event ${view}-view ${isMultidate(dates) ? " MULTIDATE" : " SINGLEDATE"} ${this.getYearClasses(dates)} ${elevated ? " elevated" : ""} ${modal ? " modal-event" : ""} ${this.props.event.offer}`;
+  `event ${isMultidate(dates) ? "MULTIDATE" : "SINGLEDATE"} ${elevated ? "elevated" : ""} ${modal ? "modal-event grid-view" : ""}`;
 
   handleOpenModal = (e, id) => {
     e.preventDefault();
@@ -35,8 +36,9 @@ class Event extends Component {
     const view = this.props.view;
     const event = this.props.event;
     const regionColor = regionInfo[this.props.event["region"]].color;
+    const offerColor = offerInfo[this.props.event["offer"]].color;
 
-    console.log(regionColor);
+    // console.log(regionColor);
 
     return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates, this.props.elevated, this.props.modal)} onClick={(e) => {
         this.handleOpenModal(e, event['id']);
@@ -49,12 +51,12 @@ class Event extends Component {
       <div className="event-inner">
         <Header channels={event.channels} otherChannels={event.otherChannels} color={regionColor} />
 
-        <div className={`event-info ${this.props.event.offer}`}>
+        <div className={`event-info`}>
           <Dates dates={event.dates}/>
 
           <div className="info-wrapper">
             <p className="activity">
-              <span className="offer-dot" title={event.offer} />{event.campaignName}
+              <span className="offer-dot" title={event.offer} style={{backgroundColor: offerColor}}/>{event.campaignName}
             </p>
             <p className="timeframe">{event.segment}</p>
             <p className="tags">
@@ -63,7 +65,8 @@ class Event extends Component {
               <span className="tag"><i className="nc-icon-mini business_stock"/>{" "}
                 {event.market}</span>{" "}
               <span className="tag">
-                {event.segment}</span>{" "}
+                {event.segment}
+              </span>{" "}
               {
                 event.programType && <span className="tag partner-type "><i className="nc-icon-mini business_briefcase-25"/>{" "}
                     {event.programType}</span>
