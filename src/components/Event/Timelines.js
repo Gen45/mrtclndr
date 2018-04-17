@@ -6,21 +6,18 @@ import {
   daysOfYear,
   day,
   month,
-  year,
-  isMultidate
+  year
 } from '../../helpers/dates';
-
-import {time} from '../../config/defaultState';
 
 export class Timeline extends Component {
 
   // TODO make the 2 in this formula a variable for number of years
   // "01/15/17"
-  getLineStart = date => ((year(date) - time.firstYear) * daysOfYear('01/01/'+time.firstYear) + dayOfYear(date)) * ((100 / 2) / daysOfYear(date));
+  getLineStart = (date, firstYear) => ((year(date) - firstYear) * daysOfYear('01/01/'+firstYear) + dayOfYear(date)) * ((100 / 2) / daysOfYear(date));
 
   // getLineStart = date => dayOfYear(date) * ((100 / 2) / daysOfYear(date));
 
-  getLineWidth = dates => this.getLineStart(dates.end) - this.getLineStart(dates.start);
+  getLineWidth = (dates, firstYear) => this.getLineStart(dates.end, firstYear) - this.getLineStart(dates.start, firstYear);
 
   oneMonth = dates => dates.start === dates.end
     ? ' one-month'
@@ -41,8 +38,8 @@ export class Timeline extends Component {
       start: cleanDate(this.props.dates.start, 'start').date,
       end: cleanDate(this.props.dates.end, 'end').date
     };
-
-      const color = this.props.color;
+    const firstYear = this.props.firstYear;
+    const color = this.props.color;
 
     return (<div className={`timeline-wrapper ${this.timeline2(this.props.multidate)}`}>
       <div className={`event-timeline ${this.oneMonth(dates)} ${this.dotted(dates)}`.trim()}
@@ -50,8 +47,8 @@ export class Timeline extends Component {
 
         // data-end={moment(dates.end, "MM/DD/YY").dayOfYear()}
         style={{
-          left: this.getLineStart(dates.start) + '%',
-          width: this.getLineWidth(dates) + '%',
+          left: this.getLineStart(dates.start, firstYear) + '%',
+          width: this.getLineWidth(dates, firstYear) + '%',
           backgroundColor: color
         }}>
         <i className="start"
@@ -69,11 +66,14 @@ class Timelines extends Component {
   render() {
     const dates = this.props.dates;
     const color = this.props.color;
+    const datesType = this.props.datesType;
+    const firstYear = this.props.time.firstYear;
+
     return (
       <div className="timelines">
-        <Timeline dates={dates.sell} color={color} />
-        {isMultidate(dates) &&
-          <Timeline dates={dates.stay} multidate={true} color={color} />}
+        <Timeline dates={dates.sell} color={color} firstYear={firstYear} />
+        {datesType === 'MULTIDATE' &&
+          <Timeline dates={dates.stay} multidate={true} color={color} firstYear={firstYear} />}
       </div>)
   }
 }

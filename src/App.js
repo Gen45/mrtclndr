@@ -138,7 +138,7 @@ class App extends Component {
               <Scrollbars thumbMinSize={100} universal={true} style={{
                   height: '100%'
                 }}>
-                <EventsWrapper events={this.state.events} view={this.state.view} handleOpenModal={this.handleOpenModal}/>
+                <EventsWrapper events={this.state.events} view={this.state.view} handleOpenModal={this.handleOpenModal} time={this.state.time}/>
               </Scrollbars>
             </div>
           </div>

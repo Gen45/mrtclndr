@@ -10,7 +10,7 @@ class EventsWrapper extends Component {
 
       <ReactList
         key={this.props.view}
-        itemRenderer={(index, key) => <Event key={key} event={this.props.events[index]} view={this.props.view} handleOpenModal={this.props.handleOpenModal} />}
+        itemRenderer={(index, key) => <Event key={key} event={this.props.events[index]} view={this.props.view} handleOpenModal={this.props.handleOpenModal} time={this.props.time} />}
         length={this.props.events.length}
         type={this.props.view === 'grid'
         ? 'uniform'

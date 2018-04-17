@@ -5,7 +5,7 @@ import offers from './offers.json';
 // import brands from './brands.json';
 // import {year} from './defaultState';
 
-import {getExtreme} from '../helpers/dates';
+import {getExtreme, isMultidate} from '../helpers/dates';
 
 const getOffer = (offer, offers) => {
   const o = Object.keys(offers).filter(key => offers[key]["name"].toUpperCase() === offer.toUpperCase())[0];
@@ -33,7 +33,7 @@ const eventsData = () => {
       "OTHER_CHANNELS": e["Other Channels"],
     };
 
-    return {
+    let event = {
       id: e["Id"],
       region: e["Owner SubRegion"],
       brands: e["Brand"].split(','),
@@ -61,7 +61,11 @@ const eventsData = () => {
       },
       earlierDay: getExtreme([e["Sell Start Date"], e["Stay Start Date"]], 'left'),
       latestDay: getExtreme([e["Sell End Date"], e["Stay End Date"]], 'right')
-    }
+    };
+
+    event['datesType'] = isMultidate(event.dates) ? 'MULTIDATE' : 'SINGLEDATE';
+
+    return event;
   });
 }
 
