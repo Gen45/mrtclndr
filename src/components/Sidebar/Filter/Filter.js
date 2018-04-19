@@ -42,7 +42,7 @@ class Filters extends Component {
         <h3>{this.props.title}</h3>
       </header>
 
-      <Content filterName={this.props.filterName} filters={this.props.filters} filterInfo={this.props.filterInfo} handleChange={this.handleChange} />
+      <Content filterName={this.props.filterName} filters={this.props.filters} filterInfo={this.props.filterInfo} handleChange={this.handleChange} labelDot={this.props.labelDot}/>
 
       <Footer filterName={this.props.filterName} batchChange={this.batchChange} />
     </div>)

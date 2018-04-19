@@ -24,7 +24,7 @@
             width: 100%;
         }
     }
-    a {
+    div {
         position: relative;
         top: 0;
         left: 0;
@@ -44,14 +44,6 @@
             // background: $color-medium-gray;
             border-bottom: 3px solid $color-accent;
         }
-    }
-}
-
-.YEAR .hidden-mobile,
-.YEAR-18 .hidden-mobile,
-.YEAR-17 .hidden-mobile {
-    @media screen and (max-width: $desktop-min) {
-        display: none !important;
     }
 }
 
@@ -85,17 +77,6 @@
                     border-left-color: $color-dark-gray;
                 }
             }
-        }
-
-        .main.Q1-18 &,
-        .main.Q2-18 &,
-        .main.Q3-18 &,
-        .main.Q4-18 &,
-        .main.Q1-17 &,
-        .main.Q2-17 &,
-        .main.Q3-17 &,
-        .main.Q4-17 & {
-            justify-content: flex-start;
         }
 
         @media screen and (max-width: $desktop-min) {
@@ -313,7 +294,7 @@
     //         left: $padding/2;
     //     }
     // }
-    
+
     .main.Q1-18 &,
     .main.Q2-18 &,
     .main.Q3-18 &,
@@ -649,6 +630,18 @@ body.activity-type .activity-type-group {
     }
 }
 
+.grid-view .event.modal-event {
+  // @media screen and (max-width: $phone-max) {
+  //   top: 30px !important;
+  //   left: 20px !important;
+  //   height: auto;
+  //   &.elevated {
+  //     max-width: calc(100% - 40px) !important;
+  //     transform: translate( 0%, 0%) !important;
+  //   }
+  // }
+}
+
 .modal {
     position: absolute;
     height: 100% !important;
@@ -657,16 +650,27 @@ body.activity-type .activity-type-group {
     left: 0;
     z-index: 9001;
     overflow-y: hidden !important;
-    pointer-events: none;
-    cursor: pointer;
+    // pointer-events: none;
+    // cursor: pointer;
     @media screen and (max-width: $phone-max) {
         background: rgba($color-black, 0.5);
-        pointer-events: auto;
+        // pointer-events: auto;
+        // .event {
+        //   top: 0;
+        //   max-width: 100%;
+        //   height: auto;
+        //   &.elevated {
+        //     transform: translate( 0%, 0%) !important;
+        //   }
+        // }
+    }
+    .react-draggable {
+      min-height: 100vh;
     }
     .event {
-        transform: translate( -50%, -50%) scale(0.8) !important;
+        transform: translate( -50%, -50%) !important;
         min-width: 280px !important;
-        width: 50% !important;
+        width: 80% !important;
         max-width: 450px;
         overflow: visible !important;
         margin: 0 !important;
@@ -676,7 +680,7 @@ body.activity-type .activity-type-group {
             display: none;
         }
         &.elevated {
-            transform: translate( -50%, -50%) scale(1.1) !important;
+            transform: translate( -50%, -50%) scale(1) !important;
         }
     }
 }

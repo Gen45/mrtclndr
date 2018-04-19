@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import Draggable from 'react-draggable';
 import OutsideAlerter from '../Helpers/OutsideAlerter';
 
 export class TriggerBox extends Component {
@@ -14,18 +14,23 @@ export class TriggerBox extends Component {
   };
 
   render() {
-    return (<div className="inner">
-      <a id="trigger-sort-tools" className="nav-trigger" onClick={() => this.toggleBox()}>
-        <i className={this.props.icon}/> {` ${this.props.title}`}
-      </a>
-      {
-        this.state.open && <OutsideAlerter event={this.toggleBox}>
-            <span className="trigger-box-children active">
-              <div className="close-button" onClick={() => this.toggleBox()}/> {this.props.children}
-            </span>
-          </OutsideAlerter>
-      }
-    </div>)
+    return (
+        <div className="inner">
+        <a className="nav-trigger" onClick={() => this.toggleBox()}>
+          <i className={this.props.icon}/> {` ${this.props.title}`}
+        </a>
+        {
+          this.state.open &&
+            <OutsideAlerter event={this.toggleBox}>
+              <Draggable>
+                <span className="trigger-box-children active" style={this.props.width && {width: this.props.width}}>
+                  <div className="close-button" onClick={() => this.toggleBox()}/> {this.props.children}
+                </span>
+              </Draggable>
+            </OutsideAlerter>
+        }
+      </div>
+    )
   }
 }
 

@@ -3,7 +3,6 @@ import offers from './offers.json';
 // import channels from './channels.json';
 // import regions from './regions.json';
 // import brands from './brands.json';
-// import {year} from './defaultState';
 
 import {getExtreme, isMultidate} from '../helpers/dates';
 
@@ -15,6 +14,9 @@ const getOffer = (offer, offers) => {
 }
 
 const cleanChannels = channels => Object.keys(channels).filter(c => channels[c] !== null );
+
+const getMarket = (e) => `${e["Destination - Featured Market"].replace("Other - please list in column G",'')} ${e["Market - more"]}`;
+
 
 const eventsData = () => {
 
@@ -41,7 +43,7 @@ const eventsData = () => {
       description: e["Description"],
       campaignGroup: e["Campaign Group"],
       segment: e["Segment"],
-      market: e["Entire US"],
+      market: getMarket(e),
       programType: e["Program Type"],
       offer: getOffer(e["Offer"], offers),
       channels: cleanChannels(eventChannels),

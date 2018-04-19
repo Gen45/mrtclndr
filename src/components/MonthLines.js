@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import range from 'lodash/range';
-import {today, day, daysInMonth, add} from '../helpers/dates';
-
+import {today, day, daysInMonth, add, yearsMonths} from '../helpers/dates';
 
 const TodayLine = props => <span className="line-today" style={{
     left: props.position
@@ -9,17 +7,20 @@ const TodayLine = props => <span className="line-today" style={{
 
 class MonthLines extends Component {
 
-  isTodayLine = m => today() === add(`01/${day(today())}/${this.props.time.firstYear}`, m, 'month');
+  isTodayLine = m => today() === add(`01/${day(today())}/${this.props.time.Y}`, m, 'month');
   todayPosition = () => `${day(today()) * 100 / daysInMonth(today())}%`;
 
   render() {
 
-    const months = range(24);
+    // const months = this.props.months * this.props.years;
+    // console.log(months);
 
-    return (<div className="months-lines">
+    return (
+      <div className="months-lines">
       {
-        months.map((m) => <span key={`m${m}`} className="line">
-          {this.isTodayLine(m) && <TodayLine position={this.todayPosition()}/>}
+        yearsMonths(this.props.years, this.props.months).map((ym, key) =>
+        <span key={`${ym.year}-${ym.month}`} className="line" >
+          {this.isTodayLine(ym.month) && <TodayLine position={this.todayPosition()}/>}
         </span>)
       }
     </div>)

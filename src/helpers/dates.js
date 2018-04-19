@@ -20,6 +20,18 @@ export const daysInMonth = date => moment(date, FORMAT).daysInMonth();
 export const dayOfYear = date => moment(date, FORMAT).dayOfYear();
 export const daysOfYear = date => moment("12/31/" + moment(date, FORMAT).format('YY'), FORMAT).dayOfYear();
 
+export const yearsMonths = (years, months) => {
+  let yearsMonths = [];
+
+  for (let y of years) {
+    for (let m of months) {
+      yearsMonths.push({year: y, month: m});
+    }
+  }
+
+  return yearsMonths;
+};
+
 export const isMultidate = (dates) => ((dates.sell.start !== dates.stay.start) || (dates.sell.end !== dates.stay.end)) && (dates.stay.start !== "" && dates.stay.end !== "");
 
 export const getExtreme = (dates, direction) => {

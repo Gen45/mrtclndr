@@ -123,7 +123,7 @@ textarea:focus, input:focus, button:focus {
   vertical-align: middle; }
   .logo a {
     height: 100%; }
-  .logo svg {
+  .logo svg, .logo img {
     width: 170px;
     height: auto; }
   @media only screen and (max-width: 500px) {
@@ -220,8 +220,7 @@ textarea:focus, input:focus, button:focus {
       text-align: left;
       opacity: 1; }
     .sidebar .filter .brand-filters {
-      position: relative;
-      height: 255px; }
+      position: relative; }
       .sidebar .filter .brand-filters:before {
         content: '';
         position: absolute;
@@ -367,9 +366,9 @@ textarea:focus, input:focus, button:focus {
   .main .content {
     position: relative;
     height: calc( 100vh - (2 * 20px) - 50px);
-    background: rgba(51, 51, 51, 0.8);
+    background: rgba(51, 51, 51, 0.9);
     box-shadow: 0 0 10px rgba(22, 22, 22, 0.5);
-    border-radius: 2px;
+    border-radius: 10px;
     overflow: hidden;
     padding-bottom: 80px; }
     .main .content > header {
@@ -432,6 +431,7 @@ textarea:focus, input:focus, button:focus {
       height: 60px;
       left: 0;
       z-index: 1000;
+      border-radius: 0 0 10px 10px;
       background: linear-gradient(180deg, rgba(51, 51, 51, 0) 0%, rgba(51, 51, 51, 0.5) 100%); }
   @media print {
     .main {
@@ -469,7 +469,7 @@ textarea:focus, input:focus, button:focus {
         font-size: 24px; } }
 
 .content-frame {
-  background: url("/images/bg-starburst-alt.png") left top fixed;
+  background: left top fixed;
   overflow-y: auto;
   min-height: calc(100vh - 50px);
   padding: 20px; }
@@ -503,30 +503,33 @@ textarea:focus, input:focus, button:focus {
   100% {
     opacity: .2; } }
 
-.activity span.offer-dot {
+.label-dot {
   width: 10px;
   height: 10px;
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 5px;
   border-radius: 10px; }
-  .RATE .activity span.offer-dot {
-    background-color: #49d135; }
-  .PACKAGE .activity span.offer-dot {
-    background-color: #8152ee; }
-  .REWARDS-OFFER .activity span.offer-dot {
-    background-color: #d0d135; }
-  .OPENING .activity span.offer-dot {
-    background-color: #ee8e52; }
-  .BRANDING .activity span.offer-dot {
-    background-color: #9ed037; }
-  .LOYALTY-OFFER .activity span.offer-dot {
-    background-color: #9ed037; }
-  .PARTNERSHIP .activity span.offer-dot {
-    background-color: #9ed037; }
-  .OTHER-PROMOTION .activity span.offer-dot {
-    background-color: #3d3d3d; }
-  .NO-PROMOTION .activity span.offer-dot {
-    background-color: #858585; }
+
+span.react-resizable-handle {
+  cursor: ns-resize;
+  margin: 0 -10px;
+  position: relative;
+  height: 10px;
+  width: calc(100% + 20px);
+  background: rgba(33, 33, 33, 0.4);
+  display: block;
+  z-index: 1000; }
+  span.react-resizable-handle:active {
+    background: rgba(33, 33, 33, 0.6); }
+  span.react-resizable-handle:before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 2px;
+    background: rgba(33, 33, 33, 0.4);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); }
 
 .main-filters {
   display: inline-block;
@@ -536,11 +539,13 @@ textarea:focus, input:focus, button:focus {
     display: inline-block;
     font-size: 14px;
     margin: 0 5px;
+    min-width: 45px;
     line-height: 1;
     vertical-align: middle;
     padding: 5px;
     letter-spacing: 1px;
-    z-index: 10; }
+    z-index: 10;
+    text-align: center; }
     .main-filters .nav-trigger:after {
       content: '';
       position: absolute;
@@ -715,19 +720,26 @@ textarea:focus, input:focus, button:focus {
   display: block;
   right: -5px;
   top: -5px;
-  background: rgba(54, 54, 54, 0.98);
+  background: rgba(59, 59, 59, 0.97);
   box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.2);
   border-radius: 3px;
-  width: 250px;
+  width: 260px;
   padding: 20px;
+  padding-top: 30px;
+  text-align: center;
   z-index: 999;
   transition: opacity 0.3s ease 0, width 0 ease 0; }
   .share-tools h4,
   .sort-tools h4,
   .time-tools h4,
   .trigger-box-children h4 {
-    font-size: 10px;
-    margin: 5px 0; }
+    font-size: 12px;
+    margin: 5px 0;
+    color: #161616;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: left;
+    width: 100%; }
   .share-tools br,
   .sort-tools br,
   .time-tools br,
@@ -738,7 +750,17 @@ textarea:focus, input:focus, button:focus {
   .time-tools a,
   .trigger-box-children a {
     display: block;
-    margin-bottom: 10px !important; }
+    margin-bottom: 10px !important;
+    text-transform: uppercase; }
+  .share-tools hr,
+  .sort-tools hr,
+  .time-tools hr,
+  .trigger-box-children hr {
+    border-color: #666;
+    border: none;
+    border-top: solid 2px #222;
+    width: calc(100% + (2 * $padding));
+    margin: 5px -20px 10px; }
   .share-tools .trigger-box-children-enter,
   .sort-tools .trigger-box-children-enter,
   .time-tools .trigger-box-children-enter,
@@ -824,7 +846,7 @@ span.filter-category.time-filters.time {
       padding: 0 10px; }
       .collapsed .months-bar {
         width: 100%; } }
-  .months-bar a {
+  .months-bar div {
     position: relative;
     top: 0;
     left: 0;
@@ -837,16 +859,10 @@ span.filter-category.time-filters.time {
     text-align: center;
     transition: 0.2s;
     border-bottom: 3px solid transparent; }
-    .months-bar a:hover {
+    .months-bar div:hover {
       background: rgba(153, 153, 153, 0.2); }
-    .months-bar a.linted {
+    .months-bar div.linted {
       border-bottom: 3px solid #e4144a; }
-
-@media screen and (max-width: 940px) {
-  .YEAR .hidden-mobile,
-  .YEAR-18 .hidden-mobile,
-  .YEAR-17 .hidden-mobile {
-    display: none !important; } }
 
 .timeline-view .months-lines {
   background: rgba(102, 102, 102, 0.6);
@@ -873,15 +889,6 @@ span.filter-category.time-filters.time {
       border-left-color: #333333; }
       .timeline-view .months-lines .line.linted + .line {
         border-left-color: #333333; }
-  .main.Q1-18 .timeline-view .months-lines,
-  .main.Q2-18 .timeline-view .months-lines,
-  .main.Q3-18 .timeline-view .months-lines,
-  .main.Q4-18 .timeline-view .months-lines,
-  .main.Q1-17 .timeline-view .months-lines,
-  .main.Q2-17 .timeline-view .months-lines,
-  .main.Q3-17 .timeline-view .months-lines,
-  .main.Q4-17 .timeline-view .months-lines {
-    justify-content: flex-start; }
   @media screen and (max-width: 940px) {
     .timeline-view .months-lines {
       padding: 0 10px; } }
@@ -1427,17 +1434,16 @@ body.activity-type .activity-type-group {
   top: 0;
   left: 0;
   z-index: 9001;
-  overflow-y: hidden !important;
-  pointer-events: none;
-  cursor: pointer; }
+  overflow-y: hidden !important; }
   @media screen and (max-width: 679px) {
     .modal {
-      background: rgba(22, 22, 22, 0.5);
-      pointer-events: auto; } }
+      background: rgba(22, 22, 22, 0.5); } }
+  .modal .react-draggable {
+    min-height: 100vh; }
   .modal .event {
-    transform: translate(-50%, -50%) scale(0.8) !important;
+    transform: translate(-50%, -50%) !important;
     min-width: 280px !important;
-    width: 50% !important;
+    width: 80% !important;
     max-width: 450px;
     overflow: visible !important;
     margin: 0 !important;
@@ -1446,11 +1452,11 @@ body.activity-type .activity-type-group {
     .modal .event .more {
       display: none; }
     .modal .event.elevated {
-      transform: translate(-50%, -50%) scale(1.1) !important; }
+      transform: translate(-50%, -50%) scale(1) !important; }
 
 .grid-view {
   height: calc(100% - 50px);
-  overflow-y: scroll; }
+  overflow-y: auto; }
   .grid-view .events-wrapper {
     min-height: 100%;
     padding: 10px;
@@ -1461,14 +1467,15 @@ body.activity-type .activity-type-group {
   .grid-view .months-bar {
     display: none; }
   .grid-view .event {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.92);
     margin: 10px;
     position: relative;
     vertical-align: top;
     display: inline-block;
     color: #333333;
     overflow: hidden;
-    height: 300px; }
+    height: 300px;
+    border-radius: 5px; }
     .grid-view .event.modal-event {
       position: absolute;
       left: 50%;
@@ -1554,6 +1561,7 @@ body.activity-type .activity-type-group {
           color: #999999;
           cursor: pointer; }
     .grid-view .event .brands {
+      overflow-y: auto;
       min-height: 50px;
       position: relative;
       background: #666666;
@@ -1755,22 +1763,6 @@ body.activity-type .activity-type-group {
     .event-info .tag.landing-page a {
       text-decoration: none;
       color: white; }
-    .US .event-info .tag.landing-page {
-      background: #4399c4; }
-    .US-WEST .event-info .tag.landing-page {
-      background: #3b79cb; }
-    .US-EAST .event-info .tag.landing-page {
-      background: #3dc7ca; }
-    .CALA .event-info .tag.landing-page {
-      background: #70cb74; }
-    .CANADA .event-info .tag.landing-page {
-      background: #e85858; }
-    .PORTFOLIO .event-info .tag.landing-page {
-      background: #f49140; }
-    .LOYALTY .event-info .tag.landing-page {
-      background: #4b4eb2; }
-    .BRAND .event-info .tag.landing-page {
-      background: #ab528d; }
 
 .grid-view .event-info p:last-child {
   margin-bottom: 0; }
@@ -1810,22 +1802,6 @@ body.activity-type .activity-type-group {
       transition: 0.2s; }
       .tabs ul li.tab-trigger:not(.active):hover {
         border-color: gainsboro; }
-      .US .tabs ul li.tab-trigger.active {
-        border-color: #4399c4; }
-      .US-WEST .tabs ul li.tab-trigger.active {
-        border-color: #3b79cb; }
-      .US-EAST .tabs ul li.tab-trigger.active {
-        border-color: #3dc7ca; }
-      .CALA .tabs ul li.tab-trigger.active {
-        border-color: #70cb74; }
-      .CANADA .tabs ul li.tab-trigger.active {
-        border-color: #e85858; }
-      .PORTFOLIO .tabs ul li.tab-trigger.active {
-        border-color: #f49140; }
-      .LOYALTY .tabs ul li.tab-trigger.active {
-        border-color: #4b4eb2; }
-      .BRAND .tabs ul li.tab-trigger.active {
-        border-color: #ab528d; }
   .tabs .tab-content {
     padding: 15px 20px 25px;
     padding: 15px 0 0;
@@ -1835,7 +1811,8 @@ body.activity-type .activity-type-group {
     .tabs .tab-content p.description {
       text-align: center;
       padding: 20px;
-      padding-top: 0; }
+      padding-top: 0;
+      overflow-y: auto; }
     .tabs .tab-content.active {
       display: block; }
     .tabs .tab-content.t2 {
@@ -1853,56 +1830,8 @@ body.activity-type .activity-type-group {
       color: #333333; }
       .tabs .contact a:hover {
         text-decoration: underline; }
-        .US .tabs .contact a:hover {
-          color: #4399c4; }
-        .US-WEST .tabs .contact a:hover {
-          color: #3b79cb; }
-        .US-EAST .tabs .contact a:hover {
-          color: #3dc7ca; }
-        .CALA .tabs .contact a:hover {
-          color: #70cb74; }
-        .CANADA .tabs .contact a:hover {
-          color: #e85858; }
-        .PORTFOLIO .tabs .contact a:hover {
-          color: #f49140; }
-        .LOYALTY .tabs .contact a:hover {
-          color: #4b4eb2; }
-        .BRAND .tabs .contact a:hover {
-          color: #ab528d; }
-    .US .tabs .contact {
-      border-color: #b7d8e9; }
-    .US-WEST .tabs .contact {
-      border-color: #b4cceb; }
-    .US-EAST .tabs .contact {
-      border-color: #b5eaeb; }
-    .CALA .tabs .contact {
-      border-color: #e0f4e1; }
-    .CANADA .tabs .contact {
-      border-color: #fbdede; }
-    .PORTFOLIO .tabs .contact {
-      border-color: #fce4d1; }
-    .LOYALTY .tabs .contact {
-      border-color: #b6b7e0; }
-    .BRAND .tabs .contact {
-      border-color: #ddb9d1; }
     .tabs .contact i {
       margin-right: 5px; }
-      .US .tabs .contact i {
-        color: #4399c4; }
-      .US-WEST .tabs .contact i {
-        color: #3b79cb; }
-      .US-EAST .tabs .contact i {
-        color: #3dc7ca; }
-      .CALA .tabs .contact i {
-        color: #70cb74; }
-      .CANADA .tabs .contact i {
-        color: #e85858; }
-      .PORTFOLIO .tabs .contact i {
-        color: #f49140; }
-      .LOYALTY .tabs .contact i {
-        color: #4b4eb2; }
-      .BRAND .tabs .contact i {
-        color: #ab528d; }
 
 .filter .content {
   text-align: center; }

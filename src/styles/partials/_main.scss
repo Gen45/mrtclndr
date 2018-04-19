@@ -36,9 +36,9 @@
     .content {
         position: relative;
         height: calc( 100vh - (2 * #{$padding}) - #{$header-height});
-        background: rgba($color-dark-gray, 0.8);
+        background: rgba($color-dark-gray, 0.90);
         box-shadow: 0 0 10px rgba($color-black, 0.5);
-        border-radius: 2px;
+        border-radius: 10px;
         overflow: hidden;
         padding-bottom: $padding * 4;
         > header {
@@ -109,6 +109,7 @@
             height: 3*$padding;
             left: 0;
             z-index: 1000;
+            border-radius: 0 0 10px 10px;
             background: linear-gradient(180deg, rgba($color-dark-gray, 0) 0%, rgba($color-dark-gray, 0.5) 100%);
         }
     }
@@ -157,7 +158,8 @@
 }
 
 .content-frame {
-    background: url('/images/bg-starburst-alt.png') left top fixed;
+    background: left top fixed;
+    // background: url('/images/bg-starburst-alt.png') left top fixed;
     overflow-y: auto;
     min-height: calc(100vh - #{$header-height});
     padding: $padding;
@@ -202,112 +204,34 @@
     }
 }
 
-//
-// .event {
-//    &:before {
-//         display: inline-block;
-//         position: absolute;
-//         right: 0;
-//         top: 0;
-//         padding: 1px 5px;
-//         min-width: 100px;
-//         text-align: right;
-//         margin: 10px;
-//         white-space: nowrap;
-//         font-size: 9px;
-//         background: $color-dark-gray;
-//         border-right: solid 5px black;
-//         letter-spacing: 1px;
-//     }
-//
-//     &.RATE:first-child:before {
-//         content: 'Rate';
-//         border-right-color: $color-Rate;
-//     }
-//
-//     &.PACKAGE:first-child:before {
-//         content: 'Package';
-//         border-right-color: $color-Package;
-//     }
-//
-//     &.REWARDS:first-child:before {
-//         content: 'Rewards';
-//         border-right-color: $color-Rewards;
-//     }
-//
-//     &.OPENING:first-child:before {
-//         content: 'Opening';
-//         border-right-color: $color-Opening;
-//     }
-//
-//     &.BRANDING:first-child:before {
-//         content: 'Branding';
-//         border-right-color: $color-Branding;
-//     }
-//
-//     &.LOYALTY-OFFER:first-child:before {
-//         content: 'Loyalty';
-//         border-right-color: $color-Branding;
-//     }
-//
-//     &.PARTNERSHIP:first-child:before {
-//         content: 'Partnership';
-//         border-right-color: $color-Branding;
-//     }
-//
-//     &.OTHER-PROMOTION:first-child:before {
-//         content: 'Other';
-//         border-right-color: $color-Other;
-//     }
-//
-//     &.NO-PROMOTION:first-child:before {
-//         content: 'No Promotion';
-//         border-right-color: $color-No-Promotion;
-//     }
-// }
-
-
-.activity span.offer-dot {
-  // content: '';
+.label-dot {
   width: 10px;
   height: 10px;
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 5px;
   border-radius: 10px;
+}
 
-  .RATE & {
-      background-color: $color-Rate;
+span.react-resizable-handle {
+  cursor: ns-resize;
+  margin: 0 -10px;
+  position: relative;
+  height: 10px;
+  width: calc(100% + 20px);
+  background: rgba(33, 33, 33, 0.4);
+  display: block;
+  z-index: 1000;
+  &:active {
+    background: rgba(33, 33, 33, 0.6);
   }
-
-  .PACKAGE & {
-      background-color: $color-Package;
-  }
-
-  .REWARDS-OFFER & {
-      background-color: $color-Rewards;
-  }
-
-  .OPENING & {
-      background-color: $color-Opening;
-  }
-
-  .BRANDING & {
-      background-color: $color-Branding;
-  }
-
-  .LOYALTY-OFFER & {
-      background-color: $color-Branding;
-  }
-
-  .PARTNERSHIP & {
-      background-color: $color-Branding;
-  }
-
-  .OTHER-PROMOTION & {
-      background-color: $color-Other;
-  }
-
-  .NO-PROMOTION & {
-      background-color: $color-No-Promotion;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 2px;
+    background: rgba(33, 33, 33, 0.4);
+    left: 50%;
+    top: 50%;
+    transform:translate(-50%, -50%);
   }
 }

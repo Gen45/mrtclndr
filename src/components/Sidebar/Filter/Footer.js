@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class Footer extends Component {
 
   handleChange = (event, active) => {
-    event.preventDefault();
+    // event.preventDefault();
     event.target.checked = false;
     this.props.batchChange(active);
   };

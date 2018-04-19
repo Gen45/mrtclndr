@@ -6,18 +6,15 @@ import {
   daysOfYear,
   day,
   month,
-  year
+  year,
+  add
 } from '../../helpers/dates';
 
 export class Timeline extends Component {
 
-  // TODO make the 2 in this formula a variable for number of years
-  // "01/15/17"
-  getLineStart = (date, firstYear) => ((year(date) - firstYear) * daysOfYear('01/01/'+firstYear) + dayOfYear(date)) * ((100 / 2) / daysOfYear(date));
+  getLineStart = (date, Y, timespan) => ((year(date) - Y) * daysOfYear('01/01/' + Y) + dayOfYear(date)) * ((100 / timespan) / daysOfYear(date));
 
-  // getLineStart = date => dayOfYear(date) * ((100 / 2) / daysOfYear(date));
-
-  getLineWidth = (dates, firstYear) => this.getLineStart(dates.end, firstYear) - this.getLineStart(dates.start, firstYear);
+  getLineWidth = (dates, Y, timespan) => this.getLineStart(dates.end, Y, timespan) - this.getLineStart(dates.start, Y, timespan);
 
   oneMonth = dates => dates.start === dates.end
     ? ' one-month'
@@ -38,25 +35,34 @@ export class Timeline extends Component {
       start: cleanDate(this.props.dates.start, 'start').date,
       end: cleanDate(this.props.dates.end, 'end').date
     };
-    const firstYear = this.props.firstYear;
+
+    const mode = this.props.time.mode;
+    const M = this.props.time.M;
+    const Y = this.props.time.Y;
+    const Q = this.props.time.Q;
+    const timespan = mode === 'Q' ? 1/4 : mode === 'M' ? 1 / 12 : this.props.time.numberOfYears;
+    const offset = mode === 'Q' ? (Q - 1) * 3: mode === 'M' ? M - 1 : 0;
     const color = this.props.color;
 
-    return (<div className={`timeline-wrapper ${this.timeline2(this.props.multidate)}`}>
-      <div className={`event-timeline ${this.oneMonth(dates)} ${this.dotted(dates)}`.trim()}
-        // data-start={moment(dates.start, "MM/DD/YY").dayOfYear()}
+    return (<div className={`timeline-wrapper${this.timeline2(this.props.multidate)}`}>
+      <div className={`event-timeline${this.oneMonth(dates)}${this.dotted(dates)}`.trim()}
 
-        // data-end={moment(dates.end, "MM/DD/YY").dayOfYear()}
         style={{
-          left: this.getLineStart(dates.start, firstYear) + '%',
-          width: this.getLineWidth(dates, firstYear) + '%',
+          // left: this.getLineStart(dates.start, Y, timespan) + '%',
+          left: this.getLineStart(add(dates.start, -offset, 'months'), Y, timespan) + '%',
+          width: this.getLineWidth(dates, Y, timespan) + '%',
           backgroundColor: color
         }}>
         <i className="start"
           // data-date={dates.start}
-          data-day={day(dates.start)} data-month={month(dates.start)} data-year={year(dates.start)} style={{ borderColor: color }}/>
+          data-day={day(dates.start)} data-month={month(dates.start)} data-year={year(dates.start)} style={{
+            borderColor: color
+          }}/>
         <i className="end"
           // data-date={dates.end}
-          data-day={day(dates.end)} data-month={month(dates.end)} data-year={year(dates.end)} style={{ borderColor: color }}/>
+          data-day={day(dates.end)} data-month={month(dates.end)} data-year={year(dates.end)} style={{
+            borderColor: color
+          }}/>
       </div>
     </div>)
   }
@@ -67,14 +73,11 @@ class Timelines extends Component {
     const dates = this.props.dates;
     const color = this.props.color;
     const datesType = this.props.datesType;
-    const firstYear = this.props.time.firstYear;
+    const time = this.props.time;
 
-    return (
-      <div className="timelines">
-        <Timeline dates={dates.sell} color={color} firstYear={firstYear} />
-        {datesType === 'MULTIDATE' &&
-          <Timeline dates={dates.stay} multidate={true} color={color} firstYear={firstYear} />}
-      </div>)
+    return (<div className="timelines">
+      <Timeline dates={dates.sell} color={color} time={time}/> {datesType === 'MULTIDATE' && <Timeline dates={dates.stay} multidate={true} color={color} time={time}/>}
+    </div>)
   }
 }
 

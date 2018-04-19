@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+// import {shadeColor} from '../../../helpers/colors';
+
 class Button extends Component {
 
   componentWillMount() {
@@ -13,9 +15,10 @@ class Button extends Component {
     const filterIcon = this.props.filterIcon || false;
     const filterImage = this.props.filterImage || false;
     const active = this.props.active;
-    const color = active ? this.props.color : "rgba(153, 153, 153, 0.3)" || false;
+    const labelDot = this.props.labelDot;
+    const color = active || labelDot ? this.props.color : "rgba(153, 153, 153, 0.3)" || false;
 
-    const putColor = color => color ? {backgroundColor: color, borderColor: color}: {};
+    const putColor = color => color && !labelDot ? {backgroundColor: color, borderColor: color}: {};
 
     return (
 
@@ -24,7 +27,9 @@ class Button extends Component {
               this.props.handleChange(event, filter, active)
             }}/>
 
-          <label htmlFor={`filter-${filter}`} style={putColor(color)} >{filterIcon && <i className={filterIcon} />}{" "}
+          <label htmlFor={`filter-${filter}`} style={putColor(color)} >
+            {labelDot && <span className='label-dot' style={{backgroundColor: color}}/> }
+            {filterIcon && <i className={filterIcon} />}{" "}
             {
               filterImage
                 ? <img src={filterImage} alt=""/>

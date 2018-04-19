@@ -1,8 +1,6 @@
 .grid-view {
   height: calc(100% - #{$header-height});
-  overflow-y: scroll;
-
-
+  overflow-y: auto;
 
   .events-wrapper {
     min-height: 100%;
@@ -18,7 +16,7 @@
   }
 
   .event {
-    background: $color-white;
+    background: rgba($color-white, .92);
     margin: $padding/2;
     position: relative;
     vertical-align: top;
@@ -28,6 +26,7 @@
     overflow: hidden;
     // height: 450px;
     height: 300px;
+    border-radius: 5px;
 
     &.modal-event {
       position: absolute;
@@ -152,6 +151,8 @@
     }
 
     .brands {
+      // max-height: 110px;
+      overflow-y: auto;
       min-height: 50px;
       position: relative;
       background: $color-medium-gray;
@@ -427,38 +428,6 @@
         text-decoration: none;
         color: white;
       }
-
-      .US & {
-        background: $color-US;
-      }
-
-      .US-WEST & {
-        background: $color-US-WEST;
-      }
-
-      .US-EAST & {
-        background: $color-US-EAST;
-      }
-
-      .CALA & {
-        background: $color-CALA;
-      }
-
-      .CANADA & {
-        background: $color-CANADA;
-      }
-
-      .PORTFOLIO & {
-        background: $color-PORTFOLIO;
-      }
-
-      .LOYALTY & {
-        background: $color-LOYALTY;
-      }
-
-      .BRAND & {
-        background: $color-BRAND;
-      }
     }
   }
 
@@ -524,40 +493,6 @@
       &:not(.active):hover {
         border-color: darken($color-lightest-gray, 10%);
       }
-
-      &.active {
-        .US & {
-          border-color: $color-US;
-        }
-
-        .US-WEST & {
-          border-color: $color-US-WEST;
-        }
-
-        .US-EAST & {
-          border-color: $color-US-EAST;
-        }
-
-        .CALA & {
-          border-color: $color-CALA;
-        }
-
-        .CANADA & {
-          border-color: $color-CANADA;
-        }
-
-        .PORTFOLIO & {
-          border-color: $color-PORTFOLIO;
-        }
-
-        .LOYALTY & {
-          border-color: $color-LOYALTY;
-        }
-
-        .BRAND & {
-          border-color: $color-BRAND;
-        }
-      }
     }
   }
 
@@ -572,6 +507,8 @@
       text-align: center;
       padding: $padding;
       padding-top: 0;
+      // max-height: 100px;
+      overflow-y: auto;
     }
 
     &.active {
@@ -600,107 +537,11 @@
 
       &:hover {
         text-decoration: underline;
-
-        .US & {
-          color: $color-US;
-        }
-
-        .US-WEST & {
-          color: $color-US-WEST;
-        }
-
-        .US-EAST & {
-          color: $color-US-EAST;
-        }
-
-        .CALA & {
-          color: $color-CALA;
-        }
-
-        .CANADA & {
-          color: $color-CANADA;
-        }
-
-        .PORTFOLIO & {
-          color: $color-PORTFOLIO;
-        }
-
-        .LOYALTY & {
-          color: $color-LOYALTY;
-        }
-
-        .BRAND & {
-          color: $color-BRAND;
-        }
       }
-    }
-
-    .US & {
-      border-color: lighten($color-US, 30%);
-    }
-
-    .US-WEST & {
-      border-color: lighten($color-US-WEST, 30%);
-    }
-
-    .US-EAST & {
-      border-color: lighten($color-US-EAST, 30%);
-    }
-
-    .CALA & {
-      border-color: lighten($color-CALA, 30%);
-    }
-
-    .CANADA & {
-      border-color: lighten($color-CANADA, 30%);
-    }
-
-    .PORTFOLIO & {
-      border-color: lighten($color-PORTFOLIO, 30%);
-    }
-
-    .LOYALTY & {
-      border-color: lighten($color-LOYALTY, 30%);
-    }
-
-    .BRAND & {
-      border-color: lighten($color-BRAND, 30%);
     }
 
     i {
       margin-right: 5px;
-
-      .US & {
-        color: $color-US;
-      }
-
-      .US-WEST & {
-        color: $color-US-WEST;
-      }
-
-      .US-EAST & {
-        color: $color-US-EAST;
-      }
-
-      .CALA & {
-        color: $color-CALA;
-      }
-
-      .CANADA & {
-        color: $color-CANADA;
-      }
-
-      .PORTFOLIO & {
-        color: $color-PORTFOLIO;
-      }
-
-      .LOYALTY & {
-        color: $color-LOYALTY;
-      }
-
-      .BRAND & {
-        color: $color-BRAND;
-      }
     }
   }
 }

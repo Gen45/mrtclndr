@@ -24,8 +24,8 @@ class Event extends Component {
   //   year(dates.stay.end)
   // ].filter((value, index, self) => self.indexOf(value) === index).reduce((classes, year) => `${classes} YEAR-${year}`, '');
 
-  getEventClassName = (view, region, dates, elevated, modal) =>
-  `event ${isMultidate(dates) ? 'MULTIDATE' : 'SINGLEDATE'} ${elevated ? 'elevated' : ''} ${modal ? 'modal-event grid-view' : ''}`;
+  getEventClassName = (view, region, dates, elevated, modal, multidate) =>
+  `event${multidate ? ' MULTIDATE' : ''}${elevated ? ' elevated' : ''}${modal ? ' modal-event grid-view' : ''}`;
 
   handleOpenModal = (id) => {
     !this.props.elevated && this.props.handleOpenModal(id);
@@ -38,12 +38,12 @@ class Event extends Component {
     const regionColor = regionInfo[this.props.event['region']].color;
     const offerColor = offerInfo[this.props.event['offer']].color;
     const time = this.props.time;
+    const multidate = isMultidate(event.dates);
 
     // console.log(regionColor);
 
-    return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates, this.props.elevated, this.props.modal)} onClick={() => {
-        this.handleOpenModal(event['id']);
-      }}>
+    return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates, this.props.elevated, this.props.modal, multidate)} onClick={() => {
+        this.handleOpenModal(event['id']);}}>
 
       <div className='close-button' onClick={() => {
           this.props.handleCloseModal();
@@ -57,19 +57,19 @@ class Event extends Component {
 
           <div className='info-wrapper'>
             <p className='activity'>
-              <span className='offer-dot' title={event.offer} style={{backgroundColor: offerColor}}/>{event.campaignName}
+              <span className='label-dot' title={event.offer} style={{backgroundColor: offerColor}}/>{event.campaignName}
             </p>
-            <p className='timeframe'>{event.segment}</p>
+            <p className='timeframe'>{event.market}</p>
             <p className='tags'>
-              <span className='tag'><i className='nc-icon-mini business_globe'/>{' '}
+              <span className='tag'>
+                {/* <i className='nc-icon-mini business_globe'/>{' '} */}
                 {event.campaignGroup}</span>{' '}
-              <span className='tag'><i className='nc-icon-mini business_stock'/>{' '}
-                {event.market}</span>{' '}
               <span className='tag'>
                 {event.segment}
               </span>{' '}
               {
-                event.programType && <span className='tag partner-type '><i className='nc-icon-mini business_briefcase-25'/>{' '}
+                event.programType && <span className='tag partner-type '>
+                  {/* <i className='nc-icon-mini business_briefcase-25'/>{' '} */}
                     {event.programType}</span>
               }
             </p>
@@ -91,7 +91,7 @@ class Event extends Component {
 
       </div>
 
-      <Timelines dates={event.dates} color={regionColor} time={time} datesType={event.datesType} />
+      <Timelines dates={event.dates} color={regionColor} Y={time.Y} datesType={event.datesType} time={this.props.time} />
 
     </div>)
   }

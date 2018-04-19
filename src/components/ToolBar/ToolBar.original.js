@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 const Title = (props) =>
   <h2 className="title">
     <span className="segment">{props.defaultTime.mode}</span>
-    <span className="detail">{props.defaultTime.firstYear}</span>
+    <span className="detail">{props.defaultTime.Y}</span>
   </h2>
 
 const Pagination = (props) =>

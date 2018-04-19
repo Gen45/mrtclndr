@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
+import {ResizableBox} from 'react-resizable';
 
 // COMPONENTS
 import Content from './Content';
@@ -30,6 +31,15 @@ class BrandsFilter extends Component {
     this.setState({collapsed});
   };
 
+  handleSearch = (e, target) => {
+    this.setState({keyPhrase: target.value.toUpperCase()});
+  };
+
+  handleClearSearch = () => {
+    this.setState({keyPhrase: ''});
+    this.search.value = '';
+  };
+
   render() {
     const filterName = this.props.filterName;
     const filterCategories = this.props.filterCategories;
@@ -48,35 +58,51 @@ class BrandsFilter extends Component {
       </header>
       <div className="content">
         <div className="brand-cat-filters">
-
-          {/* <div id="BRAND_SEARCH">
-            <div className="input-icon">
-              <input id="search_brand_box" className="search-box rounded" type="text" placeholder="Filter Brands"/>
-              <i className="nc-icon-mini ui-1_zoom"></i>
-            </div>
-          </div> */}
-
-          {/* <FilterCategory category={"ALL"}/>
-          {Object.keys(filterCategories).map((r, i) => <FilterCategory key={i} category={filterCategories[r]["name"].toUpperCase()}/>)} */}
-
+          <div className="input-icon">
+            <input id="search_brand_box" ref={(input) => this.search = input} className="search-box rounded" type="text" placeholder="Brand Search" onChange={(e) => {
+                this.handleSearch(e, this.search)
+              }} />
+              {
+                this.state.keyPhrase !== "" && this.state.keyPhrase !== undefined ?
+                <i className="nc-icon-mini ui-1_circle-remove" onClick={ () => {this.handleClearSearch()}}/> :
+                <i className="nc-icon-mini ui-1_zoom" />
+              }
+          </div>
         </div>
 
+        {/* <FilterCategory category={"ALL"}/>
+          {Object.keys(filterCategories).map((r, i) => <FilterCategory key={i} category={filterCategories[r]["name"].toUpperCase()}/>)}
+        </div> */
+        }
+
         <div className="brand-filters">
-          <Scrollbars thumbMinSize={100} universal={true} style={{
-              height: '100%'
-            }}>
 
-            {
-              Object.keys(filterCategories).map((c, i) =>
-              <div key={i} id={filterCategories[c]["name"].toUpperCase()} className="brand-category">
-                <h4>
-                  <span>{filterCategories[c]["name"]}</span>
-                </h4>
-                <Content filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} filterInfo={this.props.filterInfo} handleChange={this.handleChange} inner={true}/>
-              </div>)
-            }
+          <ResizableBox width={280} height={255} minConstraints={[0, 0]} axis='y'>
+            <Scrollbars thumbMinSize={100} universal={true} style={{
+                height: 100 + '%'
+              }}>
 
-          </Scrollbars>
+              {
+                Object.keys(filterCategories).map((c, i) => {
+                  const keyPhrase = this.state.keyPhrase !== "" && this.state.keyPhrase !== undefined ? this.state.keyPhrase : '';
+                  // const validKeyPhrase = this.props.filterInfo[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
+
+                  const isInSearch = filterCategories[c]["brands"].map((b, i) => this.props.filterInfo[b]["name"]).join('').toUpperCase().indexOf(keyPhrase) > -1
+                    ? true
+                    : false;
+
+                  return isInSearch || keyPhrase === "" || keyPhrase === undefined
+                    ? <div key={i} id={filterCategories[c]["name"].toUpperCase()} className="brand-category">
+                        <h4><span>{filterCategories[c]["name"]}</span> </h4>
+                        <Content filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} filterInfo={this.props.filterInfo} handleChange={this.handleChange} inner={true} keyPhrase={keyPhrase}>
+                        </Content>
+                      </div>
+                    : null
+                })
+              }
+
+            </Scrollbars>
+          </ResizableBox>
         </div>
 
       </div>
