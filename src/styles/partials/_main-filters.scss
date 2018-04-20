@@ -1,13 +1,15 @@
 .main-filters {
     display: inline-block;
     cursor: pointer;
+    position: relative;
     .nav-trigger {
         position: relative;
         display: inline-block;
         font-size: 14px;
         margin: 0 $padding/4;
         // margin-right: -4px;
-        min-width: 45px;
+
+        text-transform: uppercase;
         line-height: 1;
         vertical-align: middle;
         padding: $padding/4;
@@ -252,14 +254,16 @@
     position: absolute;
     height: auto;
     display: block;
-    right: -5px;
-    top: -5px;
+    // right: -5px;
+    right: -35px;
+    // top: -5px;
+    top: -8px;
     background: rgba(lighten($color-darker-gray, 6%), 0.97);
-    box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, 0.75);
     border-radius: 3px;
         width: 260px;
     padding: $padding;
-    padding-top: $padding*1.5;
+    padding-top: $padding* 2;
     text-align: center;
     z-index: 999;
     transition: opacity 0.3s ease 0, width 0 ease 0;
@@ -285,6 +289,8 @@
       a {
         // padding-bottom: 10px !important;
         // margin-bottom: 0px !important;
+        min-width: 45px;
+
       }
     }
 
@@ -316,15 +322,19 @@
 
 
     .close-button {
-        // display: none;
         position: absolute;
-        right: 10px; //0px;
-        top: 10px;
+        padding: 10px 45px;
+        right: 0px;
+        text-align: right;
+        top: 0px;
         margin-bottom: 5px;
-        width: 26px;
+        text-transform: uppercase;
+        width: auto;
         height: 26px;
+        letter-spacing: 1px;
         z-index: 789234908423790;
         cursor: pointer;
+        font-size: 14px;
 
         &:before {
             content: '\e6ad';
@@ -333,8 +343,8 @@
             color: #FFFFFF;
             width: 26px;
             height: 26px;
-            top: 0;
-            right: 0;
+            top: 13px;
+            right: 13px;
             text-align: right;
         }
         @media screen and (max-width: $desktop-min) {

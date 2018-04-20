@@ -361,6 +361,8 @@ textarea:focus, input:focus, button:focus {
       opacity: 0;
       width: calc( 100% - 1px);
       pointer-events: none; }
+    .collapsed .main .content-frame {
+      width: 100%; }
   .collapsed .main {
     width: calc( 100% - 1px); }
   .main .content {
@@ -382,15 +384,17 @@ textarea:focus, input:focus, button:focus {
       box-shadow: 0 2px 20px rgba(51, 51, 51, 0.8); }
       @media screen and (max-width: 940px) {
         .main .content > header {
-          display: block;
-          height: 100px;
-          text-align: center; }
+          text-align: justify; }
           .main .content > header h2 {
             margin: 0 auto;
-            justify-content: center; }
+            justify-content: left; }
           .main .content > header > nav {
-            display: block;
-            margin: 0 auto; } }
+            position: absolute;
+            top: 6px;
+            right: 0;
+            text-align: right;
+            display: inline-block;
+            margin: 0 0 0 auto; } }
       .main .content > header h2.title {
         font-size: 28px;
         color: #e4144a;
@@ -406,14 +410,13 @@ textarea:focus, input:focus, button:focus {
           text-transform: none; }
       @media screen and (max-width: 940px) {
         .main .content > header {
-          padding: 5px 10px;
-          height: 80px; }
+          padding: 0;
+          height: 40px; }
           .main .content > header h2.title {
             height: 40px;
-            display: block;
             text-align: left;
             font-size: 24px;
-            margin-left: 10px;
+            margin-left: 70px;
             margin-top: -2px; }
             .main .content > header h2.title .detail {
               margin-left: 10px;
@@ -422,7 +425,8 @@ textarea:focus, input:focus, button:focus {
       display: none; }
     @media screen and (max-width: 940px) {
       .main .content {
-        height: calc( 100vh - 50px); } }
+        height: calc( 100vh - 50px);
+        border-radius: 0; } }
     .main .content:after {
       content: '';
       position: absolute;
@@ -438,9 +442,8 @@ textarea:focus, input:focus, button:focus {
       width: 100%; } }
 
 .pagination {
-  display: none;
   margin-left: -10px;
-  margin-top: 4px;
+  margin-top: 2px;
   z-index: 300; }
   .pagination a {
     display: inline-block;
@@ -458,31 +461,26 @@ textarea:focus, input:focus, button:focus {
       border-radius: 17px; }
     .pagination a:hover i {
       color: #ffffff; }
-  .MONTH .pagination {
-    display: inline-block; }
   @media screen and (max-width: 940px) {
     .pagination {
       position: absolute;
-      left: 23px;
-      top: 7px; }
+      left: 14px;
+      top: 4px; }
       .pagination a i {
         font-size: 24px; } }
 
 .content-frame {
   background: left top fixed;
+  position: fixed;
+  width: calc(100% - (300px));
+  top: 50px;
+  left: 0;
   overflow-y: auto;
   min-height: calc(100vh - 50px);
   padding: 20px; }
   @media screen and (max-width: 940px) {
     .content-frame {
       padding: 0; } }
-
-.MONTH #trigger-TIMELINE {
-  display: none; }
-
-@media screen and (max-width: 940px) {
-  .MONTH h2.title {
-    padding-left: 60px; } }
 
 .preloader {
   position: absolute;
@@ -533,13 +531,14 @@ span.react-resizable-handle {
 
 .main-filters {
   display: inline-block;
-  cursor: pointer; }
+  cursor: pointer;
+  position: relative; }
   .main-filters .nav-trigger {
     position: relative;
     display: inline-block;
     font-size: 14px;
     margin: 0 5px;
-    min-width: 45px;
+    text-transform: uppercase;
     line-height: 1;
     vertical-align: middle;
     padding: 5px;
@@ -718,14 +717,14 @@ span.react-resizable-handle {
   position: absolute;
   height: auto;
   display: block;
-  right: -5px;
-  top: -5px;
+  right: -35px;
+  top: -8px;
   background: rgba(59, 59, 59, 0.97);
-  box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, 0.75);
   border-radius: 3px;
   width: 260px;
   padding: 20px;
-  padding-top: 30px;
+  padding-top: 40px;
   text-align: center;
   z-index: 999;
   transition: opacity 0.3s ease 0, width 0 ease 0; }
@@ -752,6 +751,11 @@ span.react-resizable-handle {
     display: block;
     margin-bottom: 10px !important;
     text-transform: uppercase; }
+  .share-tools .group a,
+  .sort-tools .group a,
+  .time-tools .group a,
+  .trigger-box-children .group a {
+    min-width: 45px; }
   .share-tools hr,
   .sort-tools hr,
   .time-tools hr,
@@ -788,13 +792,18 @@ span.react-resizable-handle {
   .time-tools .close-button,
   .trigger-box-children .close-button {
     position: absolute;
-    right: 10px;
-    top: 10px;
+    padding: 10px 45px;
+    right: 0px;
+    text-align: right;
+    top: 0px;
     margin-bottom: 5px;
-    width: 26px;
+    text-transform: uppercase;
+    width: auto;
     height: 26px;
+    letter-spacing: 1px;
     z-index: 789234908423790;
-    cursor: pointer; }
+    cursor: pointer;
+    font-size: 14px; }
     .share-tools .close-button:before,
     .sort-tools .close-button:before,
     .time-tools .close-button:before,
@@ -805,8 +814,8 @@ span.react-resizable-handle {
       color: #FFFFFF;
       width: 26px;
       height: 26px;
-      top: 0;
-      right: 0;
+      top: 13px;
+      right: 13px;
       text-align: right; }
     @media screen and (max-width: 940px) {
       .share-tools .close-button,
@@ -879,11 +888,11 @@ span.filter-category.time-filters.time {
   .timeline-view .months-lines .line {
     position: relative;
     opacity: 0.5;
-    border-left: 1.5px dashed #333333;
+    border-left: 1px dashed #333333;
     flex-grow: 1;
     width: 0%; }
     .timeline-view .months-lines .line:last-child {
-      border-right: 1.5px dashed #333333; }
+      border-right: 1px dashed #333333; }
     .timeline-view .months-lines .line.linted {
       background: rgba(153, 153, 153, 0.2);
       border-left-color: #333333; }
@@ -924,7 +933,8 @@ span.filter-category.time-filters.time {
   width: 100%;
   z-index: 101;
   padding-top: 10px;
-  padding-bottom: 180px; }
+  padding-bottom: 180px;
+  overflow: hidden; }
   .timeline-view .events-wrapper .event {
     position: relative;
     height: 64px;
@@ -1255,178 +1265,6 @@ body.activity-type .activity-type-group {
     text-transform: capitalize;
     transform: translateX(-50%); }
 
-.Q1-18 .months-bar a:nth-child(4), .Q1-18 .months-bar a:nth-child(5), .Q1-18 .months-bar a:nth-child(6), .Q1-18 .months-bar a:nth-child(7), .Q1-18 .months-bar a:nth-child(8), .Q1-18 .months-bar a:nth-child(9), .Q1-18 .months-bar a:nth-child(10), .Q1-18 .months-bar a:nth-child(11), .Q1-18 .months-bar a:nth-child(12),
-.Q1-17 .months-bar a:nth-child(4),
-.Q1-17 .months-bar a:nth-child(5),
-.Q1-17 .months-bar a:nth-child(6),
-.Q1-17 .months-bar a:nth-child(7),
-.Q1-17 .months-bar a:nth-child(8),
-.Q1-17 .months-bar a:nth-child(9),
-.Q1-17 .months-bar a:nth-child(10),
-.Q1-17 .months-bar a:nth-child(11),
-.Q1-17 .months-bar a:nth-child(12), .Q1-18
-.months-lines .line:nth-child(4), .Q1-18
-.months-lines .line:nth-child(5), .Q1-18
-.months-lines .line:nth-child(6), .Q1-18
-.months-lines .line:nth-child(7), .Q1-18
-.months-lines .line:nth-child(8), .Q1-18
-.months-lines .line:nth-child(9), .Q1-18
-.months-lines .line:nth-child(10), .Q1-18
-.months-lines .line:nth-child(11), .Q1-18
-.months-lines .line:nth-child(12),
-.Q1-17
-.months-lines .line:nth-child(4),
-.Q1-17
-.months-lines .line:nth-child(5),
-.Q1-17
-.months-lines .line:nth-child(6),
-.Q1-17
-.months-lines .line:nth-child(7),
-.Q1-17
-.months-lines .line:nth-child(8),
-.Q1-17
-.months-lines .line:nth-child(9),
-.Q1-17
-.months-lines .line:nth-child(10),
-.Q1-17
-.months-lines .line:nth-child(11),
-.Q1-17
-.months-lines .line:nth-child(12) {
-  display: none; }
-
-.Q2-18 .months-bar a:nth-child(1), .Q2-18 .months-bar a:nth-child(2), .Q2-18 .months-bar a:nth-child(3), .Q2-18 .months-bar a:nth-child(7), .Q2-18 .months-bar a:nth-child(8), .Q2-18 .months-bar a:nth-child(9), .Q2-18 .months-bar a:nth-child(10), .Q2-18 .months-bar a:nth-child(11), .Q2-18 .months-bar a:nth-child(12),
-.Q2-17 .months-bar a:nth-child(1),
-.Q2-17 .months-bar a:nth-child(2),
-.Q2-17 .months-bar a:nth-child(3),
-.Q2-17 .months-bar a:nth-child(7),
-.Q2-17 .months-bar a:nth-child(8),
-.Q2-17 .months-bar a:nth-child(9),
-.Q2-17 .months-bar a:nth-child(10),
-.Q2-17 .months-bar a:nth-child(11),
-.Q2-17 .months-bar a:nth-child(12), .Q2-18
-.months-lines .line:nth-child(1), .Q2-18
-.months-lines .line:nth-child(2), .Q2-18
-.months-lines .line:nth-child(3), .Q2-18
-.months-lines .line:nth-child(7), .Q2-18
-.months-lines .line:nth-child(8), .Q2-18
-.months-lines .line:nth-child(9), .Q2-18
-.months-lines .line:nth-child(10), .Q2-18
-.months-lines .line:nth-child(11), .Q2-18
-.months-lines .line:nth-child(12),
-.Q2-17
-.months-lines .line:nth-child(1),
-.Q2-17
-.months-lines .line:nth-child(2),
-.Q2-17
-.months-lines .line:nth-child(3),
-.Q2-17
-.months-lines .line:nth-child(7),
-.Q2-17
-.months-lines .line:nth-child(8),
-.Q2-17
-.months-lines .line:nth-child(9),
-.Q2-17
-.months-lines .line:nth-child(10),
-.Q2-17
-.months-lines .line:nth-child(11),
-.Q2-17
-.months-lines .line:nth-child(12) {
-  display: none; }
-
-.Q3-18 .months-bar a:nth-child(1), .Q3-18 .months-bar a:nth-child(2), .Q3-18 .months-bar a:nth-child(3), .Q3-18 .months-bar a:nth-child(4), .Q3-18 .months-bar a:nth-child(5), .Q3-18 .months-bar a:nth-child(6), .Q3-18 .months-bar a:nth-child(10), .Q3-18 .months-bar a:nth-child(11), .Q3-18 .months-bar a:nth-child(12),
-.Q3-17 .months-bar a:nth-child(1),
-.Q3-17 .months-bar a:nth-child(2),
-.Q3-17 .months-bar a:nth-child(3),
-.Q3-17 .months-bar a:nth-child(4),
-.Q3-17 .months-bar a:nth-child(5),
-.Q3-17 .months-bar a:nth-child(6),
-.Q3-17 .months-bar a:nth-child(10),
-.Q3-17 .months-bar a:nth-child(11),
-.Q3-17 .months-bar a:nth-child(12), .Q3-18
-.months-lines .line:nth-child(1), .Q3-18
-.months-lines .line:nth-child(2), .Q3-18
-.months-lines .line:nth-child(3), .Q3-18
-.months-lines .line:nth-child(4), .Q3-18
-.months-lines .line:nth-child(5), .Q3-18
-.months-lines .line:nth-child(6), .Q3-18
-.months-lines .line:nth-child(10), .Q3-18
-.months-lines .line:nth-child(11), .Q3-18
-.months-lines .line:nth-child(12),
-.Q3-17
-.months-lines .line:nth-child(1),
-.Q3-17
-.months-lines .line:nth-child(2),
-.Q3-17
-.months-lines .line:nth-child(3),
-.Q3-17
-.months-lines .line:nth-child(4),
-.Q3-17
-.months-lines .line:nth-child(5),
-.Q3-17
-.months-lines .line:nth-child(6),
-.Q3-17
-.months-lines .line:nth-child(10),
-.Q3-17
-.months-lines .line:nth-child(11),
-.Q3-17
-.months-lines .line:nth-child(12) {
-  display: none; }
-
-.Q4-18 .months-bar a:nth-child(1), .Q4-18 .months-bar a:nth-child(2), .Q4-18 .months-bar a:nth-child(3), .Q4-18 .months-bar a:nth-child(4), .Q4-18 .months-bar a:nth-child(5), .Q4-18 .months-bar a:nth-child(6), .Q4-18 .months-bar a:nth-child(7), .Q4-18 .months-bar a:nth-child(8), .Q4-18 .months-bar a:nth-child(9),
-.Q4-17 .months-bar a:nth-child(1),
-.Q4-17 .months-bar a:nth-child(2),
-.Q4-17 .months-bar a:nth-child(3),
-.Q4-17 .months-bar a:nth-child(4),
-.Q4-17 .months-bar a:nth-child(5),
-.Q4-17 .months-bar a:nth-child(6),
-.Q4-17 .months-bar a:nth-child(7),
-.Q4-17 .months-bar a:nth-child(8),
-.Q4-17 .months-bar a:nth-child(9), .Q4-18
-.months-lines .line:nth-child(1), .Q4-18
-.months-lines .line:nth-child(2), .Q4-18
-.months-lines .line:nth-child(3), .Q4-18
-.months-lines .line:nth-child(4), .Q4-18
-.months-lines .line:nth-child(5), .Q4-18
-.months-lines .line:nth-child(6), .Q4-18
-.months-lines .line:nth-child(7), .Q4-18
-.months-lines .line:nth-child(8), .Q4-18
-.months-lines .line:nth-child(9),
-.Q4-17
-.months-lines .line:nth-child(1),
-.Q4-17
-.months-lines .line:nth-child(2),
-.Q4-17
-.months-lines .line:nth-child(3),
-.Q4-17
-.months-lines .line:nth-child(4),
-.Q4-17
-.months-lines .line:nth-child(5),
-.Q4-17
-.months-lines .line:nth-child(6),
-.Q4-17
-.months-lines .line:nth-child(7),
-.Q4-17
-.months-lines .line:nth-child(8),
-.Q4-17
-.months-lines .line:nth-child(9) {
-  display: none; }
-
-.Q1-18 .months-lines .line:nth-child(3),
-.Q1-17 .months-lines .line:nth-child(3) {
-  border-right: 1.5px dashed #333333; }
-
-.Q2-18 .months-lines .line:nth-child(6),
-.Q2-17 .months-lines .line:nth-child(6) {
-  border-right: 1.5px dashed #333333; }
-
-.Q3-18 .months-lines .line:nth-child(9),
-.Q3-17 .months-lines .line:nth-child(9) {
-  border-right: 1.5px dashed #333333; }
-
-.Q4-18 .months-lines .line:nth-child(12),
-.Q4-17 .months-lines .line:nth-child(12) {
-  border-right: 1.5px dashed #333333; }
-
 .modal {
   position: absolute;
   height: 100% !important;
@@ -1434,7 +1272,7 @@ body.activity-type .activity-type-group {
   top: 0;
   left: 0;
   z-index: 9001;
-  overflow-y: hidden !important; }
+  overflow: hidden !important; }
   @media screen and (max-width: 679px) {
     .modal {
       background: rgba(22, 22, 22, 0.5); } }
@@ -1657,10 +1495,7 @@ body.activity-type .activity-type-group {
   @media screen and (min-width: 2200px) and (max-width: 9000px) {
     .collapsed .grid-view .event {
       width: calc(100% / 7 - 20px); } }
-  @media screen and (max-width: 1px) and (max-width: 499px) {
-    .grid-view .event {
-      width: calc(100% / 1 - 20px); } }
-  @media screen and (min-width: 500px) and (max-width: 749px) {
+  @media screen and (min-width: 1px) and (max-width: 749px) {
     .grid-view .event {
       width: calc(100% / 1 - 20px); } }
   @media screen and (min-width: 750px) and (max-width: 939px) {

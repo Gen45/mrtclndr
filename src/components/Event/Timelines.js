@@ -54,12 +54,12 @@ export class Timeline extends Component {
           backgroundColor: color
         }}>
         <i className="start"
-          // data-date={dates.start}
+          title={dates.start}
           data-day={day(dates.start)} data-month={month(dates.start)} data-year={year(dates.start)} style={{
             borderColor: color
           }}/>
         <i className="end"
-          // data-date={dates.end}
+          title={dates.end}
           data-day={day(dates.end)} data-month={month(dates.end)} data-year={year(dates.end)} style={{
             borderColor: color
           }}/>

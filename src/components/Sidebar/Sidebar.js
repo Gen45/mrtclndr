@@ -16,7 +16,6 @@ import channels from '../../config/channels.json';
 class Sidebar extends Component {
 
   componentDidUpdate() {
-    // console.log('sidebar updated');
   }
 
   render() {
@@ -32,20 +31,20 @@ class Sidebar extends Component {
             ? 'collapsed'
             : ''}`}></span>
       </header>
-      <div className="nano">
-        <div className="scroll-wrapper nano-content">
 
-          {/* <Search /> */}
-          {/* <Scrollbars thumbMinSize={100} universal={true} style={{
-              height: '100%'
-            }}> */}
-            <Filter title={"Regions"} filterName={"regions"} filters={this.props.regions} titleIcon={"nc-icon-outline travel_world"} filterInfo={regions} updateFilter={this.props.updateFilter}/>
-            <BrandsFilter title={"Brands"} filterName={"brands"} filters={this.props.brands} titleIcon={"nc-icon-outline objects_diamond"} filterInfo={brands} filterCategories={brandGroups} updateFilter={this.props.updateFilter}/>
-            <Filter title={"Offers"} filterName={"offers"} titleIcon={"nc-icon-outline ui-1_check-circle-07"} filters={this.props.offers} filterInfo={offers} updateFilter={this.props.updateFilter} labelDot={true}/>
-            <Filter title={"Channels"} filterName={"channels"} titleIcon={"nc-icon-outline ui-1_send"} filters={this.props.channels} filterInfo={channels} updateFilter={this.props.updateFilter}/>
-          {/* </Scrollbars> */}
+        <div className="nano">
+          <div className="scroll-wrapper nano-content">
+            {/* <Search /> */}
+            {/* <Scrollbars thumbMinSize={100} universal={true} style={{
+                height: '100%'
+              }}> */}
+              <Filter title={"Regions"} filterName={"regions"} filters={this.props.regions} titleIcon={"nc-icon-outline travel_world"} filterInfo={regions} updateFilter={this.props.updateFilter}/>
+              <BrandsFilter title={"Brands"} filterName={"brands"} filters={this.props.brands} titleIcon={"nc-icon-outline objects_diamond"} filterInfo={brands} filterCategories={brandGroups} updateFilter={this.props.updateFilter}/>
+              <Filter title={"Offers"} filterName={"offers"} titleIcon={"nc-icon-outline ui-1_check-circle-07"} filters={this.props.offers} filterInfo={offers} updateFilter={this.props.updateFilter} labelDot={true}/>
+              <Filter title={"Channels"} filterName={"channels"} titleIcon={"nc-icon-outline ui-1_send"} filters={this.props.channels} filterInfo={channels} updateFilter={this.props.updateFilter}/>
+            {/* </Scrollbars> */}
+          </div>
         </div>
-      </div>
 
     </aside>)
   }

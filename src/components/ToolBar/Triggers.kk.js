@@ -15,7 +15,12 @@ export class TriggerBox extends Component {
 
   render() {
     return (
-        <div className="inner">
+
+<div>
+{
+      !this.props.renderChildren ?
+
+      <div className="inner">
         <a className="nav-trigger" onClick={() => this.toggleBox()}>
           <i className={this.props.icon}/> {` ${this.props.title}`}
         </a>
@@ -33,6 +38,13 @@ export class TriggerBox extends Component {
             </OutsideAlerter>
         }
       </div>
+      :
+      <div>
+        {this.props.children}
+      </div>
+}
+</div>
+
     )
   }
 }

@@ -48,6 +48,7 @@ const eventsData = () => {
       offer: getOffer(e["Offer"], offers),
       channels: cleanChannels(eventChannels),
       otherChannels: e["Other Channels"],
+      ongoing: e["Ongoing Campaign"],
       owner: {
         name: e["Owner"]
       },
@@ -61,7 +62,7 @@ const eventsData = () => {
           end: e["Stay End Date"]
         }
       },
-      earlierDay: getExtreme([e["Sell Start Date"], e["Stay Start Date"]], 'left'),
+      earliestDay: getExtreme([e["Sell Start Date"], e["Stay Start Date"]], 'left'),
       latestDay: getExtreme([e["Sell End Date"], e["Stay End Date"]], 'right')
     };
 

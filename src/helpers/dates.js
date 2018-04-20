@@ -1,7 +1,5 @@
 import moment from 'moment';
-// import range from 'lodash/range';
 import times from 'lodash/times';
-// import _ from 'lodash';
 
 const FORMAT = "MM/DD/YY";
 
@@ -11,8 +9,7 @@ export const year = date => moment(date, FORMAT).format('YY');
 
 export const add = (date, amount, type) => moment(date, FORMAT).add(amount, type).format(FORMAT);
 
-export const quarter = date => moment(date, FORMAT).quarter();
-// export const quarters = dates => moment(date, FORMAT).quarter();
+// export const quarter = date => moment(date, FORMAT).quarter();
 
 export const today = () => moment().format(FORMAT);
 export const thisYear = () => moment().format('YY');
@@ -44,10 +41,16 @@ export const getExtreme = (dates, direction) => {
     return times(Math.abs(offset), i => Number(thisYear()) + Math.sign(offset) * (i + 1)).map(y => Math.sign(offset) * daysOfYear(thisYear() + y)).reduce((y, sum) => {
       return y + sum;
     }, dayOfYear(date));
-  }).reduce((date, earlier) => (
-    date < earlier
-    ? date
-    : earlier), directions.direction * 100000)
+  }).reduce((date, extremer) => (
+    direction === 'left'
+    ? (
+      date < extremer
+      ? date
+      : extremer)
+    : (
+      date > extremer
+      ? date
+      : extremer)), directions.direction * 100000)
 };
 
 export const cleanDate = (dateIn, dateType) => {

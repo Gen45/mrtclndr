@@ -64,11 +64,11 @@
             position: relative;
             opacity: 0.5;
             // transition: $transition-time/2;
-            border-left: 1.5px dashed $color-dark-gray;
+            border-left: 1px dashed $color-dark-gray;
             flex-grow: 1;
             width: 0%;
             &:last-child {
-                border-right: 1.5px dashed $color-dark-gray;
+                border-right: 1px dashed $color-dark-gray;
             }
             &.linted {
                 background: rgba($color-light-gray, 0.2);
@@ -120,6 +120,7 @@
         z-index: 101;
         padding-top: $padding/2;
         padding-bottom: $padding*9;
+        overflow: hidden;
         .event {
             position: relative;
             height: 64px;
@@ -539,108 +540,6 @@ body.activity-type .activity-type-group {
     }
 }
 
-.months-bar a,
-.months-lines .line {
-    .Q1-18 &,
-    .Q1-17 & {
-        &:nth-child(4),
-        &:nth-child(5),
-        &:nth-child(6),
-        &:nth-child(7),
-        &:nth-child(8),
-        &:nth-child(9),
-        &:nth-child(10),
-        &:nth-child(11),
-        &:nth-child(12),
-        {
-            display: none;
-        }
-    }
-    .Q2-18 &,
-    .Q2-17 & {
-        &:nth-child(1),
-        &:nth-child(2),
-        &:nth-child(3),
-        &:nth-child(7),
-        &:nth-child(8),
-        &:nth-child(9),
-        &:nth-child(10),
-        &:nth-child(11),
-        &:nth-child(12),
-        {
-            display: none;
-        }
-    }
-    .Q3-18 &,
-    .Q3-17 & {
-        &:nth-child(1),
-        &:nth-child(2),
-        &:nth-child(3),
-        &:nth-child(4),
-        &:nth-child(5),
-        &:nth-child(6),
-        &:nth-child(10),
-        &:nth-child(11),
-        &:nth-child(12),
-        {
-            display: none;
-        }
-    }
-    .Q4-18 &,
-    .Q4-17 & {
-        &:nth-child(1),
-        &:nth-child(2),
-        &:nth-child(3),
-        &:nth-child(4),
-        &:nth-child(5),
-        &:nth-child(6),
-        &:nth-child(7),
-        &:nth-child(8),
-        &:nth-child(9),
-        {
-            display: none;
-        }
-    }
-}
-
-.months-lines .line {
-    .Q1-18 &,
-    .Q1-17 & {
-        &:nth-child(3) {
-            border-right: 1.5px dashed $color-dark-gray;
-        }
-    }
-    .Q2-18 &,
-    .Q2-17 & {
-        &:nth-child(6) {
-            border-right: 1.5px dashed $color-dark-gray;
-        }
-    }
-    .Q3-18 &,
-    .Q3-17 & {
-        &:nth-child(9) {
-            border-right: 1.5px dashed $color-dark-gray;
-        }
-    }
-    .Q4-18 &,
-    .Q4-17 & {
-        &:nth-child(12) {
-            border-right: 1.5px dashed $color-dark-gray;
-        }
-    }
-}
-
-.grid-view .event.modal-event {
-  // @media screen and (max-width: $phone-max) {
-  //   top: 30px !important;
-  //   left: 20px !important;
-  //   height: auto;
-  //   &.elevated {
-  //     max-width: calc(100% - 40px) !important;
-  //     transform: translate( 0%, 0%) !important;
-  //   }
-  // }
-}
 
 .modal {
     position: absolute;
@@ -649,23 +548,15 @@ body.activity-type .activity-type-group {
     top: 0;
     left: 0;
     z-index: 9001;
-    overflow-y: hidden !important;
-    // pointer-events: none;
-    // cursor: pointer;
+    overflow: hidden !important;
+
     @media screen and (max-width: $phone-max) {
         background: rgba($color-black, 0.5);
-        // pointer-events: auto;
-        // .event {
-        //   top: 0;
-        //   max-width: 100%;
-        //   height: auto;
-        //   &.elevated {
-        //     transform: translate( 0%, 0%) !important;
-        //   }
-        // }
     }
     .react-draggable {
       min-height: 100vh;
+      // max-width: 0;
+      // max-height: 0;
     }
     .event {
         transform: translate( -50%, -50%) !important;

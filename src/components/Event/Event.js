@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {isMultidate} from '../../helpers/dates';
+import {isMultidate, getExtreme, today} from '../../helpers/dates';
 
 import Header from './Header';
 import Brands from './Brands';
@@ -12,20 +12,8 @@ import offerInfo from '../../config/offers.json';
 
 class Event extends Component {
 
-  componentDidUpdate() {
-    // console.log('event updated');
-  }
-
-
-  // getYearClasses = (dates) => [
-  //   year(dates.sell.start),
-  //   year(dates.sell.end),
-  //   year(dates.stay.start),
-  //   year(dates.stay.end)
-  // ].filter((value, index, self) => self.indexOf(value) === index).reduce((classes, year) => `${classes} YEAR-${year}`, '');
-
-  getEventClassName = (view, region, dates, elevated, modal, multidate) =>
-  `event${multidate ? ' MULTIDATE' : ''}${elevated ? ' elevated' : ''}${modal ? ' modal-event grid-view' : ''}`;
+  getEventClassName = (view, region, dates, elevated, modal, multidate, latestDay) =>
+  `event${multidate ? ' MULTIDATE' : ''}${elevated ? ' elevated' : ''}${modal ? ' modal-event grid-view' : ''}${ latestDay < getExtreme([today()],'right') ? ' PAST-EVENT' : ''}`;
 
   handleOpenModal = (id) => {
     !this.props.elevated && this.props.handleOpenModal(id);
@@ -42,8 +30,13 @@ class Event extends Component {
 
     // console.log(regionColor);
 
-    return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates, this.props.elevated, this.props.modal, multidate)} onClick={() => {
-        this.handleOpenModal(event['id']);}}>
+    const isHighLighted = () => this.props.modalEventId === event.id;
+    const HighLightedStyle = {boxShadow: '0 0 1px 5px rgba(160,160,160, 0.75)'};
+
+    return (<div id={event.id} className={this.getEventClassName(view, event.region, event.dates, this.props.elevated, this.props.modal, multidate, event.latestDay)} onClick={() => {
+        this.handleOpenModal(event['id']);}}
+        style={isHighLighted() ? HighLightedStyle : {}}
+        >
 
       <div className='close-button' onClick={() => {
           this.props.handleCloseModal();

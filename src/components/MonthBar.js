@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {yearsMonths} from '../helpers/dates';
 
-import {_MOBILEWIDTH} from '../config/constants';
+import {_ISMOBILE} from '../config/constants';
 
 class MonthBar extends Component {
 
@@ -11,12 +11,11 @@ class MonthBar extends Component {
     console.log(`${ym.year}-${ym.month}`);
   };
 
-
   render() {
 
     const putIndicator = (ym) => {
       const values = {JAN: {v: ym.year}, APR: {v: 'Q2'}, JUL: {v: 'Q3'}, OCT: {v: 'Q4'}};
-      return values[ym.month] && <div style={{
+      return values[ym.month] && window.innerWidth > 1000  && <span style={{
             "position" : "absolute",
             "top" : "5px",
             "left" : "-8px",
@@ -29,7 +28,7 @@ class MonthBar extends Component {
             "width" : "16px",
             "lineHeight" : "16px",
             "zIndex": "5000"
-          }}>{values[ym.month].v}</div>
+          }}>{values[ym.month].v}</span>
     }
 
     return (<div className="months-bar">
@@ -39,7 +38,7 @@ class MonthBar extends Component {
             putIndicator(ym)
           }
           {
-            window.innerWidth < _MOBILEWIDTH || this.props.time.numberOfYears > 2
+            (_ISMOBILE || this.props.time.numberOfYears > 2) && this.props.time.mode === 'Y'
               ? ym.month[0]
               : ym.month
           }
