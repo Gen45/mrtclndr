@@ -1,0 +1,98 @@
+$modal-nav-height: 50px;
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  padding-top: 10vh;
+  top: 0;
+  left: 0;
+  z-index: 9001;
+  overflow: hidden;
+  @media screen and (max-width: $desktop-min) {
+    padding-top: 0;
+  }
+
+  .modal-wrapper {
+    // padding: 10px;
+    box-shadow: 0 5px 30px 15px rgba(0,0,0,0.25);
+    border-radius: 3px;
+      background-color: rgba($color-black, 0.75);
+
+    @media screen and (max-width: $desktop-min) {
+      border-radius: 0;
+      // min-height: calc(100vh - 50px);
+      min-height: 100vh;
+    }
+  }
+
+  .modal-content {
+    width: auto;
+    height: auto;
+    position: relative;
+    display: block;
+    min-width: 460px;
+    @media screen and (max-width: $desktop-min) {
+      width: 100vw;
+      min-width: 0;
+    }
+  }
+
+
+  .modal-nav {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    height: $modal-nav-height;
+
+    .modal-handle {
+      // background: red;
+      flex-grow: 1;
+      cursor: move;
+    }
+
+    .modal-nav-trigger {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: $modal-nav-height;
+      width: $modal-nav-height;
+      padding: 0;
+      font-size: 1em;
+      // border-radius: $modal-nav-height/2;
+      cursor: pointer;
+    }
+  }
+
+  .event {
+    position: relative;
+    width: 100% !important;
+    max-width: 450px;
+    overflow: hidden;
+    height: auto;
+    border-radius: 0;
+    margin: 5px;
+    margin-top: 0;
+    // pointer-events: auto;
+    @media screen and (max-width: $desktop-min) {
+      margin: 0;
+      .event-inner {
+        min-height: calc(100vh - 50px);
+      }
+    }
+
+    &.PAST-EVENT {
+      opacity: 1;
+    }
+
+    .more {
+      display: none;
+    }
+
+
+
+  }
+}

@@ -13,15 +13,17 @@
         opacity: 1;
     }
 
+    @media screen and (max-width: $desktop-min) {
+        .modal-on & {
+          display: none;
+        }
+    }    
+
     .scroll-wrapper {
         padding-bottom: 100px;
     }
     //
-    @media screen and (max-width: $desktop-min) {
-        .modal-on & {
-            display: none;
-        }
-    }
+
     .collapsed & {
         width: $sidebar-collapsed;
         > header .icon {

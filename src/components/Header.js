@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 
-// import logo from '../config/logo.svg';
-
 class Header extends Component {
 
   state = {
@@ -39,11 +37,6 @@ class Header extends Component {
     this.setState({fullscreen: false});
   };
 
-
-  componentWillMount = () => {
-    // this.handleRequestFullscreen();
-  }
-
   render() {
 
     const fullscreenButtonOffset = this.props.collapsed ? 50 : 10;
@@ -53,17 +46,10 @@ class Header extends Component {
         <img src="images/logo.svg" alt="Marriott Logo"/>
       </div>
       <h1 className="title">Calendar</h1>
-
-      
-
-        <a onClick={(e) => { this.handleRequestFullscreen()}}
-          style={{height: 50, width: 50, lineHeight: '50px', verticalAlign: 'middle', position: 'absolute', right: fullscreenButtonOffset, top: 0, textAlign: 'center', cursor: 'pointer' }}>
-          <i className="nc-icon-outline arrows-1_fullscreen-77"/>
-        </a>
-
-      
-
-
+      <a onClick={(e) => { this.handleRequestFullscreen()}}
+        style={{height: 50, width: 50, lineHeight: '50px', verticalAlign: 'middle', position: 'absolute', right: fullscreenButtonOffset, top: 0, textAlign: 'center', cursor: 'pointer' }}>
+        <i className="nc-icon-outline arrows-1_fullscreen-77"/>
+      </a>
     </header>)
   }
 }

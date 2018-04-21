@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
 import range from 'lodash/range';
 import findIndex from 'lodash/findIndex';
-import Draggable from 'react-draggable';
 
 // STYLES
 import './styles/style.css';
@@ -14,7 +12,7 @@ import eventsData from './config/eventsData';
 import defaultState from './config/defaultState.json';
 
 // CONSTANTS
-import {_MONTHS, _ISMOBILE, _PREV, _NEXT, _BACKGROUNDIMAGE} from './config/constants';
+import {_MONTHS, _ISMOBILE, _BACKGROUNDIMAGE} from './config/constants';
 
 // HELPERS
 import {daysInMonth, getExtreme, today} from './helpers/dates';
@@ -25,9 +23,8 @@ import ToolBar from './components/ToolBar/ToolBar';
 import MonthBar from './components/MonthBar';
 import MonthLines from './components/MonthLines';
 import EventsWrapper from './components/Event/EventsWrapper';
-import Event from './components/Event/Event';
 import Sidebar from './components/Sidebar/Sidebar';
-import OutsideAlerter from './components/Helpers/OutsideAlerter';
+import Modal from './components/Helpers/Modal';
 
 const Overlay = (props) => <div className={`overlay ${props.hasModal()}`}/>
 
@@ -44,8 +41,6 @@ class App extends Component {
 
   componentWillMount() {
     this.updateEventList();
-    // this.updateEventList();
-    // setTimeout(() => this.updateEventList(), 1);
   }
 
   componentDidMount() {
@@ -99,19 +94,23 @@ class App extends Component {
 
   updateEventList = () => {
     const timeRange = this.getTimeRange(this.state.time);
+    const dayOfTheYear = getExtreme([today()],'right');
+
     let events = this.events;
 
-    console.log(this.state.vigency.past);
-
     events = events.filter(e => !(e.latestDay < timeRange.earliestDay || e.earliestDay > timeRange.latestDay));
-    events = events.filter(e => { return this.state.vigency.past === false ? !(e.latestDay < getExtreme([today()],'right')) : true} );
-    events = events.filter(e => this.state.vigency.between === false ? !(e.latestDay >= getExtreme([today()],'right') && e.earliestDay <= getExtreme([today()],'right')) : true );
-    events = events.filter(e => this.state.vigency.future === false ? !(e.earliestDay > getExtreme([today()],'right')) : true );
+
     events = this.prepareEventList(events, this.state.regions, "region");
+    events = this.prepareEventListMulti(events, this.state.brands, "brands");
     events = this.prepareEventList(events, this.state.offers, "offer");
     events = this.prepareEventListMulti(events, this.state.channels, "channels");
-    events = this.prepareEventListMulti(events, this.state.brands, "brands");
+
+    events = events.filter(e => !this.state.vigency.past ? !(e.latestDay < dayOfTheYear) : true );
+    events = events.filter(e => !this.state.vigency.between ? !(e.latestDay >= dayOfTheYear && e.earliestDay <= dayOfTheYear) : true );
+    events = events.filter(e => !this.state.vigency.future ? !(e.earliestDay > dayOfTheYear) : true );
+
     events = orderBy(events, this.state.order.sortBy, this.state.order.orderBy);
+
     this.setState({events});
     return events.length;
   };
@@ -156,7 +155,7 @@ class App extends Component {
   };
 
   handleCloseModal = () => {
-    this.setState({modalPosition: this.modalDraggableRef.state, modal: false, modalEvent: null});
+    this.setState({modal: false, modalEvent: null});
   };
 
   handleModalNav = (increment) => {
@@ -164,16 +163,13 @@ class App extends Component {
     newModalEvent = newModalEvent < 0
       ? this.state.events.length - 1
       : newModalEvent;
-    this.getCoordinates(this.modalEventBox);
-    this.setState({modalPosition: this.modalDraggableRef.state, modalEvent: newModalEvent});
-  }
-
-  getCoordinates = element => ReactDOM.findDOMNode(element);
+    this.setState({modalEvent: newModalEvent});
+  };
 
   // RENDER
   render(props) {
 
-    const time = !_ISMOBILE ? this.state.time : {...this.state.time, numberOfYears: 1 };
+    const time = !_ISMOBILE() ? this.state.time : {...this.state.time, numberOfYears: 1 };
     const mode = time.mode;
     const timespan = mode === 'Q' || mode === 'M'
       ? 1
@@ -199,63 +195,6 @@ class App extends Component {
       ? 'active'
       : '';
 
-
-    const Modal = () => {
-      const height = 50;
-      const navStyle = {
-        position: 'absolute',
-        backgroundColor: 'rgba(0,0,0,0.1)',
-        height: height,
-        width: 50 + '%',
-        padding: '0 15px',
-        verticalAlign: 'middle',
-        lineHeight: height + 'px',
-        fontSize: 1 + 'em',
-        borderRadius: height/2
-      };
-
-      const defaultPosition = this.state.modalPosition !== undefined ? {x: this.state.modalPosition.x, y: this.state.modalPosition.y} : {x: 0, y: 0};
-      return this.state.modal &&
-      <div className="modal grid-view">
-            <OutsideAlerter event={this.handleCloseModal}>
-              <Draggable ref={(modalDraggable) => {this.modalDraggableRef = modalDraggable}} defaultPosition={defaultPosition} >
-            <div style={{
-                width: 'auto',
-                height: 'auto'
-              }}>
-              <nav style={{
-                  position: 'absolute',
-                  top: 50 + '%',
-                  left: 50 + '%',
-                  width: 100 + '%',
-                  height: height,
-                  transform: 'translate(-50%, -50%)',
-                  maxWidth: 550,
-                  minWidth: 420,
-                  cursor: 'pointer'
-                }}>
-                <span className="prev" style={{
-                    ...navStyle,
-                    right: 50 + '%',
-                    textAlign: 'left'
-                  }} onClick={(e) => this.handleModalNav(_PREV)}>
-                  <i className="nc-icon-mini arrows-1_minimal-left"/>
-                </span>
-                <span className="next" style={{
-                    ...navStyle,
-                    left: 50 + '%',
-                    textAlign: 'right'
-                  }} onClick={(e) => this.handleModalNav(_NEXT)}>
-                  <i className="nc-icon-mini arrows-1_minimal-right"/>
-                </span>
-              </nav>
-              <Event ref={(event) => this.modalEventBox = event} event={this.state.events[this.state.modalEvent]} view='grid' elevated={true} modal={this.state.modal} handleCloseModal={this.handleCloseModal} time={time}/>
-            </div>
-          </Draggable>
-          </OutsideAlerter>
-      </div>
-    };
-
     return (<div className={appClass()}>
       <main id="main" className="main" role="main">
         <Header collapsed={this.state.collapsed}/>
@@ -273,7 +212,18 @@ class App extends Component {
               </Scrollbars>
             </div>
           </div>
-          <Modal/>
+          {
+            this.state.modal &&
+            <Modal
+              modalPosition={this.state.modalPosition}
+              handleCloseModal={this.handleCloseModal}
+              handleModalNav={this.handleModalNav}
+              modal={this.state.modal}
+              events={this.state.events}
+              modalEvent={this.state.modalEvent}
+              time={time}
+            />
+          }
         </div>
       </main>
       <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} handleCollapse={this.handleCollapse} collapsed={this.state.collapsed}/>

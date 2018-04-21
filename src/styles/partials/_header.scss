@@ -16,6 +16,10 @@
         width: calc( 100% - #{$sidebar-collapsed});
         // transition: $transition-time/2;
     }
+
+    @media screen and (max-width: $phone-max) {
+      width: 100%;
+    }
     h1 {
         display: inline-block;
         margin: 0 24px;
@@ -33,6 +37,13 @@
     }
     display: flex;
     align-items: center;
+
+
+    @media screen and (max-width: $desktop-min) {
+        .modal-on & {
+          display: none;
+        }
+    }
 }
 
 .logo {

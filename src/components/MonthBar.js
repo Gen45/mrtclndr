@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {yearsMonths} from '../helpers/dates';
 
-import {_ISMOBILE} from '../config/constants';
+import {_ISMOBILE, _COLORS} from '../config/constants';
 
 class MonthBar extends Component {
 
@@ -21,7 +21,7 @@ class MonthBar extends Component {
             "left" : "-8px",
             "fontSize" : "7px",
             // "background" : "rgba(90,90,90,0.2)",
-            "color" : "#e4144a",
+            "color" : _COLORS.ACCENT,
             "fontWeight": "bold",
             "borderRadius" : "60px",
             "height" : "16px",
@@ -38,7 +38,7 @@ class MonthBar extends Component {
             putIndicator(ym)
           }
           {
-            (_ISMOBILE || this.props.time.numberOfYears > 2) && this.props.time.mode === 'Y'
+            (_ISMOBILE() || this.props.time.numberOfYears > 2) && this.props.time.mode === 'Y'
               ? ym.month[0]
               : ym.month
           }

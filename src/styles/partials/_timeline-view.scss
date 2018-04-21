@@ -122,6 +122,7 @@
         padding-bottom: $padding*9;
         overflow: hidden;
         .event {
+
             position: relative;
             height: 64px;
             border-bottom: 2px solid rgba($color-dark-gray, 0.5); //$color-light-gray;
@@ -136,12 +137,24 @@
                 background: rgba($color-light-gray, 0.2);
                 .event-info {
                     background: darken($event-info-bg, 20%);
-                    transform: scale(1.02);
+                    // transform: scale(1.02);
                     &:after {
                         border-top-color: darken($event-info-bg, 20%);
                     }
                 }
             }
+        }
+        @media screen and (max-width: $desktop-min) {
+          background: $event-info-bg;
+          // transform: scale(0.8);
+          .event {
+          }
+          .event-info {
+            // background: none;
+            &:after {
+              display: none;
+            }
+          }
         }
     }
     .event-info {
@@ -198,6 +211,10 @@
     }
     .nano {
         top: 25px;
+
+        @media screen and (max-width: $desktop-min) {
+          height: calc(100% + 15px);
+        }
     }
 
     .event.MULTIDATE {
@@ -276,65 +293,6 @@
         width: calc(100% - #{$padding});
         left: $padding/2;
     }
-
-    // .YEAR &,
-    // .YEAR-18 &,
-    // .YEAR-17 &,
-    // .Q1-18 &,
-    // .Q2-18 &,
-    // .Q3-18 &,
-    // .Q4-18 &,
-    // .Q1-17 &,
-    // .Q2-17 &,
-    // .Q3-17 &,
-    // .Q4-17 & {
-    //     width: calc(100% - #{$padding*4});
-    //     left: $padding*2;
-    //     @media screen and (max-width: $desktop-min) {
-    //         width: calc(100% - #{$padding});
-    //         left: $padding/2;
-    //     }
-    // }
-
-    .main.Q1-18 &,
-    .main.Q2-18 &,
-    .main.Q3-18 &,
-    .main.Q4-18 &,
-    .main.Q1-17 &,
-    .main.Q2-17 &,
-    .main.Q3-17 &,
-    .main.Q4-17 & {
-        width: calc(400% - #{$padding*16});
-        left: $padding*2;
-        @media screen and (max-width: $desktop-min) {
-            width: calc(400% - #{($padding/4)*16});
-            left: $padding/2;
-        }
-    }
-    .main.Q1-18 & {
-        transform: translateX( 0 * -25%);
-    }
-    .main.Q2-18 & {
-        transform: translateX( 1 * -25%);
-    }
-    .main.Q3-18 & {
-        transform: translateX( 2 * -25%);
-    }
-    .main.Q4-18 & {
-        transform: translateX( 3 * -25%);
-    }
-    .main.Q1-17 & {
-        transform: translateX( 0 * -25%);
-    }
-    .main.Q2-17 & {
-        transform: translateX( 1 * -25%);
-    }
-    .main.Q3-17 & {
-        transform: translateX( 2 * -25%);
-    }
-    .main.Q4-17 & {
-        transform: translateX( 3 * -25%);
-    }
 }
 
 .event-timeline {
@@ -353,30 +311,6 @@
         i.end {
             top: -9px;
         }
-    }
-    .US & {
-        border-color: $color-US;
-    }
-    .US-WEST & {
-        border-color: $color-US-WEST;
-    }
-    .US-EAST & {
-        border-color: $color-US-EAST;
-    }
-    .CALA & {
-        border-color: $color-CALA;
-    }
-    .CANADA & {
-        border-color: $color-CANADA;
-    }
-    .BRAND & {
-        border-color: $color-BRAND;
-    }
-    .PORTFOLIO & {
-        border-color: $color-PORTFOLIO;
-    }
-    .LOYALTY & {
-        border-color: $color-LOYALTY;
     }
     &.one-month {
         min-width: 0;
@@ -421,30 +355,6 @@
                 text-shadow: none;
             }
         }
-        .US & {
-            border-color: $color-US;
-        }
-        .US-WEST & {
-            border-color: $color-US-WEST;
-        }
-        .US-EAST & {
-            border-color: $color-US-EAST;
-        }
-        .CALA & {
-            border-color: $color-CALA;
-        }
-        .CANADA & {
-            border-color: $color-CANADA;
-        }
-        .BRAND & {
-            border-color: $color-BRAND;
-        }
-        .PORTFOLIO & {
-            border-color: $color-PORTFOLIO;
-        }
-        .LOYALTY & {
-            border-color: $color-LOYALTY;
-        }
     }
     i.start {
         left: -$event-timeline-weight;
@@ -478,24 +388,6 @@ body.linted .timeline-view .event {
     pointer-events: none;
 }
 
-.event .wrong-date {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    padding: 0 5px;
-    width: auto;
-    font-size: 10px;
-    font-weight: bold;
-    text-align: right;
-    background: #e71212;
-    color: black;
-    opacity: 0.75;
-    display: none;
-    .debug & {
-        display: block;
-    }
-}
-
 .event .id {
     &:before {
         content: 'id: ';
@@ -514,6 +406,10 @@ body.linted .timeline-view .event {
 .PAST-EVENT {
     filter: grayscale(40%);
     opacity: 0.6;
+    // &:hover {
+    //   transition: $transition-time;
+    //   opacity: 0.9;
+    // }
 }
 
 // .timeline-view
@@ -537,41 +433,5 @@ body.activity-type .activity-type-group {
         background: rgba($color-medium-gray, 1);
         text-transform: capitalize;
         transform: translateX(-50%);
-    }
-}
-
-
-.modal {
-    position: absolute;
-    height: 100% !important;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 9001;
-    overflow: hidden !important;
-
-    @media screen and (max-width: $phone-max) {
-        background: rgba($color-black, 0.5);
-    }
-    .react-draggable {
-      min-height: 100vh;
-      // max-width: 0;
-      // max-height: 0;
-    }
-    .event {
-        transform: translate( -50%, -50%) !important;
-        min-width: 280px !important;
-        width: 80% !important;
-        max-width: 450px;
-        overflow: visible !important;
-        margin: 0 !important;
-        opacity: 0;
-        pointer-events: auto;
-        .more {
-            display: none;
-        }
-        &.elevated {
-            transform: translate( -50%, -50%) scale(1) !important;
-        }
     }
 }

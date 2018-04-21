@@ -7,6 +7,9 @@
     }
     @media screen and (max-width: $desktop-min) {
         width: calc( 100% - #{$sidebar-collapsed});
+        .content-frame {
+          width: calc( 100% - #{$sidebar-collapsed});
+        }
         &:before {
             content: '';
             position: fixed;
@@ -63,7 +66,7 @@
                 }
                 > nav {
                   position: absolute;
-                  top: 6px;
+                  top: 11px;
                   right: 0;
                   text-align: right;
                     display: inline-block;
@@ -76,7 +79,7 @@
                 display: flex;
                 align-items: center;
                 text-transform: uppercase;
-                margin: 0 auto 0 0;
+                margin: 0 auto 0 10px;
                 letter-spacing: 1px;
                 .detail {
                     font-size: 18px;
@@ -87,9 +90,9 @@
             }
             @media screen and (max-width: $desktop-min) {
                 padding: 0;
-                height: 40px;
+                height: 50px;
                 h2.title {
-                    height: 40px;
+                    height: 50px;
                     // display: block;
                     text-align: left;
                     font-size: 24px;
@@ -132,7 +135,7 @@
     z-index: 300;
     a {
         display: inline-block;
-        margin-right: 10px;
+        // margin-right: 10px;
         line-height: 55px;
         padding: 0;
         vertical-align: middle;
@@ -152,8 +155,14 @@
 
     @media screen and (max-width: $desktop-min) {
         position: absolute;
-        left: 14px;
-        top: 4px;
+        height: 50px;
+        width: 70px;
+        left: 0;
+        top: 0;
+        margin: 0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
         a {
             i {
                 font-size: 24px;
@@ -174,6 +183,11 @@
     padding: $padding;
     @media screen and (max-width: $desktop-min) {
         padding: 0;
+
+        .modal-on & {
+          top: 0;
+          height: 100vh;
+        }
     }
 }
 

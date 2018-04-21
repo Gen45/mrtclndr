@@ -7,8 +7,6 @@
         display: inline-block;
         font-size: 14px;
         margin: 0 $padding/4;
-        // margin-right: -4px;
-
         text-transform: uppercase;
         line-height: 1;
         vertical-align: middle;
@@ -241,14 +239,8 @@
             width: calc( 100% - 40px);
         }
     }
-    #trigger-CLOSEPRINT {
-        display: none;
-    }
 }
 
-.share-tools,
-.sort-tools,
-.time-tools,
 .trigger-box-children {
     opacity: 1;
     position: absolute;
@@ -285,7 +277,6 @@
         text-transform: uppercase;
     }
     .group {
-
       a {
         // padding-bottom: 10px !important;
         // margin-bottom: 0px !important;
@@ -351,19 +342,4 @@
             display: block;
         }
     }
-}
-
-.time-tools {
-    a {
-        width: auto;
-    }
-}
-
-#view-share {
-    position: absolute;
-}
-
-
-span.filter-category.time-filters.time {
-    margin-left: 0;
 }

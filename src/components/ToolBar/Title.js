@@ -5,7 +5,7 @@ import {_MONTHS, _LONGMONTHS, _ISMOBILE} from '../../config/constants';
 
 export const Title = props => {
 
-  const monthNames = _ISMOBILE ? _MONTHS : _LONGMONTHS;
+  const monthNames = _ISMOBILE() ? _MONTHS : _LONGMONTHS;
   let detail,
     segment;
   switch (props.time.mode) {

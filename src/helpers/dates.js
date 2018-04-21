@@ -17,6 +17,8 @@ export const daysInMonth = date => moment(date, FORMAT).daysInMonth();
 export const dayOfYear = date => moment(date, FORMAT).dayOfYear();
 export const daysOfYear = date => moment("12/31/" + moment(date, FORMAT).format('YY'), FORMAT).dayOfYear();
 
+export const timestamp = () => moment().milliseconds();
+
 export const yearsMonths = (years, months) => {
   let yearsMonths = [];
 

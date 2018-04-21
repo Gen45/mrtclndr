@@ -13,7 +13,7 @@ const getOffer = (offer, offers) => {
     : 'NO-PROMOTION';
 }
 
-const cleanChannels = channels => Object.keys(channels).filter(c => channels[c] !== null );
+const cleanChannels = channels => Object.keys(channels).filter(c => channels[c] !== null && channels[c] !== '' && channels[c] !== undefined );
 
 const getMarket = (e) => `${e["Destination - Featured Market"].replace("Other - please list in column G",'')} ${e["Market - more"]}`;
 
