@@ -11,12 +11,7 @@ import OutsideAlerter from './OutsideAlerter';
 class Modal extends Component {
 
   render() {
-
-    // const handle = `handle-${timestamp}`;
-    // const handle = 'handle-' + this.props.events[this.props.modalEvent].id;
-    const handle = 'modal-handle';
-
-    console.log(_ISMOBILE());
+    const handle = 'handle-' + this.props.events[this.props.modalEvent].id;
 
     return (
       <div className="modal grid-view">
@@ -24,7 +19,10 @@ class Modal extends Component {
               <Draggable ref={(modalDraggable) => {this.modalDraggableRef = modalDraggable}} disabled={_ISMOBILE()} handle={`.${handle}`} >
               <div className='modal-wrapper'>
                   <nav className="modal-nav">
-                    <span className={`${handle}`}></span>
+                    <span className="modal-nav-trigger prev" onClick={(e) => this.props.handleToggleFav()}>
+                      <i className="nc-icon-mini health_heartbeat-16"/>
+                    </span>
+                    <span className={`modal-handle ${handle}`}></span>
                     <span className="modal-nav-trigger prev" onClick={(e) => this.props.handleModalNav(_PREV)}>
                       <i className="nc-icon-mini arrows-1_minimal-left"/>
                     </span>

@@ -72,3 +72,17 @@ export const cleanDate = (dateIn, dateType) => {
       clean: true
     };
 };
+
+export const getTimeRange = time => {
+  const yearStart = time.Y;
+  const yearEnd = time.mode === 'Y' ? time.Y + time.numberOfYears - 1 : time.Y;
+
+  const monthStart = time.mode === 'Y' ? 1 : time.mode === 'Q' ? time.Q * 3 - 2 : time.M;
+  const monthEnd = time.mode === 'Y' ? 12 : time.mode === 'Q' ? time.Q * 3 : time.M;
+
+  const startDate = `${monthStart}/01/${yearStart}`;
+  const endDate = `${monthEnd}/${daysInMonth(`${monthEnd}/01/${yearEnd}`)}/${yearEnd}`;
+
+  const timeRange = {start: startDate, earliestDay: getExtreme([startDate], 'left'),  end: endDate, latestDay: getExtreme([endDate], 'right')};
+  return timeRange;
+}

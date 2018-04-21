@@ -64,6 +64,13 @@ $modal-nav-height: 50px;
       font-size: 1em;
       // border-radius: $modal-nav-height/2;
       cursor: pointer;
+
+      &:hover {
+        color: $color-lightest-gray;
+      }
+      &:active {
+        color: $color-accent;
+      }
     }
   }
 

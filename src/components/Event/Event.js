@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 
-import {isMultidate, getExtreme, today} from '../../helpers/dates';
-
 import Header from './Header';
 import Brands from './Brands';
 import Dates from './Dates';
 import Timelines from './Timelines';
+
+import {isMultidate, getExtreme, today} from '../../helpers/dates';
+import {isValid} from '../../helpers/misc';
 
 import {_COLORS} from '../../config/constants';
 
@@ -50,7 +51,7 @@ class Event extends Component {
             <p className='timeframe'>{event.market}</p>
             <p className='tags'>
               {
-                [{name:"Segment",val:event.segment},{name:"Group",val:event.campaignGroup},{name:"Program Type",val:event.programType},{name:"Ongoing",val:event.ongoing}].map((e, i)=> e.val !== undefined && e.val !== '' ?
+                [{name:"Segment",val:event.segment},{name:"Group",val:event.campaignGroup},{name:"Program Type",val:event.programType},{name:"Ongoing",val:event.ongoing}].map((e, i)=> isValid(e.val) ?
                   <span key={i} className='tag'>
                     <span style={{color: _COLORS.LIGHTERGRAY }}>{e.name}: </span> {e.val}
                   </span>

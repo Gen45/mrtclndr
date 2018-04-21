@@ -6,6 +6,8 @@ import {ResizableBox} from 'react-resizable';
 import Content from './Content';
 import Footer from './Footer';
 
+import {isValid} from '../../../helpers/misc';
+
 class BrandsFilter extends Component {
 
   state = {
@@ -63,7 +65,7 @@ class BrandsFilter extends Component {
                 this.handleSearch(e, this.search)
               }} />
               {
-                this.state.keyPhrase !== "" && this.state.keyPhrase !== undefined ?
+                isValid(this.state.keyPhrase) ?
                 <i className="nc-icon-mini ui-1_circle-remove" onClick={ () => {this.handleClearSearch()}}/> :
                 <i className="nc-icon-mini ui-1_zoom" />
               }
@@ -84,7 +86,7 @@ class BrandsFilter extends Component {
 
               {
                 Object.keys(filterCategories).map((c, i) => {
-                  const keyPhrase = this.state.keyPhrase !== "" && this.state.keyPhrase !== undefined ? this.state.keyPhrase : '';
+                  const keyPhrase = this.state.keyPhrase !== "" && isValid(this.state.keyPhrase) ? this.state.keyPhrase : '';
                   // const validKeyPhrase = this.props.filterInfo[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
 
                   const isInSearch = filterCategories[c]["brands"].map((b, i) => this.props.filterInfo[b]["name"]).join('').toUpperCase().indexOf(keyPhrase) > -1

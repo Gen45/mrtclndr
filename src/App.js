@@ -15,7 +15,8 @@ import defaultState from './config/defaultState.json';
 import {_MONTHS, _ISMOBILE, _BACKGROUNDIMAGE} from './config/constants';
 
 // HELPERS
-import {daysInMonth, getExtreme, today} from './helpers/dates';
+import {daysInMonth, getExtreme, getTimeRange, today} from './helpers/dates';
+import {isValid} from './helpers/misc';
 
 // LOCAL COMPONENTS
 import Header from './components/Header';
@@ -78,22 +79,8 @@ class App extends Component {
     return ev;
   };
 
-  getTimeRange = (time) => {
-    const yearStart = time.Y;
-    const yearEnd = time.mode === 'Y' ? time.Y + time.numberOfYears - 1 : time.Y;
-
-    const monthStart = time.mode === 'Y' ? 1 : time.mode === 'Q' ? time.Q * 3 - 2 : time.M;
-    const monthEnd = time.mode === 'Y' ? 12 : time.mode === 'Q' ? time.Q * 3 : time.M;
-
-    const startDate = `${monthStart}/01/${yearStart}`;
-    const endDate = `${monthEnd}/${daysInMonth(`${monthEnd}/01/${yearEnd}`)}/${yearEnd}`;
-
-    const timeRange = {start: startDate, earliestDay: getExtreme([startDate], 'left'),  end: endDate, latestDay: getExtreme([endDate], 'right')};
-    return timeRange;
-  }
-
   updateEventList = () => {
-    const timeRange = this.getTimeRange(this.state.time);
+    const timeRange = getTimeRange(this.state.time);
     const dayOfTheYear = getExtreme([today()],'right');
 
     let events = this.events;
@@ -166,6 +153,13 @@ class App extends Component {
     this.setState({modalEvent: newModalEvent});
   };
 
+  // handleToggleFav = (eventId) => {
+  //   const state = this.state;
+  //   state.starred.indexOf(eventId) > -1
+  //    = state[favList][eventId] ? !state[favList][eventId]
+  //   this.setState({favEvents: newModalEvent});
+  // };
+
   // RENDER
   render(props) {
 
@@ -218,6 +212,7 @@ class App extends Component {
               modalPosition={this.state.modalPosition}
               handleCloseModal={this.handleCloseModal}
               handleModalNav={this.handleModalNav}
+              handleToggleFav={this.handleToggleFav}
               modal={this.state.modal}
               events={this.state.events}
               modalEvent={this.state.modalEvent}
