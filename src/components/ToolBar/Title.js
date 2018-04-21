@@ -1,7 +1,8 @@
 import React from 'react';
 import range from 'lodash/range';
 
-import {_MONTHS, _LONGMONTHS, _ISMOBILE} from '../../config/constants';
+import {_MONTHS, _LONGMONTHS} from '../../helpers/dates';
+import {_ISMOBILE} from '../../config/constants';
 
 export const Title = props => {
 

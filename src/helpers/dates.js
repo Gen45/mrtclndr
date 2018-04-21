@@ -1,23 +1,44 @@
 import moment from 'moment';
 import times from 'lodash/times';
+import range from 'lodash/range';
 
-const FORMAT = "MM/DD/YY";
+import {_PREV, _NEXT} from '../config/constants';
 
-export const day = date => moment(date, FORMAT).format('DD');
-export const month = date => moment(date, FORMAT).format('MM');
-export const year = date => moment(date, FORMAT).format('YY');
+export const _DATEFORMAT = "MM/DD/YY";
 
-export const add = (date, amount, type) => moment(date, FORMAT).add(amount, type).format(FORMAT);
+export const _MONTHS = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
+export const _LONGMONTHS = [ "JANUARY", "FEBRARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" ];
 
-// export const quarter = date => moment(date, FORMAT).quarter();
-
-export const today = () => moment().format(FORMAT);
+export const today = () => moment().format(_DATEFORMAT);
+export const day = date => moment(date, _DATEFORMAT).format('DD');
+export const month = date => moment(date, _DATEFORMAT).format('MM');
+export const year = date => moment(date, _DATEFORMAT).format('YY');
 export const thisYear = () => moment().format('YY');
-export const daysInMonth = date => moment(date, FORMAT).daysInMonth();
-export const dayOfYear = date => moment(date, FORMAT).dayOfYear();
-export const daysOfYear = date => moment("12/31/" + moment(date, FORMAT).format('YY'), FORMAT).dayOfYear();
+export const daysInMonth = date => moment(date, _DATEFORMAT).daysInMonth();
+export const dayOfYear = date => moment(date, _DATEFORMAT).dayOfYear();
+export const daysOfYear = date => moment("12/31/" + moment(date, _DATEFORMAT).format('YY'), _DATEFORMAT).dayOfYear();
+
+export const _TODAY = today();
+export const _CURRENTYEAR = Number(year(_TODAY));
+export const _PREVIOUSYEAR = _CURRENTYEAR + _PREV;
+export const _NEXTYEAR = _CURRENTYEAR + _NEXT;
+export const _THREEYEARS = [_PREVIOUSYEAR, _CURRENTYEAR, _NEXTYEAR];
+
+export const add = (date, amount, type) => moment(date, _DATEFORMAT).add(amount, type).format(_DATEFORMAT);
 
 export const timestamp = () => moment().milliseconds();
+
+export const timespan = time => time.mode === 'Q' || time.mode === 'M'
+  ? 1
+  : time.numberOfYears;
+
+export const years = (time) => range(timespan(time)).map(y => y + time.Y);
+
+export const months = time => time.mode === 'Q'
+  ? _MONTHS.slice(time.Q * 3 - 3, time.Q * 3)
+  : time.mode === 'M'
+    ? _MONTHS.slice(time.M - 1, time.M)
+    : _MONTHS;
 
 export const yearsMonths = (years, months) => {
   let yearsMonths = [];
@@ -27,7 +48,6 @@ export const yearsMonths = (years, months) => {
       yearsMonths.push({year: y, month: m});
     }
   }
-
   return yearsMonths;
 };
 
@@ -56,7 +76,7 @@ export const getExtreme = (dates, direction) => {
 };
 
 export const cleanDate = (dateIn, dateType) => {
-  const date = moment(dateIn, FORMAT).format(FORMAT);
+  const date = moment(dateIn, _DATEFORMAT).format(_DATEFORMAT);
   return date === "Invalid date"
     ? dateType === 'start'
       ? {

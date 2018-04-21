@@ -3,6 +3,7 @@ import {Scrollbars} from 'react-custom-scrollbars';
 import {ResizableBox} from 'react-resizable';
 
 // COMPONENTS
+import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
 
@@ -50,14 +51,9 @@ class BrandsFilter extends Component {
     return (<div className={`filter ${this.state.collapsed
         ? 'collapsed'
         : ''} filter-wrap-${this.props.filterName}`}>
-      <header onClick={() => {
-          this.handleCollapse();
-        }}>
-        <span className="icon icon-circle">
-          <i className={this.props.titleIcon}></i>
-        </span>
-        <h3>{this.props.title}</h3>
-      </header>
+
+      <Header handleCollapse={this.handleCollapse} icon={this.props.icon} title={this.props.title}/>
+
       <div className="content">
         <div className="brand-cat-filters">
           <div className="input-icon">

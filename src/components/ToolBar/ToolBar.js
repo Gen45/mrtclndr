@@ -4,7 +4,8 @@ import {TriggerBox, Trigger} from './Triggers';
 import {Title} from './Title';
 import Pagination from './Pagination';
 
-import { _MONTHS, _ISMOBILE, _THREEYEARS, _PREVIOUSYEAR, _NEXTYEAR } from '../../config/constants';
+import { _ISMOBILE } from '../../config/constants';
+import { _MONTHS, _THREEYEARS, _PREVIOUSYEAR, _NEXTYEAR } from '../../helpers/dates';
 
 
 const FilterCategory = props => <div className="filter-category">{props.children}</div>

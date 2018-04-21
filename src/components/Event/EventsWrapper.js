@@ -5,10 +5,6 @@ import Event from './Event';
 
 class EventsWrapper extends Component {
 
-  componentDidUpdate() {
-    // console.log(this.ReactListRef.state.size);
-  }
-
   render() {
     return (<div className={`events-wrapper`}>
 

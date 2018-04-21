@@ -1,16 +1,5 @@
-import {year, today} from '../helpers/dates';
-
-export const _MONTHS = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
-export const _LONGMONTHS = [ "JANUARY", "FEBRARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" ];
-
 export const _PREV = -1;
 export const _NEXT = 1;
-
-export const _TODAY = today();
-export const _CURRENTYEAR = Number(year(_TODAY));
-export const _PREVIOUSYEAR = _CURRENTYEAR + _PREV;
-export const _NEXTYEAR = _CURRENTYEAR + _NEXT;
-export const _THREEYEARS = [_PREVIOUSYEAR, _CURRENTYEAR, _NEXTYEAR];
 
 export const _MOBILEWIDTH = 720;
 export const _ISMOBILE = () => window.innerWidth < _MOBILEWIDTH;

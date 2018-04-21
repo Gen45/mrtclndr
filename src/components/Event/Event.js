@@ -16,8 +16,8 @@ import offerInfo from '../../config/offers.json';
 class Event extends Component {
 
 
-  handleOpenModal = (id) => {
-    !this.props.elevated && this.props.handleOpenModal(id);
+  handleOpenModal = (targetId) => {
+    !this.props.elevated && this.props.handleOpenModal(targetId);
   };
 
   render() {
