@@ -1,36 +1,37 @@
 import React from 'react';
 import range from 'lodash/range';
 
-import {_MONTHS, _LONGMONTHS} from '../../helpers/dates';
+import {_MONTHS, _LONGMONTHS, _PREVIOUSYEAR, _NEXTYEAR} from '../../helpers/dates';
 import {_ISMOBILE} from '../../config/constants';
 
 export const Title = props => {
 
   const monthNames = _ISMOBILE() ? _MONTHS : _LONGMONTHS;
   let detail,
-    segment;
+      segment;
+
   switch (props.time.mode) {
     case 'Y':
       {
-        detail = range(props.time.numberOfYears - 1).reduce( (a, y, i, ar) => a+=`20${y + props.time.Y + 1}${i < props.time.numberOfYears - 2 ? ' - ': ''}`, '');
-        segment = `20${props.time.Y}`;
+        segment = `20${props.time.Y === _PREVIOUSYEAR - 1 ? `${_PREVIOUSYEAR} - 20${_NEXTYEAR}` : props.time.Y}`;
+        detail = props.view === 'grid' ? '' : range(props.time.numberOfYears - 1).reduce( (a, y, i, ar) => a+=`20${y + props.time.Y + 1}${i < props.time.numberOfYears - 2 ? ' - ': ''}`, '');
         break;
       }
     case 'M':
       {
-        detail = `20${props.time.Y}`;
         segment = `${monthNames[props.time.M - 1]}`;
+        detail = `20${props.time.Y}`;
         break;
       }
     case 'Q':
       {
-        detail = `20${props.time.Y}`;
         segment = `Q${props.time.Q}`;
+        detail = `20${props.time.Y}`;
         break;
       }
     default: {
-      detail = '...';
       segment = 'Loading';
+      detail = '...';
       break;
     }
   }

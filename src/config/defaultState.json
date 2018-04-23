@@ -18,6 +18,12 @@
     "between": true,
     "future": true
   },
+  "filtersList": {
+    "regions": {"name": "region"},
+    "offers": {"name": "offer"},
+    "brands": {"name": "brands"},
+    "channels": {"name": "channels"}
+  },
   "regions": {
     "PORTFOLIO": true,
     "BRAND": true,
@@ -90,5 +96,18 @@
     "OTHER_CHANNELS": true,
     "NO_CHANNEL": true
   },
-  "starred": []
+  "modal": {
+    "modalEvent": null,
+    "show": false
+  },
+  "starred": {
+    "items": [],
+    "show": false
+  },
+  "sidebar": {
+    "collapsed": true
+  },
+  "search": {
+    "active": false
+  }
 }

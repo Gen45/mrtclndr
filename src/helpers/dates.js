@@ -6,6 +6,7 @@ import {_PREV, _NEXT} from '../config/constants';
 
 export const _DATEFORMAT = "MM/DD/YY";
 
+export const _QUARTERS = [1, 2, 3, 4];
 export const _MONTHS = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
 export const _LONGMONTHS = [ "JANUARY", "FEBRARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" ];
 
@@ -23,6 +24,7 @@ export const _CURRENTYEAR = Number(year(_TODAY));
 export const _PREVIOUSYEAR = _CURRENTYEAR + _PREV;
 export const _NEXTYEAR = _CURRENTYEAR + _NEXT;
 export const _THREEYEARS = [_PREVIOUSYEAR, _CURRENTYEAR, _NEXTYEAR];
+export const _TIMELIMITS = {Q: 4, M: 12, Y: {start: _PREVIOUSYEAR, end: _NEXTYEAR}};
 
 export const add = (date, amount, type) => moment(date, _DATEFORMAT).add(amount, type).format(_DATEFORMAT);
 
@@ -54,6 +56,7 @@ export const yearsMonths = (years, months) => {
 export const isMultidate = (dates) => ((dates.sell.start !== dates.stay.start) || (dates.sell.end !== dates.stay.end)) && (dates.stay.start !== "" && dates.stay.end !== "");
 
 export const getExtreme = (dates, direction) => {
+  direction = direction || 'right';
   const directions = {
     left: -1,
     right: 1
@@ -93,7 +96,7 @@ export const cleanDate = (dateIn, dateType) => {
     };
 };
 
-export const getTimeRange = time => {
+export const getTimeRange = (time) => {
   const yearStart = time.Y;
   const yearEnd = time.mode === 'Y' ? time.Y + time.numberOfYears - 1 : time.Y;
 

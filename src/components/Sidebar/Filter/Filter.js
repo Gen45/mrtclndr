@@ -36,7 +36,7 @@ class Filters extends Component {
         ? 'collapsed'
         : ''}`}>
       <Header handleCollapse={this.handleCollapse} icon={this.props.icon} title={this.props.title}/>
-      <Content filterName={this.props.filterName} filters={this.props.filters} filterInfo={this.props.filterInfo} handleChange={this.handleChange} labelDot={this.props.labelDot}/>
+      <Content filterName={this.props.filterName} filters={this.props.filters} filterInfo={this.props.filterInfo} handleChange={this.handleChange} labelDot={this.props.labelDot} TooltipTheme='light' tooltips={this.props.tooltips}/>
       <Footer filterName={this.props.filterName} batchChange={this.batchChange}/>
     </div>)
   }

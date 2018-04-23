@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import Draggable from 'react-draggable';
 import OutsideAlerter from '../Helpers/OutsideAlerter';
+import {Tooltip} from 'react-tippy';
+
+import {isValid} from '../../helpers/misc';
 
 export class TriggerBox extends Component {
 
@@ -14,10 +17,11 @@ export class TriggerBox extends Component {
   };
 
   render() {
+    const triggerClass = this.props.triggerClass || 'nav-trigger';
     return (
         <div className="inner">
-        <a className="nav-trigger" onClick={() => this.toggleBox()}>
-          <i className={this.props.icon}/> {` ${this.props.title}`}
+        <a className={triggerClass} onClick={() => this.toggleBox()}>
+          <i className={this.props.icon}/> {` ${isValid(this.props.title) ? this.props.title : ''}`}
         </a>
         {
           this.state.open &&
@@ -40,14 +44,28 @@ export class TriggerBox extends Component {
 export class Trigger extends Component {
 
   isActive = (propState, propStateValue) =>
-    propState === propStateValue
+    propState === propStateValue && isValid(propState) && isValid(propStateValue)
       ? 'active'
       : '';
 
   handleClick = payload => payload();
 
   render() {
-    return (<a className={`nav-trigger ${this.isActive(this.props.propState, this.props.propStateValue)}`} onClick={() => this.handleClick(this.props.payload)}><i className={this.props.icon}/> {this.props.children}</a>);
+    const triggerClass = this.props.triggerClass || 'nav-trigger';
+    return (
+      <Tooltip
+        title={this.props.caption}
+        trigger="mouseenter"
+        delay={500}
+        arrow={true}
+        distance={15}
+        theme="light"
+        size="big"
+        disabled={!this.props.caption}
+      >
+        <a className={`${triggerClass} ${this.isActive(this.props.propState, this.props.propStateValue)}`} onClick={() => this.handleClick(this.props.payload)}><i className={this.props.icon}/> {this.props.children}</a>
+      </Tooltip>
+    );
   }
 }
 

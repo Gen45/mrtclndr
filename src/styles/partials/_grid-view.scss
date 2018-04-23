@@ -271,10 +271,10 @@
         width: calc(100% / 4 - #{$padding});
       }
       @media screen and (min-width: 1600px) and (max-width: 2199px) {
-        width: calc(100% / 6 - #{$padding});
+        width: calc(100% / 5 - #{$padding});
       }
       @media screen and (min-width: 2200px) and (max-width: 9000px) {
-        width: calc(100% / 7 - #{$padding});
+        width: calc(100% / 6 - #{$padding});
       }
     }
     // SIDEBAR EXPANDED
@@ -297,7 +297,7 @@
       width: calc(100% / 5 - #{$padding});
     }
     @media screen and (min-width: 2200px) and (max-width: 9000px) {
-      width: calc(100% / 6 - #{$padding});
+      width: calc(100% / 5 - #{$padding});
     }
   }
   //

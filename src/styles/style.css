@@ -134,7 +134,7 @@ textarea:focus, input:focus, button:focus {
     height: auto; }
   @media only screen and (max-width: 500px) {
     .logo {
-      margin-left: 20px;
+      margin-left: 15px;
       width: 30px;
       overflow: hidden; } }
 
@@ -397,12 +397,8 @@ textarea:focus, input:focus, button:focus {
             margin: 0 auto;
             justify-content: left; }
           .main .content > header > nav {
-            position: absolute;
-            top: 11px;
-            right: 0;
             text-align: right;
-            display: inline-block;
-            margin: 0 0 0 auto; } }
+            display: inline-block; } }
       .main .content > header h2.title {
         font-size: 28px;
         color: #e4144a;
@@ -442,7 +438,7 @@ textarea:focus, input:focus, button:focus {
       bottom: 0;
       height: 60px;
       left: 0;
-      z-index: 1000;
+      z-index: 102;
       border-radius: 0 0 10px 10px;
       background: linear-gradient(180deg, rgba(51, 51, 51, 0) 0%, rgba(51, 51, 51, 0.5) 100%); }
   @media print {
@@ -545,11 +541,11 @@ span.react-resizable-handle {
     top: 50%;
     transform: translate(-50%, -50%); }
 
-.main-filters {
+.filters-group {
   display: inline-block;
   cursor: pointer;
   position: relative; }
-  .main-filters .nav-trigger {
+  .filters-group .nav-trigger {
     position: relative;
     display: inline-block;
     font-size: 14px;
@@ -561,7 +557,7 @@ span.react-resizable-handle {
     letter-spacing: 1px;
     z-index: 10;
     text-align: center; }
-    .main-filters .nav-trigger:after {
+    .filters-group .nav-trigger:after {
       content: '';
       position: absolute;
       height: 2px;
@@ -570,135 +566,38 @@ span.react-resizable-handle {
       width: 0;
       left: 50%;
       z-index: -1; }
-    .main-filters .nav-trigger:hover:after, .main-filters .nav-trigger:active:after {
+    .filters-group .nav-trigger:hover:after, .filters-group .nav-trigger:active:after {
       background: #2b2b2b;
       top: calc(-20px / 4);
       height: calc(100% + 20px / 2);
       width: calc(100% + 20px / 2);
       left: calc(-20px / 4);
       border-radius: 2px; }
-    .main-filters .nav-trigger:active:after {
+    .filters-group .nav-trigger:active:after {
       background: #e4144a;
       transition: 0; }
-    .main-filters .nav-trigger.active {
+    .filters-group .nav-trigger.active {
       z-index: 10; }
-      .main-filters .nav-trigger.active:after {
+      .filters-group .nav-trigger.active:after {
         background: #e4144a;
         width: calc(100% - 20px / 2);
         left: 5px; }
-      .main-filters .nav-trigger.active:hover:after {
+      .filters-group .nav-trigger.active:hover:after {
         background: #e4144a;
         width: calc(100% + 20px / 2);
         left: calc(-20px / 4); }
-    .main-filters .nav-trigger.disable {
+    .filters-group .nav-trigger.disable {
       color: #666666; }
   @media screen and (max-width: 940px) {
-    .main-filters {
+    .filters-group {
       margin: 0 2px; } }
-  .main-filters .time .nav-trigger.dropdown {
-    top: -5px;
-    position: relative;
-    margin-left: 0;
-    margin-right: 5px; }
-    .main-filters .time .nav-trigger.dropdown.active:after {
-      background: transparent;
-      width: 62%; }
-      .main-filters .time .nav-trigger.dropdown.active:after i {
-        color: #ffffff; }
-      @media screen and (max-width: 940px) {
-        .main-filters .time .nav-trigger.dropdown.active:after {
-          left: 1px; } }
-    .main-filters .time .nav-trigger.dropdown.active:hover:after {
-      height: 2px;
-      top: 100%;
-      background: transparent;
-      width: 62%;
-      left: 5px; }
-      @media screen and (max-width: 940px) {
-        .main-filters .time .nav-trigger.dropdown.active:hover:after {
-          left: 1px; } }
-    .main-filters .time .nav-trigger.dropdown:hover:after {
-      background-color: transparent; }
-    .main-filters .time .nav-trigger.dropdown ul {
-      position: absolute;
-      background: #595959;
-      top: 100%;
-      left: calc(100% - 9px);
-      padding: 5px;
-      padding-right: 7px;
-      padding-top: 8.66667px;
-      margin: 0;
-      display: none;
-      list-style-type: none;
-      width: 170px;
-      transform: translate(-50%, 12px);
-      border-radius: 2px;
-      text-align: center;
-      z-index: 10; }
-      .main-filters .time .nav-trigger.dropdown ul.menu-open {
-        display: block;
-        box-shadow: 0 0 10px rgba(43, 43, 43, 0.5); }
-      .main-filters .time .nav-trigger.dropdown ul:before {
-        content: '';
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        margin-left: -8px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        text-align: center;
-        border-width: 0 8px 8px 8px;
-        border-color: transparent transparent #595959 transparent; }
-      .main-filters .time .nav-trigger.dropdown ul hr {
-        border: none;
-        border-bottom: solid 1px #333333; }
-      .main-filters .time .nav-trigger.dropdown ul li {
-        display: inline-block;
-        position: relative;
-        padding: 0;
-        width: calc(100% / 3 - 10px);
-        text-align: center;
-        margin: 2.5px; }
-        .main-filters .time .nav-trigger.dropdown ul li.q {
-          width: calc(100% / 4 - 10px); }
-          .main-filters .time .nav-trigger.dropdown ul li.q a {
-            margin-left: 0; }
-        .main-filters .time .nav-trigger.dropdown ul li a {
-          text-transform: uppercase;
-          border-radius: 2px;
-          width: 100%;
-          position: relative;
-          padding: 5px;
-          font-size: 12px;
-          display: block; }
-          .main-filters .time .nav-trigger.dropdown ul li a:hover {
-            background: #333333; }
-        .main-filters .time .nav-trigger.dropdown ul li .active {
-          background: #333333;
-          color: #ffffff; }
-          .main-filters .time .nav-trigger.dropdown ul li .active:active:after {
-            background: transparent;
-            transition: 0; }
-    .timeline-view .main-filters .time .nav-trigger.dropdown .month-trigger {
-      display: none; }
-    .main-filters .time .nav-trigger.dropdown .dropdown-toggle {
-      font-size: 10px;
-      color: #666666;
-      padding: 5px 3px 4px 5px;
-      margin-right: -5px;
-      text-align: center;
-      border-radius: 10px; }
-      .main-filters .time .nav-trigger.dropdown .dropdown-toggle:hover {
-        background: #e4144a;
-        color: #ffffff; }
-  .main-filters .filter-category {
+  .filters-group .filter-category {
     display: inline-block;
     position: relative;
     margin-left: 10px; }
-    .main-filters .filter-category .inner {
+    .filters-group .filter-category .inner {
       position: relative; }
-    .main-filters .filter-category .filter-header {
+    .filters-group .filter-category .filter-header {
       color: #666666;
       white-space: nowrap;
       text-align: left;
@@ -711,16 +610,16 @@ span.react-resizable-handle {
       left: 50%;
       transform: translateX(-50%); }
     @media screen and (max-width: 940px) {
-      .main-filters .filter-category.view {
+      .filters-group .filter-category.view {
         position: absolute;
         margin-left: 0;
         top: 10px;
         right: 20px; } }
   @media screen and (max-width: 940px) {
-    .main-filters .nav-trigger.month {
+    .filters-group .nav-trigger.month {
       margin-left: 0;
       padding-left: 0; }
-    .main-filters .time-filters {
+    .filters-group .time-filters {
       width: calc( 100% - 40px); } }
 
 .trigger-box-children {
@@ -1337,10 +1236,10 @@ body.activity-type .activity-type-group {
       width: calc(100% / 4 - 20px); } }
   @media screen and (min-width: 1600px) and (max-width: 2199px) {
     .collapsed .grid-view .event {
-      width: calc(100% / 6 - 20px); } }
+      width: calc(100% / 5 - 20px); } }
   @media screen and (min-width: 2200px) and (max-width: 9000px) {
     .collapsed .grid-view .event {
-      width: calc(100% / 7 - 20px); } }
+      width: calc(100% / 6 - 20px); } }
   @media screen and (min-width: 1px) and (max-width: 749px) {
     .grid-view .event {
       width: calc(100% / 1 - 20px); } }
@@ -1361,7 +1260,7 @@ body.activity-type .activity-type-group {
       width: calc(100% / 5 - 20px); } }
   @media screen and (min-width: 2200px) and (max-width: 9000px) {
     .grid-view .event {
-      width: calc(100% / 6 - 20px); } }
+      width: calc(100% / 5 - 20px); } }
   .grid-view .event {
     cursor: pointer;
     box-shadow: 0 0 0;
@@ -1491,7 +1390,7 @@ body.activity-type .activity-type-group {
   justify-content: center;
   align-items: flex-start;
   position: absolute;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   padding-top: 10vh;
   top: 0;
@@ -1538,8 +1437,10 @@ body.activity-type .activity-type-group {
       cursor: pointer; }
       .modal .modal-nav .modal-nav-trigger:hover {
         color: #f5f5f5; }
-      .modal .modal-nav .modal-nav-trigger:active {
+      .modal .modal-nav .modal-nav-trigger.active {
         color: #e4144a; }
+      .modal .modal-nav .modal-nav-trigger:active {
+        color: #c2c2c2; }
   .modal .event {
     position: relative;
     width: 100% !important;

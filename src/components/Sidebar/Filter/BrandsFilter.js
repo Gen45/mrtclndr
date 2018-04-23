@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+
 import {Scrollbars} from 'react-custom-scrollbars';
 import {ResizableBox} from 'react-resizable';
 
@@ -62,7 +63,7 @@ class BrandsFilter extends Component {
               }} />
               {
                 isValid(this.state.keyPhrase) ?
-                <i className="nc-icon-mini ui-1_circle-remove" onClick={ () => {this.handleClearSearch()}}/> :
+                <i className="nc-icon-mini ui-1_circle-remove" onClick={ () => {this.handleClearSearch()}}  style={{cursor: 'pointer'}}/> :
                 <i className="nc-icon-mini ui-1_zoom" />
               }
           </div>
@@ -92,7 +93,7 @@ class BrandsFilter extends Component {
                   return isInSearch || keyPhrase === "" || keyPhrase === undefined
                     ? <div key={i} id={filterCategories[c]["name"].toUpperCase()} className="brand-category">
                         <h4><span>{filterCategories[c]["name"]}</span> </h4>
-                        <Content filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} filterInfo={this.props.filterInfo} handleChange={this.handleChange} inner={true} keyPhrase={keyPhrase}>
+                        <Content filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} filterInfo={this.props.filterInfo} handleChange={this.handleChange} inner={true} keyPhrase={keyPhrase} tooltips={this.props.tooltips} TooltipTheme='dark'>
                         </Content>
                       </div>
                     : null

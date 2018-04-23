@@ -17,7 +17,7 @@ class Pagination extends Component {
     let newState = {};
     newState[mode] = this.props.time[mode];
     newState['Y'] = this.props.time.Y
-    this.props.stateUpdate({time: {...this.props.time, ...newState}}, true);
+    this.props.updateState({time: {...this.props.time, ...newState}}, true);
   };
 
   render() {

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Tooltip} from 'react-tippy';
 
 import {
   cleanDate,
@@ -46,27 +47,35 @@ export class Timeline extends Component {
 
     return (<div className={`timeline-wrapper${this.timeline2(this.props.multidate)}`}>
       <div className={`event-timeline${this.oneMonth(dates)}${this.dotted(dates)}`.trim()}
-
         style={{
           // left: this.getLineStart(dates.start, Y, timespan) + '%',
           left: this.getLineStart(add(dates.start, -offset, 'months'), Y, timespan) + '%',
           width: this.getLineWidth(dates, Y, timespan) + '%',
           backgroundColor: color
         }}>
-        <i className="start"
-          title={dates.start}
-          data-day={day(dates.start)} data-month={month(dates.start)} data-year={year(dates.start)} style={{
-            borderColor: color
-          }}/>
-        <i className="end"
-          title={dates.end}
-          data-day={day(dates.end)} data-month={month(dates.end)} data-year={year(dates.end)} style={{
-            borderColor: color
-          }}/>
+        <Dot position='start' date={dates.start} color={color}/>
+        <Dot position='end' date={dates.end} color={color}/>
+
       </div>
     </div>)
   }
 }
+
+const Dot = (props) =>
+<Tooltip
+  title={props.date}
+  trigger="mouseenter"
+  delay={200}
+  arrow={true}
+  distance={10}
+  theme="light"
+  size="big"
+>
+  <i className={props.position}
+    data-day={day(props.date)} data-month={month(props.date)} data-year={year(props.date)} style={{
+      borderColor: props.color
+  }}/>
+</Tooltip>
 
 class Timelines extends Component {
   render() {

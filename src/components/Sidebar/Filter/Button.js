@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Tooltip} from 'react-tippy';
 
 // import {shadeColor} from '../../../helpers/colors';
 
@@ -20,25 +21,36 @@ class Button extends Component {
 
     const putColor = color => color && !labelDot ? {backgroundColor: color, borderColor: color}: {};
 
+    const ButtonContent = (props) => <span>
+      {labelDot && <span className='label-dot' style={{backgroundColor: color}}/> }
+      {filterIcon && <i className={filterIcon} />}{" "}
+      {filterImage && !props.isTooltip ? <img src={filterImage} alt={filterName}/> : `${props.isTooltip ? filterName : filterName.toUpperCase()}`}
+    </span>
+
     return (
 
-      <span className={`filter-tag`}>
+      <Tooltip
+        disabled={!this.props.tooltips}
+        trigger="mouseenter"
+        delay={200}
+        arrow={true}
+        distance={30}
+        theme={this.props.TooltipTheme}
+        size="big"
+        html={(
+          <ButtonContent isTooltip={true} />
+        )}
+      >
+        <span className={`filter-tag`}>
           <input type="checkbox" id={`filter-${this.props.filter}`} checked={active} onChange={(event) => {
               this.props.handleChange(event, filter, active)
             }}/>
 
           <label htmlFor={`filter-${filter}`} style={putColor(color)} >
-            {labelDot && <span className='label-dot' style={{backgroundColor: color}}/> }
-            {filterIcon && <i className={filterIcon} />}{" "}
-            {
-              filterImage
-                ? <img src={filterImage} alt=""/>
-                : filterName
-            }
+            <ButtonContent />
           </label>
         </span>
-
-
+      </Tooltip>
     )
   }
 }

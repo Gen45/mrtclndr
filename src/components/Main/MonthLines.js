@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {today, day, daysInMonth, add, yearsMonths, months, years} from '../helpers/dates';
+import {today, day, daysInMonth, add, yearsMonths, months, years} from '../../helpers/dates';
 
-import {_ISMOBILE, _COLORS} from '../config/constants';
+import {_ISMOBILE, _COLORS} from '../../config/constants';
 
 const TodayLine = props => <span className="line-today" style={{
     left: props.position

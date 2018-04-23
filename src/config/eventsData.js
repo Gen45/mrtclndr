@@ -37,7 +37,7 @@ const eventsData = () => {
 
     let event = {
       id: e["Id"],
-      region: e["Owner SubRegion"],
+      region: [e["Owner SubRegion"]],
       brands: e["Brand"].split(','),
       campaignName: e["Campaign Name"],
       description: e["Description"],
@@ -45,7 +45,7 @@ const eventsData = () => {
       segment: e["Segment"],
       market: getMarket(e),
       programType: e["Program Type"],
-      offer: getOffer(e["Offer"], offers),
+      offer: [getOffer(e["Offer"], offers)],
       channels: cleanChannels(eventChannels),
       otherChannels: e["Other Channels"],
       ongoing: e["Ongoing Campaign"],
