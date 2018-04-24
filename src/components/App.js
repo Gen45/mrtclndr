@@ -32,8 +32,8 @@ class App extends Component {
   events = eventsData();
 
   componentWillMount() {
-    // const { params } = this.props.match;
-    // first reinstate our localStorage
+    // const match = this.props.match;
+    // console.log(match);
     const localStorageRef = localStorage.getItem('marriott-calendar');
     if (localStorageRef) {
       this.setState({...JSON.parse(localStorageRef)}, () => this.updateEventList(this.events));
@@ -60,7 +60,6 @@ class App extends Component {
   prepareEventList = (events, filter, field) => events.filter(e => e[field].reduce((x, c) => x || (this.activeFilter(filter).indexOf(c) >= 0), false));
 
   updateEventList = (events, update) => {
-    console.log('wat')
     const timeRange = getTimeRange(this.state.time);
     const dayOfTheYear = getExtreme([today()]);
 
@@ -142,11 +141,20 @@ class App extends Component {
         <div className="content-frame" style={{backgroundImage: `url(${_BACKGROUNDIMAGE})`}}>
           <div className={`content ${this.state.view}-view`}>
 
-            <ToolBar time={time} updateState={this.updateState} view={this.state.view} groupByType={this.state.order.groupByType} orderDirection={this.state.order.orderDirection} sortBy={this.state.order.sortBy} orderBy={this.state.order.orderBy} vigency={this.state.vigency} updateEventOrder={this.updateEventOrder} starred={this.state.starred} search={this.state.search} />
+            <ToolBar
+              time={time}
+              updateState={this.updateState}
+              view={this.state.view}
+              groupByType={this.state.order.groupByType}
+              orderDirection={this.state.order.orderDirection} sortBy={this.state.order.sortBy} orderBy={this.state.order.orderBy} vigency={this.state.vigency}
+              updateEventOrder={this.updateEventOrder}
+              starred={this.state.starred}
+              search={this.state.search}
+            />
 
             <div className={`overlay${this.state.modal.show ? ' active' : ''}`}/>
 
-            <MonthBar time={time}/>
+            <MonthBar time={time} collapsed={this.state.sidebar.collapsed}/>
 
             <div className="nano">
               <MonthLines time={time}/>

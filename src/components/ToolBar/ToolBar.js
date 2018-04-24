@@ -1,42 +1,68 @@
 import React, {Component} from 'react';
+import debounce from 'lodash/debounce';
 
-import {TriggerBox, Trigger} from './Triggers';
-import {Title} from './Title';
+import Title from './Title';
 import Pagination from './Pagination';
+import {FiltersGroup, FilterCategory, Header} from './Filters';
+import {TriggerBox, Trigger} from './Triggers';
 
-import { _ISMOBILE } from '../../config/constants';
-import { _MONTHS, _QUARTERS, _THREEYEARS, _PREVIOUSYEAR, _CURRENTYEAR, _TIMELIMITS } from '../../helpers/dates';
+import {getCoordinates} from '../../helpers/misc';
 
-
-const FilterCategory = props => !props.disabled && <div className="filter-category">{props.children}</div>
-
-// width={window.innerWidth + 75}
-const FiltersGroup = props => !props.disabled &&
-<nav className='filters-group'>
-  {
-    _ISMOBILE() ?
-    <TriggerBox title={props.title} icon={props.icon} width={250} draggable={false} align='left'>
-    {/* <TriggerBox title='Settings' icon='nc-icon-mini ui-1_settings-gear-65' width={window.innerWidth + 75} draggable={false} align='center'> */}
-      {props.children}
-    </TriggerBox> :
-    <div>{props.children}</div>
-  }
-</nav>
+import {_MONTHS, _QUARTERS, _THREEYEARS, _PREVIOUSYEAR, _CURRENTYEAR, _TIMELIMITS} from '../../helpers/dates';
+import {_ISMOBILE, _DEBOUNCE} from '../../config/constants';
 
 class ToolBar extends Component {
+
+  state = {
+    collapsed: false
+  }
+
+  componentDidMount(){
+    const toolbarMaxWidth =
+    getCoordinates(this.mainFiltersGroupRef).offsetWidth +
+    getCoordinates(this.PaginationRef).offsetWidth +
+    getCoordinates(this.TitleRef).offsetWidth + 50;
+    this.setState({toolbarMaxWidth}, this.updateDimensions);
+    window.addEventListener("resize", debounce(this.updateDimensions, _DEBOUNCE));
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   const toolbarMaxWidth =
+  //   getCoordinates(this.mainFiltersGroupRef).offsetWidth +
+  //   getCoordinates(this.PaginationRef).offsetWidth +
+  //   getCoordinates(this.TitleRef).offsetWidth + 150;
+  //   this.setState({toolbarMaxWidth}, this.updateDimensions);
+  // }
+
+  componentWillUnmount() {
+      window.removeEventListener("resize", this.updateDimensions);
+  }
+
+  updateDimensions = () => {
+    const collapseToolbar = this.state.toolbarMaxWidth > getCoordinates(this.HeaderRef).offsetWidth;
+    if(collapseToolbar) {
+      this.setState({collapsed: true});
+    } else {
+      this.setState({collapsed: false});
+    }
+  };
 
   render() {
 
     const normalizeYear = year => year === _PREVIOUSYEAR - 1 ? _CURRENTYEAR : year;
 
     return (
-      <header>
-      { !(this.props.time.mode === 'Y' && this.props.view === 'grid') &&
-         <Pagination time={this.props.time} updateState={this.props.updateState} limit={_TIMELIMITS} />
-      }
-      <Title time={this.props.time} view={this.props.view}/>
+      <Header ref={Header => this.HeaderRef = Header}>
+    {
+      !(this.props.time.mode === 'Y' && this.props.view === 'grid') &&
+      <Pagination ref={Pagination => this.PaginationRef = Pagination}
+        time={this.props.time} updateState={this.props.updateState} limit={_TIMELIMITS} />
+    }
+      <Title ref={Title => this.TitleRef = Title}
+        time={this.props.time} view={this.props.view}/>
 
-      <FiltersGroup title='Settings' icon='nc-icon-mini ui-1_settings-gear-65' disabled={this.props.search.active}>
+      <FiltersGroup ref={FiltersGroup => this.mainFiltersGroupRef = FiltersGroup}
+        title='Settings' icon='nc-icon-mini ui-1_settings-gear-65' disabled={this.props.search.active} collapsed={this.state.collapsed} >
         <FilterCategory>
           <TriggerBox title='Date' icon='nc-icon-mini ui-1_calendar-60' width={270} renderChildren={true} align='left'>
             <div className='group'>
@@ -82,7 +108,7 @@ class ToolBar extends Component {
               </div>
             }
             {
-              this.props.time.mode === 'Y' && !_ISMOBILE() && this.props.view !== 'grid' &&
+              this.props.time.mode === 'Y' && !_ISMOBILE() && this.props.view === 'timeline' &&
               <div className='group'>
                 <h4>NUMBER OF YEARS TO SHOW</h4>
                 {[1,2,3].map( (n, i) =>
@@ -93,7 +119,7 @@ class ToolBar extends Component {
                 }
               </div>
             }
-            {this.props.time.mode === 'Y' && this.props.view === 'timeline' && <hr/>}
+            {this.props.time.mode === 'Y' && !_ISMOBILE() && this.props.view === 'timeline' && <hr/>}
 
             <div className='group'>
               <h4>{`${this.props.time.mode === 'Y' && this.props.view === 'timeline' ? 'STARTING ' : ''}YEAR`}</h4>
@@ -116,7 +142,7 @@ class ToolBar extends Component {
           </TriggerBox>
         </FilterCategory>
 
-        { _ISMOBILE() && <hr/> }
+        { this.state.collapsed && <hr/> }
 
         <FilterCategory>
           {/* <TriggerBox title='Sort' icon='nc-icon-mini design_bullet-list-67'> */}
@@ -150,8 +176,7 @@ class ToolBar extends Component {
           </TriggerBox>
         </FilterCategory>
 
-        { _ISMOBILE() && <hr/> }
-        {/* { _ISMOBILE() && <h4>Vigency</h4> } */}
+        { this.state.collapsed && <hr/> }
 
         <FilterCategory>
           <Trigger caption='Toggle past events' propState={this.props.vigency.past} propStateValue={true} icon='nc-icon-mini arrows-2_cross-left'
@@ -162,8 +187,7 @@ class ToolBar extends Component {
             payload={() => this.props.updateState({vigency:{...this.props.vigency, future: !this.props.vigency.future}}, true)}/>
         </FilterCategory>
 
-        { _ISMOBILE() && <hr/> }
-        {/* { _ISMOBILE() && <h4>View Type</h4> } */}
+        { this.state.collapsed && <hr/> }
 
         <FilterCategory>
           <Trigger caption='View as grid' propState={this.props.view} propStateValue='grid' icon='nc-icon-mini ui-2_grid-square'
@@ -172,8 +196,7 @@ class ToolBar extends Component {
             payload={() => this.props.updateState({view: 'timeline'})}/>
         </FilterCategory>
 
-        { _ISMOBILE() && <hr/> }
-        {/* { _ISMOBILE() && <h4>View Type</h4> } */}
+        { this.state.collapsed && <hr/> }
 
         <FilterCategory>
           <Trigger caption='Starred items' propState={this.props.starred.show} propStateValue={true} icon='nc-icon-mini nc-icon-mini health_heartbeat-16'
@@ -188,7 +211,7 @@ class ToolBar extends Component {
             payload={() => this.props.updateState({search:{active: !this.props.search.active}})}/>
           </FilterCategory>
       </FiltersGroup>
-      </header>
+    </Header>
     )
   }
 }

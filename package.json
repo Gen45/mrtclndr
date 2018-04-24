@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.0.0",
     "clipboard": "^1.7.1",
     "downloadjs": "^1.4.7",
     "global": "^4.3.2",
@@ -15,17 +14,11 @@
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.2.0",
     "react-draggable": "^3.0.5",
-    "react-google-sheet-connector": "^1.0.1",
-    "react-lazy-load": "^3.0.13",
     "react-list": "^0.8.8",
-    "react-list-lazy-load": "^1.1.0",
-    "react-masonry-component": "^6.0.2",
-    "react-masonry-infinite": "^1.2.2",
     "react-popper": "^0.8.2",
     "react-resizable": "^1.7.5",
     "react-router-dom": "^4.2.2",
-    "react-tippy": "^1.2.2",
-    "reactstrap": "next"
+    "react-tippy": "^1.2.2"
   },
   "devDependencies": {
     "react-scripts": "1.1.1"

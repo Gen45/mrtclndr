@@ -17,7 +17,7 @@
         .modal-on & {
           display: none;
         }
-    }    
+    }
 
     .scroll-wrapper {
         padding-bottom: 100px;
@@ -45,8 +45,9 @@
         cursor: pointer;
         h3 {
             margin-left: $padding/2;
+            line-height: 1;
             .collapsed & {
-                opacity: 0;
+                // opacity: 0;
             }
         }
         .collapsed & {
@@ -56,7 +57,7 @@
             }
         }
         .icon {
-            transition: $transition-time;
+            // transition: $transition-time;
             transform: rotate(0deg);
         }
     }
@@ -93,7 +94,7 @@
                 width: $filter-header-height;
                 left: calc( #{$sidebar-expanded} - #{$filter-header-height});
                 top: 0;
-                transition: $transition-time/4;
+                // transition: $transition-time/4;
                 @include flex-center();
                 opacity: 0;
                 transform: rotate(0deg);
@@ -194,8 +195,8 @@
         .collapsed & {
             background: $color-black;
             width: $sidebar-expanded + 100px;
-            transform: translateX(-50px);
-            transition: $transition-time/2 ease;
+            transform: translateX(-125px);
+            // transition: $transition-time ease;
         }
     }
 }

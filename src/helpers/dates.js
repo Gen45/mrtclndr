@@ -37,10 +37,10 @@ export const timespan = time => time.mode === 'Q' || time.mode === 'M'
 export const years = (time) => range(timespan(time)).map(y => y + time.Y);
 
 export const months = time => time.mode === 'Q'
-  ? _MONTHS.slice(time.Q * 3 - 3, time.Q * 3)
+  ? _LONGMONTHS.slice(time.Q * 3 - 3, time.Q * 3)
   : time.mode === 'M'
-    ? _MONTHS.slice(time.M - 1, time.M)
-    : _MONTHS;
+    ? _LONGMONTHS.slice(time.M - 1, time.M)
+    : _LONGMONTHS;
 
 export const yearsMonths = (years, months) => {
   let yearsMonths = [];

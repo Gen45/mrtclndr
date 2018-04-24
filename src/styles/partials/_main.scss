@@ -81,6 +81,7 @@
                 text-transform: uppercase;
                 margin: 0 auto 0 10px;
                 letter-spacing: 1px;
+                white-space: nowrap;
                 .detail {
                     font-size: 18px;
                     color: $color-white;
@@ -122,6 +123,7 @@
             z-index: 102;
             border-radius: 0 0 10px 10px;
             background: linear-gradient(180deg, rgba($color-dark-gray, 0) 0%, rgba($color-dark-gray, 0.5) 100%);
+            pointer-events: none;
         }
     }
     @media print {
@@ -130,9 +132,11 @@
 }
 
 .pagination {
+    min-width: 60px;
     margin-left: -10px;
     margin-top: 2px;
     z-index: 300;
+    white-space: nowrap;
     a {
         display: inline-block;
         // margin-right: 10px;

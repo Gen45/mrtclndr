@@ -8,7 +8,7 @@
     "M": 1
   },
   "order": {
-    "sortBy": ["earliestDay", "latestDay", "region", "offer"],
+    "sortBy": ["earliestDay", "offer", "region"],
     "orderBy": ["asc"],
     "groupByType": "date",
     "orderDirection": "ASCENDING"

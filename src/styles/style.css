@@ -170,13 +170,11 @@ textarea:focus, input:focus, button:focus {
     white-space: nowrap;
     cursor: pointer; }
     .sidebar header h3 {
-      margin-left: 10px; }
-      .collapsed .sidebar header h3 {
-        opacity: 0; }
+      margin-left: 10px;
+      line-height: 1; }
     .collapsed .sidebar header {
       padding-left: 10px; }
     .sidebar header .icon {
-      transition: 0.15s;
       transform: rotate(0deg); }
   .sidebar.collapsed {
     width: 1px; }
@@ -206,7 +204,6 @@ textarea:focus, input:focus, button:focus {
         width: 50px;
         left: calc( 300px - 50px);
         top: 0;
-        transition: 0.0375s;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -274,8 +271,7 @@ textarea:focus, input:focus, button:focus {
   .collapsed .sidebar > header {
     background: #161616;
     width: 400px;
-    transform: translateX(-50px);
-    transition: 0.075s ease; }
+    transform: translateX(-125px); }
 
 .brand-category h4 {
   text-align: center;
@@ -406,7 +402,8 @@ textarea:focus, input:focus, button:focus {
         align-items: center;
         text-transform: uppercase;
         margin: 0 auto 0 10px;
-        letter-spacing: 1px; }
+        letter-spacing: 1px;
+        white-space: nowrap; }
         .main .content > header h2.title .detail {
           font-size: 18px;
           color: #ffffff;
@@ -440,15 +437,18 @@ textarea:focus, input:focus, button:focus {
       left: 0;
       z-index: 102;
       border-radius: 0 0 10px 10px;
-      background: linear-gradient(180deg, rgba(51, 51, 51, 0) 0%, rgba(51, 51, 51, 0.5) 100%); }
+      background: linear-gradient(180deg, rgba(51, 51, 51, 0) 0%, rgba(51, 51, 51, 0.5) 100%);
+      pointer-events: none; }
   @media print {
     .main {
       width: 100%; } }
 
 .pagination {
+  min-width: 60px;
   margin-left: -10px;
   margin-top: 2px;
-  z-index: 300; }
+  z-index: 300;
+  white-space: nowrap; }
   .pagination a {
     display: inline-block;
     line-height: 55px;
@@ -543,8 +543,9 @@ span.react-resizable-handle {
 
 .filters-group {
   display: inline-block;
-  cursor: pointer;
-  position: relative; }
+  position: relative;
+  white-space: nowrap;
+  cursor: pointer; }
   .filters-group .nav-trigger {
     position: relative;
     display: inline-block;
@@ -594,7 +595,8 @@ span.react-resizable-handle {
   .filters-group .filter-category {
     display: inline-block;
     position: relative;
-    margin-left: 10px; }
+    margin-left: 10px;
+    white-space: normal; }
     .filters-group .filter-category .inner {
       position: relative; }
     .filters-group .filter-category .filter-header {

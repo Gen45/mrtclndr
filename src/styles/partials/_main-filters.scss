@@ -1,7 +1,8 @@
 .filters-group {
     display: inline-block;
-    cursor: pointer;
     position: relative;
+    white-space: nowrap;
+    cursor: pointer;
     .nav-trigger {
         position: relative;
         display: inline-block;
@@ -69,6 +70,7 @@
         display: inline-block;
         position: relative;
         margin-left: $padding/2;
+        white-space: normal;
 
         .inner {
           position: relative;

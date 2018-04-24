@@ -21,15 +21,9 @@ class Button extends Component {
 
     const putColor = color => color && !labelDot ? {backgroundColor: color, borderColor: color}: {};
 
-    const ButtonContent = (props) => <span>
-      {labelDot && <span className='label-dot' style={{backgroundColor: color}}/> }
-      {filterIcon && <i className={filterIcon} />}{" "}
-      {filterImage && !props.isTooltip ? <img src={filterImage} alt={filterName}/> : `${props.isTooltip ? filterName : filterName.toUpperCase()}`}
-    </span>
-
     return (
-
       <Tooltip
+        title={filterName}
         disabled={!this.props.tooltips}
         trigger="mouseenter"
         delay={200}
@@ -37,9 +31,6 @@ class Button extends Component {
         distance={30}
         theme={this.props.TooltipTheme}
         size="big"
-        html={(
-          <ButtonContent isTooltip={true} />
-        )}
       >
         <span className={`filter-tag`}>
           <input type="checkbox" id={`filter-${this.props.filter}`} checked={active} onChange={(event) => {
@@ -47,7 +38,9 @@ class Button extends Component {
             }}/>
 
           <label htmlFor={`filter-${filter}`} style={putColor(color)} >
-            <ButtonContent />
+            {labelDot && <span className='label-dot' style={{backgroundColor: color}}/> }
+            {filterIcon && <i className={filterIcon} />}{" "}
+            {filterImage ? <img src={filterImage} alt={filterName}/> : `${filterName.toUpperCase()}`}
           </label>
         </span>
       </Tooltip>
