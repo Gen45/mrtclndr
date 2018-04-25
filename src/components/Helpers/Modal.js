@@ -68,7 +68,7 @@ class Modal extends Component {
             <div className='modal-wrapper'>
                 <nav className="modal-nav">
                   <span className={`modal-handle ${handle}`}></span>
-                  <Trigger triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} icon='nc-icon-mini nc-icon-mini health_heartbeat-16' payload={() => this.handleToggleStar(this.props.modal)}/>
+                  <Trigger triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-left'
                     payload={() => this.handleModalNav(_PREV)}/>
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-right'

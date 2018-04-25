@@ -51,21 +51,17 @@ export class Trigger extends Component {
   handleClick = payload => payload();
 
   render() {
-    const triggerClass = this.props.triggerClass || 'nav-trigger';
+    const triggerClass = this.props.triggerClass || 'toolbar-trigger';
+    const active = this.isActive(this.props.propState, this.props.propStateValue);
+    const icon = active === 'active' && this.props.iconActive
+      ? this.props.iconActive
+      : this.props.icon;
     return (
-      <Tooltip
-        title={this.props.caption}
-        trigger="mouseenter"
-        delay={500}
-        arrow={true}
-        distance={15}
-        theme="light"
-        size="big"
-        disabled={!this.props.caption}
-      >
-        <a className={`${triggerClass} ${this.isActive(this.props.propState, this.props.propStateValue)}`} onClick={() => this.handleClick(this.props.payload)}><i className={this.props.icon}/> {this.props.children}</a>
-      </Tooltip>
-    );
+    <Tooltip title={this.props.caption} trigger="mouseenter" delay={500} arrow={true} distance={15} theme="light" size="big" disabled={!this.props.caption}>
+      <a className={`${triggerClass} ${active}`} onClick={() => this.handleClick(this.props.payload)}>
+        <i className={icon}/> {this.props.children}
+      </a>
+    </Tooltip>);
   }
 }
 
