@@ -17,6 +17,7 @@
     "react-list": "^0.8.8",
     "react-popper": "^0.8.2",
     "react-resizable": "^1.7.5",
+    "react-router-auth": "^1.0.1",
     "react-router-dom": "^4.2.2",
     "react-tippy": "^1.2.2"
   },

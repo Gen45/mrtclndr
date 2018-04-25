@@ -25,7 +25,6 @@ import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
-const validPassCode = "hola";
 
 class App extends Component {
 
@@ -122,8 +121,9 @@ class App extends Component {
     this.setState({modal:{ ...OpenModal(targetId, this.state.events)}});
   }
 
-  // RENDER
-  render(props) {
+  render() {
+
+    console.log(this.props)
 
     let time = !_ISMOBILE() ? this.state.time : {...this.state.time, numberOfYears: 1 };
         time = time.Y === (_PREVIOUSYEAR - 1) && (this.state.view === 'timeline' || time.mode !== 'Y') ? {...time, Y: _CURRENTYEAR} : time;
