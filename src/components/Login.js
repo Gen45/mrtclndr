@@ -1,29 +1,29 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom'
 
-const fakeAuth = {
-  isAuthenticated: false,
-  authenticate(cb) {
-    this.isAuthenticated = true
-    setTimeout(cb, 100)
-  },
-  signout(cb) {
-    this.isAuthenticated = false
-    setTimeout(cb, 100)
-  }
-}
+// const fakeAuth = {
+//   isAuthenticated: false,
+//   authenticate(cb) {
+//     this.isAuthenticated = true
+//     setTimeout(cb, 100)
+//   },
+//   signout(cb) {
+//     this.isAuthenticated = false
+//     setTimeout(cb, 100)
+//   }
+// }
 
 class Login extends Component {
 
   state = {
-    redirectToReferrer: false
+    redirectToReferrer: false,
+    passCode: 'hola'
   }
 
   login = () => {
-    fakeAuth.authenticate(() => {
+    if(this.passCode.value === this.state.passCode){
       this.setState(() => ({redirectToReferrer: true}))
-      // this.props.history.push('/');
-    })
+    }
   }
 
   render() {
@@ -35,12 +35,11 @@ class Login extends Component {
     const {redirectToReferrer} = this.state
 
     if (redirectToReferrer === true) {
-      <Redirect to='/' />
+      <Redirect to={{ pathname: '/', state: { isAuthenticated: true } }}/>
     }
 
     return (
     <div className="login-form">
-
       <div className="logo">
         <img src="images/logo.svg" alt="Marriott Logo"/>
       </div>
@@ -53,7 +52,6 @@ class Login extends Component {
       </form>
     </div>)
   }
-
 }
 
 export default Login;
