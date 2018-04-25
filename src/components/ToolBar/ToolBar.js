@@ -18,21 +18,13 @@ class ToolBar extends Component {
   }
 
   componentDidMount(){
-    const toolbarMaxWidth =
-    getCoordinates(this.mainFiltersGroupRef).offsetWidth +
-    getCoordinates(this.PaginationRef).offsetWidth +
-    getCoordinates(this.TitleRef).offsetWidth + 50;
+    let toolbarMaxWidth = 150;
+    toolbarMaxWidth += this.mainFiltersGroupRef ? getCoordinates(this.mainFiltersGroupRef).offsetWidth : 0;
+    toolbarMaxWidth += this.PaginationRef ? getCoordinates(this.PaginationRef).offsetWidth : 0;
+    toolbarMaxWidth += this.TitleRef ? getCoordinates(this.TitleRef).offsetWidth : 0;
     this.setState({toolbarMaxWidth}, this.updateDimensions);
     window.addEventListener("resize", debounce(this.updateDimensions, _DEBOUNCE));
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   const toolbarMaxWidth =
-  //   getCoordinates(this.mainFiltersGroupRef).offsetWidth +
-  //   getCoordinates(this.PaginationRef).offsetWidth +
-  //   getCoordinates(this.TitleRef).offsetWidth + 150;
-  //   this.setState({toolbarMaxWidth}, this.updateDimensions);
-  // }
 
   componentWillUnmount() {
       window.removeEventListener("resize", this.updateDimensions);
