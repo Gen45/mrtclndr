@@ -170,11 +170,11 @@ class ToolBar extends Component {
         { this.state.collapsed && <hr/> }
 
         <FilterCategory>
-          <Trigger caption='Toggle past events' propState={this.props.vigency.past} propStateValue={true} icon='nc-icon-mini arrows-2_cross-left'
+          <Trigger caption='Toggle past events' propState={this.props.vigency.past} propStateValue={true} icon='nc-icon-mini design_align-right'
             payload={() => this.props.updateState({vigency:{...this.props.vigency, past: !this.props.vigency.past}}, true)}/>
-          <Trigger caption='Toggle current events' propState={this.props.vigency.between} propStateValue={true} icon='nc-icon-mini design_window-responsive'
+          <Trigger caption='Toggle current events' propState={this.props.vigency.between} propStateValue={true} icon='nc-icon-mini design_align-center-horizontal'
             payload={() => this.props.updateState({vigency:{...this.props.vigency, between: !this.props.vigency.between}}, true)}/>
-          <Trigger caption='Toggle future events' propState={this.props.vigency.future} propStateValue={true} icon='nc-icon-mini arrows-2_cross-right'
+          <Trigger caption='Toggle future events' propState={this.props.vigency.future} propStateValue={true} icon='nc-icon-mini design_align-left'
             payload={() => this.props.updateState({vigency:{...this.props.vigency, future: !this.props.vigency.future}}, true)}/>
         </FilterCategory>
 
