@@ -56,7 +56,7 @@ class ToolBar extends Component {
       <FiltersGroup ref={FiltersGroup => this.mainFiltersGroupRef = FiltersGroup}
         title='Settings' icon='nc-icon-mini ui-1_settings-gear-65' disabled={this.props.search.active} collapsed={this.state.collapsed} >
         <FilterCategory>
-          <TriggerBox title='Date' icon='nc-icon-mini ui-1_calendar-60' width={270} renderChildren={true} align='left'>
+          <TriggerBox title='Time Frame' icon='nc-icon-mini ui-1_calendar-60' width={270} renderChildren={true} align='left'>
             <div className='group'>
               <h4>MODE</h4>
               <Trigger propState={this.props.time.mode} propStateValue='Y'
@@ -137,7 +137,6 @@ class ToolBar extends Component {
         { this.state.collapsed && <hr/> }
 
         <FilterCategory>
-          {/* <TriggerBox title='Sort' icon='nc-icon-mini design_bullet-list-67'> */}
           <TriggerBox title='Sort / Order' icon='nc-icon-mini arrows-2_direction' width={300} renderChildren={true} align='left'>
             <div className="group">
               <h4>Sort by</h4>
@@ -194,7 +193,6 @@ class ToolBar extends Component {
           <Trigger caption='Starred items' propState={this.props.starred.show} propStateValue={true} icon='nc-icon-mini nc-icon-mini health_heartbeat-16'
             payload={() => this.props.updateState({starred:{...this.props.starred, show: !this.props.starred.show}}, true)}/>
         </FilterCategory>
-
       </FiltersGroup>
 
       <FiltersGroup title=' ' icon='nc-icon-mini ui-1_zoom' disabled={true}>
