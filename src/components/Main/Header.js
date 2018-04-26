@@ -4,7 +4,7 @@ class Header extends Component {
 
   render() {
 
-    // const fullscreenButtonOffset = this.props.collapsed ? 120 : 10;
+    const fullscreenButtonOffset = this.props.collapsed ? 120 : 10;
 
     return (<header className="header" role="banner">
       <div className="logo">
