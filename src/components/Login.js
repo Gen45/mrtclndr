@@ -1,42 +1,27 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router-dom'
-
-// const fakeAuth = {
-//   isAuthenticated: false,
-//   authenticate(cb) {
-//     this.isAuthenticated = true
-//     setTimeout(cb, 100)
-//   },
-//   signout(cb) {
-//     this.isAuthenticated = false
-//     setTimeout(cb, 100)
-//   }
-// }
 
 class Login extends Component {
 
   state = {
-    redirectToReferrer: false,
-    passCode: 'hola'
+    passCode: 'hola',
+    error: false
   }
 
-  login = () => {
-    if(this.passCode.value === this.state.passCode){
-      this.setState(() => ({redirectToReferrer: true}))
-    }
+  componentWillMount() {
+    console.log(this.props);
   }
+
+  login = (e) => {
+    e.preventDefault();
+    if(this.passCode.value === this.state.passCode){
+      this.setState({error : false});
+      this.props.history.push('/', {isAuthenticated : true});
+    } else {
+      this.setState({error : true});
+    }
+  };
 
   render() {
-    const {from} = this.props.location.state || {
-      from: {
-        pathname: '/'
-      }
-    }
-    const {redirectToReferrer} = this.state
-
-    if (redirectToReferrer === true) {
-      <Redirect to={{ pathname: '/', state: { isAuthenticated: true } }}/>
-    }
 
     return (
     <div className="login-form">
@@ -44,11 +29,13 @@ class Login extends Component {
         <img src="images/logo.svg" alt="Marriott Logo"/>
       </div>
       <h1>Please enter your pass code:</h1>
-      <form>
+      <form onSubmit={(e) => this.login(e)}>
         <input ref={(input) => this.passCode = input} type="password" name="code"/>
-        <button type="button" onClick={this.login}>
+        <button type="submit" className={this.state.error === true ? 'error' : ''}>
           <i className="nc-icon-outline arrows-1_tail-right"></i>
         </button>
+          <p style={{paddingTop: 20}}>{this.state.error ? 'Please enter a valid Code' : <br/>}</p>
+
       </form>
     </div>)
   }

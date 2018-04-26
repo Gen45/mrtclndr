@@ -15,7 +15,7 @@ import {_ISMOBILE, _BACKGROUNDIMAGE} from '../config/constants';
 
 // HELPERS
 import {getExtreme, getTimeRange, today, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
-import {isValid} from '../helpers/misc';
+import {isValid, isValidAndTrue} from '../helpers/misc';
 
 // LOCAL COMPONENTS
 import Header from './Main/Header';
@@ -31,8 +31,15 @@ class App extends Component {
   events = eventsData();
 
   componentWillMount() {
-    // const match = this.props.match;
-    // console.log(match);
+
+    if(isValid(this.props.location.state)) {
+      if(this.props.location.state.isAuthenticated === false) {
+        this.props.history.push('/login', {isAuthenticated : false});
+      }
+    } else {
+      this.props.history.push('/login', {isAuthenticated : false});
+    }
+
     const localStorageRef = localStorage.getItem('marriott-calendar');
     if (localStorageRef) {
       this.setState({...JSON.parse(localStorageRef)}, () => this.updateEventList(this.events));
@@ -53,6 +60,11 @@ class App extends Component {
     // const ENCODED = btoa(unescape(encodeURIComponent(JSON.stringify(stateNoEvents))));
     // console.log(ENCODED.length);
   }
+
+  logout = () => {
+    // console.log('should logout')
+    this.props.history.push('/login', {isAuthenticated : false});
+  };
 
   activeFilter = filterType => Object.keys(filterType).filter((f, i) => filterType[f] === true);
 
@@ -123,8 +135,6 @@ class App extends Component {
 
   render() {
 
-    console.log(this.props)
-
     let time = !_ISMOBILE() ? this.state.time : {...this.state.time, numberOfYears: 1 };
         time = time.Y === (_PREVIOUSYEAR - 1) && (this.state.view === 'timeline' || time.mode !== 'Y') ? {...time, Y: _CURRENTYEAR} : time;
 
@@ -136,7 +146,7 @@ class App extends Component {
       <div className={appClass()}>
       <main id="main" className="main" role="main">
 
-        <Header collapsed={this.state.sidebar.collapsed}/>
+        <Header collapsed={this.state.sidebar.collapsed} logout={this.logout} />
 
         <div className="content-frame" style={{backgroundImage: `url(${_BACKGROUNDIMAGE})`}}>
           <div className={`content ${this.state.view}-view`}>

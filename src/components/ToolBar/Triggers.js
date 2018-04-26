@@ -51,7 +51,7 @@ export class Trigger extends Component {
   handleClick = payload => payload();
 
   render() {
-    const triggerClass = this.props.triggerClass || 'toolbar-trigger';
+    const triggerClass = this.props.triggerClass || 'nav-trigger';
     const active = this.isActive(this.props.propState, this.props.propStateValue);
     const icon = active === 'active' && this.props.iconActive
       ? this.props.iconActive
