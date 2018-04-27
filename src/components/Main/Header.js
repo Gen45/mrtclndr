@@ -8,12 +8,12 @@ class Header extends Component {
 
     return (<header className="header" role="banner">
       <div className="logo">
-        <img src="images/logo.svg" alt="Marriott Logo"/>
+        <img src="/images/logo.svg" alt="Marriott Logo"/>
       </div>
       <h1 className="title">Calendar</h1>
       <a onClick={this.props.logout}
-        style={{height: 50, width: 50, lineHeight: '50px', verticalAlign: 'middle', position: 'absolute', right: fullscreenButtonOffset, top: 0, textAlign: 'center', cursor: 'pointer' }}>
-        <i className="nc-icon-outline arrows-1_log-out"/>
+        style={{height: 50, width: 120, whiteSpace: 'nowrap', lineHeight: '50px', verticalAlign: 'middle', position: 'absolute', right: fullscreenButtonOffset, top: 0, textAlign: 'center', cursor: 'pointer' }}>
+        <i className="nc-icon-outline arrows-1_log-out"/> Log out
       </a>
     </header>)
   }

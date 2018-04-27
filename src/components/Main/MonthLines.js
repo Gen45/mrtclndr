@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import debounce from 'lodash/debounce';
 import {today, day, daysInMonth, add, yearsMonths, months, years} from '../../helpers/dates';
 
-import {_COLORS, _SIDEBAR, _DEBOUNCE} from '../../config/constants';
+import {_COLORS, _SIDEBAR} from '../../config/constants';
 
 const TodayLine = props => <span className="line-today" style={{
     left: props.position
@@ -44,7 +43,7 @@ export class MonthBar extends Component {
 
   componentWillMount() {
     this.setState({yearsMonths: yearsMonths(years(this.props.time), months(this.props.time))}, this.updateDimensions);
-    window.addEventListener("resize", debounce(this.updateDimensions, _DEBOUNCE));
+    window.addEventListener("resize", this.updateDimensions);
   }
 
   updateDimensions = () => {

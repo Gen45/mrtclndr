@@ -3,7 +3,7 @@ import brandsInfo from '../../config/brands.json';
 
 const Brand = (props) =>
   <span className={`brand ${props.brand}`} title={props.brandInfo["name"]}>
-    <img src={`images/brands/brand_${props.brand}.svg`} alt={props.brandInfo["name"]} />
+    <img src={props.brandInfo["image"]} alt={props.brandInfo["name"]} />
   </span>
 
 

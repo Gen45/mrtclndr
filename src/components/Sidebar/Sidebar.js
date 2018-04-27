@@ -28,12 +28,14 @@ class Sidebar extends Component {
           this.handleCollapse();
         }}>
         <span className="icon">
-          <i className="nc-icon-outline arrows-1_tail-right"></i>
+          <i className="nc-icon-outline ui-2_menu-square"></i>
         </span>
         <h3>Filters</h3>
         <span className={`toggle-status ${this.props.collapsed
             ? 'collapsed'
-            : ''}`}></span>
+            : ''}`}>
+
+        </span>
       </header>
 
         <div className="nano">

@@ -1,21 +1,40 @@
 import React, {Component} from 'react';
 
+import {isValid} from '../helpers/misc';
+
 class Login extends Component {
 
   state = {
-    passCode: 'hola',
     error: false
   }
 
-  componentWillMount() {
-    console.log(this.props);
+  passCodes = {" " : 'ALL', "Mrt16!" : 'ALL', "WEST17!" : 'US-WEST', "east17!" : 'US-EAST', "Canada!!" : 'CANADA', "Cala17!" : 'CALA'};
+
+  componentDidMount(){
+    if(this.props.location.state.from){
+      this.from = [this.props.location.state.from, ...this.disectFrom(this.props.location.state.from)];
+      // console.log(this.from);
+    } else {
+      this.from = ['/', '', ''];
+    }
   }
+
+  disectFrom = from => from.split('/').splice(1, 2);
 
   login = (e) => {
     e.preventDefault();
-    if(this.passCode.value === this.state.passCode){
+
+    const codeIndex = Object.keys(this.passCodes).indexOf(this.passCode.value);
+    const preset = Object.values(this.passCodes)[codeIndex];
+
+    if(codeIndex > -1){
       this.setState({error : false});
-      this.props.history.push('/', {isAuthenticated : true});
+      const configKey = isValid(this.from)
+        ? this.from[1].toUpperCase() === preset
+          ? this.from[2]
+          : ''
+        : '';
+      this.props.history.push(this.from[0], {isAuthenticated: true, preset, configKey});
     } else {
       this.setState({error : true});
     }
@@ -26,11 +45,11 @@ class Login extends Component {
     return (
     <div className="login-form">
       <div className="logo">
-        <img src="images/logo.svg" alt="Marriott Logo"/>
+        <img src="/images/logo.svg" alt="Marriott Logo"/>
       </div>
       <h1>Please enter your pass code:</h1>
       <form onSubmit={(e) => this.login(e)}>
-        <input ref={(input) => this.passCode = input} type="password" name="code"/>
+        <input ref={(input) => this.passCode = input} type="password" name="code" autoComplete="passCode" />
         <button type="submit" className={this.state.error === true ? 'error' : ''}>
           <i className="nc-icon-outline arrows-1_tail-right"></i>
         </button>

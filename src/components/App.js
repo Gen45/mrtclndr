@@ -9,13 +9,14 @@ import 'react-tippy/dist/tippy.css';
 // DATA
 import eventsData from '../config/eventsData';
 import defaultState from '../config/defaultState.json';
+import base from '../config/base';
 
 // CONSTANTS
-import {_ISMOBILE, _BACKGROUNDIMAGE} from '../config/constants';
+import {_BASEURL, _ISMOBILE, _BACKGROUNDIMAGES} from '../config/constants';
 
 // HELPERS
 import {getExtreme, getTimeRange, today, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
-import {isValid, isValidAndTrue} from '../helpers/misc';
+import {isValid, keyGenerator} from '../helpers/misc';
 
 // LOCAL COMPONENTS
 import Header from './Main/Header';
@@ -31,40 +32,78 @@ class App extends Component {
   events = eventsData();
 
   componentWillMount() {
-
+    const from = this.props.location.pathname;
     if(isValid(this.props.location.state)) {
       if(this.props.location.state.isAuthenticated === false) {
-        this.props.history.push('/login', {isAuthenticated : false});
+        this.props.history.push('/login', { from });
+      } else {
+        this.preset = this.props.location.state.preset;
       }
     } else {
-      this.props.history.push('/login', {isAuthenticated : false});
+      this.props.history.push('/login', { from });
     }
 
-    const localStorageRef = localStorage.getItem('marriott-calendar');
+    const preset = this.preset || 'ALL';
+    this.preset = preset;
+
+    let regions = {};
+    regions[preset] = true;
+    const state = preset !== 'ALL' ? {...defaultState, regions } : defaultState;
+
+    const localStorageRef = localStorage.getItem('marriott-calendar-' + preset);
     if (localStorageRef) {
+      this.stateString = localStorageRef;
       this.setState({...JSON.parse(localStorageRef)}, () => this.updateEventList(this.events));
     } else {
-        this.setState({...defaultState}, () => this.updateEventList(this.events));
+      this.setState({...state}, () => this.updateEventList(this.events));
     }
+
+    this.firebaseShortLinksref = base.syncState('shortLinks', {
+      context: this,
+      state: "shortLinks"
+    });
+  }
+
+  componentWillUnmount() {
+    base.removeBinding(this.firebaseShortLinksref);
   }
 
   componentDidUpdate() {
-      const {
-        events,
-        ...stateNoEvents
-      } = this.state;
+    const {
+      events,
+      shortLinks,
+      ...configurations
+    } = this.state;
+
+    this.stateString = JSON.stringify(configurations);
     localStorage.setItem(
-      'marriott-calendar',
-      JSON.stringify(stateNoEvents)
+      'marriott-calendar-' + this.preset,
+      this.stateString
     );
-    // const ENCODED = btoa(unescape(encodeURIComponent(JSON.stringify(stateNoEvents))));
-    // console.log(ENCODED.length);
   }
 
-  logout = () => {
-    // console.log('should logout')
-    this.props.history.push('/login', {isAuthenticated : false});
+  getShareableLink = () => {
+    const encodedState = btoa(this.stateString);
+    let shortLinks = this.state.shortLinks;
+    shortLinks[this.preset] = isValid(shortLinks[this.preset])
+      ? shortLinks[this.preset]
+      : {};
+    let index = Object.values(shortLinks[this.preset]).indexOf(encodedState);
+    let key = '';
+    if (index < 0) {
+      do {
+        key = keyGenerator(5);
+      } while (isValid(shortLinks[this.preset][key]));
+
+      shortLinks[this.preset][key] = encodedState;
+      this.setState({shortLinks})
+    } else {
+      key = Object.keys(shortLinks[this.preset])[index];
+    }
+    return `${_BASEURL}/${this.preset.toLowerCase()}/${key}`;
   };
+
+  logout = () => this.props.history.push('/login', {});
 
   activeFilter = filterType => Object.keys(filterType).filter((f, i) => filterType[f] === true);
 
@@ -93,7 +132,7 @@ class App extends Component {
 
     // SHOULD UPDATE?
     if (update === false ? false : true) {
-      this.setState({events, ready: true});
+      this.updateState({events, ready: true}, false);
     }
 
     // RETURN NUMBER OF EVENTS
@@ -111,12 +150,12 @@ class App extends Component {
     });
   };
 
-  updateState = (newState, update) => {
+  updateState = (newState, updateEvents) => {
     this.setState({
       ...this.state,
       ...newState
     }, () => {
-      if (update) {
+      if (updateEvents) {
         this.updateEventList(this.events);
       }
     });
@@ -125,7 +164,6 @@ class App extends Component {
   updateFilter = (filter, filterName, active) => {
     let filters = this.state[filterName];
     filters[filter] = active;
-    this.setState({filterName});
     this.updateEventList(this.events);
   };
 
@@ -148,7 +186,7 @@ class App extends Component {
 
         <Header collapsed={this.state.sidebar.collapsed} logout={this.logout} />
 
-        <div className="content-frame" style={{backgroundImage: `url(${_BACKGROUNDIMAGE})`}}>
+        <div className="content-frame" style={{backgroundImage: `url(${_BACKGROUNDIMAGES.IMAGES[0]})`}}>
           <div className={`content ${this.state.view}-view`}>
 
             <ToolBar
@@ -160,6 +198,7 @@ class App extends Component {
               updateEventOrder={this.updateEventOrder}
               starred={this.state.starred}
               search={this.state.search}
+              getShareableLink={this.getShareableLink}
             />
 
             <div className={`overlay${this.state.modal.show ? ' active' : ''}`}/>

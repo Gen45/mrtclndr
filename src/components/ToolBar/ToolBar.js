@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import debounce from 'lodash/debounce';
 
 import Title from './Title';
 import Pagination from './Pagination';
@@ -9,7 +8,7 @@ import {TriggerBox, Trigger} from './Triggers';
 import {getCoordinates} from '../../helpers/misc';
 
 import {_MONTHS, _QUARTERS, _THREEYEARS, _PREVIOUSYEAR, _CURRENTYEAR, _TIMELIMITS} from '../../helpers/dates';
-import {_ISMOBILE, _DEBOUNCE} from '../../config/constants';
+import {_ISMOBILE} from '../../config/constants';
 
 class ToolBar extends Component {
 
@@ -23,7 +22,7 @@ class ToolBar extends Component {
     toolbarMaxWidth += this.PaginationRef ? getCoordinates(this.PaginationRef).offsetWidth : 0;
     toolbarMaxWidth += this.TitleRef ? getCoordinates(this.TitleRef).offsetWidth : 0;
     this.setState({toolbarMaxWidth}, this.updateDimensions);
-    window.addEventListener("resize", debounce(this.updateDimensions, _DEBOUNCE));
+    window.addEventListener("resize", this.updateDimensions);
   }
 
   componentWillUnmount() {
@@ -164,6 +163,25 @@ class ToolBar extends Component {
               payload={() => this.props.updateEventOrder({sortBy: this.props.sortBy, orderBy: ['desc','desc','desc'], orderDirection: 'DESCENDING'})}>
               DESCENDING
             </Trigger>
+          </TriggerBox>
+        </FilterCategory>
+
+        { this.state.collapsed && <hr/> }
+
+        <FilterCategory disabled={false}>
+          <TriggerBox title='Download' icon='nc-icon-mini arrows-1_download' width={200} renderChildren={true} align='left'>
+            <div className="group">
+              <h4>File</h4>
+              {/* <Trigger icon='nc-icon-mini ui-1_calendar-57'
+                payload={() => this.props.updateEventOrder({sortBy: ['earliestDay','offer','region'], orderBy: this.props.orderBy, groupByType: 'date'})}>
+                PDF
+              </Trigger> */}
+              {/* <br/> */}
+              <Trigger icon=''
+                payload={() => console.log(this.props.getShareableLink())}>
+                Share Link
+              </Trigger>
+            </div>
           </TriggerBox>
         </FilterCategory>
 

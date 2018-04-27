@@ -284,16 +284,16 @@
     @media screen and (min-width: 750px) and (max-width: 939px) {
       width: calc(100% / 2 - #{$padding});
     }
-    @media screen and (min-width: 940px) and (max-width: 1149px) {
+    @media screen and (min-width: 940px) and (max-width: 1319px) {
       width: calc(100% / 2 - #{$padding});
     }
-    @media screen and (min-width: 1150px) and (max-width: 1449px) {
+    @media screen and (min-width: 1320px) and (max-width: 1619px) {
       width: calc(100% / 3 - #{$padding});
     }
-    @media screen and (min-width: 1450px) and (max-width: 1799px) {
+    @media screen and (min-width: 1620px) and (max-width: 1989px) {
       width: calc(100% / 4 - #{$padding});
     }
-    @media screen and (min-width: 1800px) and (max-width: 2199px) {
+    @media screen and (min-width: 1990px) and (max-width: 2199px) {
       width: calc(100% / 5 - #{$padding});
     }
     @media screen and (min-width: 2200px) and (max-width: 9000px) {

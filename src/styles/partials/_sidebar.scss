@@ -151,7 +151,7 @@
         &.collapsed {
             > header {
                 &:after {
-                    transform: rotate(-180deg);
+                    // transform: rotate(-180deg);
                 }
             }
             & > .content {
@@ -193,7 +193,7 @@
     }
     > header {
         .collapsed & {
-            background: $color-black;
+            background: darken($color-darker-gray, 5);
             width: $sidebar-expanded + 100px;
             transform: translateX(-125px);
             // transition: $transition-time ease;
