@@ -70,11 +70,11 @@ class App extends Component {
         // console.log(location, this.state.shortLinks, this.state.shortLinks);
           if(location.key !== ''){
             const decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.preset][location.key]))));
-            console.log(decodedState);
+            // console.log(decodedState);
             // this.updateState({...this.state.events, decodedState}, true);
             this.updateState({...this.state, ...decodedState, ready: true}, true);
           } else {
-            console.log('gua')
+            // console.log('gua')
             this.updateState({ready: true}, true);
           }
       }
@@ -232,7 +232,7 @@ class App extends Component {
               <MonthLines time={time}/>
               <Scrollbars thumbMinSize={100} universal={true} style={{
                   height: '100%'
-                }}>
+                }} autoHide={true}>
               {
                 this.state.ready && this.state.events ?
                 <EventsWrapper

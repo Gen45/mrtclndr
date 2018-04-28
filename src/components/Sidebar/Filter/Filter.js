@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {_LOGO} from '../../../config/constants';
+// import {_LOGO} from '../../../config/constants';
 
 // COMPONENTS
 import Header from './Header';

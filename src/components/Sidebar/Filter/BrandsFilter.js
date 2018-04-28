@@ -81,9 +81,9 @@ class BrandsFilter extends Component {
                 <div className="brand-filters">
 
                   <ResizableBox width={280} height={255} minConstraints={[0, 0]} axis='y'>
-                    <Scrollbars thumbMinSize={100} universal={true} style={{
+                    <Scrollbars thumbMinSize={50} universal={true} style={{
                         height: 100 + '%'
-                      }}>
+                      }} autoHide={true}>
 
                       {
                         Object.keys(filterCategories).map((c, i) => {
