@@ -13,7 +13,7 @@ class Header extends Component {
         </div>
         <h1 className="title">Calendar</h1>
         <a className="logout" onClick={this.props.logout}>
-          {/* <i className="nc-icon-outline arrows-2_circle-out" />  */}
+          <i className="nc-icon-outline media-1_button-power" style={{marginRight: 10}} /> 
           Log Out
         </a>
       </header>

@@ -141,9 +141,10 @@
         opacity: 0;
         transform: scale(0.5);
         transition: opacity $transition-time/2;
+        z-index: 1000;
 
         &:after {
-          content: '\e99d';
+          content: '\e9c5';
           position: absolute;
           bottom: 0;
           right: 0;
@@ -218,7 +219,7 @@
         white-space: nowrap;
         text-transform: uppercase;
         // color: $color-medium-gray;
-        font-weight: 400;
+        // font-weight: 400;
         font-size: 18px;
 
         > span > span {
@@ -374,7 +375,7 @@
 .event-info {
   .activity {
     margin-bottom: $padding/2;
-    font-weight: 400;
+    // font-weight: 400;
 
     > div {
       // flex-grow: 1;

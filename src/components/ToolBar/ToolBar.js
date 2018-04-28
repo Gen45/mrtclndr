@@ -144,7 +144,7 @@ class ToolBar extends Component {
           <TriggerBox title='Sort / Order' icon='nc-icon-mini arrows-2_direction' width={300} renderChildren={true} align='left'>
             <div className="group">
               <h4>Sort by</h4>
-              <Trigger propState={this.props.groupByType} propStateValue='date' icon='nc-icon-mini ui-1_calendar-57'
+              <Trigger propState={this.props.groupByType} propStateValue='date' icon='nc-icon-outline ui-1_calendar-57'
                 payload={() => this.props.updateEventOrder({sortBy: ['earliestDay','offer','region'], orderBy: this.props.orderBy, groupByType: 'date'})}>
                 DATE
               </Trigger>

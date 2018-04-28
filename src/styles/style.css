@@ -1059,7 +1059,7 @@ body.linted .timeline-view .event {
 
 .PAST-EVENT {
   filter: grayscale(40%);
-  opacity: 0.6; }
+  opacity: 0.8; }
 
 body.activity-type .activity-type-group {
   position: relative;
@@ -1185,9 +1185,10 @@ body.activity-type .activity-type-group {
         cursor: pointer;
         opacity: 0;
         transform: scale(0.5);
-        transition: opacity 0.075s; }
+        transition: opacity 0.075s;
+        z-index: 1000; }
         .grid-view .event .event-info .more:after {
-          content: '\e99d';
+          content: '\e9c5';
           position: absolute;
           bottom: 0;
           right: 0;
@@ -1235,7 +1236,6 @@ body.activity-type .activity-type-group {
         text-align: center;
         white-space: nowrap;
         text-transform: uppercase;
-        font-weight: 400;
         font-size: 18px; }
         .grid-view .event .event-dates .end > span > span,
         .grid-view .event .event-dates .start > span > span {
@@ -1350,8 +1350,7 @@ body.activity-type .activity-type-group {
     cursor: pointer; }
 
 .event-info .activity {
-  margin-bottom: 10px;
-  font-weight: 400; }
+  margin-bottom: 10px; }
   .event-info .activity > div {
     text-align: right; }
     .event-info .activity > div .label-dot {
