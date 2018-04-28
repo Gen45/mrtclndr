@@ -24,11 +24,11 @@ class BrandsFilter extends Component {
     this.props.updateFilter(filter, this.props.filterName, event.target.checked);
   };
 
-  batchChange = (active) => {
-    for (let filter in this.props.filters) {
-      this.props.updateFilter(filter, this.props.filterName, active);
-    }
-  };
+  // batchChange = (active) => {
+  //   for (let filter in this.props.filters) {
+  //     this.props.updateFilter(filter, this.props.filterName, active);
+  //   }
+  // };
 
   handleCollapse = () => {
     const collapsed = !this.state.collapsed;
@@ -49,64 +49,71 @@ class BrandsFilter extends Component {
     const filterCategories = this.props.filterCategories;
     const filters = this.props.filters;
 
+
     return (<div className={`filter ${this.state.collapsed
-        ? 'collapsed'
-        : ''} filter-wrap-${this.props.filterName}`}>
+                ? 'collapsed'
+                : ''} filter-wrap-${this.props.filterName}`}>
 
-      <Header handleCollapse={this.handleCollapse} icon={this.props.icon} title={this.props.title}/>
+              <Header handleCollapse={this.handleCollapse} icon={this.props.icon} title={this.props.title}/>
 
-      <div className="content">
-        <div className="brand-cat-filters">
-          <div className="input-icon">
-            <input id="search_brand_box" ref={(input) => this.search = input} className="search-box rounded" type="text" placeholder="Brand Search" onChange={(e) => {
-                this.handleSearch(e, this.search)
-              }} />
-              {
-                isValid(this.state.keyPhrase) ?
-                <i className="nc-icon-mini ui-1_circle-remove" onClick={ () => {this.handleClearSearch()}}  style={{cursor: 'pointer'}}/> :
-                <i className="nc-icon-mini ui-1_zoom" />
-              }
-          </div>
-        </div>
+              <div className="content">
+                <div className="brand-cat-filters">
+                  <div className="input-icon">
+                    <input id="search_brand_box" ref={(input) => this.search = input} className="search-box rounded" type="text" placeholder="Brand Search" onChange={(e) => {
+                        this.handleSearch(e, this.search)
+                      }}/> {
+                      isValid(this.state.keyPhrase)
+                        ? <i className="nc-icon-mini ui-1_circle-remove" onClick={() => {
+                              this.handleClearSearch()
+                            }} style={{
+                              cursor: 'pointer'
+                            }}/>
+                        : <i className="nc-icon-mini ui-1_zoom"/>
+                    }
+                  </div>
+                </div>
 
-        {/* <FilterCategory category={"ALL"}/>
+                {/* <FilterCategory category={"ALL"}/>
           {Object.keys(filterCategories).map((r, i) => <FilterCategory key={i} category={filterCategories[r]["name"].toUpperCase()}/>)}
         </div> */
-        }
+                }
 
-        <div className="brand-filters">
+                <div className="brand-filters">
 
-          <ResizableBox width={280} height={255} minConstraints={[0, 0]} axis='y'>
-            <Scrollbars thumbMinSize={100} universal={true} style={{
-                height: 100 + '%'
-              }}>
+                  <ResizableBox width={280} height={255} minConstraints={[0, 0]} axis='y'>
+                    <Scrollbars thumbMinSize={100} universal={true} style={{
+                        height: 100 + '%'
+                      }}>
 
-              {
-                Object.keys(filterCategories).map((c, i) => {
-                  const keyPhrase = this.state.keyPhrase !== "" && isValid(this.state.keyPhrase) ? this.state.keyPhrase : '';
-                  // const validKeyPhrase = this.props.filterInfo[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
+                      {
+                        Object.keys(filterCategories).map((c, i) => {
+                          const keyPhrase = this.state.keyPhrase !== "" && isValid(this.state.keyPhrase)
+                            ? this.state.keyPhrase
+                            : '';
+                          // const validKeyPhrase = this.props.filterInfo[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
 
-                  const isInSearch = filterCategories[c]["brands"].map((b, i) => this.props.filterInfo[b]["name"]).join('').toUpperCase().indexOf(keyPhrase) > -1
-                    ? true
-                    : false;
+                          const isInSearch = filterCategories[c]["brands"].map((b, i) => this.props.filterInfo[b]["name"]).join('').toUpperCase().indexOf(keyPhrase) > -1
+                            ? true
+                            : false;
 
-                  return isInSearch || keyPhrase === "" || keyPhrase === undefined
-                    ? <div key={i} id={filterCategories[c]["name"].toUpperCase()} className="brand-category">
-                        <h4><span>{filterCategories[c]["name"]}</span> </h4>
-                        <Content filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} filterInfo={this.props.filterInfo} handleChange={this.handleChange} inner={true} keyPhrase={keyPhrase} tooltips={this.props.tooltips} TooltipTheme='dark'>
-                        </Content>
-                      </div>
-                    : null
-                })
-              }
+                          return isInSearch || keyPhrase === "" || keyPhrase === undefined
+                            ? <div key={i} id={filterCategories[c]["name"].toUpperCase()} className="brand-category">
+                                <h4>
+                                  <span>{filterCategories[c]["name"]}</span>
+                                </h4>
+                                <Content filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} filterInfo={this.props.filterInfo} handleChange={this.handleChange} inner={true} keyPhrase={keyPhrase} tooltips={this.props.tooltips} TooltipTheme='dark'></Content>
+                              </div>
+                            : null
+                        })
+                      }
 
-            </Scrollbars>
-          </ResizableBox>
-        </div>
+                    </Scrollbars>
+                  </ResizableBox>
+                </div>
 
-      </div>
-      <Footer filterName={filterName} batchChange={this.batchChange}/>
-    </div>)
+              </div>
+              <Footer filterName={this.props.filterName} filters={this.props.filters} batchChange={this.props.batchChange}/>
+            </div>)
   }
 }
 

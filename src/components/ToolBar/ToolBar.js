@@ -22,11 +22,16 @@ class ToolBar extends Component {
     toolbarMaxWidth += this.PaginationRef ? getCoordinates(this.PaginationRef).offsetWidth : 0;
     toolbarMaxWidth += this.TitleRef ? getCoordinates(this.TitleRef).offsetWidth : 0;
     this.setState({toolbarMaxWidth}, this.updateDimensions);
+
     window.addEventListener("resize", this.updateDimensions);
   }
 
   componentWillUnmount() {
       window.removeEventListener("resize", this.updateDimensions);
+  }
+
+  componentWillReceiveProps(props, nextProps) {
+    this.updateDimensions();
   }
 
   updateDimensions = () => {
@@ -208,7 +213,7 @@ class ToolBar extends Component {
         { this.state.collapsed && <hr/> }
 
         <FilterCategory>
-          <Trigger caption='Starred items' propState={this.props.starred.show} propStateValue={true} icon='nc-icon-mini nc-icon-mini health_heartbeat-16'
+          <Trigger caption='Starred items' propState={this.props.starred.show} propStateValue={true} icon='nc-icon-mini ui-2_favourite-31'
             payload={() => this.props.updateState({starred:{...this.props.starred, show: !this.props.starred.show}}, true)}/>
         </FilterCategory>
       </FiltersGroup>

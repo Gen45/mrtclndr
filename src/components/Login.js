@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import {isValid} from '../helpers/misc';
+import {_LOGO, _PASSCODES} from '../config/constants';
 
 class Login extends Component {
 
@@ -8,14 +9,12 @@ class Login extends Component {
     error: false
   }
 
-  passCodes = {" " : 'ALL', "Mrt16!" : 'ALL', "WEST17!" : 'US-WEST', "east17!" : 'US-EAST', "Canada!!" : 'CANADA', "Cala17!" : 'CALA'};
-
   componentDidMount(){
     if(this.props.location.state.from){
-      this.from = [this.props.location.state.from, ...this.disectFrom(this.props.location.state.from)];
+      this.from = {path: this.props.location.state.from, preset: this.disectFrom(this.props.location.state.from)[0] || '', key: this.disectFrom(this.props.location.state.from)[1] || ''};
       // console.log(this.from);
     } else {
-      this.from = ['/', '', ''];
+      this.from = {path: '/', preset: '', key: ''};
     }
   }
 
@@ -24,17 +23,17 @@ class Login extends Component {
   login = (e) => {
     e.preventDefault();
 
-    const codeIndex = Object.keys(this.passCodes).indexOf(this.passCode.value);
-    const preset = Object.values(this.passCodes)[codeIndex];
+    const codeIndex = Object.keys(_PASSCODES).indexOf(this.passCode.value);
+    const preset = Object.values(_PASSCODES)[codeIndex];
 
     if(codeIndex > -1){
       this.setState({error : false});
-      const configKey = isValid(this.from)
-        ? this.from[1].toUpperCase() === preset
-          ? this.from[2]
+      const key = isValid(this.from)
+        ? this.from.preset.toUpperCase() === preset
+          ? this.from.key
           : ''
         : '';
-      this.props.history.push(this.from[0], {isAuthenticated: true, preset, configKey});
+      this.props.history.push(this.from.path, {isAuthenticated: true, preset, key});
     } else {
       this.setState({error : true});
     }
@@ -45,7 +44,7 @@ class Login extends Component {
     return (
     <div className="login-form">
       <div className="logo">
-        <img src="/images/logo.svg" alt="Marriott Logo"/>
+        <img src={_LOGO.URL} alt={_LOGO.ALT}/>
       </div>
       <h1>Please enter your pass code:</h1>
       <form onSubmit={(e) => this.login(e)}>

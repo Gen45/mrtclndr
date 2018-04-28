@@ -43,7 +43,7 @@
     .content {
         position: relative;
         height: calc( 100vh - (2 * #{$padding}) - #{$header-height});
-        background: rgba($color-dark-gray, 0.90);
+        background: rgba($color-dark-gray, 0.85);
         box-shadow: 0 0 10px rgba($color-black, 0.5);
         border-radius: 10px;
         overflow: hidden;
@@ -54,6 +54,7 @@
             padding: 0 $padding;
             display: flex;
             align-items: center;
+            border-bottom: 1px solid $color-darker-gray;
             justify-content: space-between;
             height: $content-header-height;
             box-shadow: 0 2px 20px rgba($color-dark-gray, 0.8);
@@ -84,7 +85,7 @@
                 white-space: nowrap;
                 .detail {
                     font-size: 18px;
-                    color: $color-white;
+                    color: $color-lightest-gray;
                     margin-left: $padding;
                     text-transform: none;
                 }
@@ -221,11 +222,11 @@
 }
 
 .label-dot {
-  width: 10px;
-  height: 10px;
+  width: $label-dot;
+  height: $label-dot;
   display: inline-block;
   margin-right: 5px;
-  border-radius: 10px;
+  border-radius: $label-dot;
 }
 
 span.react-resizable-handle {

@@ -1,213 +1,235 @@
 .filters-group {
-    display: inline-block;
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;
+  cursor: pointer;
+
+  .nav-trigger {
+    color: $color-lightest-gray;
     position: relative;
-    white-space: nowrap;
-    cursor: pointer;
-    .nav-trigger {
-        position: relative;
-        display: inline-block;
-        font-size: 14px;
-        margin: 0 $padding/4;
-        text-transform: uppercase;
-        line-height: 1;
-        vertical-align: middle;
-        padding: $padding/4;
-        letter-spacing: 1px;
-        z-index: 10;
-        text-align: center;
-        &:after {
-            content: '';
-            position: absolute;
-            height: 2px;
-            background: transparent;
-            top: 100%;
-            width: 0;
-            left: 50%;
-            // transition: $transition-time/2;
-            z-index: -1;
-        }
-        &:hover,
-        &:active {
-            &:after {
-                background: $color-darker-gray;
-                top: calc(-#{$padding} / 4);
-                height: calc(100% + #{$padding} / 2);
-                width: calc(100% + #{$padding} / 2);
-                left: calc(-#{$padding} / 4);
-                border-radius: 2px;
-            }
-        }
-        &:active {
-            &:after {
-                background: $color-accent;
-                transition: 0;
-            }
-        }
-        &.active {
-            // text-transform: uppercase;
-            z-index: 10;
-            &:after {
-                background: $color-accent;
-                width: calc(100% - #{$padding} / 2);
-                left: $padding / 4;
-            }
-            &:hover {
-                &:after {
-                    background: $color-accent;
-                    width: calc(100% + #{$padding} / 2);
-                    left: calc(-#{$padding} / 4);
-                }
-            }
-        }
-        &.disable {
-            color: $color-medium-gray;
-        }
-    }
-    @media screen and (max-width: $desktop-min) {
-        margin: 0 2px;
-    }
-    .filter-category {
-        display: inline-block;
-        position: relative;
-        margin-left: $padding/2;
-        white-space: normal;
-
-        .inner {
-          position: relative;
-        }
-        //
-        .filter-header {
-            color: $color-medium-gray;
-            white-space: nowrap;
-            text-align: left;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            position: absolute;
-            font-size: 8px;
-            top: -17px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        &.view {
-            @media screen and (max-width: $desktop-min) {
-                position: absolute;
-                margin-left: 0;
-                top: 10px;
-                right: 20px;
-            }
-        }
-    }
-    @media screen and (max-width: $desktop-min) {
-        .nav-trigger.month {
-            margin-left: 0;
-            padding-left: 0;
-        }
-        .time-filters {
-            width: calc( 100% - 40px);
-        }
-    }
-}
-
-.trigger-box-children {
-    opacity: 1;
-    position: absolute;
-    height: auto;
-    display: block;
-    // right: -5px;
-    right: -35px;
-    // top: -5px;
-    top: -8px;
-    background: rgba(lighten($color-darker-gray, 6%), 0.97);
-    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, 0.75);
-    border-radius: 3px;
-        width: 260px;
-    padding: $padding;
-    padding-top: $padding* 2;
+    display: inline-block;
+    font-size: 14px;
+    margin: 0 $padding/4;
+    text-transform: uppercase;
+    line-height: 1;
+    vertical-align: middle;
+    padding: $padding/4;
+    letter-spacing: 1px;
+    z-index: 10;
     text-align: center;
-    z-index: 999;
-    transition: opacity 0.3s ease 0, width 0 ease 0;
-    h4 {
-        font-size: 12px;
-        margin: 5px 0;
-        color: $color-black;
-        font-weight: bold;
-        text-transform: uppercase;
-        text-align: left;
-        width: 100%;
-    }
-    br {
-        height: 5px;
-    }
-    a {
-        display: block;
-        margin-bottom: 10px !important;
-        text-transform: uppercase;
-    }
-    .group {
-      a {
-        // padding-bottom: 10px !important;
-        // margin-bottom: 0px !important;
-        min-width: 45px;
 
+    &:after {
+      content: '';
+      position: absolute;
+      height: 2px;
+      // background: transparent;
+      background: $color-darker-gray;
+      top: 50%;
+      width: 0;
+      left: 50%;
+      transition: $transition-time;
+      z-index: -1;
+    }
+
+    &:hover {
+      &:after {
+        background: $color-darker-gray;
+        top: calc(-#{$padding} / 4);
+        height: calc(100% + #{$padding} / 2);
+        width: calc(100% + #{$padding} / 2);
+        left: calc(-#{$padding} / 4);
+        border-radius: 2px;
+        border-radius: 100px;
+        transition: $transition-time;
       }
     }
 
-    hr {
-      border-color: #666;
-      border: none;
-      border-top: solid 2px #222;
-      width: calc(100% + (2 * $padding));
-      margin: 5px (-$padding) 10px;
+    &:active {
+      &:after {
+        background: $color-accent;
+        // background: $color-darker-gray;
+        top: calc(-#{$padding} / 4);
+        height: calc(100% + #{$padding} / 2);
+        width: calc(100% + #{$padding} / 2);
+        left: calc(-#{$padding} / 4);
+        // border-radius: 2px;
+        border-radius: 100px;
+        // transition: $transition-time;
+      }
+    }
+    // &:active {
+    //     &:after {
+    //         background: $color-accent;
+    //     }
+    // }
+    &.active {
+      // text-transform: uppercase;
+      z-index: 10;
+
+      &:after {
+        background: $color-accent;
+        width: calc(100% - #{$padding} / 2);
+        top: 100%;
+        left: $padding / 4;
+        transition: 0;
+      }
+
+      &:hover {
+        &:after {
+          background: $color-accent;
+          width: 100%;
+          top: 100%;
+          left: 0;
+          height: 2px;
+          transition: 0;
+          // transition: $transition-time;
+        }
+      }
     }
 
-    .trigger-box-children-enter {
-      opacity: 0.01;
+    &.disable {
+      color: $color-medium-gray;
+    }
+  }
+  @media screen and (max-width: $desktop-min) {
+    margin: 0 2px;
+  }
+
+  .filter-category {
+    display: inline-block;
+    position: relative;
+    margin-left: $padding/2;
+    white-space: normal;
+
+    .inner {
+      position: relative;
+    }
+    //
+    .filter-header {
+      color: $color-medium-gray;
+      white-space: nowrap;
+      text-align: left;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      position: absolute;
+      font-size: 8px;
+      top: -17px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-    .trigger-box-children-enter.trigger-box-children-enter-active {
-      opacity: 1;
-      transition: opacity 500ms ease-in;
-    }
-
-    .trigger-box-children-leave {
-      opacity: 1;
-    }
-
-    .trigger-box-children-leave.trigger-box-children-leave-active {
-      opacity: 0.01;
-      transition: opacity 300ms ease-in;
-    }
-
-
-    .close-button {
+    &.view {
+      @media screen and (max-width: $desktop-min) {
         position: absolute;
-        padding: 10px 45px;
-        right: 0px;
-        text-align: right;
-        top: 0px;
-        margin-bottom: 5px;
-        text-transform: uppercase;
-        width: auto;
-        height: 26px;
-        letter-spacing: 1px;
-        z-index: 789234908423790;
-        cursor: pointer;
-        font-size: 14px;
-
-        &:before {
-            content: '\e6ad';
-            font: normal normal normal 16px/1 'Nucleo Outline';
-            position: absolute;
-            color: #FFFFFF;
-            width: 26px;
-            height: 26px;
-            top: 13px;
-            right: 13px;
-            text-align: right;
-        }
-        @media screen and (max-width: $desktop-min) {
-            display: block;
-        }
+        margin-left: 0;
+        top: 10px;
+        right: 20px;
+      }
     }
+  }
+  @media screen and (max-width: $desktop-min) {
+    .nav-trigger.month {
+      margin-left: 0;
+      padding-left: 0;
+    }
+
+    .time-filters {
+      width: calc(100% - 40px);
+    }
+  }
+}
+
+.trigger-box-children {
+  opacity: 1;
+  position: absolute;
+  height: auto;
+  display: block;
+  // right: -5px;
+  right: -10px;
+  //45 -35   20
+  // top: -5px;
+  top: -8px;
+  background: rgba(lighten($color-darker-gray, 10%), 0.98);
+  box-shadow: 0 0 35px 5px rgba(lighten($color-black, 5%), 0.75);
+  border-radius: 5px;
+  width: 260px;
+  padding: $padding* 2 $padding $padding;
+  text-align: center;
+  z-index: 999;
+  transition: opacity 0.3s ease 0, width 0 ease 0;
+
+  .trigger-box-children {
+    background: rgba(lighten($color-darker-gray, 20%), 0.98);
+  }
+
+  h4 {
+    font-size: 12px;
+    margin: 5px 0;
+    color: $color-black;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: left;
+    width: 100%;
+  }
+
+  br {
+    height: 5px;
+  }
+
+  a {
+    display: block;
+    margin-bottom: 10px !important;
+    text-transform: uppercase;
+  }
+
+  .group {
+    a {
+      // padding-bottom: 10px !important;
+      // margin-bottom: 0px !important;
+      min-width: 45px;
+    }
+  }
+
+  hr {
+    border-color: transparent;
+    border: none;
+    border-top: solid 2px $color-dark-gray;
+    width: calc(100% + (2 * $padding));
+    margin: 5px (-$padding) 10px;
+  }
+
+  .close-button {
+    color: $color-light-gray;
+    position: absolute;
+    padding: $padding/2 $padding;
+    right: 0;
+    align-items: center;
+    top: 0;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    // height: 26px;
+    letter-spacing: 1px;
+    z-index: 789234908423790;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:before{
+      content: '\e6ad';
+      font: normal normal normal 12px/1 'Nucleo Outline';
+      color: $color-lighter-gray;
+      background: rgba($color-dark-gray, 0.5);
+      border-radius: 50px;
+      padding: 5px;
+      margin: -5px;
+      text-align: center;
+    }
+
+    // @media screen and (max-width: $desktop-min) {
+    //   display: block;
+    // }
+  }
 }

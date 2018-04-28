@@ -12,7 +12,7 @@ import defaultState from '../config/defaultState.json';
 import base from '../config/base';
 
 // CONSTANTS
-import {_BASEURL, _ISMOBILE, _BACKGROUNDIMAGES} from '../config/constants';
+import {_LOGO, _ISMOBILE, _BACKGROUNDIMAGES} from '../config/constants';
 
 // HELPERS
 import {getExtreme, getTimeRange, today, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
@@ -32,7 +32,12 @@ class App extends Component {
   events = eventsData();
 
   componentWillMount() {
+
     const from = this.props.location.pathname;
+    let location = this.props.location.state;
+    // console.log(location);
+    // let location = this.props.location.state;
+
     if(isValid(this.props.location.state)) {
       if(this.props.location.state.isAuthenticated === false) {
         this.props.history.push('/login', { from });
@@ -53,14 +58,26 @@ class App extends Component {
     const localStorageRef = localStorage.getItem('marriott-calendar-' + preset);
     if (localStorageRef) {
       this.stateString = localStorageRef;
-      this.setState({...JSON.parse(localStorageRef)}, () => this.updateEventList(this.events));
+      this.setState({...JSON.parse(localStorageRef)}, () => this.updateEventList(this.events), false);
     } else {
-      this.setState({...state}, () => this.updateEventList(this.events));
+      this.setState({...state}, () => this.updateEventList(this.events), false);
     }
 
     this.firebaseShortLinksref = base.syncState('shortLinks', {
       context: this,
-      state: "shortLinks"
+      state: "shortLinks",
+      then() {
+        // console.log(location, this.state.shortLinks, this.state.shortLinks);
+          if(location.key !== ''){
+            const decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.preset][location.key]))));
+            console.log(decodedState);
+            // this.updateState({...this.state.events, decodedState}, true);
+            this.updateState({...this.state, ...decodedState, ready: true}, true);
+          } else {
+            console.log('gua')
+            this.updateState({ready: true}, true);
+          }
+      }
     });
   }
 
@@ -80,6 +97,13 @@ class App extends Component {
       'marriott-calendar-' + this.preset,
       this.stateString
     );
+
+    if(this.state.shortLinks) {
+      const to = this.getShareableLink();
+      if (to.key !== this.props.location.state.key){
+        this.props.history.push(to.path, {isAuthenticated: true, preset: to.preset, key: to.key});
+      }
+    }
   }
 
   getShareableLink = () => {
@@ -100,7 +124,7 @@ class App extends Component {
     } else {
       key = Object.keys(shortLinks[this.preset])[index];
     }
-    return `${_BASEURL}/${this.preset.toLowerCase()}/${key}`;
+    return {path: `/${this.preset.toLowerCase()}/${key}`, preset: this.preset, key: key} ;
   };
 
   logout = () => this.props.history.push('/login', {});
@@ -132,7 +156,7 @@ class App extends Component {
 
     // SHOULD UPDATE?
     if (update === false ? false : true) {
-      this.updateState({events, ready: true}, false);
+      this.updateState({events}, false);
     }
 
     // RETURN NUMBER OF EVENTS
@@ -188,7 +212,6 @@ class App extends Component {
 
         <div className="content-frame" style={{backgroundImage: `url(${_BACKGROUNDIMAGES.IMAGES[0]})`}}>
           <div className={`content ${this.state.view}-view`}>
-
             <ToolBar
               time={time}
               updateState={this.updateState}
@@ -211,7 +234,7 @@ class App extends Component {
                   height: '100%'
                 }}>
               {
-                this.state.ready && this.state.events &&
+                this.state.ready && this.state.events ?
                 <EventsWrapper
                   events={this.state.events}
                   view={this.state.view}
@@ -219,31 +242,40 @@ class App extends Component {
                   time={time}
                   modalEventId={isValid(this.state.modal.modalEvent) ? this.state.events[this.state.modal.modalEvent].id : null}
                   modal={this.state.modal}
-                />
+                /> :
+                <p style = {{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -80%)',
+                  textAlign: 'center',
+                  opacity: 0.25
+                }}>
+                <img width={200} src={_LOGO.URL} alt={_LOGO.ALT} style={{display: 'block', margin: '20px auto',}}/>
+                 Loading</p>
               }
               </Scrollbars>
             </div>
-
           </div>
         </div>
+        {
+          this.state.modal.show && this.state.ready && this.state.events &&
+          <Modal
+            ref={(Modal) => {this.ModalRef = Modal}}
+            modalPosition={this.state.modalPosition}
+            handleCloseModal={this.handleCloseModal}
+            handleModalNav={this.handleModalNav}
+            handleToggleStar={this.handleToggleStar}
+            modal={this.state.modal}
+            events={this.state.events}
+            time={time}
+            updateState={this.updateState}
+            starred={this.state.starred}
+          />
+        }
       </main>
 
-      <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} collapsed={this.state.sidebar.collapsed || false} updateState={this.updateState}/>
-      {
-        this.state.modal.show && this.state.ready && this.state.events &&
-        <Modal
-          ref={(Modal) => {this.ModalRef = Modal}}
-          modalPosition={this.state.modalPosition}
-          handleCloseModal={this.handleCloseModal}
-          handleModalNav={this.handleModalNav}
-          handleToggleStar={this.handleToggleStar}
-          modal={this.state.modal}
-          events={this.state.events}
-          time={time}
-          updateState={this.updateState}
-          starred={this.state.starred}
-        />
-      }
+      <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} collapsed={this.state.sidebar.collapsed || false} updateState={this.updateState} ready={this.state.ready} />
     </div>);
   }
 }

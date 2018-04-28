@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import {_LOGO} from '../../../config/constants';
+
 // COMPONENTS
 import Header from './Header';
 import Content from './Content';
@@ -11,18 +13,8 @@ class Filters extends Component {
     collapsed: false
   }
 
-  componentDidUpdate() {
-    // console.log('filter ' + this.props.title + ' updated');
-  }
-
   handleChange = (event, filter, active) => {
     this.props.updateFilter(filter, this.props.filterName, event.target.checked);
-  };
-
-  batchChange = (active) => {
-    for (let filter in this.props.filters) {
-      this.props.updateFilter(filter, this.props.filterName, active);
-    }
   };
 
   handleCollapse = () => {
@@ -33,12 +25,12 @@ class Filters extends Component {
   render() {
 
     return (<div className={`filter ${this.state.collapsed
-        ? 'collapsed'
-        : ''}`}>
-      <Header handleCollapse={this.handleCollapse} icon={this.props.icon} title={this.props.title}/>
-      <Content filterName={this.props.filterName} filters={this.props.filters} filterInfo={this.props.filterInfo} handleChange={this.handleChange} labelDot={this.props.labelDot} TooltipTheme='light' tooltips={this.props.tooltips}/>
-      <Footer filterName={this.props.filterName} batchChange={this.batchChange}/>
-    </div>)
+                ? 'collapsed'
+                : ''}`}>
+              <Header handleCollapse={this.handleCollapse} icon={this.props.icon} title={this.props.title}/>
+              <Content filterName={this.props.filterName} filters={this.props.filters} filterInfo={this.props.filterInfo} handleChange={this.handleChange} labelDot={this.props.labelDot} TooltipTheme='light' tooltips={this.props.tooltips}/>
+              <Footer filterName={this.props.filterName} filters={this.props.filters} batchChange={this.props.batchChange}/>
+            </div>)
   }
 }
 

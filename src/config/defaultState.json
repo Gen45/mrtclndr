@@ -105,7 +105,7 @@
     "show": false
   },
   "sidebar": {
-    "collapsed": true
+    "collapsed": false
   },
   "search": {
     "active": false

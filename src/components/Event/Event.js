@@ -53,7 +53,7 @@ class Event extends Component {
           <div className='info-wrapper'>
             <div className='activity'>
               <Tooltip
-                // trigger="click"
+                title={event.offer}
                 trigger="mouseenter"
                 delay={200}
                 arrow={true}
@@ -70,7 +70,7 @@ class Event extends Component {
             </div>
           {
             this.props.view === 'grid' &&
-            <p className='timeframe'>{event.market}</p>
+            <p className='market'>{event.market}</p>
           }
           {
             this.props.view === 'grid' &&

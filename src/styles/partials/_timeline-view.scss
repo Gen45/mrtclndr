@@ -38,7 +38,7 @@
         transition: $transition-time;
         border-bottom: 3px solid transparent;
         &:hover {
-            background: rgba($color-light-gray, 0.2);
+            background: rgba($color-light-gray, 0.05);
         }
         &.linted {
             // background: $color-medium-gray;

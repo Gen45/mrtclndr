@@ -4,6 +4,7 @@ import ReactList from 'react-list';
 import Event from '../Event/Event';
 
 import {isValid} from '../../helpers/misc';
+import {_LOGO} from '../../config/constants';
 
 class EventsWrapper extends Component {
 
@@ -31,7 +32,7 @@ class EventsWrapper extends Component {
           textAlign: 'center',
           opacity: 0.25
         }}>
-        <img width={200} src="/images/logo.svg" alt="Marriott Logo" style={{display: 'block', margin: '20px auto',}}/>
+        <img width={200} src={_LOGO.URL} alt={_LOGO.ALT} style={{display: 'block', margin: '20px auto',}}/>
          There are no entries for the current selection</p>
       }
     </div>)

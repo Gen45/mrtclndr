@@ -12,6 +12,36 @@
     .login & {
         // opacity: 0;
     }
+    .logout {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      height: 50px;
+      width: 114px;
+      white-space: nowrap;
+      vertical-align: middle;
+      position: absolute;
+      right: 10px;
+      top: 0px;
+      justify-content: flex-end;
+      text-align: right;
+      cursor: pointer;
+      padding: 0 15px;
+      font-size: 14px;
+      color: $color-light-gray;
+      .collapsed & {
+        right: 125px;
+      }
+      &:hover {
+        color: $color-lighter-gray;
+      }
+      @media only screen and (max-width:$phone-max) {
+        right: $header-height;
+        .collapsed & {
+          right: $header-height;
+        }
+      }
+    }
     .collapsed & {
         width: calc( 100% - #{$sidebar-collapsed});
         // transition: $transition-time/2;
@@ -29,7 +59,7 @@
         padding-left: $padding;
         white-space: nowrap;
         //
-        @media only screen and (max-width: 360px) {
+        @media only screen and (max-width:$phone-max) {
             margin: 0 12px;
             padding-left: $padding/2;
             font-size: 24px;
