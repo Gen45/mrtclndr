@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 
+import Loading from '../Helpers/Loading';
+
 // COMPONENTS
 // import Search from './Search';
 import Filter from './Filter/Filter';
@@ -62,18 +64,15 @@ class Sidebar extends Component {
                 <Filter title={"Channels"} filterName={"channels"} icon={"nc-icon-outline ui-1_send"} filters={this.props.channels} filterInfo={channels} updateFilter={this.props.updateFilter} tooltips={false} batchChange={this.batchChange}/>
               </Scrollbars>
             </div>
-          : <p style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -80%)',
-                textAlign: 'center',
-                opacity: 0.25
-              }}>
-
+          :
+          <Loading>
+            <span>
               <i className="nc-icon-outline ui-2_time"/>
               <br/>
-              Loading</p>
+              Loading
+            </span>
+          </Loading>
+
       }
 
     </aside>)

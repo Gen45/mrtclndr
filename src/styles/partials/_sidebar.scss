@@ -5,13 +5,10 @@
   height: 100%;
   top: 0;
   right: 0;
-  // transition: width $transition-time/2, opacity $transition-time*2;
+  transition: transform $transition-time*2;
   z-index: 12;
   box-shadow: -4px 0 30px rgba($color-black, 0.5);
 
-  .print & {
-    opacity: 1;
-  }
   @media screen and (max-width: $desktop-min) {
       transition: $transition-time;
       opacity: 0.95;
@@ -25,11 +22,7 @@
   }
 
   .collapsed & {
-    width: $sidebar-collapsed;
-
-    > header .icon {
-      // transform: rotate(-180deg);
-    }
+    transform: translateX(100%);
   }
 
   header {
@@ -42,30 +35,15 @@
     display: flex;
     align-items: center;
     white-space: nowrap;
-    // transition: 0;
-    // transition-delay: 0;
     cursor: pointer;
 
     h3 {
       margin-left: $padding/2;
       line-height: 1;
-
-      .collapsed & {
-        // opacity: 0;
-      }
     }
 
     .collapsed & {
       padding-left: $padding/2;
-
-      .icon {
-        // transition: $transition-time;
-      }
-    }
-
-    .icon {
-      // transition: $transition-time;
-      transform: rotate(0deg);
     }
   }
 

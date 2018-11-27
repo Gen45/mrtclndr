@@ -13,11 +13,14 @@ export const _ISMOBILE = () => window.innerWidth < _MOBILEWIDTH;
 export const _PASSCODES = {" " : 'ALL', "Mrt16!" : 'ALL', "WEST17!" : 'US-WEST', "east17!" : 'US-EAST', "Canada!!" : 'CANADA', "Cala17!" : 'CALA'};
 
 export const _BACKGROUNDIMAGES = {
-  IMAGES: ['/images/bokeh.jpg'],
+  IMAGES: ['/images/topographic.png'],
+  // IMAGES: ['/images/bokeh.jpg'],
   LENGTH: function() {
     return this.images.length
   }
 };
+
+export const _TRANSITIONTIME = 150;
 
 // COLORS
 export const _COLORS = {

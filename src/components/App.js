@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
+import Loading from './Helpers/Loading';
 
 // STYLES
 import '../styles/style.css';
 import 'react-tippy/dist/tippy.css';
 
 // DATA
-import eventsData from '../config/eventsData';
+// import eventsData from '../config/eventsData';
+import eventsData from '../config/eventsWP';
 import defaultState from '../config/defaultState.json';
 import base from '../config/base';
 
@@ -23,7 +25,7 @@ import Header from './Main/Header';
 import ToolBar from './ToolBar/ToolBar';
 import {MonthBar, MonthLines} from './Main/MonthLines';
 import EventsWrapper from './Main/EventsWrapper';
-import Sidebar from './Sidebar/Sidebar';
+// import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
 
@@ -36,7 +38,6 @@ class App extends Component {
     const from = this.props.location.pathname;
     let location = this.props.location.state;
     // console.log(location);
-    // let location = this.props.location.state;
 
     if(isValid(this.props.location.state)) {
       if(this.props.location.state.isAuthenticated === false) {
@@ -222,6 +223,7 @@ class App extends Component {
               starred={this.state.starred}
               search={this.state.search}
               getShareableLink={this.getShareableLink}
+              sidebarCollapse={this.state.sidebar.collapsed}
             />
 
             <div className={`overlay${this.state.modal.show ? ' active' : ''}`}/>
@@ -243,39 +245,36 @@ class App extends Component {
                   modalEventId={isValid(this.state.modal.modalEvent) ? this.state.events[this.state.modal.modalEvent].id : null}
                   modal={this.state.modal}
                 /> :
-                <p style = {{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -80%)',
-                  textAlign: 'center',
-                  opacity: 0.25
-                }}>
-                <img width={200} src={_LOGO.URL} alt={_LOGO.ALT} style={{display: 'block', margin: '20px auto',}}/>
-                 Loading</p>
+                <Loading>
+                  <span>
+                    <img width={200} src={_LOGO.URL} alt={_LOGO.ALT} style={{display: 'block', margin: '20px auto',}}/>
+                     Loading
+                  </span>
+                </Loading>
+
               }
               </Scrollbars>
             </div>
           </div>
+          {
+            this.state.modal.show && this.state.ready && this.state.events &&
+            <Modal
+              ref={(Modal) => {this.ModalRef = Modal}}
+              modalPosition={this.state.modal.position}
+              handleCloseModal={this.handleCloseModal}
+              handleModalNav={this.handleModalNav}
+              handleToggleStar={this.handleToggleStar}
+              modal={this.state.modal}
+              events={this.state.events}
+              time={time}
+              updateState={this.updateState}
+              starred={this.state.starred}
+            />
+          }
         </div>
-        {
-          this.state.modal.show && this.state.ready && this.state.events &&
-          <Modal
-            ref={(Modal) => {this.ModalRef = Modal}}
-            modalPosition={this.state.modalPosition}
-            handleCloseModal={this.handleCloseModal}
-            handleModalNav={this.handleModalNav}
-            handleToggleStar={this.handleToggleStar}
-            modal={this.state.modal}
-            events={this.state.events}
-            time={time}
-            updateState={this.updateState}
-            starred={this.state.starred}
-          />
-        }
       </main>
 
-      <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} collapsed={this.state.sidebar.collapsed || false} updateState={this.updateState} ready={this.state.ready} />
+      {/* <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} collapsed={this.state.sidebar.collapsed || false} updateState={this.updateState} ready={this.state.ready} /> */}
     </div>);
   }
 }

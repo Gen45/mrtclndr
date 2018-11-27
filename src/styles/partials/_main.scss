@@ -1,14 +1,25 @@
 .main {
-    width: calc( 100% - #{$sidebar-expanded});
+    width: 100%;
     position: fixed;
-    .login &,
-    .print & {
-        opacity: 1;
+    background: $color-black;
+    .collapsed & {
+        width: 100%;
+        overflow: auto;
+        &:before {
+            opacity: 0;
+            width: 100%;
+            pointer-events: none;
+        }
+
+      .content-frame {
+        width: 100%;
+        transition: width 0s;
+      }
     }
     @media screen and (max-width: $desktop-min) {
         width: calc( 100% - #{$sidebar-collapsed});
         .content-frame {
-          width: calc( 100% - #{$sidebar-collapsed});
+          width: 100%;
         }
         &:before {
             content: '';
@@ -22,24 +33,11 @@
             transition: opacity $transition-time;
         }
     }
-    .collapsed & {
-        overflow: auto;
-        &:before {
-            opacity: 0;
-            width: calc( 100% - #{$sidebar-collapsed});
-            pointer-events: none;
-        }
 
-      .content-frame {
-        width: 100%;
-      }
-    }
     height: 100vh;
     padding-top: $header-height;
     // transition: $transition-time/2;
-    .collapsed & {
-        width: calc( 100% - #{$sidebar-collapsed});
-    }
+
     .content {
         position: relative;
         height: calc( 100vh - (2 * #{$padding}) - #{$header-height});
@@ -74,7 +72,7 @@
                     // margin: 0 0 0 auto;
                 }
             }
-            h2.title {
+            .title {
                 font-size: 28px;
                 color: $color-accent;
                 display: flex;
@@ -106,9 +104,6 @@
                     }
                 }
             }
-        }
-        &.none {
-            display: none;
         }
         @media screen and (max-width: $desktop-min) {
             height: calc( 100vh - #{$header-height});
@@ -178,12 +173,12 @@
 
 .content-frame {
     background: left top fixed;
-    // background: url('/images/bg-starburst-alt.png') left top fixed;
     position: fixed;
-    width: calc(100% - (300px));
+    width: calc(100% - #{$sidebar-expanded});
+    transition: width 0s $transition-time*2;
     top: 50px;
     left: 0;
-    overflow-y: auto;
+    overflow: hidden;
     min-height: calc(100vh - #{$header-height});
     padding: $padding;
     @media screen and (max-width: $desktop-min) {
@@ -194,61 +189,4 @@
           height: 100vh;
         }
     }
-}
-
-.preloader {
-    position: absolute;
-    width: 200px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    svg {
-        width: 100%;
-        height: auto;
-    }
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        opacity: .2;
-    }
-    60% {
-        opacity: 1;
-    }
-    100% {
-        opacity: .2;
-    }
-}
-
-.label-dot {
-  width: $label-dot;
-  height: $label-dot;
-  display: inline-block;
-  margin-right: 5px;
-  border-radius: $label-dot;
-}
-
-span.react-resizable-handle {
-  cursor: ns-resize;
-  margin: 0 -10px;
-  position: relative;
-  height: 10px;
-  width: calc(100% + 20px);
-  background: rgba(33, 33, 33, 0.4);
-  display: block;
-  z-index: 1000;
-  &:active {
-    background: rgba(33, 33, 33, 0.6);
-  }
-  &:before {
-    content: '';
-    position: absolute;
-    width: 50px;
-    height: 2px;
-    background: rgba(33, 33, 33, 0.4);
-    left: 50%;
-    top: 50%;
-    transform:translate(-50%, -50%);
-  }
 }

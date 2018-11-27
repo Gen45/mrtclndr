@@ -2,17 +2,40 @@ import axios from 'axios';
 import events from './events.json';
 import offers from './offers.json';
 
-// import channels from './channels.json';
-// import regions from './regions.json';
-// import brands from './brands.json';
-
 import {
   getExtreme,
   isMultidate
 } from '../helpers/dates';
 
-const WP_URL = 'http://admin.marriottcalendar.loc';
-axios.get(`${WP_URL}/wp-json/wp/v2/entry/`).then(res => { console.log(res.data); });
+const WP_URL = 'http://admin.marriottcalendar.com/wp-json/wp/v2/';
+const parameters = '/?per_page=100';
+
+async function go() {
+  try {
+
+    const channelPromise = axios(`${WP_URL}channel${parameters}`);
+    const brandPromise = axios(`${WP_URL}brand${parameters}`);
+    const offerPromise = axios(`${WP_URL}offer${parameters}`);
+    const regionPromise = axios(`${WP_URL}region${parameters}`);
+    const ownerPromise = axios(`${WP_URL}owner${parameters}`);
+    const campaign_groupPromise = axios(`${WP_URL}campaign_group${parameters}`);
+    const segmentPromise = axios(`${WP_URL}segment${parameters}`);
+    const market_scopePromise = axios(`${WP_URL}market_scope${parameters}`);
+    const featured_marketsPromise = axios(`${WP_URL}featured_markets${parameters}`);
+    const program_typePromise = axios(`${WP_URL}program_type${parameters}`);
+    const entryPromise = axios(`${WP_URL}entry${parameters}`);
+
+    const [channel, brand, offer, region, owner, campaign_group, segment, market_scope, featured_markets, program_type, entry] = await Promise.all([channelPromise, brandPromise, offerPromise, regionPromise, ownerPromise, campaign_groupPromise, segmentPromise, market_scopePromise, featured_marketsPromise, program_typePromise, entryPromise]);
+
+    console.log(channel.data, brand.data, offer.data, region.data, owner.data, campaign_group.data, segment.data, market_scope.data, featured_markets.data, program_type.data, entry.data);
+
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+go();
 
 const getOffer = (offer, offers) => {
   const o = Object.keys(offers).filter(key => offers[key]["name"].toUpperCase() === offer.toUpperCase())[0];
@@ -20,25 +43,6 @@ const getOffer = (offer, offers) => {
     o :
     'NO-PROMOTION';
 }
-
-
-
-
-
-// axios.post(`${WP_URL}/wp-json/wp/v2/entry?title=jola&fields[description]=oh lalay&channel=7 8&status=publish`, {},
-//   {
-//     auth: {
-//       username: 'GDCMWX',
-//       password: '#yoyoMWX1470.'
-//     }
-//   })
-//   .then(function (response) {
-//     console.log(response);
-//   })
-//   .catch(function (error) {
-//     console.log(error);
-//   });
-
 
 const cleanChannels = channels => Object.keys(channels).filter(c => channels[c] !== null && channels[c] !== '' && channels[c] !== undefined);
 const getMarket = (e) => `${e["Destination - Featured Market"].replace("Other - please list in column G",'')} ${e["Market - more"]}`;

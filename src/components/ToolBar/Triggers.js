@@ -29,6 +29,7 @@ export class TriggerBox extends Component {
               <Draggable disabled={!this.props.draggable}>
                 <span className="trigger-box-children active" style={{width: this.props.width || 200, textAlign: this.props.align || "center"}}>
                   <div className="close-button" onClick={() => this.toggleBox()}>
+                    <i className="nc-icon-outline ui-1_simple-remove close" />
                     {this.props.title && <span><i className={this.props.icon}/> {` ${this.props.title}`}</span>}
                   </div>
                   {this.props.children}

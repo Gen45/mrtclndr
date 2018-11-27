@@ -16,11 +16,6 @@ export const OpenModal = (targetId, events)=> {
 
 class Modal extends Component {
 
-  // handleCloseModal = (callback, update) => {
-  //   typeof callback === 'function' && callback();
-  //   this.props.updateState({modal:{show: false, modalEvent: null}}, update || false);
-  // };
-
   handleCloseModal = () => {
     this.props.updateState({modal:{show: false, modalEvent: null}});
   };

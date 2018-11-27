@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+// import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import Title from './Title';
 import Pagination from './Pagination';
@@ -8,7 +9,7 @@ import {TriggerBox, Trigger} from './Triggers';
 import {getCoordinates} from '../../helpers/misc';
 
 import {_MONTHS, _QUARTERS, _THREEYEARS, _PREVIOUSYEAR, _CURRENTYEAR, _TIMELIMITS} from '../../helpers/dates';
-import {_ISMOBILE} from '../../config/constants';
+import {_ISMOBILE, _TRANSITIONTIME} from '../../config/constants';
 
 class ToolBar extends Component {
 
@@ -17,6 +18,7 @@ class ToolBar extends Component {
   }
 
   componentDidMount(){
+    this.sidebarCollapse = this.props.sidebarCollapse;
     let toolbarMaxWidth = 150;
     toolbarMaxWidth += this.mainFiltersGroupRef ? getCoordinates(this.mainFiltersGroupRef).offsetWidth : 0;
     toolbarMaxWidth += this.PaginationRef ? getCoordinates(this.PaginationRef).offsetWidth : 0;
@@ -30,8 +32,14 @@ class ToolBar extends Component {
       window.removeEventListener("resize", this.updateDimensions);
   }
 
-  componentWillReceiveProps(props, nextProps) {
-    this.updateDimensions();
+  componentWillReceiveProps() {
+    // console.log(this.sidebarCollapse, this.props.sidebarCollapse)
+    if(this.sidebarCollapse !== this.props.sidebarCollapse){
+      this.sidebarCollapse = this.props.sidebarCollapse;
+      setTimeout(() => {console.log('wu'); this.updateDimensions()}, _TRANSITIONTIME*3);
+    } else {
+      this.updateDimensions();
+    }
   }
 
   updateDimensions = () => {
