@@ -25,13 +25,14 @@ import Header from './Main/Header';
 import ToolBar from './ToolBar/ToolBar';
 import {MonthBar, MonthLines} from './Main/MonthLines';
 import EventsWrapper from './Main/EventsWrapper';
-// import Sidebar from './Sidebar/Sidebar';
+import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
 
 class App extends Component {
 
-  events = eventsData();
+  // events = eventsData();
+  events = [];
 
   componentWillMount() {
 
@@ -75,7 +76,6 @@ class App extends Component {
             // this.updateState({...this.state.events, decodedState}, true);
             this.updateState({...this.state, ...decodedState, ready: true}, true);
           } else {
-            // console.log('gua')
             this.updateState({ready: true}, true);
           }
       }
@@ -274,7 +274,7 @@ class App extends Component {
         </div>
       </main>
 
-      {/* <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} collapsed={this.state.sidebar.collapsed || false} updateState={this.updateState} ready={this.state.ready} /> */}
+      <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} collapsed={this.state.sidebar.collapsed || false} updateState={this.updateState} ready={this.state.ready} />
     </div>);
   }
 }

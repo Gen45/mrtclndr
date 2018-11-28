@@ -16,7 +16,7 @@ class Content extends Component {
         ? '-inner'
         : ''}`}>
       {
-        Object.keys(this.props.filters).map((r, i) => {
+        Object.keys(this.props.filters ? this.props.filters : []).map((r, i) => {
 
           const filter = r.toUpperCase();
           const filterName = this.props.filterInfo[r]["name"];

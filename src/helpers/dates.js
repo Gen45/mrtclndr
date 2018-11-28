@@ -4,7 +4,7 @@ import range from 'lodash/range';
 
 import {_PREV, _NEXT} from '../config/constants';
 
-export const _DATEFORMAT = "MM/DD/YY";
+export const _DATEFORMAT = "MM/DD/YYYY";
 
 export const _QUARTERS = [1, 2, 3, 4];
 export const _MONTHS = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
