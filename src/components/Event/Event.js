@@ -11,11 +11,10 @@ import {isValid} from '../../helpers/misc';
 
 import {_COLORS} from '../../config/constants';
 
-import regionInfo from '../../config/regions.json';
-import offerInfo from '../../config/offers.json';
+// import regionInfo from '../../config/regions.json';
+// import offerInfo from '../../config/offers.json';
 
 class Event extends Component {
-
 
   handleOpenModal = (targetId) => {
     !this.props.elevated && this.props.handleOpenModal(targetId);
@@ -24,8 +23,8 @@ class Event extends Component {
   render() {
 
     const event = this.props.event;
-    const regionColor = regionInfo[this.props.event['region']].color;
-    const offerColor = offerInfo[this.props.event['offer']].color;
+    const regionColor = this.props.event['region'].color;
+    const offerColor = this.props.event['offer'].color;
     const time = this.props.time;
     const multidate = isMultidate(event.dates);
     const isPastEvent = event.latestDay < getExtreme([today()],'right');

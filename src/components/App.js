@@ -31,9 +31,8 @@ import Modal, {OpenModal} from './Helpers/Modal';
 
 class App extends Component {
 
-  // events = eventsData();
   events = [];
-
+  
   componentWillMount() {
 
     const from = this.props.location.pathname;
@@ -86,7 +85,18 @@ class App extends Component {
     base.removeBinding(this.firebaseShortLinksref);
   }
 
+  componentDidMount() {
+
+    const newEvents = eventsData();
+    newEvents.then((data) => { 
+      this.setState({ events: data.entries }); 
+      this.events = data.entries;
+      console.log(data);
+    });
+  }
+
   componentDidUpdate() {
+
     const {
       events,
       shortLinks,
