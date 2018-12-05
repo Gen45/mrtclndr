@@ -14,6 +14,7 @@ class Filters extends Component {
   }
 
   handleChange = (event, filter, active) => {
+    // console.log(event, filter, active);
     this.props.updateFilter(filter, this.props.filterName, event.target.checked);
   };
 
@@ -28,7 +29,8 @@ class Filters extends Component {
                 ? 'collapsed'
                 : ''}`}>
               <Header handleCollapse={this.handleCollapse} icon={this.props.icon} title={this.props.title}/>
-              <Content filterName={this.props.filterName} filters={this.props.filters} filterInfo={this.props.filterInfo} handleChange={this.handleChange} labelDot={this.props.labelDot} TooltipTheme='light' tooltips={this.props.tooltips}/>
+              <Content filterName={this.props.filterName} filters={this.props.filters} 
+              handleChange={this.handleChange} labelDot={this.props.labelDot} TooltipTheme='light' tooltips={this.props.tooltips}/>
               <Footer filterName={this.props.filterName} filters={this.props.filters} batchChange={this.props.batchChange}/>
             </div>)
   }

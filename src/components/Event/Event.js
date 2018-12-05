@@ -23,8 +23,8 @@ class Event extends Component {
   render() {
 
     const event = this.props.event;
-    const regionColor = this.props.event['region'].color;
-    const offerColor = this.props.event['offer'].color;
+    const regionColor = this.props.event['region'][0].color;
+    const offerColor = this.props.event['offer'][0].color;
     const time = this.props.time;
     const multidate = isMultidate(event.dates);
     const isPastEvent = event.latestDay < getExtreme([today()],'right');

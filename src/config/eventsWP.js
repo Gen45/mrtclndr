@@ -10,7 +10,7 @@ import {
   decodeHTML
 } from '../helpers/misc';
 
-const WP_URL = 'http://admin.marriottcalendar.loc/wp-json/wp/v2/';
+const WP_URL = 'http://admin.marriottcalendar.com/wp-json/wp/v2/';
 const parameters = '/?per_page=100';
 
 export async function eventsData() {
@@ -29,11 +29,11 @@ export async function eventsData() {
     const featured_markets1Promise = axios(`${WP_URL}featured_markets${parameters}&page=1`);
     const featured_markets2Promise = axios(`${WP_URL}featured_markets${parameters}&page=2`);
     const program_typePromise = axios(`${WP_URL}program_type${parameters}`);
-    const entry1Promise = axios(`${WP_URL}entry${parameters}&page=1`);
-    const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE
-    const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE
-    const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE
-    const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE
+    const entry1Promise = axios(`${WP_URL}entry${parameters}&page=5`);
+    // const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE
+    // const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE
+    // const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE
+    // const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE
 
     const [
       channel,
@@ -48,10 +48,10 @@ export async function eventsData() {
       featured_markets2,
       program_type,
       entry1,
-      entry2, // DISABLE
-      entry3, // DISABLE
-      entry4, // DISABLE
-      entry5  // DISABLE
+      // entry2, // DISABLE
+      // entry3, // DISABLE
+      // entry4, // DISABLE
+      // entry5  // DISABLE
     ] =
     await Promise.all(
       [channelPromise,
@@ -66,16 +66,16 @@ export async function eventsData() {
         featured_markets2Promise,
         program_typePromise,
         entry1Promise,
-        entry2Promise,  // DISABLE
-        entry3Promise,  // DISABLE
-        entry4Promise,  // DISABLE
-        entry5Promise   // DISABLE
+        // entry2Promise,  // DISABLE
+        // entry3Promise,  // DISABLE
+        // entry4Promise,  // DISABLE
+        // entry5Promise   // DISABLE
       ]);
 
 
     const featured_marketsALL = [...featured_markets1.data, ...featured_markets2.data];
     const entriesALL = [...entry1.data
-      // , ...entry2.data, ...entry3.data, ...entry4.data, ...entry5.data
+      // , ...entry2.data, ...entry3.data, ...entry4.data, ...entry5.data // DISABLE
       ];
 
     const regions = region.data.map((r) => {
@@ -113,7 +113,7 @@ export async function eventsData() {
         id: b.id,
         slug: b.slug,
         count: b.count,
-        logo: b.acf.logo,
+        image: b.acf.logo,
         abreviation: b.acf.abreviation,
         name: b.name
       }
@@ -132,17 +132,11 @@ export async function eventsData() {
     // var t0 = performance.now();
 
     entries = entriesALL.map(e => {
-      let _region = find(region.data, r => r.id === e.region[0]);
       return {
         id: e.id,
-        region: {
-          id: _region.id,
-          name: _region.name,
-          slug: _region.slug,
-          color: _region.acf.color
-        },
+        region: [find(regions, r => r.id === e.region[0])],
         brands: e.brand.map(b => find(brand.data, i => i.id === b).acf.abreviation),
-        channels: e.channel.map(c => find(channel.data, i => i.id === c).slug),
+        channels: e.channel.map(c => find(channels, i => i.id === c)),
         campaignName: decodeHTML(e.title.rendered),
         description: e.acf.description,
         owner: e.owner[0] ? {
@@ -153,10 +147,12 @@ export async function eventsData() {
         market: e.featured_markets[0] ? find(featured_marketsALL, fm => fm.id === e.featured_markets[0]).name : null,
         marketScope: e.market_scope[0] ? find(market_scope.data, ms => ms.id === e.market_scope[0]).name : null,
         programType: e.program_type[0] ? find(program_type.data, pt => pt.id === e.program_type[0]).name : null,
-        offer: e.offer[0] ? {
+        offer: e.offer[0] ? [{
           name: find(offer.data, o => o.id === e.offer[0]).name,
-          color: find(offer.data, o => o.id === e.offer[0]).acf.color
-        } : {},
+          color: find(offer.data, o => o.id === e.offer[0]).acf.color,
+          id: find(offer.data, o => o.id === e.offer[0]).id,
+          slug: find(offer.data, o => o.id === e.offer[0]).slug
+        }] : [{}],
         otherChannels: e.acf.other_channels,
         ongoing: e.acf.dates.ongoing,
         datesType: e.acf.dates.multidate ? 'MULTIDATE' : 'SINGLEDATE',
@@ -175,7 +171,7 @@ export async function eventsData() {
       }
     });
 
-    var t1 = performance.now();
+    // var t1 = performance.now();
 
     // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
 
