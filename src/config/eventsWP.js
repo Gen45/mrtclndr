@@ -29,11 +29,11 @@ export async function eventsData() {
     const featured_markets1Promise = axios(`${WP_URL}featured_markets${parameters}&page=1`);
     const featured_markets2Promise = axios(`${WP_URL}featured_markets${parameters}&page=2`);
     const program_typePromise = axios(`${WP_URL}program_type${parameters}`);
-    const entry1Promise = axios(`${WP_URL}entry${parameters}&page=5`);
-    // const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE
-    // const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE
-    // const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE
-    // const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE
+    const entry1Promise = axios(`${WP_URL}entry${parameters}&page=1`);
+    const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE
+    const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE
+    const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE
+    const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE
 
     const [
       channel,
@@ -48,10 +48,10 @@ export async function eventsData() {
       featured_markets2,
       program_type,
       entry1,
-      // entry2, // DISABLE
-      // entry3, // DISABLE
-      // entry4, // DISABLE
-      // entry5  // DISABLE
+      entry2, // DISABLE
+      entry3, // DISABLE
+      entry4, // DISABLE
+      entry5  // DISABLE
     ] =
     await Promise.all(
       [channelPromise,
@@ -66,16 +66,16 @@ export async function eventsData() {
         featured_markets2Promise,
         program_typePromise,
         entry1Promise,
-        // entry2Promise,  // DISABLE
-        // entry3Promise,  // DISABLE
-        // entry4Promise,  // DISABLE
-        // entry5Promise   // DISABLE
+        entry2Promise,  // DISABLE
+        entry3Promise,  // DISABLE
+        entry4Promise,  // DISABLE
+        entry5Promise   // DISABLE
       ]);
 
 
     const featured_marketsALL = [...featured_markets1.data, ...featured_markets2.data];
     const entriesALL = [...entry1.data
-      // , ...entry2.data, ...entry3.data, ...entry4.data, ...entry5.data // DISABLE
+      , ...entry2.data, ...entry3.data, ...entry4.data, ...entry5.data // DISABLE
       ];
 
     const regions = region.data.map((r) => {
@@ -125,17 +125,18 @@ export async function eventsData() {
         slug: bg.slug,
         count: bg.count,
         name: bg.name,
-        brands: bg.acf.sub_brands
+        brands: bg.acf.sub_brands.map(b => find(brand.data, i => i.id === b).slug)
       }
     });
 
     // var t0 = performance.now();
-
+    let i = [];
     entries = entriesALL.map(e => {
+      i.push(e.id);
       return {
         id: e.id,
         region: [find(regions, r => r.id === e.region[0])],
-        brands: e.brand.map(b => find(brand.data, i => i.id === b).acf.abreviation),
+        brands: e.brand.map(b => find(brand.data, i => i.id === b).slug),
         channels: e.channel.map(c => find(channels, i => i.id === c)),
         campaignName: decodeHTML(e.title.rendered),
         description: e.acf.description,
@@ -171,11 +172,12 @@ export async function eventsData() {
       }
     });
 
+    // console.log(i)
     // var t1 = performance.now();
 
     // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
 
-    // console.log(entriesALL[0], entries);
+    // console.log(entriesALL);
 
     return {
       entries,

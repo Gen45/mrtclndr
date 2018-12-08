@@ -34,9 +34,14 @@ class Button extends Component {
         size="big"
       >
         <span className={`filter-tag`}>
-          <input type="checkbox" id={`filter-${this.props.filter}`} checked={active} onChange={(event) => {
-              this.props.handleChange(event, filter, active)
-            }}/>
+          <input 
+            type="checkbox"
+            id={`filter-${this.props.filter}`}
+            checked={active}
+            onChange={(event) => {
+                this.props.handleChange(event, filter, active)
+              }}
+          />
 
           <label htmlFor={`filter-${filter}`} style={putColor(color)} >
             {labelDot && <span className='label-dot' style={{backgroundColor: color}}/> }

@@ -17,7 +17,7 @@ class BrandsFilter extends Component {
   }
 
   componentDidUpdate() {
-    // console.log('filter ' + this.props.title + ' updated');
+    // // console.log('filter ' + this.props.title + ' updated');
   }
 
   handleChange = (event, filter, active) => {
@@ -90,9 +90,15 @@ class BrandsFilter extends Component {
                           const keyPhrase = this.state.keyPhrase !== "" && isValid(this.state.keyPhrase)
                             ? this.state.keyPhrase
                             : '';
-                          // const validKeyPhrase = this.props.filterInfo[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
+                          // const validKeyPhrase = this.props.filters[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
 
-                          const isInSearch = filterCategories[c]["brands"].map((b, i) => this.props.filterInfo[b]["name"]).join('').toUpperCase().indexOf(keyPhrase) > -1
+                  // console.log(filterCategories[c]["brands"]);
+
+                  const isInSearch = filterCategories[c]["brands"].map((b, i) => { 
+                    // console.log(this.props.filters)
+
+                    return this.props.filters[b]["name"]
+                    }).join('').toUpperCase().indexOf(keyPhrase) > -1
                             ? true
                             : false;
 
@@ -101,7 +107,7 @@ class BrandsFilter extends Component {
                                 <h4>
                                   <span>{filterCategories[c]["name"]}</span>
                                 </h4>
-                                <Content filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} filterInfo={this.props.filterInfo} handleChange={this.handleChange} inner={true} keyPhrase={keyPhrase} tooltips={this.props.tooltips} TooltipTheme='dark'></Content>
+                                <Content filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} handleChange={this.handleChange} inner={true} keyPhrase={keyPhrase} tooltips={this.props.tooltips} TooltipTheme='dark'></Content>
                               </div>
                             : null
                         })

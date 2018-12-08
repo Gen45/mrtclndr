@@ -4,7 +4,8 @@ class Footer extends Component {
 
   handleChange = (e, active) => {
     e.target.checked = false;
-    this.props.batchChange(this.props.filters, this.props.filterName, active);
+    // console.log(this.props.filters, this.props.filterName, active);
+    this.props.batchChange(this.props.filterName, active);
   };
 
   render(props) {

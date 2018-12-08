@@ -14,16 +14,7 @@ class EventsWrapper extends Component {
     return (<div className={`events-wrapper`}>
 
       { itemSize > 0 ?
-        <ReactList ref={(ReactList) => this.ReactListRef = ReactList}
-          key={this.props.view}
-          itemRenderer={(index, key) => <Event key={this.props.events[index].id} event={this.props.events[index]} view={this.props.view} handleOpenModal={this.props.handleOpenModal} time={this.props.time} modalEventId={this.props.modalEventId} />}
-          length={itemSize}
-          type={this.props.view === 'grid'
-          ? 'uniform'
-          : 'variable'}
-          useTranslate3d={true}
-          pageSize={40}
-        /> :
+        <ReactList ref={(ReactList) => this.ReactListRef = ReactList} key={this.props.view} itemRenderer={(index, key) => <Event key={this.props.events[index].id} event={this.props.events[index]} view={this.props.view} handleOpenModal={this.props.handleOpenModal} time={this.props.time} modalEventId={this.props.modalEventId} brandsInfo={this.props.brandsInfo} />} length={itemSize} type={this.props.view === 'grid' ? 'uniform' : 'variable'} useTranslate3d={true} pageSize={40} /> :
         <p style = {{
           position: 'absolute',
           top: '50%',

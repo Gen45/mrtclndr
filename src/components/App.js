@@ -35,6 +35,8 @@ class App extends Component {
   
   componentWillMount() {
 
+    this.setState({ ready: false });
+
     const from = this.props.location.pathname;
     let location = this.props.location.state;
     // console.log(location);
@@ -73,54 +75,69 @@ class App extends Component {
             const decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.preset][location.key]))));
             // console.log(decodedState);
             // this.updateState({...this.state.events, decodedState}, true);
-            this.updateState({...this.state, ...decodedState, ready: true}, true);
+            this.updateState({...this.state, ...decodedState}, true);
           } else {
-            this.updateState({ready: true}, true);
+            // this.updateState({ready: true}, true);
           }
       }
     });
   }
 
   componentWillUnmount() {
+    // TODO: cancel eventsData
+    this.setState({
+      ready: false
+    });
     base.removeBinding(this.firebaseShortLinksref);
   }
 
   componentDidMount() {
 
     const newEvents = eventsData();
+
     newEvents.then((data) => { 
       let regions = {};
       let offers = {};
       let channels = {};
       let brands = {};
-
+      let brandGroups = {};
 
       for (const r in data.regions) {
         regions[data.regions[r].slug] = data.regions[r];
-        // regions[data.regions[r].slug].active = true;
+        regions[data.regions[r].slug].active = true;
       }
+      
       for (const r in data.channels) {
         channels[data.channels[r].slug] = data.channels[r];
-        // channels[data.channels[r].slug].active = true;
+        channels[data.channels[r].slug].active = true;
       }
+      
       for (const r in data.offers) {
         offers[data.offers[r].slug] = data.offers[r];
-        // offers[data.offers[r].slug].active = true;
+        offers[data.offers[r].slug].active = true;
       }
+      
       for (const r in data.brands) {
         brands[data.brands[r].slug] = data.brands[r];
-        // brands[data.brands[r].slug].active = true;
+        brands[data.brands[r].slug].active = true;
       }
+
+      for (const r in data.brandGroups) {
+        brandGroups[data.brandGroups[r].slug] = data.brandGroups[r];
+        // brandGroups[data.brandGroups[r].slug].active = true;
+      }      
+
+      this.events = data.entries;
 
       this.setState({ 
         events: data.entries,
         regions,
         offers,
         brands,
-        channels
+        channels,
+        brandGroups,
+        ready: true
      }); 
-
-      this.events = data.entries;
       
     });
   }
@@ -130,6 +147,7 @@ class App extends Component {
     const {
       events,
       shortLinks,
+      ready,
       ...configurations
     } = this.state;
 
@@ -173,12 +191,15 @@ class App extends Component {
   activeFilter = filterType => Object.keys(filterType).filter((f, i) => filterType[f].active === true);
 
   prepareEventList = (events, filter, field) => events.filter(e => {
-    console.log(events, e, filter, field);
-    const fieldArr = Object.keys(e[field]);
+    // console.log(e);
+    // console.log(filter);
+    // console.log(field);
+    // const fieldArr = Object.keys(e[field]);
     // console.log(fieldArr);
     return e[field].reduce((x, c) => {
-      console.log(this.activeFilter(filter), c.slug);
-      const bla = x || (this.activeFilter(filter).indexOf(c.slug) >= 0)
+      // console.log(this.activeFilter(filter), c.slug);
+      // console.log(this.activeFilter(filter), c);
+      const bla = x || (this.activeFilter(filter).indexOf(field === 'brands' ? c : c.slug) >= 0)
       return bla
     }, false)
     // return e[field].reduce((x, c) => x || (this.activeFilter(filter).indexOf(c) >= 0), false)
@@ -193,21 +214,23 @@ class App extends Component {
 
     // FILTER BY TIME
     events = events.filter(e => !(e.latestDay < timeRange.earliestDay || e.earliestDay > timeRange.latestDay));
-    // console.log(events);
     
     // FILTER BY FILTERS (=O)
-    events = Object.keys(this.state.filtersList).reduce((acc, f) => this.prepareEventList(acc, this.state[f], this.state.filtersList[f].name), events);
-    console.log(events);
+    events = Object.keys(this.state.filtersList).reduce((acc, f) => {
+      // console.log(f);
+      return this.prepareEventList(acc, this.state[f], this.state.filtersList[f].name);
+    }, events);
+    // console.log(events);
     
     // FILTER BY VIGENCY
     events = !this.state.vigency.past ? events.filter(e => !(e.latestDay < dayOfTheYear)) : events;
     events = !this.state.vigency.between ? events.filter(e => !(e.latestDay >= dayOfTheYear && e.earliestDay <= dayOfTheYear)) : events;
     events = !this.state.vigency.future ? events.filter(e => !(e.earliestDay > dayOfTheYear)) : events;
-    console.log(events);
+    // console.log(events);
     
     // FILTER BY STARRED
     events = this.state.starred.show ? events.filter(e => this.state.starred.items.indexOf(e.id) > -1) : events;
-    console.log(events);
+    // console.log(events);
 
     // ORDER
     events = orderBy(events, this.state.order.sortBy, this.state.order.orderBy);
@@ -247,6 +270,18 @@ class App extends Component {
     let filters = this.state[filterName];
     filters[filter].active = active;
     this.updateEventList(this.events);
+  };
+
+  batchChange = (filterName, active) => {
+    let filters = this.state[filterName];
+    let newState = {};
+    newState[filterName] = filters;
+    // console.log(newState);
+    for (let filter in filters) {
+      newState[filterName][filter]["active"] = active;
+    }
+    // console.log({newState});
+    this.updateState(newState, true);
   };
 
   handleOpenModal = (targetId) => {
@@ -301,6 +336,7 @@ class App extends Component {
                   time={time}
                   modalEventId={isValid(this.state.modal.modalEvent) ? this.state.events[this.state.modal.modalEvent].id : null}
                   modal={this.state.modal}
+                  brandsInfo={this.state.brands}
                 /> :
                 <Loading>
                   <span>
@@ -326,12 +362,24 @@ class App extends Component {
               time={time}
               updateState={this.updateState}
               starred={this.state.starred}
+              brandsInfo={this.state.brands}
             />
           }
         </div>
       </main>
 
-      <Sidebar regions={this.state.regions} brands={this.state.brands} offers={this.state.offers} channels={this.state.channels} updateFilter={this.updateFilter} collapsed={this.state.sidebar.collapsed || false} updateState={this.updateState} ready={this.state.ready} />
+      <Sidebar 
+        regions={this.state.regions}
+        brands={this.state.brands}
+        brandGroups={this.state.brandGroups}
+        offers={this.state.offers}
+        channels={this.state.channels}
+        updateFilter={this.updateFilter}
+        collapsed={this.state.sidebar.collapsed || false}
+        updateState={this.updateState}
+        ready={this.state.ready}
+        batchChange={this.batchChange}
+      />
     </div>);
   }
 }

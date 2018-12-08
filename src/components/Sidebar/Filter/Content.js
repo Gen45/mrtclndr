@@ -33,8 +33,22 @@ class Content extends Component {
             : '';
           const validKeyPhrase = this.props.filters[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
 
+
           return ((filterCategories.indexOf(r) > -1 && validKeyPhrase) || filterCategories.length === 0)
-            ? <Button key={this.props.filters[r]["slug"]} prefix="filter" filter={filter} filterName={filterName} active={active} handleChange={this.props.handleChange} color={color} filterIcon={filterIcon} filterImage={filterImage} labelDot={labelDot} TooltipTheme={this.props.TooltipTheme} tooltips={this.props.tooltips} />
+            ? <Button 
+                key={this.props.filters[r]["slug"]} 
+                prefix="filter" 
+                filter={filter} 
+                filterName={filterName} 
+                active={active} 
+                handleChange={this.props.handleChange} 
+                color={color} 
+                filterIcon={filterIcon} 
+                filterImage={filterImage} 
+                labelDot={labelDot} 
+                TooltipTheme={this.props.TooltipTheme} 
+                tooltips={this.props.tooltips}
+              />
             : null;
         })
       }

@@ -47,11 +47,15 @@ class Modal extends Component {
     // this.props.updateState({starred:{items: starredItems, show: starredItems.length > 0 ? showStarred : false }, closeModal}, showStarred);
   };
 
+  handleEdit = () => {
+    console.log('lol')
+  }
+
   render() {
 
     const EventForModal = () =>
     <div className="modal-content">
-      <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} />
+        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} brandsInfo={this.props.brandsInfo} />
     </div>
 
     const handle = 'handle-' + this.props.events[this.props.modal.modalEvent].id;
@@ -62,6 +66,8 @@ class Modal extends Component {
           <Draggable ref={(modalDraggable) => {this.modalDraggableRef = modalDraggable}} disabled={_ISMOBILE()} handle={`.${handle}`} >
             <div className='modal-wrapper'>
                 <nav className="modal-nav">
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_pencil' 
+                  payload={() => this.handleEdit()}/>
                   <span className={`modal-handle ${handle}`}></span>
                   <Trigger triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-left'

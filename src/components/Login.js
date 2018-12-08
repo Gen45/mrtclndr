@@ -53,7 +53,6 @@ class Login extends Component {
           <i className="nc-icon-outline arrows-1_tail-right"></i>
         </button>
           <p style={{paddingTop: 20}}>{this.state.error ? 'Please enter a valid Code' : <br/>}</p>
-
       </form>
     </div>)
   }

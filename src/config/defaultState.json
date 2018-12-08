@@ -19,7 +19,18 @@
     "future": true
   },
   "filtersList": {
-    "regions": {"name": "region"}
+    "regions": {
+      "name": "region"
+    },
+    "channels": {
+      "name": "channels"
+    },
+    "offers": {
+      "name": "offer"
+    },
+    "brands": {
+      "name": "brands"
+    }
   },
   "modal": {
     "modalEvent": null,

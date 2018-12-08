@@ -51,18 +51,7 @@ class Event extends Component {
         }
           <div className='info-wrapper'>
             <div className='activity'>
-              <Tooltip
-                title={event.offer}
-                trigger="mouseenter"
-                delay={200}
-                arrow={true}
-                distance={10}
-                theme="light"
-                size="big"
-                html={(
-                  <span><span className='label-dot' style={{backgroundColor: offerColor}}/> {event.offer}</span>
-                )}
-              >
+              <Tooltip title={event.offer[0].name} trigger="mouseenter" delay={0} arrow={true} distance={10} theme="light" size="big" html={( <span><span className='label-dot' style={{backgroundColor: offerColor}}/> {event.offer[0].name}</span> )} >
                 <span className='label-dot' style={{backgroundColor: offerColor}}/>
               </Tooltip>
               <span>{event.campaignName}</span>
@@ -70,12 +59,12 @@ class Event extends Component {
           {
             this.props.view === 'grid' &&
             <p className='market'>{event.market}</p>
-          }
+          }       
           {
             this.props.view === 'grid' &&
             <p className='tags'>
               {
-                [{name:"Segment",val:event.segment},{name:"Group",val:event.campaignGroup},{name:"Program Type",val:event.programType},{name:"Ongoing",val:event.ongoing}].map((e, i)=> isValid(e.val) ?
+                    [{ name: "Segment", val: event.segment }, { name: "Group", val: event.campaignGroup }, { name: "Program Type", val: event.programType }, { name: "Market Scope", val: event.marketScope }].map((e, i)=> isValid(e.val) ?
                   <span key={i} className='tag'>
                     <span style={{color: _COLORS.LIGHTERGRAY }}>{e.name}: </span> {e.val}
                   </span>
@@ -104,7 +93,7 @@ class Event extends Component {
               ? ' active'
               : ''}`}>
             <p className='contact ' title={event.owner.name}><i className='nc-icon-mini users_circle-09' style={{color: regionColor}}/> {event.owner.name}</p>
-            <Brands brands={event.brands}/>
+              <Brands brands={event.brands} brandsInfo={this.props.brandsInfo} />
           </div>
         </div>
       }

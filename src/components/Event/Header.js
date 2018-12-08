@@ -26,8 +26,8 @@ class Header extends Component {
     return (
       <header className="event-channels" style={putColor(this.props.color)}>
         <span className="channels">
-        {channels.map(c => c !== "OTHER_CHANNELS" &&
-          withTooltip(c["name"], <i  className={ c["icon"] }/>, c)
+          {channels.map(c => (c !== "OTHER_CHANNELS" && c.slug !== "other-channels" ) &&
+          withTooltip(c["name"], <i className={ c["icon"] }/>, c.slug)
         )}
           {this.props.otherChannels !== "" && withTooltip(this.props.otherChannels, <i className="icon nc-icon-mini ui-2_menu-dots" /> )}
         </span>
