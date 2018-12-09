@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
+import axios from 'axios';
+
 import Loading from './Helpers/Loading';
 
 // STYLES
@@ -14,7 +16,7 @@ import defaultState from '../config/defaultState.json';
 import base from '../config/base';
 
 // CONSTANTS
-import {_LOGO, _ISMOBILE, _BACKGROUNDIMAGES} from '../config/constants';
+import {_LOGO, _ISMOBILE, _BACKGROUNDIMAGES, _WP_URL, _AUTH} from '../config/constants';
 
 // HELPERS
 import {getExtreme, getTimeRange, today, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
@@ -27,6 +29,7 @@ import {MonthBar, MonthLines} from './Main/MonthLines';
 import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
+import EnterData from './Main/EnterData';
 
 
 class App extends Component {
@@ -129,7 +132,7 @@ class App extends Component {
 
       this.events = data.entries;
 
-      this.setState({ 
+      this.setState({
         events: data.entries,
         regions,
         offers,
@@ -137,13 +140,12 @@ class App extends Component {
         channels,
         brandGroups,
         ready: true
-     }); 
+      }); 
       
     });
   }
 
   componentDidUpdate() {
-
     const {
       events,
       shortLinks,
@@ -188,21 +190,75 @@ class App extends Component {
 
   logout = () => this.props.history.push('/login', {});
 
+  addEntry = () => {
+
+    this.setState({addEntry: !this.state.addEntry});
+
+    const newEntry = {
+      campaign_name: 'el title',
+      description: 'lorem123'
+    }
+
+    console.log('Adding new Entry modal');
+
+    // axios({
+    //     method: 'post',
+    //     url: _WP_URL + "/wp-json/wp/v2/entry",
+    //     auth: _AUTH,
+    //     data: {
+    //       title: newEntry.campaign_name,
+    //       fields: {
+    //         "description": "lorem123",
+    //         "owner_subregion": 21,
+    //         "other_channels": "nono",
+    //         "owner": 260,
+    //         "campaign_group": 153,
+    //         "featured_markets": [
+    //           402
+    //         ],
+    //         "market_scope": 77,
+    //         "segment": 74,
+    //         "program_type": 158,
+    //         "brands": [
+    //           33
+    //         ],
+    //         "dates": {
+    //           "multidate": true,
+    //           "ongoing": false,
+    //           "date": {
+    //             "start": null,
+    //             "end": null
+    //           },
+    //           "sell": {
+    //             "start": "12/09/2018",
+    //             "end": "12/16/2018"
+    //           },
+    //           "stay": {
+    //             "start": "12/16/2018",
+    //             "end": "12/16/2018"
+    //           }
+    //         },
+    //         "channels": [
+    //           11
+    //         ]
+    //       },
+    //       status: 'publish'
+    //     }
+    //   }).then(function (response) {
+    //     console.log('ta listo', response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log('no ta listo', error);
+    //   });
+  }
+
   activeFilter = filterType => Object.keys(filterType).filter((f, i) => filterType[f].active === true);
 
   prepareEventList = (events, filter, field) => events.filter(e => {
-    // console.log(e);
-    // console.log(filter);
-    // console.log(field);
-    // const fieldArr = Object.keys(e[field]);
-    // console.log(fieldArr);
     return e[field].reduce((x, c) => {
-      // console.log(this.activeFilter(filter), c.slug);
-      // console.log(this.activeFilter(filter), c);
-      const bla = x || (this.activeFilter(filter).indexOf(field === 'brands' ? c : c.slug) >= 0)
-      return bla
+      const eventList = x || (this.activeFilter(filter).indexOf(field === 'brands' ? c : c.slug) >= 0)
+      return eventList
     }, false)
-    // return e[field].reduce((x, c) => x || (this.activeFilter(filter).indexOf(c) >= 0), false)
   });
 
   updateEventList = (events, update) => {
@@ -299,11 +355,23 @@ class App extends Component {
 
     return (
       <div className={appClass()}>
+      { this.state.addEntry && 
+        <EnterData 
+          brands={this.state.brands}
+          regions={this.state.regions}
+          offers={this.state.offers}
+          brands={this.state.brands}
+          channels={this.state.channels}
+          brandGroups={this.state.brandGroups}
+        />
+      }
       <main id="main" className="main" role="main">
 
-        <Header collapsed={this.state.sidebar.collapsed} logout={this.logout} />
+        <Header collapsed={this.state.sidebar.collapsed} logout={this.logout} addEntry={this.addEntry} />
+        
 
         <div className="content-frame" style={{backgroundImage: `url(${_BACKGROUNDIMAGES.IMAGES[0]})`}}>
+        
           <div className={`content ${this.state.view}-view`}>
             <ToolBar
               time={time}
@@ -322,7 +390,8 @@ class App extends Component {
 
             <MonthBar time={time} collapsed={this.state.sidebar.collapsed}/>
 
-            <div className="nano">
+
+              <div className="nano">
               <MonthLines time={time}/>
               <Scrollbars thumbMinSize={100} universal={true} style={{
                   height: '100%'
@@ -341,7 +410,7 @@ class App extends Component {
                 <Loading>
                   <span>
                     <img width={200} src={_LOGO.URL} alt={_LOGO.ALT} style={{display: 'block', margin: '20px auto',}}/>
-                     Loading
+                    <span>Loading</span>
                   </span>
                 </Loading>
 
@@ -349,6 +418,7 @@ class App extends Component {
               </Scrollbars>
             </div>
           </div>
+        
           {
             this.state.modal.show && this.state.ready && this.state.events &&
             <Modal

@@ -6,49 +6,70 @@
     background: $color-black;
     width: calc( 100% - #{$sidebar-expanded});
     z-index: 1;
-    padding-bottom: 2px;
-    // transition: $transition-time/2;
-
+    padding-bottom: 2px; // transition: $transition-time/2;
     .login & {
         // opacity: 0;
     }
-    .logout {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-      height: 50px;
-      width: 114px;
-      white-space: nowrap;
-      vertical-align: middle;
-      position: absolute;
-      right: 10px;
-      top: 0px;
-      justify-content: flex-end;
-      text-align: right;
-      cursor: pointer;
-      padding: 0 15px;
-      font-size: 14px;
-      color: $color-light-gray;
-      .collapsed & {
-        right: 125px;
-      }
-      &:hover {
-        color: $color-lighter-gray;
-      }
-      @media only screen and (max-width:$phone-max) {
-        right: $header-height;
-        .collapsed & {
-          right: $header-height;
+    .logout,
+    .addEntry {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        height: 50px;
+        width: 114px;
+        white-space: nowrap;
+        vertical-align: middle;
+        position: absolute;
+        right: 10px;
+        top: 0px;
+        justify-content: flex-end;
+        text-align: right;
+        cursor: pointer;
+        padding: 0 15px;
+        font-size: 14px;
+        color: $color-light-gray;
+        i {
+            margin-right: 10px;
         }
-      }
+        .collapsed & {
+            right: 125px;
+        }
+        &:hover {
+            color: $color-lighter-gray;
+        }
+        @media only screen and (max-width:$phone-max) {
+            width: 50px;
+            i {
+                margin-right: 0;
+            }
+            span {
+                display: none;
+            }
+            right: 50px; 
+            .collapsed & {
+                right: 50px; 
+            }
+        }
+    }
+    .addEntry {
+        right: 100px;
+        .collapsed & {
+            right: 225px;
+        }
+        @media only screen and (max-width:$phone-max) {
+            // right: 225px !important;
+            right: 85px !important;
+
+            .collapsed & {
+                // right: 225px !important;
+            }
+        }
     }
     .collapsed & {
-        width: calc( 100% - #{$sidebar-collapsed});
-        // transition: $transition-time/2;
+        width: calc( 100% - #{$sidebar-collapsed}); // transition: $transition-time/2;
     }
-
     @media screen and (max-width: $phone-max) {
-      width: 100%;
+        width: 100%;
     }
     h1 {
         display: inline-block;
@@ -57,9 +78,8 @@
         height: 36px;
         line-height: 36px;
         padding-left: $padding;
-        white-space: nowrap;
-        //
-        @media only screen and (max-width:$phone-max) {
+        white-space: nowrap; //
+        @media only screen and (max-width: $phone-max) {
             margin: 0 12px;
             padding-left: $padding/2;
             font-size: 24px;
@@ -67,11 +87,9 @@
     }
     display: flex;
     align-items: center;
-
-
     @media screen and (max-width: $desktop-min) {
         .modal-on & {
-          display: none;
+            display: none;
         }
     }
 }
@@ -92,11 +110,11 @@
     a {
         height: 100%;
     }
-    svg, img {
+    svg,
+    img {
         width: 170px;
         height: auto;
-    }
-    //
+    } //
     @media only screen and (max-width:500px) {
         margin-left: 15px;
         width: 30px;

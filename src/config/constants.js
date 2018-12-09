@@ -37,3 +37,10 @@ export const _COLORS = {
   ACCENT: "#e4144a",
   SUCCESS: "#70cb74"
 };
+
+
+export const _WP_URL = 'http://admin.marriottcalendar.com';
+export const _AUTH = {
+  username: 'GDCMWX',
+  password: '#yoyoMWX1470.'
+};

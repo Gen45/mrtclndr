@@ -185,3 +185,87 @@ input.search-box {
     padding: 0;
     opacity: 0;
 }
+
+.form-input--no-margin {
+    margin-bottom: 0 !important;
+}
+
+.form-input {
+    margin-bottom: 1.5em;
+    input[type="text"], textarea {
+        font: 300 16px/1.6 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
+        width: 100%;
+            border: none;
+        height: 2em;
+        background: transparent;
+        border-bottom: 2px solid $color-medium-gray;
+        color: $color-white;
+        font-size: 1.5em;
+        &:focus {
+            border-bottom: 2px solid $color-accent;
+        }
+        ::selection {
+            background: $color-accent;
+            color: #fff;
+            text-shadow: none; 
+        }
+        ::-moz-selection{
+            background: $color-accent;
+            color: #fff;
+            text-shadow: none; 
+        }
+    }
+    textarea {
+        padding: 0.5em;
+        font-size: 1.2em;
+        background: rgba($color-medium-gray, 0.5);
+        height: 6em;
+    }
+
+
+    small.message {
+        margin-top: -1em;
+        display: block;
+        border-top: 1px solid $color-medium-gray;
+        color: $color-light-gray;
+        font-size: 0.75em;
+    }
+
+    h3 {
+        width: 100%;
+        display: block;
+        margin-bottom: 0.5em;
+
+    }
+    
+}
+
+.form-input--tags {
+    width: 100%;
+    margin-bottom: 1em;
+    .form-input--tags-wrapper {
+        position: relative;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+    display: flex;
+    flex-wrap: wrap;
+    input {
+        display: none;
+        &:checked + label {
+            background: $color-medium-gray;
+        }
+    }
+    label {
+        background: transparent;
+        border: 1px solid $color-medium-gray;;
+        width: 100%;
+        white-space: nowrap;
+        font-size: 12px;
+        text-align: center;
+        border-radius: 30px;
+        padding: 3px 10px;
+        min-width: 100%;
+    }
+
+}

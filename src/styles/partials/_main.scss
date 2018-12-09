@@ -1,26 +1,32 @@
 .main {
+
     width: 100%;
     position: fixed;
     background: $color-black;
+
     .collapsed & {
         width: 100%;
         overflow: auto;
+
         &:before {
             opacity: 0;
             width: 100%;
             pointer-events: none;
         }
 
-      .content-frame {
-        width: 100%;
-        transition: width 0s;
-      }
-    }
-    @media screen and (max-width: $desktop-min) {
-        width: calc( 100% - #{$sidebar-collapsed});
         .content-frame {
-          width: 100%;
+            width: 100%;
+            transition: width 0s;
         }
+    }
+
+    @media screen and (max-width: $desktop-min) {
+        width: calc(100% - #{$sidebar-collapsed});
+
+        .content-frame {
+            width: 100%;
+        }
+
         &:before {
             content: '';
             position: fixed;
@@ -40,13 +46,14 @@
 
     .content {
         position: relative;
-        height: calc( 100vh - (2 * #{$padding}) - #{$header-height});
+        height: calc(100vh - (2 * #{$padding}) - #{$header-height});
         background: rgba($color-dark-gray, 0.85);
         box-shadow: 0 0 10px rgba($color-black, 0.5);
         border-radius: 10px;
         overflow: hidden;
         padding-bottom: $padding * 4;
-        > header {
+
+        >header {
             position: relative;
             z-index: 103;
             padding: 0 $padding;
@@ -56,22 +63,26 @@
             justify-content: space-between;
             height: $content-header-height;
             box-shadow: 0 2px 20px rgba($color-dark-gray, 0.8);
+
             @media screen and (max-width: $desktop-min) {
                 // display: block;
                 text-align: justify;
+
                 h2 {
                     margin: 0 auto;
                     justify-content: left;
                 }
-                > nav {
-                  // position: absolute;
-                  // top: 11px;
-                  // right: 0;
-                  text-align: right;
+
+                >nav {
+                    // position: absolute;
+                    // top: 11px;
+                    // right: 0;
+                    text-align: right;
                     display: inline-block;
                     // margin: 0 0 0 auto;
                 }
             }
+
             .title {
                 font-size: 28px;
                 color: $color-accent;
@@ -81,6 +92,7 @@
                 margin: 0 auto 0 10px;
                 letter-spacing: 1px;
                 white-space: nowrap;
+
                 .detail {
                     font-size: 18px;
                     color: $color-lightest-gray;
@@ -88,9 +100,11 @@
                     text-transform: none;
                 }
             }
+
             @media screen and (max-width: $desktop-min) {
                 padding: 0;
                 height: 50px;
+
                 h2.title {
                     height: 50px;
                     // display: block;
@@ -98,6 +112,7 @@
                     font-size: 24px;
                     margin-left: 70px;
                     margin-top: -2px;
+
                     .detail {
                         margin-left: 10px;
                         font-size: 18px;
@@ -105,10 +120,12 @@
                 }
             }
         }
+
         @media screen and (max-width: $desktop-min) {
-            height: calc( 100vh - #{$header-height});
+            height: calc(100vh - #{$header-height});
             border-radius: 0;
         }
+
         &:after {
             content: '';
             position: absolute;
@@ -122,6 +139,7 @@
             pointer-events: none;
         }
     }
+
     @media print {
         width: 100%;
     }
@@ -133,6 +151,7 @@
     margin-top: 2px;
     z-index: 300;
     white-space: nowrap;
+
     a {
         display: inline-block;
         // margin-right: 10px;
@@ -141,6 +160,7 @@
         vertical-align: middle;
         cursor: pointer;
         text-align: center;
+
         i {
             display: flex;
             font-size: 30px;
@@ -148,6 +168,7 @@
             text-align: center;
             border-radius: 17px;
         }
+
         &:hover i {
             color: $color-white;
         }
@@ -163,6 +184,7 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
+
         a {
             i {
                 font-size: 24px;
@@ -181,12 +203,13 @@
     overflow: hidden;
     min-height: calc(100vh - #{$header-height});
     padding: $padding;
+
     @media screen and (max-width: $desktop-min) {
         padding: 0;
 
         .modal-on & {
-          top: 0;
-          height: 100vh;
+            top: 0;
+            height: 100vh;
         }
     }
 }

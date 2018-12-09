@@ -12,9 +12,17 @@ class Header extends Component {
           <img src={_LOGO.URL} alt={_LOGO.ALT}/>
         </div>
         <h1 className="title">Calendar</h1>
+        <a className="addEntry" onClick={this.props.addEntry}>
+          <i className="nc-icon-mini ui-1_bold-add" /> 
+          <span>
+            Add Entry
+          </span>
+        </a>        
         <a className="logout" onClick={this.props.logout}>
-          <i className="nc-icon-outline media-1_button-power" style={{marginRight: 10}} /> 
-          Log Out
+          <i className="nc-icon-outline media-1_button-power" /> 
+          <span>
+            Log Out
+          </span>
         </a>
       </header>
     )

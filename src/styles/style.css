@@ -92,7 +92,8 @@ textarea:focus, input:focus, button:focus {
   padding-bottom: 2px;
   display: flex;
   align-items: center; }
-  .header .logout {
+  .header .logout,
+  .header .addEntry {
     align-items: center;
     display: flex;
     justify-content: space-between;
@@ -109,15 +110,36 @@ textarea:focus, input:focus, button:focus {
     padding: 0 15px;
     font-size: 14px;
     color: #999999; }
-    .collapsed .header .logout {
+    .header .logout i,
+    .header .addEntry i {
+      margin-right: 10px; }
+    .collapsed .header .logout, .collapsed
+    .header .addEntry {
       right: 125px; }
-    .header .logout:hover {
+    .header .logout:hover,
+    .header .addEntry:hover {
       color: #c2c2c2; }
     @media only screen and (max-width: 679px) {
-      .header .logout {
+      .header .logout,
+      .header .addEntry {
+        width: 50px;
         right: 50px; }
-        .collapsed .header .logout {
+        .header .logout i,
+        .header .addEntry i {
+          margin-right: 0; }
+        .header .logout span,
+        .header .addEntry span {
+          display: none; }
+        .collapsed .header .logout, .collapsed
+        .header .addEntry {
           right: 50px; } }
+  .header .addEntry {
+    right: 100px; }
+    .collapsed .header .addEntry {
+      right: 225px; }
+    @media only screen and (max-width: 679px) {
+      .header .addEntry {
+        right: 85px !important; } }
   .collapsed .header {
     width: calc( 100% - 1px); }
   @media screen and (max-width: 679px) {
@@ -155,7 +177,8 @@ textarea:focus, input:focus, button:focus {
   vertical-align: middle; }
   .logo a {
     height: 100%; }
-  .logo svg, .logo img {
+  .logo svg,
+  .logo img {
     width: 170px;
     height: auto; }
   @media only screen and (max-width: 500px) {
@@ -382,7 +405,7 @@ textarea:focus, input:focus, button:focus {
       transition: width 0s; }
   @media screen and (max-width: 940px) {
     .main {
-      width: calc( 100% - 1px); }
+      width: calc(100% - 1px); }
       .main .content-frame {
         width: 100%; }
       .main:before {
@@ -397,7 +420,7 @@ textarea:focus, input:focus, button:focus {
         transition: opacity 0.15s; } }
   .main .content {
     position: relative;
-    height: calc( 100vh - (2 * 20px) - 50px);
+    height: calc(100vh - (2 * 20px) - 50px);
     background: rgba(51, 51, 51, 0.85);
     box-shadow: 0 0 10px rgba(22, 22, 22, 0.5);
     border-radius: 10px;
@@ -451,7 +474,7 @@ textarea:focus, input:focus, button:focus {
               font-size: 18px; } }
     @media screen and (max-width: 940px) {
       .main .content {
-        height: calc( 100vh - 50px);
+        height: calc(100vh - 50px);
         border-radius: 0; } }
     .main .content:after {
       content: '';
@@ -1530,6 +1553,42 @@ body.activity-type .activity-type-group {
     top: 50%;
     transform: translate(-50%, -50%); }
 
+.main-overlay {
+  padding-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(34, 34, 34, 0.85);
+  z-index: 100; }
+
+.enter-data-wrapper {
+  display: block;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  border-radius: 10px;
+  background: #333333;
+  box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.75); }
+
+.enter-data-header,
+.enter-data-body,
+.enter-data-footer {
+  padding: 20px; }
+
+.enter-data-header {
+  background: #222;
+  border-radius: 10px 10px 0 0; }
+
+.enter-data-body {
+  display: flex; }
+  .enter-data-body .col {
+    width: 40%;
+    margin-right: 2em; }
+
 .filter .content {
   text-align: center; }
 
@@ -1667,6 +1726,70 @@ input.search-box {
   display: inline-block;
   padding: 0;
   opacity: 0; }
+
+.form-input--no-margin {
+  margin-bottom: 0 !important; }
+
+.form-input {
+  margin-bottom: 1.5em; }
+  .form-input input[type="text"], .form-input textarea {
+    font: 300 16px/1.6 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
+    width: 100%;
+    border: none;
+    height: 2em;
+    background: transparent;
+    border-bottom: 2px solid #666666;
+    color: #ffffff;
+    font-size: 1.5em; }
+    .form-input input[type="text"]:focus, .form-input textarea:focus {
+      border-bottom: 2px solid #e4144a; }
+    .form-input input[type="text"] ::selection, .form-input textarea ::selection {
+      background: #e4144a;
+      color: #fff;
+      text-shadow: none; }
+    .form-input input[type="text"] ::-moz-selection, .form-input textarea ::-moz-selection {
+      background: #e4144a;
+      color: #fff;
+      text-shadow: none; }
+  .form-input textarea {
+    padding: 0.5em;
+    font-size: 1.2em;
+    background: rgba(102, 102, 102, 0.5);
+    height: 6em; }
+  .form-input small.message {
+    margin-top: -1em;
+    display: block;
+    border-top: 1px solid #666666;
+    color: #999999;
+    font-size: 0.75em; }
+  .form-input h3 {
+    width: 100%;
+    display: block;
+    margin-bottom: 0.5em; }
+
+.form-input--tags {
+  width: 100%;
+  margin-bottom: 1em;
+  display: flex;
+  flex-wrap: wrap; }
+  .form-input--tags .form-input--tags-wrapper {
+    position: relative;
+    margin-right: 5px;
+    margin-bottom: 5px; }
+  .form-input--tags input {
+    display: none; }
+    .form-input--tags input:checked + label {
+      background: #666666; }
+  .form-input--tags label {
+    background: transparent;
+    border: 1px solid #666666;
+    width: 100%;
+    white-space: nowrap;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 30px;
+    padding: 3px 10px;
+    min-width: 100%; }
 
 .icon {
   width: 30px;
