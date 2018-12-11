@@ -16,7 +16,7 @@
         font-weight: 400;
         letter-spacing: 1px;
         background: transparent;
-        min-width: 88px;
+        // min-width: 88px;
         // border: 1px solid $color-light-gray;
         height: $filter-tag-height;
         line-height: $filter-tag-height;
@@ -217,9 +217,10 @@ input.search-box {
     }
     textarea {
         padding: 0.5em;
-        font-size: 1.2em;
+        font-size: 1em;
         background: rgba($color-medium-gray, 0.5);
         height: 6em;
+        resize: none;
     }
 
 
@@ -229,6 +230,7 @@ input.search-box {
         border-top: 1px solid $color-medium-gray;
         color: $color-light-gray;
         font-size: 0.75em;
+        
     }
 
     h3 {
@@ -238,6 +240,9 @@ input.search-box {
 
     }
     
+    &.form-input--small {
+        font-size: 1em;
+    }
 }
 
 .form-input--tags {
@@ -257,6 +262,7 @@ input.search-box {
         }
     }
     label {
+        cursor: pointer;
         background: transparent;
         border: 1px solid $color-medium-gray;;
         width: 100%;

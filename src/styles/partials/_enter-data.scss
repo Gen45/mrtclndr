@@ -38,9 +38,35 @@
 
 .enter-data-body {
     display: flex;
+    flex-wrap: wrap;
+    
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
 
     .col {
-        width: 40%;
+        // width: 45%;
         margin-right: 2em;
+    }
+    .col-full {
+        width: calc(90% + 2em);
+    }
+
+    .col-50 {
+        width: calc(50% - 1em);
+        margin-right: 1em;
+    }
+
+    .col-end {
+        margin-right: 0;
+        margin-left: 1em;
+    }
+
+    .col-1 {
+        width: 30%;
+    }
+    .col-2 {
+        width: 60%;
     }
 }

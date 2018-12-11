@@ -47,8 +47,10 @@ class Modal extends Component {
     // this.props.updateState({starred:{items: starredItems, show: starredItems.length > 0 ? showStarred : false }, closeModal}, showStarred);
   };
 
-  handleEdit = () => {
-    console.log('lol')
+  handleEdit = (id) => {
+    // console.log(link);
+    const url = `http://admin.marriottcalendar.com/wp-admin/post.php?post=${id}&action=edit`;
+    window.open(url, '_blank');
   }
 
   render() {
@@ -67,7 +69,7 @@ class Modal extends Component {
             <div className='modal-wrapper'>
                 <nav className="modal-nav">
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_pencil' 
-                  payload={() => this.handleEdit()}/>
+                  payload={() => this.handleEdit(this.props.events[this.props.modal.modalEvent].id)}/>
                   <span className={`modal-handle ${handle}`}></span>
                   <Trigger triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-left'

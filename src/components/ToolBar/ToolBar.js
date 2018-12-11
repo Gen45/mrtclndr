@@ -153,15 +153,15 @@ class ToolBar extends Component {
             <div className="group">
               <h4>Sort by</h4>
               <Trigger propState={this.props.groupByType} propStateValue='date' icon='nc-icon-outline ui-1_calendar-57'
-                payload={() => this.props.updateEventOrder({sortBy: ['earliestDay','offer','region'], orderBy: this.props.orderBy, groupByType: 'date'})}>
+                payload={() => this.props.updateEventOrder({sortBy: ['earliestDay','offer[0]["name"]','region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'date'})}>
                 DATE
               </Trigger>
               <Trigger propState={this.props.groupByType} propStateValue='offer' icon='nc-icon-outline ui-1_check-circle-07'
-                payload={() => this.props.updateEventOrder({sortBy: ['offer','earliestDay','region'], orderBy: this.props.orderBy, groupByType: 'offer'})}>
+                payload={() => this.props.updateEventOrder({sortBy: ['offer[0]["name"]','earliestDay','region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'offer'})}>
                 OFFER
               </Trigger>
               <Trigger propState={this.props.groupByType} propStateValue='region' icon='nc-icon-outline travel_world'
-                payload={() => this.props.updateEventOrder({sortBy: ['region','earliestDay','offer'], orderBy: this.props.orderBy, groupByType: 'region'})}>
+                payload={() => this.props.updateEventOrder({sortBy: ['region[0]["name"]','earliestDay','offer[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'region'})}>
                 REGION
               </Trigger>
               <hr/>

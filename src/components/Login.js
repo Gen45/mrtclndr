@@ -24,7 +24,9 @@ class Login extends Component {
     e.preventDefault();
 
     const codeIndex = Object.keys(_PASSCODES).indexOf(this.passCode.value);
-    const preset = Object.values(_PASSCODES)[codeIndex];
+    // const preset = Object.values(_PASSCODES)[codeIndex];
+    const preset = Object.keys(_PASSCODES).map(itm => _PASSCODES[itm])[codeIndex];
+    
 
     if(codeIndex > -1){
       this.setState({error : false});

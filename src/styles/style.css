@@ -1553,6 +1553,18 @@ body.activity-type .activity-type-group {
     top: 50%;
     transform: translate(-50%, -50%); }
 
+.pulse {
+  opacity: 0;
+  animation: pulse 2s infinite; }
+
+@keyframes pulse {
+  0% {
+    opacity: 0.35; }
+  50% {
+    opacity: 1; }
+  100% {
+    opacity: 0.35; } }
+
 .main-overlay {
   padding-top: 50px;
   display: flex;
@@ -1584,10 +1596,25 @@ body.activity-type .activity-type-group {
   border-radius: 10px 10px 0 0; }
 
 .enter-data-body {
-  display: flex; }
+  display: flex;
+  flex-wrap: wrap; }
+  .enter-data-body .row {
+    display: flex;
+    flex-wrap: wrap; }
   .enter-data-body .col {
-    width: 40%;
     margin-right: 2em; }
+  .enter-data-body .col-full {
+    width: calc(90% + 2em); }
+  .enter-data-body .col-50 {
+    width: calc(50% - 1em);
+    margin-right: 1em; }
+  .enter-data-body .col-end {
+    margin-right: 0;
+    margin-left: 1em; }
+  .enter-data-body .col-1 {
+    width: 30%; }
+  .enter-data-body .col-2 {
+    width: 60%; }
 
 .filter .content {
   text-align: center; }
@@ -1603,7 +1630,6 @@ body.activity-type .activity-type-group {
     font-weight: 400;
     letter-spacing: 1px;
     background: transparent;
-    min-width: 88px;
     height: 24px;
     line-height: 24px;
     padding: 0 10px;
@@ -1753,9 +1779,10 @@ input.search-box {
       text-shadow: none; }
   .form-input textarea {
     padding: 0.5em;
-    font-size: 1.2em;
+    font-size: 1em;
     background: rgba(102, 102, 102, 0.5);
-    height: 6em; }
+    height: 6em;
+    resize: none; }
   .form-input small.message {
     margin-top: -1em;
     display: block;
@@ -1766,6 +1793,8 @@ input.search-box {
     width: 100%;
     display: block;
     margin-bottom: 0.5em; }
+  .form-input.form-input--small {
+    font-size: 1em; }
 
 .form-input--tags {
   width: 100%;
@@ -1781,6 +1810,7 @@ input.search-box {
     .form-input--tags input:checked + label {
       background: #666666; }
   .form-input--tags label {
+    cursor: pointer;
     background: transparent;
     border: 1px solid #666666;
     width: 100%;

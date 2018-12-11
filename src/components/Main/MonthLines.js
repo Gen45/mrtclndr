@@ -20,7 +20,7 @@ export class MonthLines extends Component {
     return (<div className="months-lines">
       {
         yearsMonths(_years, _months).map((ym, key) => <span key={`${ym.year}-${ym.month}`} className="line">
-          {this.isTodayLine(_months.indexOf(ym.month), ym.year) && <TodayLine position={this.todayPosition()}/>}
+          {this.isTodayLine(_months.indexOf(ym.month) + (this.props.time.mode === 'M' ? this.props.time.M - 1 : (this.props.time.mode === 'Q' ? ((this.props.time.Q - 1)*3 ): 0)), ym.year) && <TodayLine position={this.todayPosition()}/>}
         </span>)
       }
     </div>)
@@ -35,6 +35,7 @@ export class MonthBar extends Component {
 
   handleClick = (event, ym) => {
     event.preventDefault();
+    console.log(ym);
   };
 
   componentWillReceiveProps(nextProps) {

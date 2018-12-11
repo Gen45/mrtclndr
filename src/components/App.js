@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
-import axios from 'axios';
+// import axios from 'axios';
 
 import Loading from './Helpers/Loading';
 
@@ -16,10 +16,12 @@ import defaultState from '../config/defaultState.json';
 import base from '../config/base';
 
 // CONSTANTS
-import {_LOGO, _ISMOBILE, _BACKGROUNDIMAGES, _WP_URL, _AUTH} from '../config/constants';
+import {_LOGO, _ISMOBILE, _BACKGROUNDIMAGES
+  // , _WP_URL, _AUTH
+} from '../config/constants';
 
 // HELPERS
-import {getExtreme, getTimeRange, today, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
+import {getExtreme, getTimeRange, today, month, year, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
 import {isValid, keyGenerator} from '../helpers/misc';
 
 // LOCAL COMPONENTS
@@ -47,11 +49,14 @@ class App extends Component {
     if(isValid(this.props.location.state)) {
       if(this.props.location.state.isAuthenticated === false) {
         this.props.history.push('/login', { from });
+        this.readyLoad = false;
       } else {
         this.preset = this.props.location.state.preset;
+        this.readyLoad = true;
       }
     } else {
       this.props.history.push('/login', { from });
+      this.readyLoad = false;
     }
 
     const preset = this.preset || 'ALL';
@@ -59,9 +64,10 @@ class App extends Component {
 
     let regions = {};
     regions[preset] = true;
-    const state = preset !== 'ALL' ? {...defaultState, regions } : defaultState;
+    // const state = preset !== 'ALL' ? {...defaultState, regions } : defaultState;
+    const state = defaultState;
 
-    const localStorageRef = localStorage.getItem('marriott-calendar-' + preset);
+    const localStorageRef = localStorage.getItem('marriott-calendar-' + preset + "-" + month(today()) + "-" + year(today()));
     if (localStorageRef) {
       this.stateString = localStorageRef;
       this.setState({...JSON.parse(localStorageRef)}, () => this.updateEventList(this.events), false);
@@ -96,53 +102,68 @@ class App extends Component {
 
   componentDidMount() {
 
-    const newEvents = eventsData();
+    if (this.readyLoad) {
 
-    newEvents.then((data) => { 
-      let regions = {};
-      let offers = {};
-      let channels = {};
-      let brands = {};
-      let brandGroups = {};
+      const newEvents = eventsData();
 
-      for (const r in data.regions) {
-        regions[data.regions[r].slug] = data.regions[r];
-        regions[data.regions[r].slug].active = true;
-      }
-      
-      for (const r in data.channels) {
-        channels[data.channels[r].slug] = data.channels[r];
-        channels[data.channels[r].slug].active = true;
-      }
-      
-      for (const r in data.offers) {
-        offers[data.offers[r].slug] = data.offers[r];
-        offers[data.offers[r].slug].active = true;
-      }
-      
-      for (const r in data.brands) {
-        brands[data.brands[r].slug] = data.brands[r];
-        brands[data.brands[r].slug].active = true;
-      }
+      newEvents.then((data) => { 
+        let regions = {};
+        let offers = {};
+        let channels = {};
+        let brands = {};
+        let brandGroups = {};
 
-      for (const r in data.brandGroups) {
-        brandGroups[data.brandGroups[r].slug] = data.brandGroups[r];
-        // brandGroups[data.brandGroups[r].slug].active = true;
-      }      
+        for (const r in data.regions) {
+          if (this.preset === 'ALL') {
+            regions[data.regions[r].slug] = data.regions[r];
+            regions[data.regions[r].slug].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].slug].active : true;
+          } else {
+            if (data.regions[r].slug === this.preset.toLowerCase()) {
+              regions[data.regions[r].slug] = data.regions[r];
+              regions[data.regions[r].slug].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].slug].active : true;
+            }
+          }
 
-      this.events = data.entries;
+        }
+        
+        for (const r in data.channels) {
+          channels[data.channels[r].slug] = data.channels[r];
+          channels[data.channels[r].slug].active = this.state.channels !== undefined ? this.state.channels[data.channels[r].slug].active : true;
+        }
+        
+        for (const r in data.offers) {
+          offers[data.offers[r].slug] = data.offers[r];
+          offers[data.offers[r].slug].active = this.state.offers !== undefined ? this.state.offers[data.offers[r].slug].active : true;
+        }
+        
+        for (const r in data.brands) {
+          brands[data.brands[r].slug] = data.brands[r];
+          brands[data.brands[r].slug].active = this.state.brands !== undefined ? this.state.brands[data.brands[r].slug].active : true;
+        }
 
-      this.setState({
-        events: data.entries,
-        regions,
-        offers,
-        brands,
-        channels,
-        brandGroups,
-        ready: true
-      }); 
-      
-    });
+        for (const r in data.brandGroups) {
+          brandGroups[data.brandGroups[r].slug] = data.brandGroups[r];
+          // brandGroups[data.brandGroups[r].slug].active = this.state.brandGroups !== undefined ? this.state.regions[data.regions[r].slug].active : true;
+        }      
+
+        this.events = data.entries;
+
+        this.setState({
+          events: data.entries,
+          regions,
+          offers,
+          brands,
+          channels,
+          brandGroups,
+          ready: true
+        });
+
+        this.updateEventList(this.events, true);
+        
+      });
+
+    }
+
   }
 
   componentDidUpdate() {
@@ -150,12 +171,13 @@ class App extends Component {
       events,
       shortLinks,
       ready,
+      addEntry,
       ...configurations
     } = this.state;
 
     this.stateString = JSON.stringify(configurations);
     localStorage.setItem(
-      'marriott-calendar-' + this.preset,
+      'marriott-calendar-' + this.preset + "-" + month(today()) + "-" + year(today()),
       this.stateString
     );
 
@@ -173,7 +195,8 @@ class App extends Component {
     shortLinks[this.preset] = isValid(shortLinks[this.preset])
       ? shortLinks[this.preset]
       : {};
-    let index = Object.values(shortLinks[this.preset]).indexOf(encodedState);
+    let index = Object.keys(shortLinks[this.preset]).map(itm => shortLinks[this.preset][itm]).indexOf(encodedState);
+
     let key = '';
     if (index < 0) {
       do {
@@ -190,67 +213,67 @@ class App extends Component {
 
   logout = () => this.props.history.push('/login', {});
 
-  addEntry = () => {
+  // addEntry = () => {
 
-    this.setState({addEntry: !this.state.addEntry});
+  //   this.setState({addEntry: !this.state.addEntry});
 
-    const newEntry = {
-      campaign_name: 'el title',
-      description: 'lorem123'
-    }
+  //   const newEntry = {
+  //     campaign_name: 'el title',
+  //     description: 'lorem123'
+  //   }
 
-    console.log('Adding new Entry modal');
+  //   console.log('Adding new Entry modal');
 
-    // axios({
-    //     method: 'post',
-    //     url: _WP_URL + "/wp-json/wp/v2/entry",
-    //     auth: _AUTH,
-    //     data: {
-    //       title: newEntry.campaign_name,
-    //       fields: {
-    //         "description": "lorem123",
-    //         "owner_subregion": 21,
-    //         "other_channels": "nono",
-    //         "owner": 260,
-    //         "campaign_group": 153,
-    //         "featured_markets": [
-    //           402
-    //         ],
-    //         "market_scope": 77,
-    //         "segment": 74,
-    //         "program_type": 158,
-    //         "brands": [
-    //           33
-    //         ],
-    //         "dates": {
-    //           "multidate": true,
-    //           "ongoing": false,
-    //           "date": {
-    //             "start": null,
-    //             "end": null
-    //           },
-    //           "sell": {
-    //             "start": "12/09/2018",
-    //             "end": "12/16/2018"
-    //           },
-    //           "stay": {
-    //             "start": "12/16/2018",
-    //             "end": "12/16/2018"
-    //           }
-    //         },
-    //         "channels": [
-    //           11
-    //         ]
-    //       },
-    //       status: 'publish'
-    //     }
-    //   }).then(function (response) {
-    //     console.log('ta listo', response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log('no ta listo', error);
-    //   });
-  }
+  //   // axios({
+  //   //     method: 'post',
+  //   //     url: _WP_URL + "/wp-json/wp/v2/entry",
+  //   //     auth: _AUTH,
+  //   //     data: {
+  //   //       title: newEntry.campaign_name,
+  //   //       fields: {
+  //   //         "description": "lorem123",
+  //   //         "owner_subregion": 21,
+  //   //         "other_channels": "nono",
+  //   //         "owner": 260,
+  //   //         "campaign_group": 153,
+  //   //         "featured_markets": [
+  //   //           402
+  //   //         ],
+  //   //         "market_scope": 77,
+  //   //         "segment": 74,
+  //   //         "program_type": 158,
+  //   //         "brands": [
+  //   //           33
+  //   //         ],
+  //   //         "dates": {
+  //   //           "multidate": true,
+  //   //           "ongoing": false,
+  //   //           "date": {
+  //   //             "start": null,
+  //   //             "end": null
+  //   //           },
+  //   //           "sell": {
+  //   //             "start": "12/09/2018",
+  //   //             "end": "12/16/2018"
+  //   //           },
+  //   //           "stay": {
+  //   //             "start": "12/16/2018",
+  //   //             "end": "12/16/2018"
+  //   //           }
+  //   //         },
+  //   //         "channels": [
+  //   //           11
+  //   //         ]
+  //   //       },
+  //   //       status: 'publish'
+  //   //     }
+  //   //   }).then(function (response) {
+  //   //     console.log('ta listo', response);
+  //   //   })
+  //   //   .catch(function (error) {
+  //   //     console.log('no ta listo', error);
+  //   //   });
+  // }
 
   activeFilter = filterType => Object.keys(filterType).filter((f, i) => filterType[f].active === true);
 
@@ -262,7 +285,6 @@ class App extends Component {
   });
 
   updateEventList = (events, update) => {
-
     // console.log(events);
 
     const timeRange = getTimeRange(this.state.time);
@@ -345,7 +367,6 @@ class App extends Component {
   }
 
   render() {
-
     let time = !_ISMOBILE() ? this.state.time : {...this.state.time, numberOfYears: 1 };
         time = time.Y === (_PREVIOUSYEAR - 1) && (this.state.view === 'timeline' || time.mode !== 'Y') ? {...time, Y: _CURRENTYEAR} : time;
 
@@ -354,25 +375,30 @@ class App extends Component {
     }
 
     return (
+
+      <div>
+
+      {
+      this.state.ready && this.state.events !== [] ?
+
       <div className={appClass()}>
       { this.state.addEntry && 
         <EnterData 
           brands={this.state.brands}
           regions={this.state.regions}
           offers={this.state.offers}
-          brands={this.state.brands}
           channels={this.state.channels}
           brandGroups={this.state.brandGroups}
         />
       }
-      <main id="main" className="main" role="main">
 
+      <main id="main" className="main" role="main">
         <Header collapsed={this.state.sidebar.collapsed} logout={this.logout} addEntry={this.addEntry} />
         
-
         <div className="content-frame" style={{backgroundImage: `url(${_BACKGROUNDIMAGES.IMAGES[0]})`}}>
         
           <div className={`content ${this.state.view}-view`}>
+            
             <ToolBar
               time={time}
               updateState={this.updateState}
@@ -388,8 +414,9 @@ class App extends Component {
 
             <div className={`overlay${this.state.modal.show ? ' active' : ''}`}/>
 
+            { this.state.ready &&
             <MonthBar time={time} collapsed={this.state.sidebar.collapsed}/>
-
+            }
 
               <div className="nano">
               <MonthLines time={time}/>
@@ -438,6 +465,7 @@ class App extends Component {
         </div>
       </main>
 
+
       <Sidebar 
         regions={this.state.regions}
         brands={this.state.brands}
@@ -450,7 +478,20 @@ class App extends Component {
         ready={this.state.ready}
         batchChange={this.batchChange}
       />
-    </div>);
+    </div>
+
+    :
+      <Loading>
+        <span>
+          <img className="pulse" width={200} src={_LOGO.URL} alt={_LOGO.ALT} style={{display: 'block', margin: '20px auto',}}/>
+          <span>Loading... please wait</span>
+        </span>
+      </Loading>
+
+    }
+    </div> 
+    
+    );
   }
 }
 

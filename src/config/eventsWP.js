@@ -88,7 +88,7 @@ export async function eventsData() {
         id: r.id,
         slug: r.slug,
         count: r.count,
-        name: r.name,
+        name: decodeHTML(r.name),
         color: r.acf.color
       }
     });
@@ -98,7 +98,7 @@ export async function eventsData() {
         id: c.id,
         slug: c.slug,
         count: c.count,
-        name: c.name,
+        name: decodeHTML(c.name),
         icon: c.acf.icon
       }
     });
@@ -108,40 +108,56 @@ export async function eventsData() {
         id: o.id,
         slug: o.slug,
         count: o.count,
-        name: o.name,
+        name: decodeHTML(o.name),
         color: o.acf.color
       }
     });    
     
-    const brands = brand.data.filter( (b) => { return b.acf.group ===  false; }).map((b) => {
+    const brands = brand.data.filter( (b) => { return b.acf.group === false; }).map((b) => {
       return {
         id: b.id,
         slug: b.slug,
         count: b.count,
         image: b.acf.logo,
         abreviation: b.acf.abreviation,
-        name: b.name
+        name: decodeHTML(b.name)
       }
     });
 
-    const brandGroups = brand.data.filter( (bg) => { return bg.acf.group ===  true; }).map((bg) => {
+    const brandGroups = brand.data.filter( (bg) => bg.acf.group ===  true ).map((bg) => {
       return {
         id: bg.id,
         slug: bg.slug,
         count: bg.count,
-        name: bg.name,
+        name: decodeHTML(bg.name),
         brands: bg.acf.sub_brands.map(b => find(brand.data, i => i.id === b).slug)
       }
     });
 
     // var t0 = performance.now();
-    let i = [];
     entries = entriesALL.map(e => {
-      i.push(e.id);
+
+      const dates = {
+        sell: {
+          start: e.acf.dates.multidate ? e.acf.dates.sell.start: e.acf.dates.date.start,
+          end: e.acf.dates.multidate ? e.acf.dates.sell.end: e.acf.dates.date.end
+        },
+        stay: {
+          start: e.acf.dates.multidate ? e.acf.dates.stay.start: e.acf.dates.date.start,
+          end: e.acf.dates.multidate ? e.acf.dates.stay.end: e.acf.dates.date.end
+        }
+      };
+
       return {
         id: e.id,
+        wp_link: e.link,
         region: [find(regions, r => r.id === e.region[0])],
-        brands: e.brand.map(b => find(brand.data, i => i.id === b).slug),
+        brands: [...new Set(e.brand.reduce(
+          (bs, b) => {
+            const _brand = find(brand.data, i => i.id === b);
+            return _brand.acf.group ? [..._brand.acf.sub_brands, ...bs] : [b, ...bs];
+          }
+          ,[]))].map(b => find(brand.data, i => i.id === b).slug ),
         channels: e.channel.map(c => find(channels, i => i.id === c)),
         campaignName: decodeHTML(e.title.rendered),
         description: e.acf.description,
@@ -162,25 +178,15 @@ export async function eventsData() {
         otherChannels: e.acf.other_channels,
         ongoing: e.acf.dates.ongoing,
         datesType: e.acf.dates.multidate ? 'MULTIDATE' : 'SINGLEDATE',
-        dates: {
-          sell: {
-            start: e.acf.dates.sell.start,
-            end: e.acf.dates.sell.end
-          },
-          stay: {
-            start: e.acf.dates.stay.start,
-            end: e.acf.dates.stay.end
-          }
-        },
-        earliestDay: getExtreme([e.acf.dates.sell.start, e.acf.dates.stay.start], 'left'),
-        latestDay: getExtreme([e.acf.dates.sell.end, e.acf.dates.stay.end], 'right')
+        dates,
+        earliestDay: getExtreme([dates.sell.start, dates.stay.start], 'left'),
+        latestDay: getExtreme([dates.sell.end, dates.stay.end], 'right')
       }
     });
 
     // console.log(i)
     // var t1 = performance.now();
 
-    // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
 
     // console.log(entriesALL);
 
