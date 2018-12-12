@@ -20,6 +20,11 @@ class Event extends Component {
     !this.props.elevated && this.props.handleOpenModal(targetId);
   };
 
+  keepEdits = (e) => {
+    this.props.event['campaignName'] = this.editedCampaignName.value;
+    this.props.event['description'] = this.editedDescription.value;
+  }
+
   render() {
 
     const event = this.props.event;
@@ -47,14 +52,18 @@ class Event extends Component {
         <div className={`event-info`}>
         {
           this.props.view === 'grid' &&
-          <Dates dates={event.dates}/>
+          <Dates dates={event.dates} editable={this.props.editable} />
         }
           <div className='info-wrapper'>
             <div className='activity'>
               <Tooltip title={event.offer[0].name} trigger="mouseenter" delay={0} arrow={true} distance={10} theme="light" size="big" html={( <span><span className='label-dot' style={{backgroundColor: offerColor}}/> {event.offer[0].name}</span> )} >
                 <span className='label-dot' style={{backgroundColor: offerColor}}/>
               </Tooltip>
-              <span>{event.campaignName}</span>
+              {
+                this.props.editable 
+                ? <span><textarea rows={1} className="editable-field" ref={(input) => this.editedCampaignName = input} defaultValue={event.campaignName} onChange={(e) => this.keepEdits(e)} /></span>
+                : <span>{event.campaignName}</span>
+              }
             </div>
           {
             this.props.view === 'grid' &&
@@ -75,9 +84,13 @@ class Event extends Component {
           }
           {
             this.props.elevated && this.props.view === 'grid' &&
-            <p className='description'>
-              {event.description}
-            </p>
+            <div>
+            {
+              this.props.editable 
+              ? <p className='description'> <textarea rows={4} ref={(input) => this.editedDescription = input} className="editable-field" defaultValue={event.description} onChange={(e) => this.keepEdits(e)} /> </p>
+              : <p className='description'> {event.description} </p>
+            }
+            </div>
           }
           </div>
         {

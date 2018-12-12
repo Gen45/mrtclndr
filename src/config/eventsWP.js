@@ -30,11 +30,10 @@ export async function eventsData() {
     const featured_markets2Promise = axios(`${WP_URL}featured_markets${parameters}&page=2`);
     const program_typePromise = axios(`${WP_URL}program_type${parameters}`);
     const entry1Promise = axios(`${WP_URL}entry${parameters}&page=1`);
-    const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE
-    const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE
-    const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE
-    const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE
-    // const entry6Promise = axios(`${WP_URL}entry${parameters}&page=6`); // DISABLE //KILL
+    // const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE
+    // const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE
+    // const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE
+    // const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE
 
     const [
       channel,
@@ -49,11 +48,10 @@ export async function eventsData() {
       featured_markets2,
       program_type,
       entry1,
-      entry2, // DISABLE
-      entry3, // DISABLE
-      entry4, // DISABLE
-      entry5,  // DISABLE
-      // entry6  // DISABLE //KILL
+      // entry2, // DISABLE
+      // entry3, // DISABLE
+      // entry4, // DISABLE
+      // entry5,  // DISABLE
     ] =
     await Promise.all(
       [channelPromise,
@@ -68,19 +66,16 @@ export async function eventsData() {
         featured_markets2Promise,
         program_typePromise,
         entry1Promise,
-        entry2Promise,  // DISABLE
-        entry3Promise,  // DISABLE
-        entry4Promise,  // DISABLE
-        entry5Promise,   // DISABLE
-        // entry6Promise   // DISABLE //KILL
+        // entry2Promise,  // DISABLE
+        // entry3Promise,  // DISABLE
+        // entry4Promise,  // DISABLE
+        // entry5Promise,   // DISABLE
       ]);
 
 
     const featured_marketsALL = [...featured_markets1.data, ...featured_markets2.data];
-    // const lastPage = entry6.data.status === 400 ? {} : entry6.data; //KILL
     const entriesALL = [...entry1.data
-      , ...entry2.data, ...entry3.data, ...entry4.data, ...entry5.data // DISABLE
-      // , ...lastPage // DISABLE //KILL
+      // , ...entry2.data, ...entry3.data, ...entry4.data, ...entry5.data // DISABLE
       ];
 
     const regions = region.data.map((r) => {

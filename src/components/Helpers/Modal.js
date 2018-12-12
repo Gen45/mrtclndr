@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import Draggable from 'react-draggable';
 import findIndex from 'lodash/findIndex';
+import axios from 'axios';
 
-import { _PREV, _NEXT, _ISMOBILE } from '../../config/constants';
+import { _PREV, _NEXT, _ISMOBILE, _WP_URL, _AUTH } from '../../config/constants';
 
 import {Trigger} from '../ToolBar/Triggers';
 import Event from '../Event/Event';
@@ -15,6 +16,10 @@ export const OpenModal = (targetId, events)=> {
 };
 
 class Modal extends Component {
+
+  componentWillMount() {
+    this.setState({ edit: false });
+  }
 
   handleCloseModal = () => {
     this.props.updateState({modal:{show: false, modalEvent: null}});
@@ -48,16 +53,44 @@ class Modal extends Component {
   };
 
   handleEdit = (id) => {
+    this.setState({edit:true});
     // console.log(link);
-    const url = `http://admin.marriottcalendar.com/wp-admin/post.php?post=${id}&action=edit`;
-    window.open(url, '_blank');
+    // const url = `http://admin.marriottcalendar.com/wp-admin/post.php?post=${id}&action=edit`;
+    // window.open(url, '_blank');
+  }
+
+  saveChanges = (id) => {
+    // this.setState({edit:true});
+    axios({
+      method: 'put',
+      url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
+      auth: _AUTH,
+      data: {
+        title: this.props.events[this.props.modal.modalEvent]['campaignName'],
+        fields: {
+          description: this.props.events[this.props.modal.modalEvent]['description']
+        },
+        status: 'publish'
+      }
+    }).then(function (response) {
+      console.log('ta listo', response);
+    })
+    .catch(function (error) {
+      console.log('no ta listo', error);
+    });
+    this.setState({edit:false});
+    
+  }
+
+  cancelEdit = (id) => {
+    this.setState({edit:false});
   }
 
   render() {
 
     const EventForModal = () =>
     <div className="modal-content">
-        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} brandsInfo={this.props.brandsInfo} />
+        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} brandsInfo={this.props.brandsInfo} editable={this.state.edit} updateState={this.props.updateState} saveChanges={this.saveChanges} />
     </div>
 
     const handle = 'handle-' + this.props.events[this.props.modal.modalEvent].id;
@@ -68,16 +101,42 @@ class Modal extends Component {
           <Draggable ref={(modalDraggable) => {this.modalDraggableRef = modalDraggable}} disabled={_ISMOBILE()} handle={`.${handle}`} >
             <div className='modal-wrapper'>
                 <nav className="modal-nav">
+                {
+                  !this.state.edit &&
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_pencil' 
                   payload={() => this.handleEdit(this.props.events[this.props.modal.modalEvent].id)}/>
+                }
                   <span className={`modal-handle ${handle}`}></span>
+                {
+                  this.state.edit &&
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove' 
+                  payload={() => this.cancelEdit()}/>                  
+                }                
+                {
+                  this.state.edit &&
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_check' 
+                  payload={() => this.saveChanges(this.props.events[this.props.modal.modalEvent].id)}/>
+                }
+
+                {
+                  !this.state.edit &&  
                   <Trigger triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
+                }
+                {
+                  !this.state.edit &&  
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-left'
                     payload={() => this.handleModalNav(_PREV)}/>
+                }
+                {
+                  !this.state.edit &&  
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-right'
                     payload={() => this.handleModalNav(_NEXT)}/>
+                }
+                {
+                  !this.state.edit &&  
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove'
                     payload={() => this.handleCloseModal()}/>
+                }
                 </nav>
               {
                 _ISMOBILE() ?

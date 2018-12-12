@@ -1821,6 +1821,21 @@ input.search-box {
     padding: 3px 10px;
     min-width: 100%; }
 
+.editable-field {
+  font-size: inherit;
+  font: inherit;
+  border: none;
+  border-bottom: 1px dotted black;
+  background: transparent;
+  resize: none;
+  text-align: center;
+  line-height: inherit;
+  width: 90%; }
+  .editable-field:focus {
+    border: none;
+    border-bottom: 1px dotted black;
+    background: #ddd; }
+
 .icon {
   width: 30px;
   height: 30px;

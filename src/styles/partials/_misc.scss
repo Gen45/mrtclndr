@@ -49,20 +49,20 @@
 }
 
 .pulse {
-  opacity: 0;
-  animation: pulse 2s infinite;
+    opacity: 0;
+    animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
     0% {
-      opacity: 0.35;
+        opacity: 0.35;
     }
 
     50% {
-      opacity: 1;
+        opacity: 1;
     }
 
     100% {
-      opacity: 0.35;
+        opacity: 0.35;
     }
 }

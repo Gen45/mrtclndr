@@ -18,24 +18,22 @@ class EnterData extends Component {
             </div>
             <div className="col col-1">
 
-          
-
-            <div className="form-input">
-              <h3>Description</h3>
-              <textarea name="description" id="" cols="30" rows="10" placeholder="Enter the description" />
-            </div>
-
-            <div className="form-input form-input--2-cols">
-              <h3>Dates</h3>
-              <div className="row">
-                <div className="col col-50"><input type="text" placeholder="Sell Start" /></div>
-                <div className="col col-50 col-end"><input type="text" placeholder="Sell End" /></div>
+              <div className="form-input">
+                <h3>Description</h3>
+                <textarea name="description" id="" cols="30" rows="10" placeholder="Enter the description" />
               </div>
-              <div className="row">
-                <div className="col col-50"><input type="text" placeholder="Stay Start" /></div>
-                <div className="col col-50 col-end"><input type="text" placeholder="Stay End" /></div>
+
+              <div className="form-input form-input--2-cols">
+                <h3>Dates</h3>
+                <div className="row">
+                  <div className="col col-50"><input type="text" placeholder="Sell Start" /></div>
+                  <div className="col col-50 col-end"><input type="text" placeholder="Sell End" /></div>
+                </div>
+                <div className="row">
+                  <div className="col col-50"><input type="text" placeholder="Stay Start" /></div>
+                  <div className="col col-50 col-end"><input type="text" placeholder="Stay End" /></div>
+                </div>
               </div>
-            </div>
 
             </div>
             <div className="col col-2">
