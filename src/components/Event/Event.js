@@ -24,16 +24,17 @@ const scaryAnimals = [
 
 class Event extends Component {
 
-  componentWillMount() {
-    this.setState({});
-  }
-
   handleOpenModal = (targetId) => {
     !this.props.elevated && this.props.handleOpenModal(targetId);
   };
 
-  keepEdits = (e, field) => {
-    this.props.event[field] = e.target.value;
+  keepEdits = (value, field) => {
+    this.props.event[field] = value;
+    this.setState({cambio: true });
+  }
+
+  cleanFilterInfo = (filterInfo) => {
+    return Object.keys(filterInfo).map( x => { return {label: filterInfo[x].name, value: filterInfo[x].slug} } );
   }
 
   render() {
@@ -58,7 +59,7 @@ class Event extends Component {
         <div className='event-inner'>
         {
           this.props.view === 'grid' &&
-            <Header channels={event.channels} otherChannels={event.otherChannels} color={regionColor} editable={this.props.editable} />
+            <Header channels={event.channels} otherChannels={event.otherChannels} color={this.props.editable ? _COLORS.LIGHTGRAY : regionColor} editable={this.props.editable} />
         }
         <div className={`event-info`}>
         {
@@ -70,8 +71,7 @@ class Event extends Component {
             <div className='activity'>
               {
                 this.props.editable 
-                //? <span><textarea className="editable-field" ref={(input) => this.editedCampaignName = input} defaultValue={event.campaignName} onChange={(e) => this.keepEdits(e)} /></span>
-                ? <TextareaAutosize className="editable-field"  defaultValue={event.campaignName} onChange={(e) => this.keepEdits(e, 'campaignName')} />
+                ? <TextareaAutosize className="editable-field"  defaultValue={event.campaignName} onChange={(e) => this.keepEdits(e.target.value, 'campaignName')} />
                 : <span> 
                     {
                     this.props.view === 'timeline' && 
@@ -85,6 +85,7 @@ class Event extends Component {
           {
             this.props.view === 'grid' && !this.props.editable &&
             <div>
+
               <p className='tags'>
                 <span className="tag"> 
                   <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
@@ -92,6 +93,7 @@ class Event extends Component {
                   <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
                 </span>
               </p>
+
               <p className='tags'>
                 {
                       [
@@ -115,23 +117,47 @@ class Event extends Component {
           {
             this.props.view === 'grid' && this.props.editable &&
             <div>
-              <p className='tags'>
-                <span className="tag editable-field"> 
-                  <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
-                  {event.offer[0].name.toUpperCase()} 
-                  <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
-                </span>
-              </p>
-            </div>
+              <div className='tags'>
+                <Tooltip title={event.offer[0].name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                      html={(<div style={{ width: 300 }}><Select options={this.cleanFilterInfo(this.props.offers)} onChange={opt => this.keepEdits([this.props.offers[opt.value]], 'offer')} /></div> )} >
+                  <span className="tag editable-field" tabIndex={0}> 
+                    <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
+                    {event.offer[0].name.toUpperCase()} 
+                    <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
+                  </span>
+                </Tooltip>
+              </div>
+              <div className='tags'>
+                {
+                  [
+                    { name: "Region", val: event.region[0].name },
+                    { name: "Featured Market", val: event.market },
+                    { name: "Market Scope", val: event.marketScope },
+                    { name: "Campaign Group", val: event.campaignGroup }, 
+                    { name: "Program Type", val: event.programType }, 
+                    { name: "Segment", val: event.segment },
+                    { name: "Ongoing", val: event.ongoing ? 'Yes' : 'No' },
+                  ].map((e, i)=> isValid(e.val) 
+                  ?
+                    <Tooltip key={i} title={e.name}delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                      html={(<div style={{ width: 300 }}><Select options={scaryAnimals} onChange={opt => console.log(opt.label, opt.value)} /></div> )} >
+                      <span className="tag editable-field" tabIndex={0}> 
+                        <span style={{color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
+                      </span>
+                    </Tooltip>
+                  : null
+                  )
+                }
+              </div>
+            </div>            
           }          
-
 
           {
             this.props.elevated && this.props.view === 'grid' &&
             <div>
             {
               this.props.editable 
-              ? <p className='description'><TextareaAutosize  className="editable-field" defaultValue={event.description} onChange={(e) => this.keepEdits(e, 'description')} /> </p>
+              ? <p className='description'><TextareaAutosize  className="editable-field" defaultValue={event.description} onChange={(e) => this.keepEdits(e.target.value, 'description')} /> </p>
               : <p className='description'>{event.description}</p>
             }
             </div>
@@ -149,8 +175,12 @@ class Event extends Component {
           <div className={`tab-content t1 ${this.props.elevated
               ? ' active'
               : ''}`}>
-            <p className='contact ' title={event.owner.name}><i className='nc-icon-mini users_circle-09' style={{color: regionColor}}/> {event.owner.name}</p>
-              <Brands brands={event.brands} brandsInfo={this.props.brandsInfo} />
+            { 
+              !this.props.editable 
+                ? <p className='contact ' title={event.owner.name}><i className='nc-icon-mini users_circle-09' style={{ color: regionColor }} /> {event.owner.name}</p>
+                : <p className='editable-field contact ' title={event.owner.name}><i className='nc-icon-mini users_circle-09' style={{ color: _COLORS.LIGHTGRAY }} /> {event.owner.name}</p>
+            }
+              <Brands brands={event.brands} brandsInfo={this.props.brandsInfo} editable={this.props.editable} />
           </div>
         </div>
       }

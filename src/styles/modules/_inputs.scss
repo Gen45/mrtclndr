@@ -134,10 +134,12 @@ input.search-box {
     font: 300 16px/1.6 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
     text-transform: uppercase;
     // margin-bottom: 5px;
-    background-color: rgba(darken($color-light-gray, 20%), 0.8);
+    // background-color: rgba(darken($color-light-gray, 20%), 0.8);
+    background-color: rgba(darken($color-medium-gray, 5%), 1);
     // border: 1px solid $color-light-gray;
     border: none;
     &:focus {
+
         &::-webkit-input-placeholder {
             color: transparent;
         }
@@ -277,26 +279,46 @@ input.search-box {
 }
 
 
-.editable-field, .flatpickr-input {
+.modal .event-info *.editable-field, 
+.contact.editable-field, 
+.brand.editable-field, 
+*.flatpickr-input {
+    cursor: pointer;
     font-size: inherit;
     font: inherit;
     border: none;
     // border-bottom: 2px dotted $color-blue;
-    background: rgba($color-accent, 0.15);
+    background: rgba($color-yellow, 0.15);
     resize: none;
     text-align: center;
     line-height: inherit;
     border-radius: 4px;
-    min-width: 60%;   
-    width: 100%; 
-    // box-shadow: 0 0 10px 0 rgba($color-medium-gray, 0.2);
-    
-    &:focus {
-        border: none;
-        // border-bottom: 1px solid $color-blue;
-        box-shadow: 0 0 30px 0 rgba($color-medium-gray, 0.3);
-        background: rgba($color-white, 0.15);
+    &:focus,
+    .flatpickr-input.active {
+        outline: none !important;
+        border: none !important;
+        box-shadow: 0 0 30px 0 rgba($color-medium-gray, 0.3),
+                    inset 0 0 0 1px rgba($color-blue, 0.5) !important;
+        background: rgba($color-white, 0.15) !important;
     }
+}
+
+.description,
+.activity {
+    .editable-field {
+        min-width: 60%;   
+        width: 100%; 
+    }
+}
+
+.brand.editable-field {
+    width: auto;
+    min-width: 0;
+    margin: 2px;
+}
+
+.modal .event-info .tag.editable-field {
+    font-size: 14px;
 }
 
 .editable-field--date, .flatpickr-input {
@@ -306,6 +328,42 @@ input.search-box {
 .flatpickr-calendar {
     background: $color-darker-gray !important;
     box-shadow: none !important;
+}
+
+.editable .event-info {
+    &:before {
+        display: none;
+    }
+    .description,
+    .activity {
+        position: relative;
+        padding-top: $padding/2;
+        // margin-top: $padding/2;
+        &:before {
+            content: 'Description';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            font-size: 8px;
+            line-height: 1;
+            font-weight: 600;
+            color: #c2c2c2;
+            letter-spacing: 0.5px;
+            text-transform: uppercase; 
+            overflow: visible;    
+        }
+    }
+    .description {
+        padding-bottom: 0;
+        &:before {
+            content: "Description";
+        }
+    }
+    .activity:before { 
+        content: "Campaign Name";
+    }
 }
 
 .flatpickr-day.selected,
@@ -333,4 +391,8 @@ input.search-box {
 .flatpickr-current-month {
     padding-top: 6px;
     font-size: 110%
+}
+
+.tippy-tooltip--big {
+    padding: .6rem !important;
 }

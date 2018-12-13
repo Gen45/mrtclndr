@@ -31,7 +31,7 @@ class Sidebar extends Component {
 
     // console.log(this.props.brandGroups);
 
-    return (<aside className="sidebar">
+    return (<aside className={`sidebar${this.props.disabled ? ' disabled': ''}`}>
       <header onClick={() => {
           this.handleCollapse();
         }}>

@@ -392,10 +392,10 @@ class App extends Component {
         />
       }
 
-      <main id="main" className="main" role="main">
+      <main id="main" className="main" role="main" style={{ backgroundImage: `url(${_BACKGROUNDIMAGES.IMAGES[0]})` }}>
         <Header collapsed={this.state.sidebar.collapsed} logout={this.logout} addEntry={this.addEntry} />
         
-        <div className="content-frame" style={{backgroundImage: `url(${_BACKGROUNDIMAGES.IMAGES[0]})`}}>
+        <div className="content-frame">
         
           <div className={`content ${this.state.view}-view`}>
 
@@ -460,11 +460,11 @@ class App extends Component {
               updateState={this.updateState}
               starred={this.state.starred}
               brandsInfo={this.state.brands}
+              offers={this.state.offers}
             />
           }
         </div>
       </main>
-
 
       <Sidebar 
         regions={this.state.regions}
@@ -477,9 +477,9 @@ class App extends Component {
         updateState={this.updateState}
         ready={this.state.ready}
         batchChange={this.batchChange}
+        disabled={this.state.modal.show}
       />
     </div>
-
     :
       <Loading>
         <span>

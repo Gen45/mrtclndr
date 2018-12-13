@@ -25,6 +25,7 @@ class Header extends Component {
 
     return (
       <header className="event-channels" style={putColor(this.props.color)}>
+
         <span className="channels">
           {channels.map(c => (c !== "OTHER_CHANNELS" && c.slug !== "other-channels" ) &&
           withTooltip(c["name"], <i className={ c["icon"] }/>, c.slug)
@@ -34,7 +35,8 @@ class Header extends Component {
           <div style={{flexGrow: 1, textAlign: 'right', padding: '0 10px'}}>  </div>
         </span>
         
-      </header>)
+      </header>
+    )
   }
 }
 

@@ -45,7 +45,6 @@ $modal-nav-height: 50px;
     }
   }
 
-
   .modal-nav {
     display: flex;
     justify-content: flex-end;
@@ -101,15 +100,11 @@ $modal-nav-height: 50px;
 
     &.PAST-EVENT {
       opacity: 1;
+      filter: grayscale(0%);
     }
 
     .more {
       display: none;
     }
-
-
-
   }
-
-
 }

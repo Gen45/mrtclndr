@@ -58,11 +58,17 @@ export class Trigger extends Component {
       ? this.props.iconActive
       : this.props.icon;
     return (
-    <Tooltip title={this.props.caption} trigger="mouseenter" delay={500} arrow={true} distance={15} theme="light" size="big" disabled={!this.props.caption}>
-      <a className={`${triggerClass} ${active}`} onClick={() => this.handleClick(this.props.payload)}>
-        <i className={icon}/> {this.props.children}
-      </a>
-    </Tooltip>);
+      <span>
+        {
+          !this.props.disabled &&
+          <Tooltip title={this.props.caption} trigger="mouseenter" delay={500} arrow={true} distance={5} theme="light" size="big" disabled={!this.props.caption}>
+            <a className={`${triggerClass} ${active}`} onClick={() => this.handleClick(this.props.payload)}>
+              <i className={icon}/> {this.props.children}
+            </a>
+          </Tooltip>
+        }
+      </span>
+    );
   }
 }
 

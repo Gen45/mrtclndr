@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
+// import { Tooltip } from 'react-tippy';
+// import Select from 'react-select';
 // import brandsInfo from '../../config/brands.json';
 
 const Brand = (props) => {
-  // console.log(props);
 
-  return <span className={`brand ${props.brand}`} title={props.brandsInfo[props.brand]["name"]}>
+  return (
+    <span className={`brand ${props.brand}${props.editable ? ' editable-field': ''} `} title={props.brandsInfo[props.brand]["name"]}>
       <img src={props.brandsInfo[props.brand]["image"]} alt={props.brandsInfo[props.brand]["name"]} />
     </span>
+  )
   
 }
 
@@ -20,7 +23,11 @@ class Brands extends Component {
     return (
       <div className="brands">
         {
-          brands.map((b, i) => <Brand key={i} brand={b} brandsInfo={this.props.brandsInfo} />)
+          brands.map((b, i) => <Brand key={i} brand={b} brandsInfo={this.props.brandsInfo} editable={this.props.editable} />)
+        }
+        {
+          this.props.editable && 
+            <span className="brand add-brand editable-field" title="add brand"> <i className="nc-icon-mini ui-1_simple-add"></i> </span>
         }
       </div>
     )

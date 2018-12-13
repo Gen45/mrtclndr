@@ -12,6 +12,7 @@ import {
 
 const WP_URL = 'http://admin.marriottcalendar.com/wp-json/wp/v2/';
 const parameters = '/?per_page=100';
+const short = '/?per_page=10';
 
 export async function eventsData() {
   try {
@@ -29,11 +30,11 @@ export async function eventsData() {
     const featured_markets1Promise = axios(`${WP_URL}featured_markets${parameters}&page=1`);
     const featured_markets2Promise = axios(`${WP_URL}featured_markets${parameters}&page=2`);
     const program_typePromise = axios(`${WP_URL}program_type${parameters}`);
-    const entry1Promise = axios(`${WP_URL}entry${parameters}&page=1`);
-    const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE
-    const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE
-    const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE
-    const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE
+    // const entry1Promise = axios(`${WP_URL}entry${parameters}&page=1`); // DISABLE 0
+    // const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE 1
+    const entry3Promise = axios(`${WP_URL}entry${short}&page=3`); // DISABLE 2
+    // const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE 3
+    // const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE 4
 
     const [
       channel,
@@ -47,11 +48,11 @@ export async function eventsData() {
       featured_markets1,
       featured_markets2,
       program_type,
-      entry1,
-      entry2, // DISABLE
-      entry3, // DISABLE
-      entry4, // DISABLE
-      entry5,  // DISABLE
+      // entry1, // DISABLE 0
+      // entry2, // DISABLE 1
+      entry3, // DISABLE 2
+      // entry4, // DISABLE 3
+      // entry5,  // DISABLE 4
     ] =
     await Promise.all(
       [channelPromise,
@@ -65,18 +66,25 @@ export async function eventsData() {
         featured_markets1Promise,
         featured_markets2Promise,
         program_typePromise,
-        entry1Promise,
-        entry2Promise,  // DISABLE
-        entry3Promise,  // DISABLE
-        entry4Promise,  // DISABLE
-        entry5Promise,   // DISABLE
+        // entry1Promise, // DISABLE 0
+        // entry2Promise,  // DISABLE 1
+        entry3Promise,  // DISABLE 2
+        // entry4Promise,  // DISABLE 3
+        // entry5Promise,   // DISABLE 4
       ]);
 
 
     const featured_marketsALL = [...featured_markets1.data, ...featured_markets2.data];
-    const entriesALL = [...entry1.data
-      , ...entry2.data, ...entry3.data, ...entry4.data, ...entry5.data // DISABLE
+
+    const entriesALL = [
+      // ...entry1.data, // DISABLE 0
+      // ...entry2.data, // DISABLE 1
+      ...entry3.data, // DISABLE 2
+      // ...entry4.data, // DISABLE 3
+      // ...entry5.data // DISABLE 4       
       ];
+
+    console.log(entriesALL);
 
     const regions = region.data.map((r) => {
       return {

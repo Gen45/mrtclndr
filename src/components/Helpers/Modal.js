@@ -18,11 +18,13 @@ export const OpenModal = (targetId, events)=> {
 class Modal extends Component {
 
   componentWillMount() {
-    this.setState({ edit: false });
+    this.setState({ edit: false, saving: false });
   }
 
   handleCloseModal = () => {
-    this.props.updateState({modal:{show: false, modalEvent: null}});
+    if( !this.state.edit ){
+      this.props.updateState({modal:{show: false, modalEvent: null}});
+    }
   };
 
   handleModalNav = (increment) => {
@@ -54,31 +56,39 @@ class Modal extends Component {
 
   handleEdit = (id) => {
     this.setState({edit:true});
-    const eventBackUp = this.props.events[this.props.modal.modalEvent];
-    this.eventBackUp = JSON.stringify(eventBackUp);
+    // const eventBackUp = this.props.events[this.props.modal.modalEvent];
+    // this.eventBackUp = JSON.stringify(eventBackUp);
   }
 
   saveChanges = (id) => {
-    // this.setState({edit:true});
+    var self = this;
+
+    const newData = this.props.events[this.props.modal.modalEvent];
+
+    console.log(newData);
+
+    this.setState({saving: true});
+
     axios({
       method: 'put',
       url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
       auth: _AUTH,
       data: {
-        title: this.props.events[this.props.modal.modalEvent]['campaignName'],
+        title: newData['campaignName'],
         fields: {
-          description: this.props.events[this.props.modal.modalEvent]['description'],
-          dates: this.props.events[this.props.modal.modalEvent]['dates']
+          description: newData['description'],
+          dates: newData['dates'],
+          offer: newData['offer'][0]['id']
         },
         status: 'publish'
       }
     }).then(function (response) {
+      self.setState({ saving: false });
       console.log('success', response);
     })
     .catch(function (error) {
       console.log('failed', error);
-    });
-    this.setState({edit:false});
+    });    
   }
   
   trashEvent = (id) => {
@@ -100,7 +110,7 @@ class Modal extends Component {
   }
 
   cancelEdit = (id) => {
-    this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
+    // this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
     this.setState({edit:false});
   }
 
@@ -108,7 +118,7 @@ class Modal extends Component {
 
     const EventForModal = () =>
     <div className="modal-content">
-        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} brandsInfo={this.props.brandsInfo} editable={this.state.edit} updateState={this.props.updateState} saveChanges={this.saveChanges} />
+        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} brandsInfo={this.props.brandsInfo} editable={this.state.edit} updateState={this.props.updateState} saveChanges={this.saveChanges} offers={this.props.offers} />
     </div>
 
     const handle = 'handle-' + this.props.events[this.props.modal.modalEvent].id;
@@ -119,54 +129,37 @@ class Modal extends Component {
           <Draggable ref={(modalDraggable) => {this.modalDraggableRef = modalDraggable}} disabled={_ISMOBILE()} handle={`.${handle}`} >
             <div className={`modal-wrapper${this.state.edit ? ' editable' : '' }`}>
                 <nav className="modal-nav">
-                {
-                  !this.state.edit &&
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_pencil' 
-                  payload={() => this.handleEdit()}/>
-                }
-                {
-                  this.state.edit && 
-                  <span style={{display: 'flex', padding: '10px', alignItems: 'center', fontSize: '0.8em'}}>Click on the field you need to edit</span> }                  
-                {
-                  this.state.edit && false &&
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash'
-                    payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
-                }                  
-                {
-                  this.state.edit && false &&
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash'
-                    payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
-                }   
+
+                  <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} 
+                    icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
+
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash' disabled={true} payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
+    
                   <span className={`modal-handle ${handle}`}></span>
-                {
-                  this.state.edit &&
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove' 
-                  payload={() => this.cancelEdit()}/>                  
-                }                
-                {
-                  this.state.edit &&
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_check' 
-                  payload={() => this.saveChanges(this.props.events[this.props.modal.modalEvent].id)}/>
-                }
-                {
-                  !this.state.edit &&  
-                  <Trigger triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
-                }
-                {
-                  !this.state.edit &&  
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-left'
-                    payload={() => this.handleModalNav(_PREV)}/>
-                }
-                {
-                  !this.state.edit &&  
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-right'
-                    payload={() => this.handleModalNav(_NEXT)}/>
-                }
-                {
-                  !this.state.edit &&  
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove'
-                    payload={() => this.handleCloseModal()}/>
-                }
+
+                  {
+                    this.state.saving && 
+                    <span style={{display: 'flex', padding: '10px', alignItems: 'center', fontSize: '0.8em'}}>Saving</span> 
+                  }                  
+                  
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_check' disabled={!this.state.edit}
+                    payload={() => this.saveChanges(this.props.events[this.props.modal.modalEvent].id)}/>
+
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove' disabled={!this.state.edit}
+                    payload={() => this.cancelEdit()}/>     
+
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_pencil' caption="Activate Quick edit mode" disabled={this.state.edit}
+                      payload={() => this.handleEdit()}/>
+
+                  <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-left'
+                      payload={() => this.handleModalNav(_PREV)}/>
+
+                  <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-right'
+                      payload={() => this.handleModalNav(_NEXT)}/>
+
+                  <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove'
+                      payload={() => this.handleCloseModal()}/>
+                      
                 </nav>
               {
                 _ISMOBILE() ?

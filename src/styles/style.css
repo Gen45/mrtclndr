@@ -188,7 +188,7 @@ textarea:focus, input:focus, button:focus {
       overflow: hidden; } }
 
 .sidebar {
-  background: #595959;
+  background: rgba(89, 89, 89, 0.8);
   position: fixed;
   width: 300px;
   height: 100%;
@@ -197,6 +197,9 @@ textarea:focus, input:focus, button:focus {
   transition: transform 0.3s;
   z-index: 12;
   box-shadow: -4px 0 30px rgba(22, 22, 22, 0.5); }
+  .sidebar.disabled {
+    filter: grayscale(60%) contrast(60%) brightness(60%);
+    pointer-events: none; }
   @media screen and (max-width: 940px) {
     .sidebar {
       transition: 0.15s;
@@ -268,18 +271,10 @@ textarea:focus, input:focus, button:focus {
       padding: 0 10px 10px;
       text-align: left;
       opacity: 1; }
+    .sidebar .filter .brand-cat-filters {
+      margin-bottom: 10px; }
     .sidebar .filter .brand-filters {
       position: relative; }
-      .sidebar .filter .brand-filters:before {
-        content: '';
-        position: absolute;
-        height: 20px;
-        width: 100%;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        z-index: 1000;
-        background: linear-gradient(to top, rgba(89, 89, 89, 0) 0%, #595959 100%); }
       .sidebar .filter .brand-filters img {
         width: 100%;
         height: auto; }
@@ -374,7 +369,7 @@ textarea:focus, input:focus, button:focus {
   left: 0;
   pointer-events: none;
   z-index: 1000;
-  background: linear-gradient(to bottom, rgba(89, 89, 89, 0) 0%, #595959 100%); }
+  background: linear-gradient(to bottom, rgba(51, 51, 51, 0) 0%, rgba(51, 51, 51, 0.5) 100%); }
   .print .filter-wrap-brands .content:after {
     display: none; }
 
@@ -1026,10 +1021,6 @@ body.linted .timeline-view .event {
   .debug .event .id {
     display: inline-block; }
 
-.PAST-EVENT {
-  filter: grayscale(40%);
-  opacity: 0.8; }
-
 body.activity-type .activity-type-group {
   position: relative;
   width: 100%;
@@ -1433,6 +1424,9 @@ body.activity-type .activity-type-group {
     .tabs .contact i {
       margin-right: 5px; }
 
+.editable .brands {
+  background: #999999 !important; }
+
 .modal {
   display: flex;
   justify-content: center;
@@ -1507,7 +1501,8 @@ body.activity-type .activity-type-group {
         .modal .event .event-inner {
           min-height: calc(100vh - 50px); } }
     .modal .event.PAST-EVENT {
-      opacity: 1; }
+      opacity: 1;
+      filter: grayscale(0%); }
     .modal .event .more {
       display: none; }
 
@@ -1576,11 +1571,11 @@ body.activity-type .activity-type-group {
 
 @keyframes pulse-shadow {
   0% {
-    box-shadow: 0 5px 10px 5px rgba(54, 212, 133, 0.25); }
+    box-shadow: 0 5px 10px 5px rgba(153, 153, 153, 0.25); }
   50% {
-    box-shadow: 0 5px 50px 15px rgba(54, 212, 133, 0.25); }
+    box-shadow: 0 5px 50px 15px rgba(153, 153, 153, 0.25); }
   100% {
-    box-shadow: 0 5px 10px 5px rgba(54, 212, 133, 0.25); } }
+    box-shadow: 0 5px 10px 5px rgba(153, 153, 153, 0.25); } }
 
 .start .flatpickr-calendar.static {
   left: auto; }
@@ -1601,6 +1596,25 @@ span.flatpickr-weekday {
 
 .flatpickr-current-month {
   padding: 4.16px 0 0 0; }
+
+.PAST-EVENT {
+  filter: grayscale(40%);
+  opacity: 0.8; }
+
+.add-brand {
+  background: #8c8c8c !important;
+  border-radius: 4px;
+  padding: 0;
+  position: relative;
+  max-width: 72px !important;
+  width: 72px !important;
+  max-height: 36px;
+  height: 36px;
+  font-size: 16px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
 .main-overlay {
   padding-top: 50px;
@@ -1754,7 +1768,7 @@ input.search-box {
   color: #ffffff;
   font: 300 16px/1.6 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
   text-transform: uppercase;
-  background-color: rgba(102, 102, 102, 0.8);
+  background-color: #595959;
   border: none; }
   input.search-box:focus {
     outline: none;
@@ -1858,21 +1872,44 @@ input.search-box {
     padding: 3px 10px;
     min-width: 100%; }
 
-.editable-field, .flatpickr-input {
+.modal .event-info *.editable-field,
+.contact.editable-field,
+.brand.editable-field,
+*.flatpickr-input {
+  cursor: pointer;
   font-size: inherit;
   font: inherit;
   border: none;
-  background: rgba(228, 20, 74, 0.15);
+  background: rgba(221, 170, 51, 0.15);
   resize: none;
   text-align: center;
   line-height: inherit;
-  border-radius: 4px;
+  border-radius: 4px; }
+  .modal .event-info *.editable-field:focus,
+  .modal .event-info *.editable-field .flatpickr-input.active,
+  .contact.editable-field:focus,
+  .contact.editable-field .flatpickr-input.active,
+  .brand.editable-field:focus,
+  .brand.editable-field .flatpickr-input.active,
+  *.flatpickr-input:focus,
+  *.flatpickr-input .flatpickr-input.active {
+    outline: none !important;
+    border: none !important;
+    box-shadow: 0 0 30px 0 rgba(102, 102, 102, 0.3), inset 0 0 0 1px rgba(67, 153, 196, 0.5) !important;
+    background: rgba(255, 255, 255, 0.15) !important; }
+
+.description .editable-field,
+.activity .editable-field {
   min-width: 60%;
   width: 100%; }
-  .editable-field:focus, .flatpickr-input:focus {
-    border: none;
-    box-shadow: 0 0 30px 0 rgba(102, 102, 102, 0.3);
-    background: rgba(255, 255, 255, 0.15); }
+
+.brand.editable-field {
+  width: auto;
+  min-width: 0;
+  margin: 2px; }
+
+.modal .event-info .tag.editable-field {
+  font-size: 14px; }
 
 .editable-field--date, .flatpickr-input {
   width: 85px; }
@@ -1880,6 +1917,37 @@ input.search-box {
 .flatpickr-calendar {
   background: #2b2b2b !important;
   box-shadow: none !important; }
+
+.editable .event-info:before {
+  display: none; }
+
+.editable .event-info .description,
+.editable .event-info .activity {
+  position: relative;
+  padding-top: 10px; }
+  .editable .event-info .description:before,
+  .editable .event-info .activity:before {
+    content: 'Description';
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    font-size: 8px;
+    line-height: 1;
+    font-weight: 600;
+    color: #c2c2c2;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    overflow: visible; }
+
+.editable .event-info .description {
+  padding-bottom: 0; }
+  .editable .event-info .description:before {
+    content: "Description"; }
+
+.editable .event-info .activity:before {
+  content: "Campaign Name"; }
 
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
@@ -1905,6 +1973,9 @@ input.search-box {
 .flatpickr-current-month {
   padding-top: 6px;
   font-size: 110%; }
+
+.tippy-tooltip--big {
+  padding: .6rem !important; }
 
 .icon {
   width: 30px;
