@@ -18,7 +18,6 @@
     width: $label-dot;
     height: $label-dot;
     display: inline-block;
-    margin-right: 5px;
     border-radius: $label-dot;
 }
 
@@ -65,4 +64,56 @@
     100% {
         opacity: 0.35;
     }
+}
+
+.pulse-shadow {
+    animation: pulse-shadow 2s infinite;
+}
+
+@keyframes pulse-shadow {
+    0% {
+        box-shadow: 0 5px 10px 5px rgba($color-green, 0.25);;
+    }
+
+    50% {
+        box-shadow: 0 5px 50px 15px rgba($color-green, 0.25);;
+    }
+
+    100% {
+        box-shadow: 0 5px 10px 5px rgba($color-green, 0.25);;
+    }
+}
+
+
+.start {
+    .flatpickr-calendar {
+        &.static {
+            left: auto;
+        }
+
+        &:before,
+        &:after {
+            right: auto;
+            left: 22px;
+        }
+    }
+}
+
+.end  {
+    .flatpickr-calendar {
+        &.static {
+            right: 0;
+        }
+        &:before,
+        &:after {
+            left: auto;
+            right: 22px;
+        }
+    }
+}
+span.flatpickr-weekday {
+    font-size: 75%;
+}
+.flatpickr-current-month {
+    padding: 4.16px 0 0 0;
 }

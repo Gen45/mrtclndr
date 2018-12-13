@@ -54,9 +54,8 @@ class Modal extends Component {
 
   handleEdit = (id) => {
     this.setState({edit:true});
-    // console.log(link);
-    // const url = `http://admin.marriottcalendar.com/wp-admin/post.php?post=${id}&action=edit`;
-    // window.open(url, '_blank');
+    const eventBackUp = this.props.events[this.props.modal.modalEvent];
+    this.eventBackUp = JSON.stringify(eventBackUp);
   }
 
   saveChanges = (id) => {
@@ -68,21 +67,40 @@ class Modal extends Component {
       data: {
         title: this.props.events[this.props.modal.modalEvent]['campaignName'],
         fields: {
-          description: this.props.events[this.props.modal.modalEvent]['description']
+          description: this.props.events[this.props.modal.modalEvent]['description'],
+          dates: this.props.events[this.props.modal.modalEvent]['dates']
         },
         status: 'publish'
       }
     }).then(function (response) {
-      console.log('ta listo', response);
+      console.log('success', response);
     })
     .catch(function (error) {
-      console.log('no ta listo', error);
+      console.log('failed', error);
     });
     this.setState({edit:false});
-    
+  }
+  
+  trashEvent = (id) => {
+    // this.setState({edit:true});
+    axios({
+      method: 'put',
+      url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
+      auth: _AUTH,
+      data: {
+        status: 'draft'
+      }
+    }).then(function (response) {
+      console.log('success', response);
+    })
+    .catch(function (error) {
+      console.log('failed', error);
+    });
+    this.setState({edit:false});
   }
 
   cancelEdit = (id) => {
+    this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
     this.setState({edit:false});
   }
 
@@ -99,13 +117,26 @@ class Modal extends Component {
       <div className="modal grid-view">
         <OutsideAlerter event={this.handleCloseModal}>
           <Draggable ref={(modalDraggable) => {this.modalDraggableRef = modalDraggable}} disabled={_ISMOBILE()} handle={`.${handle}`} >
-            <div className='modal-wrapper'>
+            <div className={`modal-wrapper${this.state.edit ? ' editable' : '' }`}>
                 <nav className="modal-nav">
                 {
                   !this.state.edit &&
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_pencil' 
-                  payload={() => this.handleEdit(this.props.events[this.props.modal.modalEvent].id)}/>
+                  payload={() => this.handleEdit()}/>
                 }
+                {
+                  this.state.edit && 
+                  <span style={{display: 'flex', padding: '10px', alignItems: 'center', fontSize: '0.8em'}}>Click on the field you need to edit</span> }                  
+                {
+                  this.state.edit && false &&
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash'
+                    payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
+                }                  
+                {
+                  this.state.edit && false &&
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash'
+                    payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
+                }   
                   <span className={`modal-handle ${handle}`}></span>
                 {
                   this.state.edit &&
@@ -117,7 +148,6 @@ class Modal extends Component {
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_check' 
                   payload={() => this.saveChanges(this.props.events[this.props.modal.modalEvent].id)}/>
                 }
-
                 {
                   !this.state.edit &&  
                   <Trigger triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>

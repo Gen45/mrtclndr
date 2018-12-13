@@ -1122,6 +1122,8 @@ body.activity-type .activity-type-group {
       max-height: 100%;
       overflow: hidden;
       letter-spacing: -1px; }
+      .grid-view .event .event-info .modal-on {
+        overflow: visible; }
       .grid-view .event .event-info:before {
         content: '';
         position: absolute;
@@ -1138,6 +1140,8 @@ body.activity-type .activity-type-group {
         /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 );
         /* IE6-9 */ }
+        .grid-view .event .event-info:before .modal-on {
+          display: none; }
       .grid-view .event .event-info .event-date {
         position: absolute;
         top: 0;
@@ -1229,7 +1233,8 @@ body.activity-type .activity-type-group {
         left: auto;
         text-align: right; }
       .grid-view .event .event-dates.event-dates__STAY {
-        top: 40px; }
+        top: 40px;
+        z-index: 0; }
       .grid-view .event .event-dates:before {
         content: '';
         position: absolute;
@@ -1333,7 +1338,7 @@ body.activity-type .activity-type-group {
 
 .event-info .description {
   text-align: center;
-  padding: 20px;
+  padding: 20px 0;
   overflow-y: auto;
   font-size: 14px;
   line-height: 1.6;
@@ -1447,6 +1452,8 @@ body.activity-type .activity-type-group {
     box-shadow: 0 5px 30px 15px rgba(0, 0, 0, 0.25);
     border-radius: 3px;
     background-color: rgba(22, 22, 22, 0.75); }
+    .modal .modal-wrapper.editable {
+      animation: pulse-shadow 2s infinite; }
     @media screen and (max-width: 940px) {
       .modal .modal-wrapper {
         border-radius: 0;
@@ -1529,7 +1536,6 @@ body.activity-type .activity-type-group {
   width: 10px;
   height: 10px;
   display: inline-block;
-  margin-right: 5px;
   border-radius: 10px; }
 
 .react-resizable-handle {
@@ -1564,6 +1570,37 @@ body.activity-type .activity-type-group {
     opacity: 1; }
   100% {
     opacity: 0.35; } }
+
+.pulse-shadow {
+  animation: pulse-shadow 2s infinite; }
+
+@keyframes pulse-shadow {
+  0% {
+    box-shadow: 0 5px 10px 5px rgba(54, 212, 133, 0.25); }
+  50% {
+    box-shadow: 0 5px 50px 15px rgba(54, 212, 133, 0.25); }
+  100% {
+    box-shadow: 0 5px 10px 5px rgba(54, 212, 133, 0.25); } }
+
+.start .flatpickr-calendar.static {
+  left: auto; }
+
+.start .flatpickr-calendar:before, .start .flatpickr-calendar:after {
+  right: auto;
+  left: 22px; }
+
+.end .flatpickr-calendar.static {
+  right: 0; }
+
+.end .flatpickr-calendar:before, .end .flatpickr-calendar:after {
+  left: auto;
+  right: 22px; }
+
+span.flatpickr-weekday {
+  font-size: 75%; }
+
+.flatpickr-current-month {
+  padding: 4.16px 0 0 0; }
 
 .main-overlay {
   padding-top: 50px;
@@ -1821,20 +1858,53 @@ input.search-box {
     padding: 3px 10px;
     min-width: 100%; }
 
-.editable-field {
+.editable-field, .flatpickr-input {
   font-size: inherit;
   font: inherit;
   border: none;
-  border-bottom: 1px dotted black;
-  background: transparent;
+  background: rgba(228, 20, 74, 0.15);
   resize: none;
   text-align: center;
   line-height: inherit;
-  width: 90%; }
-  .editable-field:focus {
+  border-radius: 4px;
+  min-width: 60%;
+  width: 100%; }
+  .editable-field:focus, .flatpickr-input:focus {
     border: none;
-    border-bottom: 1px dotted black;
-    background: #ddd; }
+    box-shadow: 0 0 30px 0 rgba(102, 102, 102, 0.3);
+    background: rgba(255, 255, 255, 0.15); }
+
+.editable-field--date, .flatpickr-input {
+  width: 85px; }
+
+.flatpickr-calendar {
+  background: #2b2b2b !important;
+  box-shadow: none !important; }
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange,
+.flatpickr-day.startRange.inRange,
+.flatpickr-day.endRange.inRange,
+.flatpickr-day.selected:focus,
+.flatpickr-day.startRange:focus,
+.flatpickr-day.endRange:focus,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover,
+.flatpickr-day.selected.prevMonthDay,
+.flatpickr-day.startRange.prevMonthDay,
+.flatpickr-day.endRange.prevMonthDay,
+.flatpickr-day.selected.nextMonthDay,
+.flatpickr-day.startRange.nextMonthDay,
+.flatpickr-day.endRange.nextMonthDay {
+  background: #e4144a !important;
+  border-color: #e4144a !important; }
+
+.flatpickr-current-month {
+  padding-top: 6px;
+  font-size: 110%; }
 
 .icon {
   width: 30px;

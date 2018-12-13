@@ -20,7 +20,11 @@ $modal-nav-height: 50px;
     // padding: 10px;
     box-shadow: 0 5px 30px 15px rgba(0,0,0,0.25);
     border-radius: 3px;
-      background-color: rgba($color-black, 0.75);
+    background-color: rgba($color-black, 0.75);
+
+    &.editable {
+      animation: pulse-shadow 2s infinite;
+    }
 
     @media screen and (max-width: $desktop-min) {
       border-radius: 0;
@@ -106,4 +110,6 @@ $modal-nav-height: 50px;
 
 
   }
+
+
 }

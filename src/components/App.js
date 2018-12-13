@@ -398,7 +398,7 @@ class App extends Component {
         <div className="content-frame" style={{backgroundImage: `url(${_BACKGROUNDIMAGES.IMAGES[0]})`}}>
         
           <div className={`content ${this.state.view}-view`}>
-            
+
             <ToolBar
               time={time}
               updateState={this.updateState}

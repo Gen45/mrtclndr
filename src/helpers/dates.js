@@ -10,6 +10,8 @@ export const _QUARTERS = [1, 2, 3, 4];
 export const _MONTHS = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
 export const _LONGMONTHS = [ "JANUARY", "FEBRARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" ];
 
+export const format = (date) => moment(date).format(_DATEFORMAT);
+
 export const today = () => moment().format(_DATEFORMAT);
 export const day = date => moment(date, _DATEFORMAT).format('DD');
 export const month = date => moment(date, _DATEFORMAT).format('MM');
@@ -53,7 +55,7 @@ export const yearsMonths = (years, months) => {
   return yearsMonths;
 };
 
-export const isMultidate = (dates) => ((dates.sell.start !== dates.stay.start) || (dates.sell.end !== dates.stay.end)) && (dates.stay.start !== "" && dates.stay.end !== "");
+export const isMultidate = (dates) => ((format(dates.sell.start) !== format(dates.stay.start)) || (format(dates.sell.end) !== format(dates.stay.end))) && (format(dates.stay.start) !== "" && format(dates.stay.end) !== "");
 
 export const getExtreme = (dates, direction) => {
   direction = direction || 'right';

@@ -277,20 +277,60 @@ input.search-box {
 }
 
 
-.editable-field {
+.editable-field, .flatpickr-input {
     font-size: inherit;
     font: inherit;
     border: none;
-    border-bottom: 1px dotted black;
-    background: transparent;
+    // border-bottom: 2px dotted $color-blue;
+    background: rgba($color-accent, 0.15);
     resize: none;
     text-align: center;
     line-height: inherit;
-    width: 90%;    
+    border-radius: 4px;
+    min-width: 60%;   
+    width: 100%; 
+    // box-shadow: 0 0 10px 0 rgba($color-medium-gray, 0.2);
     
     &:focus {
         border: none;
-        border-bottom: 1px dotted black;
-        background: #ddd;
+        // border-bottom: 1px solid $color-blue;
+        box-shadow: 0 0 30px 0 rgba($color-medium-gray, 0.3);
+        background: rgba($color-white, 0.15);
     }
+}
+
+.editable-field--date, .flatpickr-input {
+    width: 85px;
+}
+
+.flatpickr-calendar {
+    background: $color-darker-gray !important;
+    box-shadow: none !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange,
+.flatpickr-day.startRange.inRange,
+.flatpickr-day.endRange.inRange,
+.flatpickr-day.selected:focus,
+.flatpickr-day.startRange:focus,
+.flatpickr-day.endRange:focus,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover,
+.flatpickr-day.selected.prevMonthDay,
+.flatpickr-day.startRange.prevMonthDay,
+.flatpickr-day.endRange.prevMonthDay,
+.flatpickr-day.selected.nextMonthDay,
+.flatpickr-day.startRange.nextMonthDay,
+.flatpickr-day.endRange.nextMonthDay {
+    background: $color-accent !important;
+    border-color: $color-accent !important;
+}
+
+.flatpickr-current-month {
+    padding-top: 6px;
+    font-size: 110%
 }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import find from 'lodash/find';
 
 import {
-  getExtreme
+  getExtreme, isMultidate
 } from '../helpers/dates';
 
 import {
@@ -30,10 +30,10 @@ export async function eventsData() {
     const featured_markets2Promise = axios(`${WP_URL}featured_markets${parameters}&page=2`);
     const program_typePromise = axios(`${WP_URL}program_type${parameters}`);
     const entry1Promise = axios(`${WP_URL}entry${parameters}&page=1`);
-    // const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE
-    // const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE
-    // const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE
-    // const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE
+    const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE
+    const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE
+    const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE
+    const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE
 
     const [
       channel,
@@ -48,10 +48,10 @@ export async function eventsData() {
       featured_markets2,
       program_type,
       entry1,
-      // entry2, // DISABLE
-      // entry3, // DISABLE
-      // entry4, // DISABLE
-      // entry5,  // DISABLE
+      entry2, // DISABLE
+      entry3, // DISABLE
+      entry4, // DISABLE
+      entry5,  // DISABLE
     ] =
     await Promise.all(
       [channelPromise,
@@ -66,16 +66,16 @@ export async function eventsData() {
         featured_markets2Promise,
         program_typePromise,
         entry1Promise,
-        // entry2Promise,  // DISABLE
-        // entry3Promise,  // DISABLE
-        // entry4Promise,  // DISABLE
-        // entry5Promise,   // DISABLE
+        entry2Promise,  // DISABLE
+        entry3Promise,  // DISABLE
+        entry4Promise,  // DISABLE
+        entry5Promise,   // DISABLE
       ]);
 
 
     const featured_marketsALL = [...featured_markets1.data, ...featured_markets2.data];
     const entriesALL = [...entry1.data
-      // , ...entry2.data, ...entry3.data, ...entry4.data, ...entry5.data // DISABLE
+      , ...entry2.data, ...entry3.data, ...entry4.data, ...entry5.data // DISABLE
       ];
 
     const regions = region.data.map((r) => {
@@ -134,12 +134,12 @@ export async function eventsData() {
 
       const dates = {
         sell: {
-          start: e.acf.dates.multidate ? e.acf.dates.sell.start: e.acf.dates.date.start,
-          end: e.acf.dates.multidate ? e.acf.dates.sell.end: e.acf.dates.date.end
+          start: e.acf.dates.sell.start,
+          end: e.acf.dates.sell.end
         },
         stay: {
-          start: e.acf.dates.multidate ? e.acf.dates.stay.start: e.acf.dates.date.start,
-          end: e.acf.dates.multidate ? e.acf.dates.stay.end: e.acf.dates.date.end
+          start: e.acf.dates.stay.start,
+          end: e.acf.dates.stay.end
         }
       };
 
@@ -172,7 +172,7 @@ export async function eventsData() {
         }] : [{}],
         otherChannels: e.acf.other_channels,
         ongoing: e.acf.dates.ongoing,
-        datesType: e.acf.dates.multidate ? 'MULTIDATE' : 'SINGLEDATE',
+        datesType: isMultidate(dates) ? 'MULTIDATE' : 'SINGLEDATE',
         dates,
         earliestDay: getExtreme([dates.sell.start, dates.stay.start], 'left'),
         latestDay: getExtreme([dates.sell.end, dates.stay.end], 'right')

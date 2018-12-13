@@ -30,7 +30,10 @@ class Header extends Component {
           withTooltip(c["name"], <i className={ c["icon"] }/>, c.slug)
         )}
           {this.props.otherChannels !== "" && withTooltip(this.props.otherChannels, <i className="icon nc-icon-mini ui-2_menu-dots" /> )}
+
+          <div style={{flexGrow: 1, textAlign: 'right', padding: '0 10px'}}>  </div>
         </span>
+        
       </header>)
   }
 }
