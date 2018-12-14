@@ -80,8 +80,14 @@ class App extends Component {
       state: "shortLinks",
       then() {
         // console.log(location, this.state.shortLinks, this.state.shortLinks);
+        let decodedState;
           if(location.key !== ''){
-            const decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.preset][location.key]))));
+            try {
+              decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.preset][location.key]))))
+            } catch (ex) {
+              decodedState = {};
+            }
+            // const decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.preset][location.key])))) || {};
             // console.log(decodedState);
             // this.updateState({...this.state.events, decodedState}, true);
             this.updateState({...this.state, ...decodedState}, true);
@@ -111,40 +117,68 @@ class App extends Component {
         let offers = {};
         let channels = {};
         let brands = {};
+        let featured_markets = {};
         let brandGroups = {};
+        let campaign_groups = {};
+        let market_scopes = {};
+        let program_types = {};
+        let segments = {};
+        let owners = {};
 
         for (const r in data.regions) {
           if (this.preset === 'ALL') {
-            regions[data.regions[r].slug] = data.regions[r];
-            regions[data.regions[r].slug].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].slug].active : true;
+            regions[data.regions[r].id] = data.regions[r];
+            regions[data.regions[r].id].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].id].active : true;
           } else {
-            if (data.regions[r].slug === this.preset.toLowerCase()) {
-              regions[data.regions[r].slug] = data.regions[r];
-              regions[data.regions[r].slug].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].slug].active : true;
+            if (data.regions[r].id === this.preset.toLowerCase()) {
+              regions[data.regions[r].id] = data.regions[r];
+              regions[data.regions[r].id].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].id].active : true;
             }
           }
-
         }
         
         for (const r in data.channels) {
-          channels[data.channels[r].slug] = data.channels[r];
-          channels[data.channels[r].slug].active = this.state.channels !== undefined ? this.state.channels[data.channels[r].slug].active : true;
+          channels[data.channels[r].id] = data.channels[r];
+          channels[data.channels[r].id].active = this.state.channels !== undefined ? this.state.channels[data.channels[r].id].active : true;
         }
         
         for (const r in data.offers) {
-          offers[data.offers[r].slug] = data.offers[r];
-          offers[data.offers[r].slug].active = this.state.offers !== undefined ? this.state.offers[data.offers[r].slug].active : true;
+          offers[data.offers[r].id] = data.offers[r];
+          offers[data.offers[r].id].active = this.state.offers !== undefined ? this.state.offers[data.offers[r].id].active : true;
         }
         
         for (const r in data.brands) {
-          brands[data.brands[r].slug] = data.brands[r];
-          brands[data.brands[r].slug].active = this.state.brands !== undefined ? this.state.brands[data.brands[r].slug].active : true;
+          brands[data.brands[r].id] = data.brands[r];
+          brands[data.brands[r].id].active = this.state.brands !== undefined ? this.state.brands[data.brands[r].id].active : true;
         }
 
         for (const r in data.brandGroups) {
-          brandGroups[data.brandGroups[r].slug] = data.brandGroups[r];
-          // brandGroups[data.brandGroups[r].slug].active = this.state.brandGroups !== undefined ? this.state.regions[data.regions[r].slug].active : true;
-        }      
+          brandGroups[data.brandGroups[r].id] = data.brandGroups[r];
+        }  
+                
+        for (const r in data.featured_markets) {
+          featured_markets[data.featured_markets[r].id] = data.featured_markets[r];
+        }  
+
+        for (const r in data.campaign_groups) {
+          campaign_groups[data.campaign_groups[r].id] = data.campaign_groups[r];
+        }  
+
+        for (const r in data.market_scopes) {
+          market_scopes[data.market_scopes[r].id] = data.market_scopes[r];
+        }  
+
+        for (const r in data.program_types) {
+          program_types[data.program_types[r].id] = data.program_types[r];
+        }  
+
+        for (const r in data.segments) {
+          segments[data.segments[r].id] = data.segments[r];
+        }  
+
+        for (const r in data.owners) {
+          owners[data.owners[r].id] = data.owners[r];
+        }  
 
         this.events = data.entries;
 
@@ -155,15 +189,17 @@ class App extends Component {
           brands,
           channels,
           brandGroups,
+          featured_markets,
+          campaign_groups,
+          market_scopes,
+          program_types,
+          segments,
+          owners,
           ready: true
         });
-
         this.updateEventList(this.events, true);
-        
       });
-
     }
-
   }
 
   componentDidUpdate() {
@@ -213,79 +249,16 @@ class App extends Component {
 
   logout = () => this.props.history.push('/login', {});
 
-  // addEntry = () => {
-
-  //   this.setState({addEntry: !this.state.addEntry});
-
-  //   const newEntry = {
-  //     campaign_name: 'el title',
-  //     description: 'lorem123'
-  //   }
-
-  //   console.log('Adding new Entry modal');
-
-  //   // axios({
-  //   //     method: 'post',
-  //   //     url: _WP_URL + "/wp-json/wp/v2/entry",
-  //   //     auth: _AUTH,
-  //   //     data: {
-  //   //       title: newEntry.campaign_name,
-  //   //       fields: {
-  //   //         "description": "lorem123",
-  //   //         "owner_subregion": 21,
-  //   //         "other_channels": "nono",
-  //   //         "owner": 260,
-  //   //         "campaign_group": 153,
-  //   //         "featured_markets": [
-  //   //           402
-  //   //         ],
-  //   //         "market_scope": 77,
-  //   //         "segment": 74,
-  //   //         "program_type": 158,
-  //   //         "brands": [
-  //   //           33
-  //   //         ],
-  //   //         "dates": {
-  //   //           "multidate": true,
-  //   //           "ongoing": false,
-  //   //           "date": {
-  //   //             "start": null,
-  //   //             "end": null
-  //   //           },
-  //   //           "sell": {
-  //   //             "start": "12/09/2018",
-  //   //             "end": "12/16/2018"
-  //   //           },
-  //   //           "stay": {
-  //   //             "start": "12/16/2018",
-  //   //             "end": "12/16/2018"
-  //   //           }
-  //   //         },
-  //   //         "channels": [
-  //   //           11
-  //   //         ]
-  //   //       },
-  //   //       status: 'publish'
-  //   //     }
-  //   //   }).then(function (response) {
-  //   //     console.log('ta listo', response);
-  //   //   })
-  //   //   .catch(function (error) {
-  //   //     console.log('no ta listo', error);
-  //   //   });
-  // }
-
   activeFilter = filterType => Object.keys(filterType).filter((f, i) => filterType[f].active === true);
 
   prepareEventList = (events, filter, field) => events.filter(e => {
     return e[field].reduce((x, c) => {
-      const eventList = x || (this.activeFilter(filter).indexOf(field === 'brands' ? c : c.slug) >= 0)
+      const eventList = x || (this.activeFilter(filter).indexOf(field === 'brands' ? c.toString() : c.id.toString()) >= 0)
       return eventList
     }, false)
   });
 
   updateEventList = (events, update) => {
-    // console.log(events);
 
     const timeRange = getTimeRange(this.state.time);
     const dayOfTheYear = getExtreme([today()]);
@@ -295,10 +268,10 @@ class App extends Component {
     
     // FILTER BY FILTERS (=O)
     events = Object.keys(this.state.filtersList).reduce((acc, f) => {
-      // console.log(f);
-      return this.prepareEventList(acc, this.state[f], this.state.filtersList[f].name);
+      const result = this.prepareEventList(acc, this.state[f], this.state.filtersList[f].name);
+      return result;
     }, events);
-    // console.log(events);
+
     
     // FILTER BY VIGENCY
     events = !this.state.vigency.past ? events.filter(e => !(e.latestDay < dayOfTheYear)) : events;
@@ -346,6 +319,7 @@ class App extends Component {
 
   updateFilter = (filter, filterName, active) => {
     let filters = this.state[filterName];
+    // console.log(filter, filterName, active, filters);
     filters[filter].active = active;
     this.updateEventList(this.events);
   };
@@ -461,6 +435,13 @@ class App extends Component {
               starred={this.state.starred}
               brandsInfo={this.state.brands}
               offers={this.state.offers}
+              regions={this.state.regions}
+              featured_markets={this.state.featured_markets}
+              campaign_groups={this.state.campaign_groups}
+              market_scopes={this.state.market_scopes}
+              program_types={this.state.program_types}
+              segments={this.state.segments}
+              owners={this.state.owners}
             />
           }
         </div>

@@ -1192,7 +1192,7 @@ body.activity-type .activity-type-group {
       position: relative;
       top: 6.66667px;
       width: 100%;
-      z-index: 1; }
+      z-index: 10; }
       .grid-view .event .event-dates .end,
       .grid-view .event .event-dates .start {
         position: absolute;
@@ -1225,7 +1225,7 @@ body.activity-type .activity-type-group {
         text-align: right; }
       .grid-view .event .event-dates.event-dates__STAY {
         top: 40px;
-        z-index: 0; }
+        z-index: 9; }
       .grid-view .event .event-dates:before {
         content: '';
         position: absolute;

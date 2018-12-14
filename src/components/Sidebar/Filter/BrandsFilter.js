@@ -92,15 +92,14 @@ class BrandsFilter extends Component {
                             : '';
                           // const validKeyPhrase = this.props.filters[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
 
-                  // console.log(filterCategories[c]["brands"]);
+                  const isInSearch = filterCategories[c]["brands"].map((b, i) => {
 
-                  const isInSearch = filterCategories[c]["brands"].map((b, i) => { 
-                    // console.log(this.props.filters)
+                    //console.log(this.props.filters[b]["name"]);
+                    //console.log(keyPhrase);
 
-                    return this.props.filters[b]["name"]
-                    }).join('').toUpperCase().indexOf(keyPhrase) > -1
-                            ? true
-                            : false;
+                    return this.props.filters[b]["name"] }).join('').toUpperCase().indexOf(keyPhrase) > -1 ? true : false;
+
+                  //console.log(filters);
 
                           return isInSearch || keyPhrase === "" || keyPhrase === undefined
                             ? <div key={i} id={filterCategories[c]["name"].toUpperCase()} className="brand-category">

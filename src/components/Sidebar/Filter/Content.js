@@ -19,9 +19,9 @@ class Content extends Component {
         Object.keys(this.props.filters ? this.props.filters : {}).map((r, i) => {
         // (this.props.filters ? this.props.filters : []).map((r, i) => {
 
-          // console.log(r);
+          {/* console.log(this.props.filters, r); */}
 
-          const filter = this.props.filters[r]["slug"];
+          const filter = this.props.filters[r]["id"];
           const filterName = this.props.filters[r]["name"];
           const filterIcon = this.props.filters[r]["icon"] || false;
           const filterImage = this.props.filters[r]["image"] || false;
@@ -32,11 +32,10 @@ class Content extends Component {
             ? this.props.keyPhrase.toUpperCase()
             : '';
           const validKeyPhrase = this.props.filters[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
-
-
-          return ((filterCategories.indexOf(r) > -1 && validKeyPhrase) || filterCategories.length === 0)
+          
+          return ((filterCategories.indexOf(Number(r)) > -1 && validKeyPhrase) || filterCategories.length === 0)
             ? <Button 
-                key={this.props.filters[r]["slug"]} 
+                key={this.props.filters[r]["id"]} 
                 prefix="filter" 
                 filter={filter} 
                 filterName={filterName} 

@@ -56,16 +56,14 @@ class Modal extends Component {
 
   handleEdit = (id) => {
     this.setState({edit:true});
-    // const eventBackUp = this.props.events[this.props.modal.modalEvent];
-    // this.eventBackUp = JSON.stringify(eventBackUp);
+    const eventBackUp = this.props.events[this.props.modal.modalEvent];
+    this.eventBackUp = JSON.stringify(eventBackUp);
   }
 
   saveChanges = (id) => {
     var self = this;
 
     const newData = this.props.events[this.props.modal.modalEvent];
-
-    console.log(newData);
 
     this.setState({saving: true});
 
@@ -77,13 +75,21 @@ class Modal extends Component {
         title: newData['campaignName'],
         fields: {
           description: newData['description'],
-          dates: newData['dates'],
-          offer: newData['offer'][0]['id']
+          dates: {...newData['dates'], ongoing: newData['ongoing']},
+          offer: newData['offer'][0]['id'],
+          owner_subregion: newData['region'][0]['id'],
+          featured_markets: newData['featured_market'][0]['id'],
+          campaign_group: newData['campaign_group'][0]['id'],
+          market_scope: newData['market_scope'][0]['id'],
+          program_type: newData['program_type'][0]['id'],
+          segment: newData['segment'][0]['id'],
+          owner: newData['owner'][0]['id'],
+          brands: newData['brands'],
         },
         status: 'publish'
       }
     }).then(function (response) {
-      self.setState({ saving: false });
+      self.setState({ saving: false, edit: false });
       console.log('success', response);
     })
     .catch(function (error) {
@@ -110,7 +116,7 @@ class Modal extends Component {
   }
 
   cancelEdit = (id) => {
-    // this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
+    this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
     this.setState({edit:false});
   }
 
@@ -118,7 +124,17 @@ class Modal extends Component {
 
     const EventForModal = () =>
     <div className="modal-content">
-        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} brandsInfo={this.props.brandsInfo} editable={this.state.edit} updateState={this.props.updateState} saveChanges={this.saveChanges} offers={this.props.offers} />
+        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} brandsInfo={this.props.brandsInfo} editable={this.state.edit} updateState=
+          {this.props.updateState} saveChanges={this.saveChanges}
+          offers={this.props.offers}
+          regions={this.props.regions}
+          featured_markets={this.props.featured_markets}
+          campaign_groups={this.props.campaign_groups}
+          market_scopes={this.props.market_scopes}
+          program_types={this.props.program_types}
+          segments={this.props.segments}
+          owners={this.props.owners}
+        />
     </div>
 
     const handle = 'handle-' + this.props.events[this.props.modal.modalEvent].id;

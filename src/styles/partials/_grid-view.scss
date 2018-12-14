@@ -216,7 +216,7 @@
       top: $padding/3;
       // top: $event-card-header + $padding/3;
       width: 100%;
-      z-index: 1;
+      z-index: 10;
 
       .end,
       .start {
@@ -263,7 +263,7 @@
 
       &.event-dates__STAY {
         top: 40px;
-        z-index: 0;
+        z-index: 9;
       }
       $arrow-length: 100px;
 
@@ -488,10 +488,6 @@
 
 .grid-view .event.elevated .event-info i.more:after {
   transform: rotate(180deg);
-}
-
-.brands {
-  // margin-bottom: $padding;
 }
 
 .tabs {
