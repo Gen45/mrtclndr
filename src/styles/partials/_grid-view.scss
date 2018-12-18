@@ -30,7 +30,8 @@
     vertical-align: top;
     // transition: $transition-time;
     display: inline-block;
-    color: $color-dark-gray;
+    // color: $color-dark-gray;
+    color: $color-medium-gray !important; 
     overflow: hidden;
     // height: 450px;
     height: 300px;
@@ -59,8 +60,13 @@
         background: inherit;
 
         &.channels {
+          font-size: 12px;
           // overflow: hidden;
           max-width: 100%;
+
+          &.editable {
+            justify-content: center;
+          }
 
           &.other-channels {
             max-width: calc(100% - 45px);
@@ -566,5 +572,5 @@
 }
 
 .editable .brands {
-  background: $color-light-gray !important;
+  // background: $color-light-gray !important;
 }

@@ -282,13 +282,14 @@ input.search-box {
 .modal .event-info *.editable-field, 
 .contact.editable-field, 
 .brand.editable-field, 
+.channel.editable-field, 
 *.flatpickr-input {
     cursor: pointer;
     font-size: inherit;
     font: inherit;
     border: none;
     // border-bottom: 2px dotted $color-blue;
-    background: rgba($color-yellow, 0.15);
+    background: rgba($color-yellow, 0.15) !important;
     resize: none;
     text-align: center;
     line-height: inherit;
@@ -311,10 +312,20 @@ input.search-box {
     }
 }
 
-.brand.editable-field {
+.brand.editable-field,
+.channel.editable-field {
     width: auto;
     min-width: 0;
     margin: 2px;
+}
+
+.channel.editable-field {
+    display: inline-block;
+    padding-right: 5px;
+
+    i {
+        background: transparent !important;
+    }
 }
 
 .modal .event-info .tag.editable-field {

@@ -127,18 +127,25 @@ span.flatpickr-weekday {
     // }
 }
 
-.add-brand {
+.add-brand,
+.edit-channels {
     background: lighten($color-medium-gray, 15%) !important;
     border-radius: 4px;
     padding: 0;
     position: relative;
-    max-width: 72px !important;
-    width: 72px !important;
-    max-height: 36px;
-    height: 36px;
-    font-size: 16px;
+    // max-width: 30px !important;
+    width: 30px !important;
+    max-height: 30px;
+    height: 30px;
     color: $color-white;
     display: flex;
     align-items: center;
     justify-content: center;
+    i {
+        font-size: 16px;
+    }
+}
+
+.edit-channels {
+    margin: 3px;
 }

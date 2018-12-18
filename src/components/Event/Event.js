@@ -15,14 +15,17 @@ import {_COLORS} from '../../config/constants';
 
 class Event extends Component {
 
+  componentWillMount() {
+    this.setState({ addingBrands: false, addingChannels: false });
+  }
+
   handleOpenModal = (targetId) => {
     !this.props.elevated && this.props.handleOpenModal(targetId);
   };
 
   keepEdits = (value, field) => {
     this.props.event[field] = value;
-    // this.setState({changed: true });
-    this.props.changes();
+    this.setState({changed: true });
   }
   
   cleanFilterInfo = (filterInfo) => {
@@ -54,12 +57,23 @@ class Event extends Component {
       >
         <div className='event-inner'>
         {
-          this.props.view === 'grid' &&
-            <Header channels={event.channels} otherChannels={event.otherChannels} color={this.props.editable ? _COLORS.LIGHTGRAY : regionColor} editable={this.props.editable} />
+          this.props.view === 'grid' && !this.props.editingBrands &&
+            <Header 
+              channels={event.channels} 
+              otherChannels={event.otherChannels} 
+              color={this.props.editable ? _COLORS.MEDIUMGRAY : regionColor} 
+              editable={this.props.editable} 
+              editChannels={this.props.editChannels} 
+              editingChannels={this.props.editingChannels} 
+              channelsInfo={this.props.channelsInfo}
+              event={this.props.event}
+            />
         }
+        {
+        !this.props.editingBrands && !this.props.editingChannels &&
         <div className={`event-info`}>
         {
-          this.props.view === 'grid' &&
+          this.props.view === 'grid' && 
           <Dates dates={event.dates} editable={this.props.editable} event={this.props.event}/>        
         }
 
@@ -77,9 +91,9 @@ class Event extends Component {
                   </span>
               }
             </div>
-   
+
           {
-            this.props.view === 'grid' && !this.props.editable &&
+            this.props.view === 'grid' && !this.props.editable && 
             <div>
               <p className='tags'>
                 <span className="tag"> 
@@ -110,16 +124,16 @@ class Event extends Component {
             </div>
           }
           {
-            this.props.view === 'grid' && this.props.editable &&
+            this.props.view === 'grid' && this.props.editable && 
             <div>
               <div className='tags'>
-                <Tooltip key={999} title={event.offer[0].name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
-                      html={(<div style={tooltip_styles}><Select placeholder={event.offer[0].name} options={this.cleanFilterInfo(this.props.offers)} onChange={opt => this.keepEdits([this.props.offers[opt.value]], 'offer')} /></div> )} >
-                  <span className="tag editable-field" tabIndex={0}> 
-                    <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
-                    {event.offer[0].name} 
-                    <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
-                  </span>
+                <Tooltip key={999} title={event.offer[0].name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive html={(<div style={tooltip_styles}>
+                  <Select placeholder={event.offer[0].name} options={this.cleanFilterInfo(this.props.offers)} onChange={opt => this.keepEdits([this.props.offers[opt.value]], 'offer')} /></div> )} >
+                    <span className="tag editable-field" tabIndex={0}> 
+                      <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
+                      {event.offer[0].name} 
+                      <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
+                    </span>
                 </Tooltip>
               </div>
               <div className='tags'>
@@ -133,8 +147,8 @@ class Event extends Component {
                     { field:'segment', name: "Segment", val: event.segment[0].name, options: this.cleanFilterInfo(this.props.segments)}
                   ].map((e, i)=> isValid(e.val) 
                   ?
-                    <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
-                          html={(<div style={tooltip_styles}><Select placeholder={e.field !== 'ongoing' ? event[e.field][0].name : event.ongoing ? 'Yes' : 'No' } options={e.options} onChange={opt => this.keepEdits([this.props[e.field + 's'][opt.value]], e.field)} /></div> )} isSearchable={e.isSearchable} >
+                    <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive html={(<div style={tooltip_styles}><Select placeholder={e.field !== 'ongoing' ? event[e.field][0].name : event.ongoing ? 'Yes' : 'No' } 
+                          options={e.options} onChange={opt => this.keepEdits([this.props[e.field + 's'][opt.value]], e.field)} /></div> )} isSearchable={e.isSearchable} >
                       <span className="tag editable-field" tabIndex={0}> 
                         <span style={{color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
                       </span>
@@ -150,7 +164,7 @@ class Event extends Component {
           }          
 
           {
-            this.props.elevated && this.props.view === 'grid' &&
+            this.props.elevated && this.props.view === 'grid' && !this.props.editingBrands && !this.props.editingChannels &&
             <div>
             {
               this.props.editable 
@@ -160,11 +174,13 @@ class Event extends Component {
             </div>
           }
           </div>
+        
         {
           this.props.view === 'grid' &&
           <i className='more'/>
         }
         </div>
+      }
 
       {
         this.props.elevated && this.props.view === 'grid' &&
@@ -172,16 +188,32 @@ class Event extends Component {
           <div className={`tab-content t1 ${this.props.elevated
               ? ' active'
               : ''}`}>
-            { 
-              !this.props.editable 
-                ? <p className='contact ' title={event.owner[0].name}><i className='nc-icon-mini users_circle-09' style={{ color: regionColor }} /> {event.owner[0].name}</p>
-                : 
-                <Tooltip key={999} title={event.owner[0].name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
-                      html={(<div style={tooltip_styles}><Select placeholder={event.owner[0].name} options={this.cleanFilterInfo(this.props.owners)} onChange={opt => this.keepEdits([this.props.owners[opt.value]], 'owner')} /></div> )} >
-                  <p tabIndex={0} className='editable-field contact ' title={event.owner[0].name}><i className='nc-icon-mini users_circle-09' style={{ color: _COLORS.LIGHTGRAY }} /> {event.owner[0].name}</p>
-                </Tooltip>
-            }
-              <Brands brands={event.brands} brandsInfo={this.props.brandsInfo} editable={this.props.editable} event={event} />
+
+              {
+                  !this.props.editingBrands && !this.props.editingChannels &&
+                  <div>
+                    { 
+                      !this.props.editable
+                        ? <p className='contact ' title={event.owner[0].name}><i className='nc-icon-mini users_circle-09' style={{ color: regionColor }} /> {event.owner[0].name}</p>
+                        : 
+                        <Tooltip key={999} title={event.owner[0].name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                              html={(<div style={tooltip_styles}><Select placeholder={event.owner[0].name} options={this.cleanFilterInfo(this.props.owners)} onChange={opt => this.keepEdits([this.props.owners[opt.value]], 'owner')} /></div> )} >
+                          <p tabIndex={0} className='editable-field contact ' title={event.owner[0].name}><i className='nc-icon-mini users_circle-09' style={{ color: _COLORS.LIGHTGRAY }} /> {event.owner[0].name}</p>
+                        </Tooltip>
+                    }
+                  </div>
+              }
+              {
+                !this.props.editingChannels &&
+                  <Brands 
+                    brands={event.brands} 
+                    brandsInfo={this.props.brandsInfo} 
+                    editable={this.props.editable}
+                    event={event} 
+                    editBrands={this.props.editBrands} 
+                    editingBrands={this.props.editingBrands} 
+                  />
+              }
           </div>
         </div>
       }

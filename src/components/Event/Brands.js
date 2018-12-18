@@ -12,21 +12,16 @@ const Brand = (props) => {
 
 class Brands extends Component {
 
-  addBrand = () => {
-    console.log('hey that\'s my bike');
-  }
-
   removeBrand = (id, event, editable) => {
-
     if (editable) {
       const index = event.brands.indexOf(id);
-      console.log(event.brands);
+      // console.log(event.brands);
       if (index > -1) {
         event.brands.splice(index, 1);
       } else {
         event.brands.push(id);
       }
-      console.log(event.brands);
+      // console.log(event.brands);
       this.setState({change: true});
     }
   }
@@ -37,15 +32,27 @@ class Brands extends Component {
     return (
       <div className="brands">
         {
-          brands.map((b, i) => <Brand key={i} brand={b} brandsInfo={this.props.brandsInfo} editable={this.props.editable} event={this.props.event} removeBrand={this.removeBrand} />)
+          this.props.editingBrands &&
+          <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}> Unassigned Brands </div>
         }
         {
-          this.props.editable && 
-          <Tooltip key={999} title={'Add Brands'} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
-                html={(<div>hola</div> )} >
-            <span className="brand add-brand editable-field" title="add brand" onClick={(e) => { this.addBrand() }}> <i className="nc-icon-mini ui-1_simple-add"></i> </span>
-          </Tooltip>
-            
+          this.props.editingBrands &&
+          Object.keys(this.props.brandsInfo).filter((b) => brands.indexOf(this.props.brandsInfo[b].id) < 0).map((b, i) => <Brand key={i} brand={this.props.brandsInfo[b].id} brandsInfo={this.props.brandsInfo} editable={this.props.editable} event={this.props.event} removeBrand={this.removeBrand} />)
+        }
+        {
+          this.props.editingBrands &&
+          <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}> Assigned Brands </div>
+        }
+        {
+          brands.map((b, i) => <Brand key={i} brand={b} brandsInfo={this.props.brandsInfo} editable={this.props.editingBrands} event={this.props.event} removeBrand={this.removeBrand} />)
+        }
+        {
+          this.props.editable && !this.props.editingBrands &&
+          <span className=" add-brand editable-field" title="add brand" onClick={() => { this.props.editBrands(true) }}> <i className="nc-icon-mini ui-1_pencil"></i> </span>            
+        }
+        {
+          this.props.editingBrands &&
+          <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}> </div>
         }
       </div>
     )

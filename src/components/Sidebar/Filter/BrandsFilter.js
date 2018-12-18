@@ -72,7 +72,7 @@ class BrandsFilter extends Component {
                     }
                   </div>
                 </div>
-
+                
                 {/* <FilterCategory category={"ALL"}/>
           {Object.keys(filterCategories).map((r, i) => <FilterCategory key={i} category={filterCategories[r]["name"].toUpperCase()}/>)}
         </div> */
@@ -86,13 +86,13 @@ class BrandsFilter extends Component {
                       }} autoHide={true}>
 
                       {
-                        Object.keys(filterCategories).map((c, i) => {
+                        Object.keys(filterCategories).filter((b) => !filterCategories[b]["preset"]).map((c, i) => {
                           const keyPhrase = this.state.keyPhrase !== "" && isValid(this.state.keyPhrase)
                             ? this.state.keyPhrase
                             : '';
                           // const validKeyPhrase = this.props.filters[r]["name"].toUpperCase().indexOf(keyPhrase) > -1;
 
-                  const isInSearch = filterCategories[c]["brands"].map((b, i) => {
+                  const isInSearch = filterCategories[c]["brands"].map((b) => {
 
                     //console.log(this.props.filters[b]["name"]);
                     //console.log(keyPhrase);
@@ -115,6 +115,8 @@ class BrandsFilter extends Component {
                     </Scrollbars>
                   </ResizableBox>
                 </div>
+
+
 
               </div>
               <Footer filterName={this.props.filterName} filters={this.props.filters} batchChange={this.props.batchChange}/>

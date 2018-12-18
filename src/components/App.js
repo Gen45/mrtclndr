@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
-// import axios from 'axios';
+import axios from 'axios';
 
 import Loading from './Helpers/Loading';
 
@@ -10,14 +10,14 @@ import '../styles/style.css';
 import 'react-tippy/dist/tippy.css';
 
 // DATA
-// import eventsData from '../config/eventsData';
 import eventsData from '../config/eventsWP';
+import oneEvent from '../config/oneEvent';
 import defaultState from '../config/defaultState.json';
 import base from '../config/base';
 
 // CONSTANTS
 import {_LOGO, _ISMOBILE, _BACKGROUNDIMAGES
-  // , _WP_URL, _AUTH
+  , _WP_URL, _AUTH
 } from '../config/constants';
 
 // HELPERS
@@ -31,7 +31,6 @@ import {MonthBar, MonthLines} from './Main/MonthLines';
 import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
-import EnterData from './Main/EnterData';
 
 
 class App extends Component {
@@ -82,6 +81,7 @@ class App extends Component {
         // console.log(location, this.state.shortLinks, this.state.shortLinks);
         let decodedState;
           if(location.key !== ''){
+            
             try {
               decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.preset][location.key]))))
             } catch (ex) {
@@ -253,7 +253,7 @@ class App extends Component {
 
   prepareEventList = (events, filter, field) => events.filter(e => {
     return e[field].reduce((x, c) => {
-      const eventList = x || (this.activeFilter(filter).indexOf(field === 'brands' ? c.toString() : c.id.toString()) >= 0)
+      const eventList = x || (this.activeFilter(filter).indexOf(field === 'brands' || field === 'channels' ? c.toString() : c.id.toString()) >= 0)
       return eventList
     }, false)
   });
@@ -340,6 +340,68 @@ class App extends Component {
     this.setState({modal:{ ...OpenModal(targetId, this.state.events)}});
   }
 
+  addEntry = () => {
+
+    let currentEvents = this.state.events;
+
+    const newEvent= { 
+      id: 0,
+      campaignName: 'Campaign Name',
+      description: 'Description',
+      region: [{id:0, name: '', color: '#000'}],
+      offer: [{id:0, name: '', color: '#000'}],
+      featured_market: [{id:0, name: ''}], 
+      market_scope: [{id:0, name: ''}], 
+      campaign_group: [{id:0, name: ''}], 
+      program_type: [{id:0, name: ''}], 
+      segment: [{id:0, name: ''}], 
+      owner: [{id:0, name: ''}], 
+      brands: [],
+      channels: [],
+      otherChannels: "",
+      dates: {
+        sell: { start: today(), end: today()},
+        stay: { start: today(), end: today()}
+      }
+    };
+
+    currentEvents.push(newEvent);
+
+    this.setState({events: currentEvents, modal: {modalEvent: currentEvents.length - 1, show: true, edit: true, new: true}});
+
+    // var self = this;
+    // this.setState({saving: true});
+
+    // axios({
+    //   method: 'post',
+    //   url: _WP_URL + "/wp-json/wp/v2/entry/",
+    //   auth: _AUTH,
+    //   data: {
+    //     title: 'New Entry',
+    //     status: 'publish'
+    //   }
+    // }).then(function (response) {
+    //   self.setState({ saving: false, edit: false });
+    //   console.log('success', response);
+    //   // modalEventId: 
+    //   console.log(response.data.id);
+
+    //   const newEntry = oneEvent(response.data);
+
+    //   newEntry.then((data) => {
+    //     console.log(data);
+    //     const events = [...self.state.events, data];
+    //     const modal = {modalEvent : events.length - 1, show: true};
+    //     self.setState({ events });
+    //     self.setState({ modal });
+    //   });
+    // })
+    // .catch(function (error) {
+    //   console.log('failed', error);
+    // });   
+
+  }
+
   render() {
     let time = !_ISMOBILE() ? this.state.time : {...this.state.time, numberOfYears: 1 };
         time = time.Y === (_PREVIOUSYEAR - 1) && (this.state.view === 'timeline' || time.mode !== 'Y') ? {...time, Y: _CURRENTYEAR} : time;
@@ -356,15 +418,6 @@ class App extends Component {
       this.state.ready && this.state.events !== [] ?
 
       <div className={appClass()}>
-      { this.state.addEntry && 
-        <EnterData 
-          brands={this.state.brands}
-          regions={this.state.regions}
-          offers={this.state.offers}
-          channels={this.state.channels}
-          brandGroups={this.state.brandGroups}
-        />
-      }
 
       <main id="main" className="main" role="main" style={{ backgroundImage: `url(${_BACKGROUNDIMAGES.IMAGES[0]})` }}>
         <Header collapsed={this.state.sidebar.collapsed} logout={this.logout} addEntry={this.addEntry} />
@@ -386,7 +439,7 @@ class App extends Component {
               sidebarCollapse={this.state.sidebar.collapsed}
             />
 
-            <div className={`overlay${this.state.modal.show ? ' active' : ''}`}/>
+            <div className={`overlay${this.state.modal.show && isValid(this.state.events[this.state.modal.modalEvent]) ? ' active' : ''}`}/>
 
             { this.state.ready &&
             <MonthBar time={time} collapsed={this.state.sidebar.collapsed}/>
@@ -404,9 +457,12 @@ class App extends Component {
                   view={this.state.view}
                   handleOpenModal={this.handleOpenModal}
                   time={time}
-                  modalEventId={isValid(this.state.modal.modalEvent) ? this.state.events[this.state.modal.modalEvent].id : null}
-                  modal={this.state.modal}
+                  //modalEventId={isValid(this.state.modal.modalEvent) ? this.state.events[this.state.modal.modalEvent].id : null}
+                  modalEventId={isValid(this.state.events[this.state.modal.modalEvent]) ? this.state.events[this.state.modal.modalEvent].id : null}
+                  //modal={this.state.modal}
+                  modal={isValid(this.state.events[this.state.modal.modalEvent]) ? this.state.modal : {show: false}}
                   brandsInfo={this.state.brands}
+                  channelsInfo={this.state.channels}
                 /> :
                 <Loading>
                   <span>
@@ -421,7 +477,7 @@ class App extends Component {
           </div>
         
           {
-            this.state.modal.show && this.state.ready && this.state.events &&
+            this.state.modal.show && this.state.ready && this.state.events && isValid(this.state.events[this.state.modal.modalEvent]) && 
             <Modal
               ref={(Modal) => {this.ModalRef = Modal}}
               modalPosition={this.state.modal.position}
@@ -434,6 +490,7 @@ class App extends Component {
               updateState={this.updateState}
               starred={this.state.starred}
               brandsInfo={this.state.brands}
+              channelsInfo={this.state.channels}
               offers={this.state.offers}
               regions={this.state.regions}
               featured_markets={this.state.featured_markets}

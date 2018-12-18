@@ -17,8 +17,23 @@ export const OpenModal = (targetId, events)=> {
 
 class Modal extends Component {
 
+
   componentWillMount() {
-    this.setState({ edit: false, saving: false });
+    this.setState({ saving: false, editingBrands: false, editingChannels: false });
+  }
+
+  componentDidMount() {
+    if(this.props.modal.edit) {
+      this.handleEdit();
+    }
+  }
+
+  editBrands = (editingBrands) => {
+    this.setState({editingBrands});
+  }
+
+  editChannels = (editingChannels) => {
+    this.setState({editingChannels});
   }
 
   handleCloseModal = () => {
@@ -54,16 +69,19 @@ class Modal extends Component {
     // this.props.updateState({starred:{items: starredItems, show: starredItems.length > 0 ? showStarred : false }, closeModal}, showStarred);
   };
 
-  handleEdit = (id) => {
+  handleEdit = () => {
     this.setState({edit:true});
     const eventBackUp = this.props.events[this.props.modal.modalEvent];
     this.eventBackUp = JSON.stringify(eventBackUp);
+    console.log(this.eventBackUp );
   }
 
   saveChanges = (id) => {
     var self = this;
 
     const newData = this.props.events[this.props.modal.modalEvent];
+
+    // console.log(newData);
 
     this.setState({saving: true});
 
@@ -85,11 +103,13 @@ class Modal extends Component {
           segment: newData['segment'][0]['id'],
           owner: newData['owner'][0]['id'],
           brands: newData['brands'],
+          channels: newData['channels'],
         },
         status: 'publish'
       }
     }).then(function (response) {
-      self.setState({ saving: false, edit: false });
+      self.setState({ saving: false, edit: false, editingBrands: false, editingChannels: false 
+       });
       console.log('success', response);
     })
     .catch(function (error) {
@@ -117,14 +137,22 @@ class Modal extends Component {
 
   cancelEdit = (id) => {
     this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
-    this.setState({edit:false});
+    this.setState({edit:false, editingChannels: false, editingBrands: false});
+  }
+
+  goBack = () => {
+    // this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
+    this.setState({editingChannels: false, editingBrands: false});
   }
 
   render() {
 
     const EventForModal = () =>
     <div className="modal-content">
-        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} brandsInfo={this.props.brandsInfo} editable={this.state.edit} updateState=
+        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} 
+        brandsInfo={this.props.brandsInfo} 
+        channelsInfo={this.props.channelsInfo} 
+        editable={this.state.edit} updateState=
           {this.props.updateState} saveChanges={this.saveChanges}
           offers={this.props.offers}
           regions={this.props.regions}
@@ -134,6 +162,10 @@ class Modal extends Component {
           program_types={this.props.program_types}
           segments={this.props.segments}
           owners={this.props.owners}
+          editingBrands={this.state.editingBrands}
+          editingChannels={this.state.editingChannels}
+          editBrands={this.editBrands}
+          editChannels={this.editChannels}
         />
     </div>
 
@@ -150,7 +182,12 @@ class Modal extends Component {
                     icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
 
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash' disabled={true} payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
-    
+
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_tail-left' 
+                    disabled={!this.state.editingBrands && !this.state.editingChannels} 
+                    payload={() => this.goBack()}
+                  />
+
                   <span className={`modal-handle ${handle}`}></span>
 
                   {

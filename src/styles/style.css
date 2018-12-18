@@ -1063,7 +1063,7 @@ body.activity-type .activity-type-group {
     position: relative;
     vertical-align: top;
     display: inline-block;
-    color: #333333;
+    color: #666666 !important;
     overflow: hidden;
     height: 300px;
     border-radius: 5px; }
@@ -1084,7 +1084,10 @@ body.activity-type .activity-type-group {
         align-items: center;
         background: inherit; }
         .grid-view .event .event-channels span.channels {
+          font-size: 12px;
           max-width: 100%; }
+          .grid-view .event .event-channels span.channels.editable {
+            justify-content: center; }
           .grid-view .event .event-channels span.channels.other-channels {
             max-width: calc(100% - 45px); }
         .grid-view .event .event-channels span.more {
@@ -1424,9 +1427,6 @@ body.activity-type .activity-type-group {
     .tabs .contact i {
       margin-right: 5px; }
 
-.editable .brands {
-  background: #999999 !important; }
-
 .modal {
   display: flex;
   justify-content: center;
@@ -1601,20 +1601,25 @@ span.flatpickr-weekday {
   filter: grayscale(40%);
   opacity: 0.8; }
 
-.add-brand {
+.add-brand,
+.edit-channels {
   background: #8c8c8c !important;
   border-radius: 4px;
   padding: 0;
   position: relative;
-  max-width: 72px !important;
-  width: 72px !important;
-  max-height: 36px;
-  height: 36px;
-  font-size: 16px;
+  width: 30px !important;
+  max-height: 30px;
+  height: 30px;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center; }
+  .add-brand i,
+  .edit-channels i {
+    font-size: 16px; }
+
+.edit-channels {
+  margin: 3px; }
 
 .main-overlay {
   padding-top: 50px;
@@ -1875,12 +1880,13 @@ input.search-box {
 .modal .event-info *.editable-field,
 .contact.editable-field,
 .brand.editable-field,
+.channel.editable-field,
 *.flatpickr-input {
   cursor: pointer;
   font-size: inherit;
   font: inherit;
   border: none;
-  background: rgba(221, 170, 51, 0.15);
+  background: rgba(221, 170, 51, 0.15) !important;
   resize: none;
   text-align: center;
   line-height: inherit;
@@ -1891,6 +1897,8 @@ input.search-box {
   .contact.editable-field .flatpickr-input.active,
   .brand.editable-field:focus,
   .brand.editable-field .flatpickr-input.active,
+  .channel.editable-field:focus,
+  .channel.editable-field .flatpickr-input.active,
   *.flatpickr-input:focus,
   *.flatpickr-input .flatpickr-input.active {
     outline: none !important;
@@ -1903,10 +1911,17 @@ input.search-box {
   min-width: 60%;
   width: 100%; }
 
-.brand.editable-field {
+.brand.editable-field,
+.channel.editable-field {
   width: auto;
   min-width: 0;
   margin: 2px; }
+
+.channel.editable-field {
+  display: inline-block;
+  padding-right: 5px; }
+  .channel.editable-field i {
+    background: transparent !important; }
 
 .modal .event-info .tag.editable-field {
   font-size: 14px; }
