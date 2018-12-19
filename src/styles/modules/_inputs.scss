@@ -289,7 +289,8 @@ input.search-box {
     font: inherit;
     border: none;
     // border-bottom: 2px dotted $color-blue;
-    background: rgba($color-yellow, 0.15) !important;
+    // background: rgba($color-yellow, 0.15) !important;
+    background: rgba(lighten($color-medium-gray, 15%), 0.15) !important;
     resize: none;
     text-align: center;
     line-height: inherit;
@@ -376,6 +377,54 @@ input.search-box {
         content: "Campaign Name";
     }
 }
+
+.add-brand,
+.edit-channels {
+    background: lighten($color-medium-gray, 15%) !important;
+    border-radius: 4px;
+    padding: 0;
+    position: relative;
+
+    // max-width: 30px !important;
+    // width: 30px !important;
+    width: auto;
+    max-height: 30px;
+    height: 30px;
+    color: $color-white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+        font-size: 14px;
+        margin-right: 10px;
+
+        &:hover {
+            background: inherit !important;
+        }
+    }
+
+    &:hover {
+        background: lighten($color-medium-gray, 20%) !important;
+    }
+}
+
+.add-brand {
+    margin-top: 5px;
+}
+
+.edit-channels {
+    margin: 10px 5px;
+    padding: 10px;
+
+    i {
+        width: auto;
+        min-width: 0 !important;
+    }
+}
+
+
+
 
 .flatpickr-day.selected,
 .flatpickr-day.startRange,

@@ -32,20 +32,6 @@
       "name": "brands"
     }
   },
-  "filtersListx": {
-    "regions": {
-      "name": "region"
-    },
-    "channels": {
-      "name": "channels"
-    },
-    "offers": {
-      "name": "offer"
-    },
-    "brands": {
-      "name": "brands"
-    }
-  },
   "modal": {
     "modalEvent": null,
     "show": false

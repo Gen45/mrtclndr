@@ -4,7 +4,8 @@ import Draggable from 'react-draggable';
 import findIndex from 'lodash/findIndex';
 import axios from 'axios';
 
-import { _PREV, _NEXT, _ISMOBILE, _WP_URL, _AUTH } from '../../config/constants';
+import { _PREV, _NEXT, _ISMOBILE, _WP_URL } from '../../config/constants';
+import { today } from '../../helpers/dates';
 
 import {Trigger} from '../ToolBar/Triggers';
 import Event from '../Event/Event';
@@ -23,7 +24,8 @@ class Modal extends Component {
   }
 
   componentDidMount() {
-    if(this.props.modal.edit) {
+    // console.log(this.props.events[this.props.modal.modalEvent]);
+    if (this.props.modal.new && this.props.modal.edit && this.props.modal.modalEvent !== null ) {
       this.handleEdit();
     }
   }
@@ -38,9 +40,20 @@ class Modal extends Component {
 
   handleCloseModal = () => {
     if( !this.state.edit ){
-      this.props.updateState({modal:{show: false, modalEvent: null}});
+      this.props.updateState({ modal: { show: false, modalEvent: null, edit: false, new: false}});
     }
-  };
+  }
+
+  auth = () => {
+    const auth = localStorage.getItem(`auth-${today()}`);
+    if (auth) {
+      return JSON.parse(decodeURIComponent(escape(atob(auth))));
+    } else {
+      this.props.history.push('/login', {});
+    }
+  }
+
+
 
   handleModalNav = (increment) => {
     let newModalEvent = (this.props.modal.modalEvent + increment) % this.props.events.length;
@@ -69,26 +82,27 @@ class Modal extends Component {
     // this.props.updateState({starred:{items: starredItems, show: starredItems.length > 0 ? showStarred : false }, closeModal}, showStarred);
   };
 
-  handleEdit = () => {
+  handleEdit = () => {   
     this.setState({edit:true});
     const eventBackUp = this.props.events[this.props.modal.modalEvent];
     this.eventBackUp = JSON.stringify(eventBackUp);
-    console.log(this.eventBackUp );
+    console.log(this.eventBackUp);
   }
 
   saveChanges = (id) => {
-    var self = this;
-
+    const self = this;
     const newData = this.props.events[this.props.modal.modalEvent];
 
     // console.log(newData);
 
     this.setState({saving: true});
 
+    id = !this.props.modal.new ? id : '';
+
     axios({
-      method: 'put',
+      method: id !== '' ? 'put' : 'post',
       url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
-      auth: _AUTH,
+      auth: this.auth(),
       data: {
         title: newData['campaignName'],
         fields: {
@@ -108,36 +122,42 @@ class Modal extends Component {
         status: 'publish'
       }
     }).then(function (response) {
-      self.setState({ saving: false, edit: false, editingBrands: false, editingChannels: false 
-       });
+      self.setState({ saving: false, edit: false, editingBrands: false, editingChannels: false });
+      self.props.updateState({ modal: { new: false, edit: false, show: false } }, true);
       console.log('success', response);
     })
     .catch(function (error) {
       console.log('failed', error);
     });    
+
+
   }
   
   trashEvent = (id) => {
-    // this.setState({edit:true});
+    const self = this;
+
     axios({
-      method: 'put',
+      method: 'delete',
       url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
-      auth: _AUTH,
-      data: {
-        status: 'draft'
-      }
+      auth: this.auth()
     }).then(function (response) {
       console.log('success', response);
+      console.log(self.props.events);
+
+      self.props.updateState({ modal: {new: false, edit: false, show: false} }, true);
     })
     .catch(function (error) {
       console.log('failed', error);
     });
-    this.setState({edit:false});
+    
   }
 
   cancelEdit = (id) => {
     this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
     this.setState({edit:false, editingChannels: false, editingBrands: false});
+    if(this.props.modal.new) {
+      this.props.updateState({ modal: { new: false, edit: false, show: false }}, true);
+    }
   }
 
   goBack = () => {
@@ -170,7 +190,7 @@ class Modal extends Component {
     </div>
 
     const handle = 'handle-' + this.props.events[this.props.modal.modalEvent].id;
-
+    
     return (
       <div className="modal grid-view">
         <OutsideAlerter event={this.handleCloseModal}>
@@ -178,10 +198,10 @@ class Modal extends Component {
             <div className={`modal-wrapper${this.state.edit ? ' editable' : '' }`}>
                 <nav className="modal-nav">
 
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash' disabled={this.props.modal.new || !this.state.edit || this.state.editingBrands || this.state.editingChannels} payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
+
                   <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} 
                     icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
-
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash' disabled={true} payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
 
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_tail-left' 
                     disabled={!this.state.editingBrands && !this.state.editingChannels} 

@@ -1601,26 +1601,6 @@ span.flatpickr-weekday {
   filter: grayscale(40%);
   opacity: 0.8; }
 
-.add-brand,
-.edit-channels {
-  background: #8c8c8c !important;
-  border-radius: 4px;
-  padding: 0;
-  position: relative;
-  width: 30px !important;
-  max-height: 30px;
-  height: 30px;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center; }
-  .add-brand i,
-  .edit-channels i {
-    font-size: 16px; }
-
-.edit-channels {
-  margin: 3px; }
-
 .main-overlay {
   padding-top: 50px;
   display: flex;
@@ -1886,7 +1866,7 @@ input.search-box {
   font-size: inherit;
   font: inherit;
   border: none;
-  background: rgba(221, 170, 51, 0.15) !important;
+  background: rgba(140, 140, 140, 0.15) !important;
   resize: none;
   text-align: center;
   line-height: inherit;
@@ -1963,6 +1943,40 @@ input.search-box {
 
 .editable .event-info .activity:before {
   content: "Campaign Name"; }
+
+.add-brand,
+.edit-channels {
+  background: #8c8c8c !important;
+  border-radius: 4px;
+  padding: 0;
+  position: relative;
+  width: auto;
+  max-height: 30px;
+  height: 30px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .add-brand i,
+  .edit-channels i {
+    font-size: 14px;
+    margin-right: 10px; }
+    .add-brand i:hover,
+    .edit-channels i:hover {
+      background: inherit !important; }
+  .add-brand:hover,
+  .edit-channels:hover {
+    background: #999999 !important; }
+
+.add-brand {
+  margin-top: 5px; }
+
+.edit-channels {
+  margin: 10px 5px;
+  padding: 10px; }
+  .edit-channels i {
+    width: auto;
+    min-width: 0 !important; }
 
 .flatpickr-day.selected,
 .flatpickr-day.startRange,

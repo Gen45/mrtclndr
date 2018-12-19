@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import axios from 'axios';
 
-import {isValid} from '../helpers/misc';
-import {_LOGO, _PASSCODES} from '../config/constants';
+import { isValid } from '../helpers/misc';
+import { _LOGO, _WP_URL} from '../config/constants';
+import { today } from '../helpers/dates';
 
 class Login extends Component {
 
@@ -23,22 +25,45 @@ class Login extends Component {
   login = (e) => {
     e.preventDefault();
 
-    const codeIndex = Object.keys(_PASSCODES).indexOf(this.passCode.value);
-    // const preset = Object.values(_PASSCODES)[codeIndex];
-    const preset = Object.keys(_PASSCODES).map(itm => _PASSCODES[itm])[codeIndex];
-    
+    const preset = 'ALL'; 
 
-    if(codeIndex > -1){
-      this.setState({error : false});
-      const key = isValid(this.from)
-        ? this.from.preset.toUpperCase() === preset
-          ? this.from.key
-          : ''
-        : '';
-      this.props.history.push(this.from.path, {isAuthenticated: true, preset, key});
-    } else {
-      this.setState({error : true});
-    }
+    const self = this;
+
+    const auth = {
+      username: this.username.value,
+      password: this.passCode.value
+    };
+
+    axios({
+      method: 'get',
+      url: _WP_URL + "/wp-json/wp/v2/users/",
+      auth
+    }).then(function (response) {
+
+      
+      if(response.status === 200){
+
+        const authStr = btoa(JSON.stringify(auth));
+        localStorage.setItem(`auth-${today()}`, authStr); 
+
+        self.setState({error : false});
+        
+        const key = isValid(self.from)
+          ? self.from.preset.toUpperCase() === 'CALA'//preset
+            ? self.from.key
+            : ''
+          : '';
+        self.props.history.push(self.from.path, { isAuthenticated: true, preset, key, auth: auth });
+      } else {
+        self.setState({error : true});
+      }
+
+    })
+    .catch(function (error) {
+      self.setState({ error: true });
+      // console.log('failed', error);
+    });
+
   };
 
   render() {
@@ -50,7 +75,8 @@ class Login extends Component {
       </div>
       <h1>Please enter your pass code:</h1>
       <form onSubmit={(e) => this.login(e)}>
-        <input ref={(input) => this.passCode = input} type="password" name="code" autoComplete="passCode" />
+          <input ref={(input) => this.username = input} placeholder="User Name" type="text" name="Username" autoComplete="Username" />
+          <input ref={(input) => this.passCode = input} placeholder="Password" type="password" name="code" autoComplete="passCode" />
         <button type="submit" className={this.state.error === true ? 'error' : ''}>
           <i className="nc-icon-outline arrows-1_tail-right"></i>
         </button>

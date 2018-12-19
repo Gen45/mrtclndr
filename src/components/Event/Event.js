@@ -24,6 +24,7 @@ class Event extends Component {
   };
 
   keepEdits = (value, field) => {
+    console.log(value, field, this.props.event[field]);
     this.props.event[field] = value;
     this.setState({changed: true });
   }
@@ -39,6 +40,9 @@ class Event extends Component {
     // console.log(event);
     const regionColor = this.props.event['region'][0].color;
     const offerColor = this.props.event['offer'][0].color;
+    // console.log(this.props.event);
+    const ownerName = this.props.event['owner'][0].name;
+    const offerName = this.props.event['offer'][0].name || 'No offer especified';
     const time = this.props.time;
     const multidate = isMultidate(event.dates);
     const isPastEvent = event.latestDay < getExtreme([today()],'right');
@@ -98,7 +102,7 @@ class Event extends Component {
               <p className='tags'>
                 <span className="tag"> 
                   <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
-                  {event.offer[0].name} 
+                  {offerName} 
                   <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
                 </span>
               </p>
@@ -127,13 +131,14 @@ class Event extends Component {
             this.props.view === 'grid' && this.props.editable && 
             <div>
               <div className='tags'>
-                <Tooltip key={999} title={event.offer[0].name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive html={(<div style={tooltip_styles}>
-                  <Select placeholder={event.offer[0].name} options={this.cleanFilterInfo(this.props.offers)} onChange={opt => this.keepEdits([this.props.offers[opt.value]], 'offer')} /></div> )} >
-                    <span className="tag editable-field" tabIndex={0}> 
-                      <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
-                      {event.offer[0].name} 
-                      <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
-                    </span>
+                <Tooltip key={'offer-key'} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive html={(
+                  <div key={'offer-key'} style={tooltip_styles}>
+                    <Select key={'offer-key'} placeholder={offerName} options={this.cleanFilterInfo(this.props.offers)} onChange={opt => this.keepEdits([this.props.offers[opt.value]], 'offer')} /></div> )} >
+                  <span className="tag editable-field" tabIndex={0}> 
+                    <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
+                    {offerName} 
+                    <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
+                  </span>
                 </Tooltip>
               </div>
               <div className='tags'>
@@ -147,8 +152,15 @@ class Event extends Component {
                     { field:'segment', name: "Segment", val: event.segment[0].name, options: this.cleanFilterInfo(this.props.segments)}
                   ].map((e, i)=> isValid(e.val) 
                   ?
-                    <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive html={(<div style={tooltip_styles}><Select placeholder={e.field !== 'ongoing' ? event[e.field][0].name : event.ongoing ? 'Yes' : 'No' } 
-                          options={e.options} onChange={opt => this.keepEdits([this.props[e.field + 's'][opt.value]], e.field)} /></div> )} isSearchable={e.isSearchable} >
+                    <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                          html={(
+                            <div style={tooltip_styles}>
+                              <Select 
+                                placeholder={e.field !== 'ongoing' ? event[e.field][0].name : event.ongoing ? 'Yes' : 'No' } 
+                                options={e.options} 
+                                onChange={opt => this.keepEdits([this.props[e.field + 's'][opt.value]], e.field)} 
+                              />
+                            </div> )} isSearchable={e.isSearchable} >
                       <span className="tag editable-field" tabIndex={0}> 
                         <span style={{color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
                       </span>
@@ -194,11 +206,17 @@ class Event extends Component {
                   <div>
                     { 
                       !this.props.editable
-                        ? <p className='contact ' title={event.owner[0].name}><i className='nc-icon-mini users_circle-09' style={{ color: regionColor }} /> {event.owner[0].name}</p>
-                        : 
-                        <Tooltip key={999} title={event.owner[0].name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
-                              html={(<div style={tooltip_styles}><Select placeholder={event.owner[0].name} options={this.cleanFilterInfo(this.props.owners)} onChange={opt => this.keepEdits([this.props.owners[opt.value]], 'owner')} /></div> )} >
-                          <p tabIndex={0} className='editable-field contact ' title={event.owner[0].name}><i className='nc-icon-mini users_circle-09' style={{ color: _COLORS.LIGHTGRAY }} /> {event.owner[0].name}</p>
+                        ? <p className='contact ' title={ownerName}><i className='nc-icon-mini users_circle-09' style={{ color: regionColor }} /> {ownerName}</p>
+                        : <Tooltip key={'owner-key'} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                            html={(
+                              <div key={'owner-key'} style={tooltip_styles}>
+                                <Select key={'owner-key'} options={this.cleanFilterInfo(this.props.owners)} onChange={opt => this.keepEdits([this.props.owners[opt.value]], 'owner')} /> 
+                              </div> 
+                            )} 
+                          >
+                          <p tabIndex={0} className='editable-field contact ' title={ownerName}>
+                            <i className='nc-icon-mini users_circle-09' style={{ color: _COLORS.LIGHTGRAY }} /> {ownerName}
+                          </p>
                         </Tooltip>
                     }
                   </div>

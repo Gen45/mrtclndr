@@ -17,9 +17,6 @@ class Content extends Component {
         : ''}`}>
       {
         Object.keys(this.props.filters ? this.props.filters : {}).map((r, i) => {
-        // (this.props.filters ? this.props.filters : []).map((r, i) => {
-
-          {/* console.log(this.props.filters, r); */}
 
           const filter = this.props.filters[r]["id"];
           const filterName = this.props.filters[r]["name"];

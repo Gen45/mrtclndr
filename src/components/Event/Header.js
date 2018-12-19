@@ -5,7 +5,7 @@ import {Tooltip} from 'react-tippy';
 
 class Header extends Component {
 
-  removeChannel = (id, event) => {
+  toggleChannel = (id, event) => {
     const index = event.channels.indexOf(id);
     // console.log(event.channels);
     if (index > -1) {
@@ -47,7 +47,7 @@ class Header extends Component {
           {
             this.props.editingChannels &&
             Object.keys(this.props.channelsInfo).filter((c) => channels.indexOf(this.props.channelsInfo[c].id) < 0).map((c, i) => 
-              <span key={i} className="channel editable-field" onClick={() => this.removeChannel(this.props.channelsInfo[c].id, this.props.event)}><i className={`${this.props.channelsInfo[this.props.channelsInfo[c].id]["icon"]}`} /> {this.props.channelsInfo[this.props.channelsInfo[c].id]["name"]} </span>)
+              <span key={i} className="channel editable-field" onClick={() => this.toggleChannel(this.props.channelsInfo[c].id, this.props.event)}><i className={`${this.props.channelsInfo[this.props.channelsInfo[c].id]["icon"]}`} /> {this.props.channelsInfo[this.props.channelsInfo[c].id]["name"]} </span>)
           }
           {
             this.props.editingChannels &&
@@ -56,21 +56,24 @@ class Header extends Component {
           {
             this.props.editingChannels &&
             channels.map((c, i) => (this.props.channelsInfo[c].slug !== "other-channels" ) &&
-              <span key={i} className="channel editable-field" onClick={() => this.removeChannel(c, this.props.event)}><i className={`${this.props.channelsInfo[c]["icon"]}`} /> {this.props.channelsInfo[c]["name"]} </span>
+              <span key={i} className="channel editable-field" onClick={() => this.toggleChannel(c, this.props.event)}><i className={`${this.props.channelsInfo[c]["icon"]}`} /> {this.props.channelsInfo[c]["name"]} </span>
           )}
           {
             !this.props.editingChannels &&
             channels.map(c => (this.props.channelsInfo[c].slug !== "other-channels") && c !== null &&
             withTooltip(this.props.channelsInfo[c]["name"], <i className={ this.props.channelsInfo[c]["icon"] }/>, this.props.channelsInfo[c].slug)
           )}
-          {this.props.otherChannels !== "" && withTooltip(this.props.otherChannels, <i className="icon nc-icon-mini ui-2_menu-dots" /> )}
           {
-            this.props.editable && !this.props.editingChannels &&
-            <i className="nc-icon-mini ui-1_pencil edit-channels" onClick={() => { this.props.editChannels(true) }}></i> 
+            !this.props.editingChannels &&
+            this.props.otherChannels !== "" && withTooltip(this.props.otherChannels, <i className="icon nc-icon-mini ui-2_menu-dots" /> )
           }
           {
           !this.props.editingChannels &&
           <div style={{flexGrow: 1, textAlign: 'right', padding: '0 10px'}}>  </div>
+          }
+          {
+            this.props.editable && !this.props.editingChannels &&
+            <span className="edit-channels" onClick={() => { this.props.editChannels(true) }}><i className="nc-icon-mini ui-1_pencil" ></i> Edit Channels</span>
           }
           {
             this.props.editingChannels &&

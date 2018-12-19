@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
-import axios from 'axios';
+// import axios from 'axios';
 
 import Loading from './Helpers/Loading';
 
@@ -11,14 +11,11 @@ import 'react-tippy/dist/tippy.css';
 
 // DATA
 import eventsData from '../config/eventsWP';
-import oneEvent from '../config/oneEvent';
 import defaultState from '../config/defaultState.json';
 import base from '../config/base';
 
 // CONSTANTS
-import {_LOGO, _ISMOBILE, _BACKGROUNDIMAGES
-  , _WP_URL, _AUTH
-} from '../config/constants';
+import {_LOGO, _ISMOBILE, _BACKGROUNDIMAGES } from '../config/constants';
 
 // HELPERS
 import {getExtreme, getTimeRange, today, month, year, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
@@ -43,7 +40,6 @@ class App extends Component {
 
     const from = this.props.location.pathname;
     let location = this.props.location.state;
-    // console.log(location);
 
     if(isValid(this.props.location.state)) {
       if(this.props.location.state.isAuthenticated === false) {
@@ -101,7 +97,8 @@ class App extends Component {
   componentWillUnmount() {
     // TODO: cancel eventsData
     this.setState({
-      ready: false
+      ready: false,
+      modal: {edit: false}
     });
     base.removeBinding(this.firebaseShortLinksref);
   }
@@ -203,15 +200,26 @@ class App extends Component {
   }
 
   componentDidUpdate() {
+
     const {
       events,
       shortLinks,
       ready,
-      addEntry,
+      modal,
+      brandGroups,
+      featured_markets,
+      market_scopes,
+      program_types,
+      segments,
+      campaign_groups,
       ...configurations
     } = this.state;
 
+    
+    configurations['modal'] = { ...this.state.modal, new: false, edit: false};
+
     this.stateString = JSON.stringify(configurations);
+
     localStorage.setItem(
       'marriott-calendar-' + this.preset + "-" + month(today()) + "-" + year(today()),
       this.stateString
@@ -277,11 +285,9 @@ class App extends Component {
     events = !this.state.vigency.past ? events.filter(e => !(e.latestDay < dayOfTheYear)) : events;
     events = !this.state.vigency.between ? events.filter(e => !(e.latestDay >= dayOfTheYear && e.earliestDay <= dayOfTheYear)) : events;
     events = !this.state.vigency.future ? events.filter(e => !(e.earliestDay > dayOfTheYear)) : events;
-    // console.log(events);
     
     // FILTER BY STARRED
     events = this.state.starred.show ? events.filter(e => this.state.starred.items.indexOf(e.id) > -1) : events;
-    // console.log(events);
 
     // ORDER
     events = orderBy(events, this.state.order.sortBy, this.state.order.orderBy);
@@ -345,17 +351,17 @@ class App extends Component {
     let currentEvents = this.state.events;
 
     const newEvent= { 
-      id: 0,
+      id: Date.now(),
       campaignName: 'Campaign Name',
       description: 'Description',
-      region: [{id:0, name: '', color: '#000'}],
-      offer: [{id:0, name: '', color: '#000'}],
-      featured_market: [{id:0, name: ''}], 
-      market_scope: [{id:0, name: ''}], 
-      campaign_group: [{id:0, name: ''}], 
-      program_type: [{id:0, name: ''}], 
-      segment: [{id:0, name: ''}], 
-      owner: [{id:0, name: ''}], 
+      region: [{id:0, name: 'select', color: '#000'}],
+      offer: [{id:0, name: 'select', color: '#000'}],
+      featured_market: [{id:0, name: 'select'}], 
+      market_scope: [{ id: 437, name: 'select'}], 
+      campaign_group: [{id:0, name: 'select'}], 
+      program_type: [{id:0, name: 'select'}], 
+      segment: [{id:0, name: 'select'}], 
+      owner: [{id:0, name: 'select'}], 
       brands: [],
       channels: [],
       otherChannels: "",
@@ -368,37 +374,6 @@ class App extends Component {
     currentEvents.push(newEvent);
 
     this.setState({events: currentEvents, modal: {modalEvent: currentEvents.length - 1, show: true, edit: true, new: true}});
-
-    // var self = this;
-    // this.setState({saving: true});
-
-    // axios({
-    //   method: 'post',
-    //   url: _WP_URL + "/wp-json/wp/v2/entry/",
-    //   auth: _AUTH,
-    //   data: {
-    //     title: 'New Entry',
-    //     status: 'publish'
-    //   }
-    // }).then(function (response) {
-    //   self.setState({ saving: false, edit: false });
-    //   console.log('success', response);
-    //   // modalEventId: 
-    //   console.log(response.data.id);
-
-    //   const newEntry = oneEvent(response.data);
-
-    //   newEntry.then((data) => {
-    //     console.log(data);
-    //     const events = [...self.state.events, data];
-    //     const modal = {modalEvent : events.length - 1, show: true};
-    //     self.setState({ events });
-    //     self.setState({ modal });
-    //   });
-    // })
-    // .catch(function (error) {
-    //   console.log('failed', error);
-    // });   
 
   }
 
@@ -499,8 +474,9 @@ class App extends Component {
               program_types={this.state.program_types}
               segments={this.state.segments}
               owners={this.state.owners}
-            />
-          }
+              history={this.props.history}
+                />
+              }
         </div>
       </main>
 
@@ -515,7 +491,7 @@ class App extends Component {
         updateState={this.updateState}
         ready={this.state.ready}
         batchChange={this.batchChange}
-        disabled={this.state.modal.show}
+        disabled={this.state.modal.show && isValid(this.state.events[this.state.modal.modalEvent])}
       />
     </div>
     :

@@ -72,18 +72,17 @@
 
 @keyframes pulse-shadow {
     0% {
-        box-shadow: 0 5px 10px 5px rgba($color-light-gray, 0.25);;
+        box-shadow: 0 5px 10px 5px rgba($color-light-gray, 0.25);
     }
 
     50% {
-        box-shadow: 0 5px 50px 15px rgba($color-light-gray, 0.25);;
+        box-shadow: 0 5px 50px 15px rgba($color-light-gray, 0.25);
     }
 
     100% {
-        box-shadow: 0 5px 10px 5px rgba($color-light-gray, 0.25);;
+        box-shadow: 0 5px 10px 5px rgba($color-light-gray, 0.25);
     }
 }
-
 
 .start {
     .flatpickr-calendar {
@@ -99,11 +98,12 @@
     }
 }
 
-.end  {
+.end {
     .flatpickr-calendar {
         &.static {
             right: 0;
         }
+
         &:before,
         &:after {
             left: auto;
@@ -111,9 +111,11 @@
         }
     }
 }
+
 span.flatpickr-weekday {
     font-size: 75%;
 }
+
 .flatpickr-current-month {
     padding: 4.16px 0 0 0;
 }
@@ -121,31 +123,9 @@ span.flatpickr-weekday {
 .PAST-EVENT {
     filter: grayscale(40%);
     opacity: 0.8;
+
     // &:hover {
     //   transition: $transition-time;
     //   opacity: 0.9;
     // }
-}
-
-.add-brand,
-.edit-channels {
-    background: lighten($color-medium-gray, 15%) !important;
-    border-radius: 4px;
-    padding: 0;
-    position: relative;
-    // max-width: 30px !important;
-    width: 30px !important;
-    max-height: 30px;
-    height: 30px;
-    color: $color-white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    i {
-        font-size: 16px;
-    }
-}
-
-.edit-channels {
-    margin: 3px;
 }
