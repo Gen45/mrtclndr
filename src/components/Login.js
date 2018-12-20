@@ -13,10 +13,10 @@ class Login extends Component {
 
   componentDidMount(){
     if(this.props.location.state.from){
-      this.from = {path: this.props.location.state.from, preset: this.disectFrom(this.props.location.state.from)[0] || '', key: this.disectFrom(this.props.location.state.from)[1] || ''};
+      this.from = {path: this.props.location.state.from, key: this.disectFrom(this.props.location.state.from)[1] || ''};
       // console.log(this.from);
     } else {
-      this.from = {path: '/', preset: '', key: ''};
+      this.from = {path: '/', key: ''};
     }
   }
 
@@ -24,8 +24,6 @@ class Login extends Component {
 
   login = (e) => {
     e.preventDefault();
-
-    const preset = 'ALL'; 
 
     const self = this;
 
@@ -49,12 +47,9 @@ class Login extends Component {
 
         self.setState({error : false});
         
-        const key = isValid(self.from)
-          ? self.from.preset.toUpperCase() === 'CALA'//preset
-            ? self.from.key
-            : ''
-          : '';
-        self.props.history.push(self.from.path, { isAuthenticated: true, preset, key, auth: auth });
+        const key = isValid(self.from) ? self.from.key : '';
+
+        self.props.history.push(self.from.path, { isAuthenticated: true, key, auth: auth });
       } else {
         self.setState({error : true});
       }

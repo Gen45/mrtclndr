@@ -42,27 +42,21 @@ class App extends Component {
     let location = this.props.location.state;
 
     if(isValid(this.props.location.state)) {
-      if(this.props.location.state.isAuthenticated === false) {
+      if(this.props.location.state.isAuthenticated) {
+        this.readyLoad = true;
+      } else {
         this.props.history.push('/login', { from });
         this.readyLoad = false;
-      } else {
-        this.preset = this.props.location.state.preset;
-        this.readyLoad = true;
       }
     } else {
       this.props.history.push('/login', { from });
       this.readyLoad = false;
     }
 
-    const preset = this.preset || 'ALL';
-    this.preset = preset;
-
-    let regions = {};
-    regions[preset] = true;
-    // const state = preset !== 'ALL' ? {...defaultState, regions } : defaultState;
     const state = defaultState;
 
-    const localStorageRef = localStorage.getItem('marriott-calendar-' + preset + "-" + month(today()) + "-" + year(today()));
+    const localStorageRef = localStorage.getItem('marriott-calendar-' + month(today()) + "-" + year(today()));
+
     if (localStorageRef) {
       this.stateString = localStorageRef;
       this.setState({...JSON.parse(localStorageRef)}, () => this.updateEventList(this.events), false);
@@ -79,7 +73,7 @@ class App extends Component {
           if(location.key !== ''){
             
             try {
-              decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.preset][location.key]))))
+              decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.key]))))
             } catch (ex) {
               decodedState = {};
             }
@@ -92,6 +86,7 @@ class App extends Component {
           }
       }
     });
+
   }
 
   componentWillUnmount() {
@@ -123,15 +118,8 @@ class App extends Component {
         let owners = {};
 
         for (const r in data.regions) {
-          if (this.preset === 'ALL') {
-            regions[data.regions[r].id] = data.regions[r];
-            regions[data.regions[r].id].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].id].active : true;
-          } else {
-            if (data.regions[r].id === this.preset.toLowerCase()) {
-              regions[data.regions[r].id] = data.regions[r];
-              regions[data.regions[r].id].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].id].active : true;
-            }
-          }
+          regions[data.regions[r].id] = data.regions[r];
+          regions[data.regions[r].id].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].id].active : true;
         }
         
         for (const r in data.channels) {
@@ -221,14 +209,14 @@ class App extends Component {
     this.stateString = JSON.stringify(configurations);
 
     localStorage.setItem(
-      'marriott-calendar-' + this.preset + "-" + month(today()) + "-" + year(today()),
+      'marriott-calendar-' + month(today()) + "-" + year(today()),
       this.stateString
     );
 
     if(this.state.shortLinks) {
       const to = this.getShareableLink();
       if (to.key !== this.props.location.state.key){
-        this.props.history.push(to.path, {isAuthenticated: true, preset: to.preset, key: to.key});
+        this.props.history.push(to.path, {isAuthenticated: true, key: to.key});
       }
     }
   }
@@ -236,23 +224,23 @@ class App extends Component {
   getShareableLink = () => {
     const encodedState = btoa(this.stateString);
     let shortLinks = this.state.shortLinks;
-    shortLinks[this.preset] = isValid(shortLinks[this.preset])
-      ? shortLinks[this.preset]
+    shortLinks = isValid(shortLinks)
+      ? shortLinks
       : {};
-    let index = Object.keys(shortLinks[this.preset]).map(itm => shortLinks[this.preset][itm]).indexOf(encodedState);
+    let index = Object.keys(shortLinks).map(itm => shortLinks[itm]).indexOf(encodedState);
 
     let key = '';
     if (index < 0) {
       do {
         key = keyGenerator(5);
-      } while (isValid(shortLinks[this.preset][key]));
+      } while (isValid(shortLinks[key]));
 
-      shortLinks[this.preset][key] = encodedState;
+      shortLinks[key] = encodedState;
       this.setState({shortLinks})
     } else {
-      key = Object.keys(shortLinks[this.preset])[index];
+      key = Object.keys(shortLinks)[index];
     }
-    return {path: `/${this.preset.toLowerCase()}/${key}`, preset: this.preset, key: key} ;
+    return {path: `/${key}`, key: key} ;
   };
 
   logout = () => this.props.history.push('/login', {});
