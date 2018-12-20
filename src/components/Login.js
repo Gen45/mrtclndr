@@ -35,16 +35,17 @@ class Login extends Component {
     };
 
     axios({
-      method: 'get',
-      url: _WP_URL + "/wp-json/wp/v2/users/",
-      auth
+      method: 'post',
+      url: _WP_URL + "/wp-json/jwt-auth/v1/token/",
+      data: auth
     }).then(function (response) {
-
       
       if(response.status === 200){
+        // console.log(response.data.token);
 
-        const authStr = btoa(JSON.stringify(auth));
-        localStorage.setItem(`auth-${today()}`, authStr); 
+        const token = response.data.token;
+
+        localStorage.setItem(today(), token);
 
         self.setState({error : false});
         
@@ -61,7 +62,7 @@ class Login extends Component {
     })
     .catch(function (error) {
       self.setState({ error: true });
-      // console.log('failed', error);
+      console.log('failed', error);
     });
 
   };
