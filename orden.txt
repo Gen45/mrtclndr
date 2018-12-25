@@ -1,0 +1,27 @@
+auth /
+  username password /
+
+    true /
+
+      initializar /
+
+        meter default en state /
+
+        check si no hay data de meta en storage /
+          jalar data /
+            convertir data /
+              meterla en storage /
+
+        sacar data de storage /
+          meter data en state /
+            
+        check si hay events en storage
+          true
+            check la fecha del mas reciente
+            jalar cualquier event mas reciente a esa fecha
+
+          false /
+            jalar todos los events /
+
+        meter events en state /
+

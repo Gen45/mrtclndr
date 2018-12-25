@@ -12,15 +12,17 @@ class Login extends Component {
   }
 
   componentDidMount(){
-    if(this.props.location.state.from){
-      this.from = {path: this.props.location.state.from, key: this.disectFrom(this.props.location.state.from)[1] || ''};
-      // console.log(this.from);
+
+    if (this.props.location.state) {
+      if( this.props.location.state.from){
+        this.from = {path: this.props.location.state.from};
+      } else {
+        this.from = {path: '/'};
+      } 
     } else {
-      this.from = {path: '/', key: ''};
+      this.props.history.push('/');
     }
   }
-
-  disectFrom = from => from.split('/').splice(1, 2);
 
   login = (e) => {
     e.preventDefault();
@@ -39,27 +41,22 @@ class Login extends Component {
     }).then(function (response) {
       
       if(response.status === 200){
-        // console.log(response.data.token);
 
         const token = response.data.token;
-
-        localStorage.setItem(today(), token);
-
+        localStorage.setItem('auth-'+today(), token);
         self.setState({error : false});
-        
         const key = isValid(self.from) ? self.from.key : '';
+        // console.log(response);
+        self.props.history.push(self.from.path, { isAuthenticated: true, key });
 
-        self.props.history.push(self.from.path, { isAuthenticated: true, key, auth: auth });
       } else {
         self.setState({error : true});
       }
 
-    })
-    .catch(function (error) {
+    }).catch(function (error) {
       self.setState({ error: true });
-      console.log('failed', error);
+      // console.log('failed', error);
     });
-
   };
 
   render() {
@@ -76,7 +73,7 @@ class Login extends Component {
         <button type="submit" className={this.state.error === true ? 'error' : ''}>
           <i className="nc-icon-outline arrows-1_tail-right"></i>
         </button>
-          <p style={{paddingTop: 20}}>{this.state.error ? 'Please enter a valid Code' : <br/>}</p>
+          <p style={{paddingTop: 20}}>{this.state.error ? 'Invalid information, please try again.' : <br/>}</p>
       </form>
     </div>)
   }

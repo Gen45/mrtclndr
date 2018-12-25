@@ -17,7 +17,6 @@ class Root extends Component {
         <Switch>
           <Route path="/login" component={Login} />
           <Route exact path='/' component={App} />
-          <Route path='/:preset' component={App} />
         </Switch>
       </div>
     </Router>

@@ -11,11 +11,21 @@ class EventsWrapper extends Component {
   render() {
     const itemSize = isValid(this.props.events) ? this.props.events.length : 0;
     // console.log('itemsize: ',itemSize);
+    // console.log(this.props.events);
     return (<div className={`events-wrapper`}>
 
       { itemSize > 0 ?
-        <ReactList ref={(ReactList) => this.ReactListRef = ReactList} key={this.props.view} itemRenderer={(index, key) => <Event key={this.props.events[index].id} event={this.props.events[index]} view={this.props.view} handleOpenModal={this.props.handleOpenModal} time={this.props.time} modalEventId={this.props.modalEventId} brandsInfo={this.props.brandsInfo} channelsInfo={this.props.channelsInfo}  />} 
-           length={itemSize} type={this.props.view === 'grid' ? 'uniform' : 'variable'} useTranslate3d={true} pageSize={40} /> :
+        <ReactList ref={(ReactList) => this.ReactListRef = ReactList} key={this.props.view} 
+          itemRenderer={(index, key) => <Event 
+          key={key} 
+          event={this.props.events[index]} 
+          view={this.props.view} 
+          handleOpenModal={this.props.handleOpenModal} 
+          time={this.props.time} 
+          modalEventId={this.props.modalEventId} 
+          brandsInfo={this.props.brandsInfo} 
+          channelsInfo={this.props.channelsInfo}  />} 
+          length={itemSize} type={this.props.view === 'grid' ? 'uniform' : 'variable'} useTranslate3d={true} pageSize={40} /> :
         <p style = {{
           position: 'absolute',
           top: '50%',

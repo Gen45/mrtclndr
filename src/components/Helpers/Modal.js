@@ -45,15 +45,13 @@ class Modal extends Component {
   }
 
   auth = () => {
-    const auth = localStorage.getItem(`auth-${today()}`);
-    if (auth) {
-      return JSON.parse(decodeURIComponent(escape(atob(auth))));
+    const token = localStorage.getItem(`auth-${today()}`);
+    if (token) {
+      return { 'Authorization': "Bearer " + token }; //JSON.parse(decodeURIComponent(escape(atob(auth))));
     } else {
       this.props.history.push('/login', {});
     }
   }
-
-
 
   handleModalNav = (increment) => {
     let newModalEvent = (this.props.modal.modalEvent + increment) % this.props.events.length;
@@ -79,6 +77,7 @@ class Modal extends Component {
     }
 
     this.props.updateState({starred:{items: starredItems, show: showStarred}, modal: newModal}, showStarred);
+
     // this.props.updateState({starred:{items: starredItems, show: starredItems.length > 0 ? showStarred : false }, closeModal}, showStarred);
   };
 
@@ -86,14 +85,12 @@ class Modal extends Component {
     this.setState({edit:true});
     const eventBackUp = this.props.events[this.props.modal.modalEvent];
     this.eventBackUp = JSON.stringify(eventBackUp);
-    console.log(this.eventBackUp);
+    // console.log(this.eventBackUp);
   }
 
   saveChanges = (id) => {
     const self = this;
     const newData = this.props.events[this.props.modal.modalEvent];
-
-    // console.log(newData);
 
     this.setState({saving: true});
 
@@ -102,7 +99,7 @@ class Modal extends Component {
     axios({
       method: id !== '' ? 'put' : 'post',
       url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
-      auth: this.auth(),
+      headers: this.auth(),
       data: {
         title: newData['campaignName'],
         fields: {
@@ -124,32 +121,39 @@ class Modal extends Component {
     }).then(function (response) {
       self.setState({ saving: false, edit: false, editingBrands: false, editingChannels: false });
       self.props.updateState({ modal: { new: false, edit: false, show: false } }, true);
-      console.log('success', response);
+
+      // console.log('success', response);
+      self.props.updateEventData();
     })
     .catch(function (error) {
-      console.log('failed', error);
+      // console.log('failed', error);
     });    
-
-
   }
   
   trashEvent = (id) => {
     const self = this;
 
-    axios({
-      method: 'delete',
-      url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
-      auth: this.auth()
-    }).then(function (response) {
-      console.log('success', response);
-      console.log(self.props.events);
+    this.setState({ saving: true });
 
-      self.props.updateState({ modal: {new: false, edit: false, show: false} }, true);
+    axios({
+      method: 'put',
+      url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
+      headers: this.auth(), 
+      data: {
+        fields: {
+          status: false
+        }
+      }
+    }).then(function (response) {
+      self.setState({ saving: false, edit: false, editingBrands: false, editingChannels: false });
+      self.props.updateState({ modal: { new: false, edit: false, show: false } }, true);
+
+      // console.log('success', response);
+      self.props.updateEventData();
     })
     .catch(function (error) {
-      console.log('failed', error);
+      // console.log('failed', error);
     });
-    
   }
 
   cancelEdit = (id) => {
@@ -221,7 +225,7 @@ class Modal extends Component {
                   <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove' disabled={!this.state.edit}
                     payload={() => this.cancelEdit()}/>     
 
-                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_pencil' caption="Activate Quick edit mode" disabled={this.state.edit}
+                  <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_pencil' caption="Activate Quick edit mode" disabled={this.state.edit || !this.props.canEdit }
                       payload={() => this.handleEdit()}/>
 
                   <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-left'

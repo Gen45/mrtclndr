@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
-// import axios from 'axios';
+import axios from 'axios';
 
 import Loading from './Helpers/Loading';
 
@@ -10,12 +10,12 @@ import '../styles/style.css';
 import 'react-tippy/dist/tippy.css';
 
 // DATA
-import eventsData from '../config/eventsWP';
+import { getMetaData, getEventsData, getLatestEventsData } from '../config/eventsWP';
 import defaultState from '../config/defaultState.json';
-import base from '../config/base';
+// import base from '../config/base';
 
 // CONSTANTS
-import {_LOGO, _ISMOBILE, _BACKGROUNDIMAGES } from '../config/constants';
+import { _LOGO, _ISMOBILE, _BACKGROUNDIMAGES, _WP_URL } from '../config/constants';
 
 // HELPERS
 import {getExtreme, getTimeRange, today, month, year, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
@@ -32,160 +32,174 @@ import Modal, {OpenModal} from './Helpers/Modal';
 
 class App extends Component {
 
-  events = [];
-  
+  events = []; 
+  metaData = {};
+
   componentWillMount() {
 
     this.setState({ ready: false });
 
     const from = this.props.location.pathname;
-    let location = this.props.location.state;
+    const authenticated = this.props.location.state ? this.props.location.state.isAuthenticated : false;
 
-    if(isValid(this.props.location.state)) {
-      if(this.props.location.state.isAuthenticated) {
-        this.readyLoad = true;
-      } else {
-        this.props.history.push('/login', { from });
-        this.readyLoad = false;
-      }
-    } else {
+    const reject = () => {
       this.props.history.push('/login', { from });
       this.readyLoad = false;
-    }
+    };
 
-    const state = defaultState;
-
-    const localStorageRef = localStorage.getItem('marriott-calendar-' + month(today()) + "-" + year(today()));
-
-    if (localStorageRef) {
-      this.stateString = localStorageRef;
-      this.setState({...JSON.parse(localStorageRef)}, () => this.updateEventList(this.events), false);
+    if (authenticated) {
+      this.readyLoad = true;
     } else {
-      this.setState({...state}, () => this.updateEventList(this.events), false);
+      reject();
     }
+ 
+    const RefLocalStorage_State = localStorage.getItem('mrt_State');
+    const RefLocalStorage_Meta = localStorage.getItem('mrt_Meta-' + month(today()) + "-" + year(today()));
 
-    this.firebaseShortLinksref = base.syncState('shortLinks', {
-      context: this,
-      state: "shortLinks",
-      then() {
-        // console.log(location, this.state.shortLinks, this.state.shortLinks);
-        let decodedState;
-          if(location.key !== ''){
-            
-            try {
-              decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.key]))))
-            } catch (ex) {
-              decodedState = {};
-            }
-            // const decodedState = JSON.parse(decodeURIComponent(escape(atob(this.state.shortLinks[location.preset][location.key])))) || {};
-            // console.log(decodedState);
-            // this.updateState({...this.state.events, decodedState}, true);
-            this.updateState({...this.state, ...decodedState}, true);
-          } else {
-            // this.updateState({ready: true}, true);
-          }
-      }
-    });
-
-  }
-
-  componentWillUnmount() {
-    // TODO: cancel eventsData
-    this.setState({
-      ready: false,
-      modal: {edit: false}
-    });
-    base.removeBinding(this.firebaseShortLinksref);
+    if (RefLocalStorage_State === null || RefLocalStorage_Meta === null) {
+      this.setState({ ...defaultState });
+    } else {
+      this.setState({ ...JSON.parse(RefLocalStorage_State) });
+    }
   }
 
   componentDidMount() {
 
-    if (this.readyLoad) {
+    this.events = [];
+    this.metaData = {};
 
-      const newEvents = eventsData();
+    const self = this;
 
-      newEvents.then((data) => { 
-        let regions = {};
-        let offers = {};
-        let channels = {};
-        let brands = {};
-        let featured_markets = {};
-        let brandGroups = {};
-        let campaign_groups = {};
-        let market_scopes = {};
-        let program_types = {};
-        let segments = {};
-        let owners = {};
-
-        for (const r in data.regions) {
-          regions[data.regions[r].id] = data.regions[r];
-          regions[data.regions[r].id].active = this.state.regions !== undefined ? this.state.regions[data.regions[r].id].active : true;
-        }
+    if (this.auth() !== undefined) {
+      axios({
+        method: 'get',
+        url: _WP_URL + "/wp-json/wp/v2/users/me",
+        headers: this.auth(),
+      }).then(function (response) {
         
-        for (const r in data.channels) {
-          channels[data.channels[r].id] = data.channels[r];
-          channels[data.channels[r].id].active = this.state.channels !== undefined ? this.state.channels[data.channels[r].id].active : true;
+        // console.log(response.data);
+
+        self.user = { id: response.data.id, role: response.data.roles[0], state: response.data.description !== '' && response.data.description.length < 4000 ? response.data.description : '{}' };
+
+        // console.log('recibimos user state from db');
+        // console.log( self.user.state );
+
+
+        if (self.readyLoad) {
+
+          let RefLocalStorage_Meta = localStorage.getItem('mrt_Meta-' + month(today()) + "-" + year(today()));
+          let RefLocalStorage_Events = localStorage.getItem('mrt_Events-' + month(today()) + "-" + year(today()));
+          const RefLocalStorage_State = localStorage.getItem('mrt_State');
+
+          // CHECK IF METADATA IS IN STORAGE, IF NOT, DOWNLOAD IT
+          if (RefLocalStorage_State === null || RefLocalStorage_Meta === null)  {
+
+            const _metaData = getMetaData();
+            let filters = self.state.filtersList;
+
+            _metaData.then(data => {
+              
+              ['regions', 'offers', 'channels', 'brands', 'featured_markets', 'brand_groups', 'campaign_groups', 'market_scopes', 'program_types', 'segments', 'owners'].forEach(t => {
+
+                self.metaData[t] = {};
+
+                if (filters[t] !== undefined) {
+                  filters[t]['items'] = {};
+                }
+
+                for (const i in data[t]) {
+                  self.metaData[t][data[t][i].id] = data[t][i];
+                  if (filters[t] !== undefined) {
+                    filters[t]['items'][data[t][i].id] = { name: data[t][i].name, active: true};
+                  }
+                }
+
+              });
+
+              self.metaData['brands_data'] = data['brands_data'];
+
+              localStorage.setItem(
+                'mrt_Meta-' + month(today()) + "-" + year(today()),
+                JSON.stringify(self.metaData)
+              );
+
+              
+              if (RefLocalStorage_Events === null) {
+
+                const eventsData = getEventsData(self.metaData);
+                eventsData.then(events => {
+                  localStorage.setItem(
+                    'mrt_Events-' + month(today()) + "-" + year(today()),
+                    JSON.stringify(events)
+                  );
+                  self.events = events;
+
+                  const userState = JSON.parse(self.user.state);
+                  // console.log(userState)
+
+                  self.setState({ 
+                    ...self.metaData,
+                    ...userState,
+                    events: self.events
+                  }, () => self.updateEventData());
+
+                  // console.log(self.state);
+                  
+                });
+              } else {
+
+                const events = JSON.parse(RefLocalStorage_Events);
+                self.events = events;
+                const userState = JSON.parse(self.user.state);
+                // console.log(userState)
+
+                self.setState({
+                  ...self.metaData,
+                  ...userState,
+                  events: self.events
+                }, () => self.updateEventData());
+
+              }
+            });
+          } else {
+
+            self.metaData = JSON.parse(RefLocalStorage_Meta);
+
+            if (RefLocalStorage_Events === null) {
+              const eventsData = getEventsData(self.metaData);
+
+              eventsData.then(events => {
+
+                localStorage.setItem(
+                  'mrt_Events-' + month(today()) + "-" + year(today()),
+                  JSON.stringify(events)
+                );
+
+                self.events = events;
+                const userState = JSON.parse(self.user.state);
+                // console.log(userState)
+
+                self.setState({
+                  ...self.metaData,
+                  ...userState,
+                  events: self.events
+                }, () => self.updateEventData());
+
+              });
+            } else {
+              self.updateEventData();
+            }
+          }
+          // KEEP UPDATING IN THE BACKGROUND
         }
-        
-        for (const r in data.offers) {
-          offers[data.offers[r].id] = data.offers[r];
-          offers[data.offers[r].id].active = this.state.offers !== undefined ? this.state.offers[data.offers[r].id].active : true;
-        }
-        
-        for (const r in data.brands) {
-          brands[data.brands[r].id] = data.brands[r];
-          brands[data.brands[r].id].active = this.state.brands !== undefined ? this.state.brands[data.brands[r].id].active : true;
-        }
 
-        for (const r in data.brandGroups) {
-          brandGroups[data.brandGroups[r].id] = data.brandGroups[r];
-        }  
-                
-        for (const r in data.featured_markets) {
-          featured_markets[data.featured_markets[r].id] = data.featured_markets[r];
-        }  
-
-        for (const r in data.campaign_groups) {
-          campaign_groups[data.campaign_groups[r].id] = data.campaign_groups[r];
-        }  
-
-        for (const r in data.market_scopes) {
-          market_scopes[data.market_scopes[r].id] = data.market_scopes[r];
-        }  
-
-        for (const r in data.program_types) {
-          program_types[data.program_types[r].id] = data.program_types[r];
-        }  
-
-        for (const r in data.segments) {
-          segments[data.segments[r].id] = data.segments[r];
-        }  
-
-        for (const r in data.owners) {
-          owners[data.owners[r].id] = data.owners[r];
-        }  
-
-        this.events = data.entries;
-
-        this.setState({
-          events: data.entries,
-          regions,
-          offers,
-          brands,
-          channels,
-          brandGroups,
-          featured_markets,
-          campaign_groups,
-          market_scopes,
-          program_types,
-          segments,
-          owners,
-          ready: true
-        });
-        this.updateEventList(this.events, true);
+      })
+      .catch(function (error) {
+        // console.log('failed', error);
       });
     }
   }
+
 
   componentDidUpdate() {
 
@@ -194,7 +208,13 @@ class App extends Component {
       shortLinks,
       ready,
       modal,
-      brandGroups,
+      brands,
+      owners,
+      regions,
+      offers,
+      channels,
+      brand_groups,
+      brands_data,
       featured_markets,
       market_scopes,
       program_types,
@@ -203,23 +223,119 @@ class App extends Component {
       ...configurations
     } = this.state;
 
-    
-    configurations['modal'] = { ...this.state.modal, new: false, edit: false};
+    const self = this;
 
+    configurations['modal'] = { ...this.state.modal, new: false, edit: false};
+    // console.log(configurations);
     this.stateString = JSON.stringify(configurations);
 
-    localStorage.setItem(
-      'marriott-calendar-' + month(today()) + "-" + year(today()),
-      this.stateString
-    );
+    // console.log('cambia local state');
+    if (this.stateString.length < 4000 ) {
+      localStorage.setItem('mrt_State', this.stateString);
+    } else {
+      localStorage.removeItem('mrt_State');
+    }
 
-    if(this.state.shortLinks) {
-      const to = this.getShareableLink();
-      if (to.key !== this.props.location.state.key){
-        this.props.history.push(to.path, {isAuthenticated: true, key: to.key});
+    // console.log(this.stateString);
+    this.ready = false;
+
+    // console.log(this.stateString.length);
+
+    axios({
+      method: 'put',
+      url: _WP_URL + "/wp-json/wp/v2/users/" + this.user.id,
+      headers: this.auth(),
+      data: {
+        description: this.stateString.length < 4000 ? this.stateString : ''
+      // description: ''
       }
+    }).then(function (response) {
+
+      
+      // console.log('now it should be ready', self.ready)
+      self.ready = true;
+      // console.log('now it should be ready', self.ready)
+
+      // console.log('success', response);
+      // console.log('success', response.data.description);
+    }).catch(function (error) {
+      // console.log('failed', error);
+    });  
+
+  }
+
+  componentWillUnmount() {
+    // TODO: cancel eventsData
+    this.setState({
+      ready: false,
+      modal: { edit: false }
+    });
+    // base.removeBinding(this.firebaseShortLinksref);
+  }
+
+  auth = () => {
+    const token = localStorage.getItem(`auth-${today()}`);
+    if (token) {
+      return { 'Authorization': "Bearer " + token };
+    } else {
+      this.props.history.push('/login', {});
     }
   }
+
+  updateEventData = () => {
+
+    // console.log('updating');
+    // this.setState({ready: false});
+
+    const self = this;
+
+    const latestEventsData = getLatestEventsData(10);
+
+    latestEventsData.then(latestEvents => {
+
+      // console.log(latestEvents)
+
+      let RefLocalStorage_Events = localStorage.getItem('mrt_Events-' + month(today()) + "-" + year(today()));
+      let RefLocalStorage_Meta = localStorage.getItem('mrt_Meta-' + month(today()) + "-" + year(today()));
+      this.metaData = JSON.parse(RefLocalStorage_Meta);
+      // this.metaData = JSON.parse(atob(RefLocalStorage_Meta));
+
+      this.events = JSON.parse(RefLocalStorage_Events);
+      let eventsIds = {};
+
+      Object.keys(this.events).forEach(e => { 
+        eventsIds[this.events[e].id] = e;
+      });
+
+      Object.keys(latestEvents).forEach(e => {
+        if (eventsIds[latestEvents[e].id] !== undefined) {
+          this.events[eventsIds[latestEvents[e].id]] = latestEvents[e];
+        } else {
+          this.events.push(latestEvents[e]);
+        }
+      });
+
+      localStorage.setItem(
+        'mrt_Events-' + month(today()) + "-" + year(today()),
+        JSON.stringify(this.events)
+      );
+
+      this.setState({
+        ...JSON.parse( this.state.ready ? this.stateString : this.user.state),
+        ...this.metaData,
+        events: this.events
+      });
+      
+    }).then( () => {
+
+      self.updateEventList(self.events, true);
+      self.setState({
+        ready: true
+      });
+
+    });
+
+  };
 
   getShareableLink = () => {
     const encodedState = btoa(this.stateString);
@@ -256,15 +372,22 @@ class App extends Component {
 
   updateEventList = (events, update) => {
 
+    // console.log(events, this.state);
+
     const timeRange = getTimeRange(this.state.time);
     const dayOfTheYear = getExtreme([today()]);
+
+    // FILTER BY STATUS
+    // console.log(events);
+    events = events.filter(e => e.status);
+    // console.log(events);
 
     // FILTER BY TIME
     events = events.filter(e => !(e.latestDay < timeRange.earliestDay || e.earliestDay > timeRange.latestDay));
     
     // FILTER BY FILTERS (=O)
     events = Object.keys(this.state.filtersList).reduce((acc, f) => {
-      const result = this.prepareEventList(acc, this.state[f], this.state.filtersList[f].name);
+      const result = this.prepareEventList(acc, this.state.filtersList[f].items, this.state.filtersList[f].name);
       return result;
     }, events);
 
@@ -276,6 +399,7 @@ class App extends Component {
     
     // FILTER BY STARRED
     events = this.state.starred.show ? events.filter(e => this.state.starred.items.indexOf(e.id) > -1) : events;
+    // console.log(events);
 
     // ORDER
     events = orderBy(events, this.state.order.sortBy, this.state.order.orderBy);
@@ -312,22 +436,22 @@ class App extends Component {
   };
 
   updateFilter = (filter, filterName, active) => {
-    let filters = this.state[filterName];
-    // console.log(filter, filterName, active, filters);
-    filters[filter].active = active;
-    this.updateEventList(this.events);
+    let filtersList = this.state.filtersList;
+    filtersList[filterName]['items'][filter]['active'] = active;
+
+    this.setState({ filtersList: filtersList }, () => {
+        this.updateEventList(this.events);
+    });
   };
 
   batchChange = (filterName, active) => {
-    let filters = this.state[filterName];
-    let newState = {};
-    newState[filterName] = filters;
-    // console.log(newState);
-    for (let filter in filters) {
-      newState[filterName][filter]["active"] = active;
+    let filtersList = this.state.filtersList;
+
+    for (let filter in filtersList[filterName].items ) {
+      filtersList[filterName].items[filter].active = active;
     }
-    // console.log({newState});
-    this.updateState(newState, true);
+
+    this.setState({ filtersList }, () => this.updateEventList(this.events));
   };
 
   handleOpenModal = (targetId) => {
@@ -360,17 +484,20 @@ class App extends Component {
     };
 
     currentEvents.push(newEvent);
-
     this.setState({events: currentEvents, modal: {modalEvent: currentEvents.length - 1, show: true, edit: true, new: true}});
-
   }
+  
+  canEdit = (user) => ['editor', 'administrator'].indexOf(user.role) > -1;
+
+  canCreate = (user) => ['author', 'administrator'].indexOf(user.role) > -1;
 
   render() {
+
     let time = !_ISMOBILE() ? this.state.time : {...this.state.time, numberOfYears: 1 };
         time = time.Y === (_PREVIOUSYEAR - 1) && (this.state.view === 'timeline' || time.mode !== 'Y') ? {...time, Y: _CURRENTYEAR} : time;
 
-    const appClass = () => {
-      return `App ${this.state.sidebar.collapsed ? ' collapsed' : ''}${this.state.modal.show ? ' modal-on' : ''}`
+    const appClass = (collapsed, show) => {
+      return `App ${collapsed ? ' collapsed' : ''}${show ? ' modal-on' : ''}`
     }
 
     return (
@@ -380,10 +507,10 @@ class App extends Component {
       {
       this.state.ready && this.state.events !== [] ?
 
-      <div className={appClass()}>
+      <div className={appClass(this.state.sidebar.collapsed || '', this.state.modal.show || '')}>
 
       <main id="main" className="main" role="main" style={{ backgroundImage: `url(${_BACKGROUNDIMAGES.IMAGES[0]})` }}>
-        <Header collapsed={this.state.sidebar.collapsed} logout={this.logout} addEntry={this.addEntry} />
+        <Header collapsed={this.state.sidebar.collapsed} logout={this.logout} addEntry={this.addEntry} canCreate={this.canCreate(this.user)} />
         
         <div className="content-frame">
         
@@ -463,15 +590,17 @@ class App extends Component {
               segments={this.state.segments}
               owners={this.state.owners}
               history={this.props.history}
-                />
-              }
+              updateEventData={this.updateEventData}
+              canEdit={this.canEdit(this.user)}
+            />
+          }
         </div>
       </main>
 
       <Sidebar 
         regions={this.state.regions}
         brands={this.state.brands}
-        brandGroups={this.state.brandGroups}
+        brand_groups={this.state.brand_groups}
         offers={this.state.offers}
         channels={this.state.channels}
         updateFilter={this.updateFilter}
@@ -480,6 +609,7 @@ class App extends Component {
         ready={this.state.ready}
         batchChange={this.batchChange}
         disabled={this.state.modal.show && isValid(this.state.events[this.state.modal.modalEvent])}
+        filtersList={this.state.filtersList}
       />
     </div>
     :

@@ -52,10 +52,10 @@ class Sidebar extends Component {
               <Scrollbars thumbMinSize={100} universal={true} autoHide={true} style={{
                   height: '100%'
                 }}>
-                <Filter title={"Regions"} filterName={"regions"} filters={this.props.regions} icon={"nc-icon-outline travel_world"} updateFilter={this.props.updateFilter} tooltips={false} batchChange={this.props.batchChange}/>
-                <BrandsFilter title={"Brands"} filterName={"brands"} filters={this.props.brands} icon={"nc-icon-outline objects_diamond"} filterCategories={this.props.brandGroups} updateFilter={this.props.updateFilter} tooltips={true} batchChange={this.props.batchChange}/>
-                <Filter title={"Offers"} filterName={"offers"} icon={"nc-icon-outline ui-1_check-circle-07"} filters={this.props.offers} updateFilter={this.props.updateFilter} tooltips={false} labelDot={true} batchChange={this.props.batchChange}/>
-                <Filter title={"Channels"} filterName={"channels"} icon={"nc-icon-outline ui-1_send"} filters={this.props.channels} updateFilter={this.props.updateFilter} tooltips={false} batchChange={this.props.batchChange}/>
+                <Filter title={"Regions"} filtersList={this.props.filtersList} filterName={"regions"} filters={this.props.regions} icon={"nc-icon-outline travel_world"} updateFilter={this.props.updateFilter} tooltips={false} batchChange={this.props.batchChange}/>
+                <BrandsFilter title={"Brands"} filtersList={this.props.filtersList} filterName={"brands"} filters={this.props.brands} icon={"nc-icon-outline objects_diamond"} filterCategories={this.props.brand_groups} updateFilter={this.props.updateFilter} tooltips={true} batchChange={this.props.batchChange}/>
+                <Filter title={"Offers"} filtersList={this.props.filtersList} filterName={"offers"} icon={"nc-icon-outline ui-1_check-circle-07"} filters={this.props.offers} updateFilter={this.props.updateFilter} tooltips={false} labelDot={true} batchChange={this.props.batchChange}/>
+                <Filter title={"Channels"} filtersList={this.props.filtersList} filterName={"channels"} icon={"nc-icon-outline ui-1_send"} filters={this.props.channels} updateFilter={this.props.updateFilter} tooltips={false} batchChange={this.props.batchChange}/>
               </Scrollbars>
             </div>
           :

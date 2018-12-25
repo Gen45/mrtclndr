@@ -20,16 +20,20 @@
   },
   "filtersList": {
     "regions": {
-      "name": "region"
+      "name": "region",
+      "active": true
     },
     "channels": {
-      "name": "channels"
+      "name": "channels",
+      "active": true
     },
     "offers": {
-      "name": "offer"
+      "name": "offer",
+      "active": true
     },
     "brands": {
-      "name": "brands"
+      "name": "brands",
+      "active": true
     }
   },
   "modal": {

@@ -12,7 +12,6 @@ class Button extends Component {
   render() {
 
     const filter = this.props.filter;
-    // console.log(filter);
     const filterName = this.props.filterName;
     const filterIcon = this.props.filterIcon || false;
     const filterImage = this.props.filterImage || false;
@@ -39,7 +38,7 @@ class Button extends Component {
             id={`filter-${this.props.filter}`}
             checked={active}
             onChange={(event) => {
-                this.props.handleChange(event, filter, active)
+                this.props.handleChange(event, filter, !active)
               }}
           />
 

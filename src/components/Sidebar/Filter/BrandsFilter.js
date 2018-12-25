@@ -106,7 +106,7 @@ class BrandsFilter extends Component {
                                 <h4>
                                   <span>{filterCategories[c]["name"]}</span>
                                 </h4>
-                                <Content filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} handleChange={this.handleChange} inner={true} keyPhrase={keyPhrase} tooltips={this.props.tooltips} TooltipTheme='dark'></Content>
+                                <Content filtersList={this.props.filtersList} filterName={filterName} filters={filters} filterCategories={filterCategories[c]["brands"]} handleChange={this.handleChange} inner={true} keyPhrase={keyPhrase} tooltips={this.props.tooltips} TooltipTheme='dark'></Content>
                               </div>
                             : null
                         })

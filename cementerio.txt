@@ -1,0 +1,20 @@
+const getMultiTaxo = (event, taxo, taxoData) => {
+  return event[taxo].length > 0 ? event[taxo] : [find(taxoData, x => x.slug === `no-${taxo}`).id];
+};
+
+const getTaxo = (event, taxo, taxoData) => {
+  console.log(event);
+  return event[taxo][0] ? find(taxoData, x => x.id === event[taxo][0]) : find(taxoData, x => x.slug === `no-${taxo}`);
+};
+
+const _brands = getMultiTaxo(e, 'brand', metaData.brands);
+const _channels = getMultiTaxo(e, 'channel', metaData.channels);
+
+const _offers = getTaxo(e, 'offer', metaData.offers);
+const _featured_markets = getTaxo(e, 'featured_market', metaData.featured_markets);
+const _campaign_groups = getTaxo(e, 'campaign_group', metaData.campaign_groups);
+const _market_scopes = getTaxo(e, 'market_scope', metaData.market_scopes);
+const _program_types = getTaxo(e, 'program_type', metaData.program_types);
+const _owners = getTaxo(e, 'owner', metaData.owners);
+const _regions = getTaxo(e, 'region', metaData.regions);
+const _segments = getTaxo(e, 'segment', metaData.segments);

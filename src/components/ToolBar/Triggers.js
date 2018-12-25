@@ -21,7 +21,7 @@ export class TriggerBox extends Component {
     return (
         <div className="inner">
         <a className={triggerClass} onClick={() => this.toggleBox()}>
-          <i className={this.props.icon}/> {` ${isValid(this.props.title) ? this.props.title : ''}`}
+          <i className={this.props.icon} />  <span className="trigger-box-title"> {` ${isValid(this.props.title) ? this.props.title : ''}`} </span>
         </a>
         {
           this.state.open &&
@@ -30,7 +30,7 @@ export class TriggerBox extends Component {
                 <span className="trigger-box-children active" style={{width: this.props.width || 200, textAlign: this.props.align || "center"}}>
                   <div className="close-button" onClick={() => this.toggleBox()}>
                     <i className="nc-icon-outline ui-1_simple-remove close" />
-                    {this.props.title && <span><i className={this.props.icon}/> {` ${this.props.title}`}</span>}
+                  {this.props.title && <span><i className={this.props.icon} /> <span className="trigger-box-title">{` ${this.props.title}`}</span></span>}
                   </div>
                   {this.props.children}
                 </span>
@@ -63,7 +63,12 @@ export class Trigger extends Component {
           !this.props.disabled &&
           <Tooltip title={this.props.caption} trigger="mouseenter" delay={500} arrow={true} distance={5} theme="light" size="big" disabled={!this.props.caption}>
             <a className={`${triggerClass} ${active}`} onClick={() => this.handleClick(this.props.payload)}>
-              <i className={icon}/> {this.props.children}
+              <i className={icon} /> 
+                { this.props.children &&
+                  <span className="trigger-box-title">  
+                    {this.props.children}
+                  </span>
+                }
             </a>
           </Tooltip>
         }

@@ -24,7 +24,7 @@ class Event extends Component {
   };
 
   keepEdits = (value, field) => {
-    console.log(value, field, this.props.event[field]);
+    // console.log(value, field, this.props.event[field]);
     this.props.event[field] = value;
     this.setState({changed: true });
   }
@@ -37,10 +37,12 @@ class Event extends Component {
   render() {
 
     const event = this.props.event;
+    
     // console.log(event);
+
     const regionColor = this.props.event['region'][0].color;
     const offerColor = this.props.event['offer'][0].color;
-    // console.log(this.props.event);
+    
     const ownerName = this.props.event['owner'][0].name;
     const offerName = this.props.event['offer'][0].name || 'No offer especified';
     const time = this.props.time;
