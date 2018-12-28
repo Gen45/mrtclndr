@@ -279,6 +279,9 @@ input.search-box {
 }
 
 
+// $color-editable: $color-yellow;
+$color-editable: $color-medium-gray;
+
 .modal .event-info *.editable-field, 
 .contact.editable-field, 
 .brand.editable-field, 
@@ -288,9 +291,7 @@ input.search-box {
     font-size: inherit;
     font: inherit;
     border: none;
-    // border-bottom: 2px dotted $color-blue;
-    // background: rgba($color-yellow, 0.15) !important;
-    background: rgba(lighten($color-medium-gray, 15%), 0.15) !important;
+    background: rgba(lighten($color-editable, 15%), 0.15) !important;
     resize: none;
     text-align: center;
     line-height: inherit;
@@ -468,7 +469,10 @@ input.search-box {
         background: transparent;
         border-bottom: 2px solid #666666;
         color: #ffffff;
-    
+        margin-top: -2px;
+        margin-left: -25px;
+        padding-left: 25px;
+
         &:active, &:focus {
             border: none;
             background: transparent;
@@ -493,7 +497,7 @@ input.search-box {
             width: 20px;
             height: 20px;
             border-radius: 50px;
-            background: #000;
+            // background: #000;
             display: block;
         }
     }

@@ -19,6 +19,7 @@
     letter-spacing: 1px;
     z-index: 10;
     text-align: center;
+    white-space: nowrap;
 
     &:after {
       content: '';
@@ -153,6 +154,7 @@
   font-size: 12px;
   margin-left: 5px;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 .trigger-box-children {

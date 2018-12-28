@@ -129,3 +129,11 @@ span.flatpickr-weekday {
     //   opacity: 0.9;
     // }
 }
+
+.searched {
+    font-weight: normal;
+    text-decoration: none;
+    // background: rgba($color-accent,0.15);
+    border-bottom: 1px solid $color-accent;
+    // text-transform: uppercase;
+}

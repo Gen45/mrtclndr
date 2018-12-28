@@ -15,7 +15,7 @@ import defaultState from '../config/defaultState.json';
 // import base from '../config/base';
 
 // CONSTANTS
-import { _LOGO, _ISMOBILE, _BACKGROUNDIMAGES, _WP_URL } from '../config/constants';
+import { _LOGO, _ISMOBILE, _BACKGROUNDIMAGES, _WP_URL, _CACHE } from '../config/constants';
 
 // HELPERS
 import {getExtreme, getTimeRange, today, month, year, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
@@ -54,8 +54,8 @@ class App extends Component {
       reject();
     }
  
-    const RefLocalStorage_State = localStorage.getItem('mrt_State');
-    const RefLocalStorage_Meta = localStorage.getItem('mrt_Meta-' + month(today()) + "-" + year(today()));
+    const RefLocalStorage_State = localStorage.getItem('mrt_'+ _CACHE +'_State');
+    const RefLocalStorage_Meta = localStorage.getItem('mrt_'+ _CACHE +'_Meta-' + month(today()) + "-" + year(today()));
 
     if (RefLocalStorage_State === null || RefLocalStorage_Meta === null) {
       this.setState({ ...defaultState });
@@ -88,9 +88,9 @@ class App extends Component {
 
         if (self.readyLoad) {
 
-          let RefLocalStorage_Meta = localStorage.getItem('mrt_Meta-' + month(today()) + "-" + year(today()));
-          let RefLocalStorage_Events = localStorage.getItem('mrt_Events-' + month(today()) + "-" + year(today()));
-          const RefLocalStorage_State = localStorage.getItem('mrt_State');
+          let RefLocalStorage_Meta = localStorage.getItem('mrt_'+ _CACHE +'_Meta-' + month(today()) + "-" + year(today()));
+          let RefLocalStorage_Events = localStorage.getItem('mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()));
+          const RefLocalStorage_State = localStorage.getItem('mrt_'+ _CACHE +'_State');
 
           // CHECK IF METADATA IS IN STORAGE, IF NOT, DOWNLOAD IT
           if (RefLocalStorage_State === null || RefLocalStorage_Meta === null)  {
@@ -120,7 +120,7 @@ class App extends Component {
               self.metaData['brands_data'] = data['brands_data'];
 
               localStorage.setItem(
-                'mrt_Meta-' + month(today()) + "-" + year(today()),
+                'mrt_'+ _CACHE +'_Meta-' + month(today()) + "-" + year(today()),
                 JSON.stringify(self.metaData)
               );
 
@@ -130,7 +130,7 @@ class App extends Component {
                 const eventsData = getEventsData(self.metaData);
                 eventsData.then(events => {
                   localStorage.setItem(
-                    'mrt_Events-' + month(today()) + "-" + year(today()),
+                    'mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()),
                     JSON.stringify(events)
                   );
                   self.events = events;
@@ -174,7 +174,7 @@ class App extends Component {
               eventsData.then(events => {
 
                 localStorage.setItem(
-                  'mrt_Events-' + month(today()) + "-" + year(today()),
+                  'mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()),
                   JSON.stringify(events)
                 );
 
@@ -237,9 +237,9 @@ class App extends Component {
 
     // console.log('cambia local state');
     if (this.stateString.length < 4000 ) {
-      localStorage.setItem('mrt_State', this.stateString);
+      localStorage.setItem('mrt_'+ _CACHE +'_State', this.stateString);
     } else {
-      localStorage.removeItem('mrt_State');
+      localStorage.removeItem('mrt_'+ _CACHE +'_State');
     }
 
     // console.log(this.stateString);
@@ -301,8 +301,8 @@ class App extends Component {
 
       // console.log(latestEvents)
 
-      let RefLocalStorage_Events = localStorage.getItem('mrt_Events-' + month(today()) + "-" + year(today()));
-      let RefLocalStorage_Meta = localStorage.getItem('mrt_Meta-' + month(today()) + "-" + year(today()));
+      let RefLocalStorage_Events = localStorage.getItem('mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()));
+      let RefLocalStorage_Meta = localStorage.getItem('mrt_'+ _CACHE +'_Meta-' + month(today()) + "-" + year(today()));
       this.metaData = JSON.parse(RefLocalStorage_Meta);
       // this.metaData = JSON.parse(atob(RefLocalStorage_Meta));
 
@@ -322,7 +322,7 @@ class App extends Component {
       });
 
       localStorage.setItem(
-        'mrt_Events-' + month(today()) + "-" + year(today()),
+        'mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()),
         JSON.stringify(this.events)
       );
 
@@ -408,11 +408,17 @@ class App extends Component {
       events = events.filter(e => {
         const toSearch = this.state.search.term;
         const o = { campaign_name: e.campaign_name, description: e.description };
-        const result = Object.keys(o).filter( i => o[i].toLowerCase().indexOf(toSearch.toLowerCase()) !== -1);
-        if (result.length > 0) {
-          console.log( o, result, toSearch);
-        }
+        const result = Object.keys(o).filter(i => o[i].toLowerCase().indexOf(toSearch.toLowerCase()) !== -1)
         return result.length > 0;
+      }).map( e => {
+        const toSearch = this.state.search.term;
+        const toReplace = new RegExp(toSearch, "gi"); 
+        const o = { campaign_name: e.campaign_name, description: e.description };
+        Object.keys(o).forEach( i => {
+          o[i] = o[i].replace(toReplace, x => `<b class="searched">${x}</b>`);
+          e = { ...e, ...o };
+        });
+        return e;
       });
     }
 

@@ -13,6 +13,12 @@ import {isValid} from '../../helpers/misc';
 
 import {_COLORS} from '../../config/constants';
 
+const removeSearched = (str) => {
+  return str
+    .replace(/<b class="searched">/g, '')
+    .replace(/<\/b>/g, '');
+}
+
 class Event extends Component {
 
   componentWillMount() {
@@ -87,13 +93,13 @@ class Event extends Component {
             <div className='activity'>
               {
                 this.props.editable 
-                ? <TextareaAutosize className="editable-field"  defaultValue={event.campaign_name} onChange={(e) => this.keepEdits(e.target.value, 'campaign_name')} />
+                ? <TextareaAutosize className="editable-field"  defaultValue={removeSearched(event.campaign_name)} onChange={(e) => this.keepEdits(e.target.value, 'campaign_name')} />
                 : <span> 
                     {
                     this.props.view === 'timeline' && 
                       <span className='label-dot' style={{ backgroundColor: offerColor, marginRight: '10px' }} /> 
                     }
-                    {event.campaign_name}
+                    <span dangerouslySetInnerHTML={{ __html: event.campaign_name }} />
                   </span>
               }
             </div>
@@ -182,8 +188,8 @@ class Event extends Component {
             <div>
             {
               this.props.editable 
-              ? <p className='description'><TextareaAutosize  className="editable-field" defaultValue={event.description} onChange={(e) => this.keepEdits(e.target.value, 'description')} /> </p>
-              : <p className='description'>{event.description}</p>
+              ? <p className='description'><TextareaAutosize className="editable-field" defaultValue={removeSearched(event.description)} onChange={(e) => this.keepEdits(e.target.value, 'description')} /> </p>
+              : <p className='description' dangerouslySetInnerHTML={{ __html: event.description }} />
             }
             </div>
           }

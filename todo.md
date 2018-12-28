@@ -11,8 +11,8 @@
   
 * separate file for CRUD
   
-* search
-  * ui
+* search /
+  * ui /
 
 * new entry /
   

@@ -555,7 +555,8 @@ textarea:focus, input:focus, button:focus {
     padding: 5px;
     letter-spacing: 1px;
     z-index: 10;
-    text-align: center; }
+    text-align: center;
+    white-space: nowrap; }
     .filters-group .nav-trigger:after {
       content: '';
       position: absolute;
@@ -640,7 +641,8 @@ textarea:focus, input:focus, button:focus {
 .trigger-box-title {
   font-size: 12px;
   margin-left: 5px;
-  vertical-align: middle; }
+  vertical-align: middle;
+  white-space: nowrap; }
 
 .trigger-box-children {
   opacity: 1;
@@ -1496,7 +1498,7 @@ body.activity-type .activity-type-group {
   .modal .event {
     position: relative;
     width: 100% !important;
-    max-width: 450px;
+    max-width: 500px;
     overflow: hidden;
     height: auto;
     border-radius: 0;
@@ -1608,6 +1610,11 @@ span.flatpickr-weekday {
 .PAST-EVENT {
   filter: grayscale(40%);
   opacity: 0.8; }
+
+.searched {
+  font-weight: normal;
+  text-decoration: none;
+  border-bottom: 1px solid #e4144a; }
 
 .main-overlay {
   padding-top: 50px;
@@ -2028,7 +2035,10 @@ input.search-box {
     border: none;
     background: transparent;
     border-bottom: 2px solid #666666;
-    color: #ffffff; }
+    color: #ffffff;
+    margin-top: -2px;
+    margin-left: -25px;
+    padding-left: 25px; }
     .searchInput input:active, .searchInput input:focus {
       border: none;
       background: transparent;
@@ -2050,7 +2060,6 @@ input.search-box {
       width: 20px;
       height: 20px;
       border-radius: 50px;
-      background: #000;
       display: block; }
 
 .icon {

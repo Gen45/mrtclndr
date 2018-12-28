@@ -7,6 +7,8 @@ import {
   getExtreme, isMultidate
 } from '../helpers/dates';
 
+import { _CACHE } from '../config/constants';
+
 import {
   decodeHTML
 } from '../helpers/misc';
@@ -156,7 +158,7 @@ export async function getLatestEventsData(perPage) {
 export const prepareEvent = (e, metaData) => {
 
   if(metaData === undefined)  {
-    const RefLocalStorage_Meta = localStorage.getItem('mrt_Meta-' + month(today()) + "-" + year(today()));
+    const RefLocalStorage_Meta = localStorage.getItem('mrt_' + _CACHE + '_Meta-' + month(today()) + "-" + year(today()));
     // metaData = JSON.parse(atob(RefLocalStorage_Meta));
     metaData = JSON.parse(RefLocalStorage_Meta);
   }
