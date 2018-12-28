@@ -14,7 +14,7 @@ class Filters extends Component {
   }
 
   handleChange = (event, filter, active) => {
-    console.log(event, filter, event.target.checked);
+    // console.log(event, filter, event.target.checked);
     this.props.updateFilter(filter, this.props.filterName, event.target.checked);
   };
 

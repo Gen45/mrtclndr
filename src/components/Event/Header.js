@@ -46,7 +46,7 @@ class Header extends Component {
           }
           {
             this.props.editingChannels &&
-            Object.keys(this.props.channelsInfo).filter((c) => channels.indexOf(this.props.channelsInfo[c].id) < 0).map((c, i) => 
+            Object.keys(this.props.channelsInfo).map((c, i) => 
               <span key={i} className="channel editable-field" onClick={() => this.toggleChannel(this.props.channelsInfo[c].id, this.props.event)}><i className={`${this.props.channelsInfo[this.props.channelsInfo[c].id]["icon"]}`} /> {this.props.channelsInfo[this.props.channelsInfo[c].id]["name"]} </span>)
           }
           {
@@ -61,15 +61,15 @@ class Header extends Component {
           {
             !this.props.editingChannels &&
             channels.map(c => (this.props.channelsInfo[c].slug !== "other-channels") && c !== null &&
-            withTooltip(this.props.channelsInfo[c]["name"], <i className={ this.props.channelsInfo[c]["icon"] }/>, this.props.channelsInfo[c].slug)
-          )}
+            withTooltip(this.props.channelsInfo[c]["name"], <i className={ this.props.channelsInfo[c]["icon"] }/>, this.props.channelsInfo[c].slug))
+          }
           {
             !this.props.editingChannels &&
             this.props.otherChannels !== "" && withTooltip(this.props.otherChannels, <i className="icon nc-icon-mini ui-2_menu-dots" /> )
           }
           {
-          !this.props.editingChannels &&
-          <div style={{flexGrow: 1, textAlign: 'right', padding: '0 10px'}}>  </div>
+            !this.props.editingChannels &&
+            <div style={{flexGrow: 1, textAlign: 'right', padding: '0 10px'}}>  </div>
           }
           {
             this.props.editable && !this.props.editingChannels &&

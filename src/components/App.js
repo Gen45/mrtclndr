@@ -34,6 +34,7 @@ class App extends Component {
 
   events = []; 
   metaData = {};
+  user = {id: null};
 
   componentWillMount() {
 
@@ -134,6 +135,8 @@ class App extends Component {
                   );
                   self.events = events;
 
+                  console.log(events);
+
                   const userState = JSON.parse(self.user.state);
                   // console.log(userState)
 
@@ -224,6 +227,9 @@ class App extends Component {
     } = this.state;
 
     const self = this;
+
+    // console.log(this.events);
+
 
     configurations['modal'] = { ...this.state.modal, new: false, edit: false};
     // console.log(configurations);
@@ -365,22 +371,19 @@ class App extends Component {
 
   prepareEventList = (events, filter, field) => events.filter(e => {
     return e[field].reduce((x, c) => {
-      const eventList = x || (this.activeFilter(filter).indexOf(field === 'brands' || field === 'channels' ? c.toString() : c.id.toString()) >= 0)
+      // console.log(typeof e[field][0], field)
+      const eventList = x || (this.activeFilter(filter).indexOf(typeof e[field][0] === 'number' ? c.toString() : c.id.toString()) >= 0)
       return eventList
     }, false)
   });
 
   updateEventList = (events, update) => {
 
-    // console.log(events, this.state);
-
     const timeRange = getTimeRange(this.state.time);
     const dayOfTheYear = getExtreme([today()]);
 
     // FILTER BY STATUS
-    // console.log(events);
     events = events.filter(e => e.status);
-    // console.log(events);
 
     // FILTER BY TIME
     events = events.filter(e => !(e.latestDay < timeRange.earliestDay || e.earliestDay > timeRange.latestDay));
@@ -391,7 +394,6 @@ class App extends Component {
       return result;
     }, events);
 
-    
     // FILTER BY VIGENCY
     events = !this.state.vigency.past ? events.filter(e => !(e.latestDay < dayOfTheYear)) : events;
     events = !this.state.vigency.between ? events.filter(e => !(e.latestDay >= dayOfTheYear && e.earliestDay <= dayOfTheYear)) : events;
@@ -399,7 +401,20 @@ class App extends Component {
     
     // FILTER BY STARRED
     events = this.state.starred.show ? events.filter(e => this.state.starred.items.indexOf(e.id) > -1) : events;
-    // console.log(events);
+
+    // FILTER BY KEYWORDS
+    if (this.state.search.active && isValid(this.state.search.term)){
+
+      events = events.filter(e => {
+        const toSearch = this.state.search.term;
+        const o = { campaign_name: e.campaign_name, description: e.description };
+        const result = Object.keys(o).filter( i => o[i].toLowerCase().indexOf(toSearch.toLowerCase()) !== -1);
+        if (result.length > 0) {
+          console.log( o, result, toSearch);
+        }
+        return result.length > 0;
+      });
+    }
 
     // ORDER
     events = orderBy(events, this.state.order.sortBy, this.state.order.orderBy);
@@ -464,10 +479,10 @@ class App extends Component {
 
     const newEvent= { 
       id: Date.now(),
-      campaignName: 'Campaign Name',
+      campaign_name: 'Campaign Name',
       description: 'Description',
-      region: [{id:0, name: 'select', color: '#000'}],
-      offer: [{id:0, name: 'select', color: '#000'}],
+      region: [{id:0, name: 'select', color: '#222'}],
+      offer: [{id:0, name: 'select', color: '#222'}],
       featured_market: [{id:0, name: 'select'}], 
       market_scope: [{ id: 437, name: 'select'}], 
       campaign_group: [{id:0, name: 'select'}], 
@@ -476,7 +491,7 @@ class App extends Component {
       owner: [{id:0, name: 'select'}], 
       brands: [],
       channels: [],
-      otherChannels: "",
+      other_channels: "",
       dates: {
         sell: { start: today(), end: today()},
         stay: { start: today(), end: today()}

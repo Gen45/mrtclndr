@@ -303,6 +303,10 @@ input.search-box {
                     inset 0 0 0 1px rgba($color-blue, 0.5) !important;
         background: rgba($color-white, 0.15) !important;
     }
+
+    &.selected {
+        background: rgba(lighten($color-lightest-gray, 15%), 0.15) !important;
+    }
 }
 
 .description,
@@ -415,16 +419,13 @@ input.search-box {
 
 .edit-channels {
     margin: 10px 5px;
-    padding: 10px;
+    padding: 0 10px;
 
     i {
         width: auto;
         min-width: 0 !important;
     }
 }
-
-
-
 
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
@@ -455,4 +456,45 @@ input.search-box {
 
 .tippy-tooltip--big {
     padding: .6rem !important;
+}
+
+
+.searchInput {
+    position: relative;
+    input {
+        font: 300 16px/1.6 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
+        flex-grow: 1;
+        border: none;
+        background: transparent;
+        border-bottom: 2px solid #666666;
+        color: #ffffff;
+    
+        &:active, &:focus {
+            border: none;
+            background: transparent;
+            border-bottom: 2px solid $color-accent;
+        }
+    }
+    .erase {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 25px;
+        i {
+            position: absolute;
+            font-size: 10px;
+        }
+        &:before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border-radius: 50px;
+            background: #000;
+            display: block;
+        }
+    }
 }

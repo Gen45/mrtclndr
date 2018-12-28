@@ -24,7 +24,6 @@ class Modal extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.props.events[this.props.modal.modalEvent]);
     if (this.props.modal.new && this.props.modal.edit && this.props.modal.modalEvent !== null ) {
       this.handleEdit();
     }
@@ -85,7 +84,6 @@ class Modal extends Component {
     this.setState({edit:true});
     const eventBackUp = this.props.events[this.props.modal.modalEvent];
     this.eventBackUp = JSON.stringify(eventBackUp);
-    // console.log(this.eventBackUp);
   }
 
   saveChanges = (id) => {
@@ -101,8 +99,9 @@ class Modal extends Component {
       url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
       headers: this.auth(),
       data: {
-        title: newData['campaignName'],
+        title: newData['campaign_name'],
         fields: {
+          campaign_name: newData['campaign_name'],
           description: newData['description'],
           dates: {...newData['dates'], ongoing: newData['ongoing']},
           offer: newData['offer'][0]['id'],

@@ -190,7 +190,7 @@ export const prepareEvent = (e, metaData) => {
     id: e.id,
     wp_link: e.link,
 
-    campaignName: decodeHTML(e.title.rendered) || '',
+    campaign_name: decodeHTML(e.title.rendered) || '',
     description: e.acf.description || '',
 
     region: [{ id: _regions.id, color: _regions.color, name: _regions.name}],

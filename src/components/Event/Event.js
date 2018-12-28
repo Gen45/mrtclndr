@@ -87,13 +87,13 @@ class Event extends Component {
             <div className='activity'>
               {
                 this.props.editable 
-                ? <TextareaAutosize className="editable-field"  defaultValue={event.campaignName} onChange={(e) => this.keepEdits(e.target.value, 'campaignName')} />
+                ? <TextareaAutosize className="editable-field"  defaultValue={event.campaign_name} onChange={(e) => this.keepEdits(e.target.value, 'campaign_name')} />
                 : <span> 
                     {
                     this.props.view === 'timeline' && 
                       <span className='label-dot' style={{ backgroundColor: offerColor, marginRight: '10px' }} /> 
                     }
-                    {event.campaignName}
+                    {event.campaign_name}
                   </span>
               }
             </div>

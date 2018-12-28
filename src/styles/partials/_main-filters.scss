@@ -1,5 +1,7 @@
 .filters-group {
-  display: inline-block;
+  // display: inline-block;
+  display: flex;
+  // justify-content: flex-end;
   position: relative;
   white-space: nowrap;
   cursor: pointer;
@@ -96,7 +98,8 @@
   }
 
   .filter-category {
-    display: inline-block;
+    display: flex;
+    // justify-content: flex-end;
     position: relative;
     margin-left: $padding/2;
     white-space: normal;

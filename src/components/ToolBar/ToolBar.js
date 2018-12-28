@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+// import AwesomeDebouncePromise from 'awesome-debounce-promise';
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import Title from './Title';
@@ -10,6 +11,12 @@ import {getCoordinates} from '../../helpers/misc';
 
 import {_MONTHS, _QUARTERS, _THREEYEARS, _PREVIOUSYEAR, _CURRENTYEAR, _TIMELIMITS} from '../../helpers/dates';
 import {_ISMOBILE, _TRANSITIONTIME} from '../../config/constants';
+
+const send = (keyword, update) => {
+  const search = {search: {active: true, term:  keyword}};
+  update(search, true);
+  console.log(search);
+};
 
 class ToolBar extends Component {
 
@@ -36,7 +43,10 @@ class ToolBar extends Component {
     // console.log(this.sidebarCollapse, this.props.sidebarCollapse)
     if(this.sidebarCollapse !== this.props.sidebarCollapse){
       this.sidebarCollapse = this.props.sidebarCollapse;
-      setTimeout(() => {console.log('wu'); this.updateDimensions()}, _TRANSITIONTIME*3);
+      setTimeout(() => {
+        console.log(''); 
+        this.updateDimensions()
+      }, _TRANSITIONTIME*3);
     } else {
       this.updateDimensions();
     }
@@ -50,6 +60,13 @@ class ToolBar extends Component {
       this.setState({collapsed: false});
     }
   };
+
+  handleSearchTerm = (keyword) => {
+
+    console.log(keyword);
+    // await AwesomeDebouncePromise(send, 100);
+    send(keyword, this.props.updateState);
+  }
 
   render() {
 
@@ -66,7 +83,7 @@ class ToolBar extends Component {
         time={this.props.time} view={this.props.view}/>
 
       <FiltersGroup ref={FiltersGroup => this.mainFiltersGroupRef = FiltersGroup}
-        title='Settings' icon='nc-icon-mini ui-1_settings-gear-65' disabled={this.props.search.active} collapsed={this.state.collapsed} >
+        title='Settings' icon='nc-icon-mini ui-1_settings-gear-65' disabled={false} collapsed={this.state.collapsed || this.props.search.active} >
         <FilterCategory>
           <TriggerBox title='Time Frame' icon='nc-icon-mini ui-1_calendar-60' width={270} renderChildren={true} align='left'>
             <div className='group'>
@@ -226,10 +243,17 @@ class ToolBar extends Component {
         </FilterCategory>
       </FiltersGroup>
 
-      <FiltersGroup title=' ' icon='nc-icon-mini ui-1_zoom' disabled={true}>
+      <FiltersGroup title=' ' icon='nc-icon-mini ui-1_zoom' disabled={false}>
         <FilterCategory>
+          {
+            this.props.search.active && 
+            <div className="searchInput" >
+              <input type="text" placeholder="Enter keywords" defaultValue={this.props.search.term} onChange={e => this.handleSearchTerm(e.target.value)}/>
+              <div className="erase" onClick={() => this.handleSearchTerm('')}><i className="nc-icon-mini ui-1_simple-remove" onClick={() => this.handleSearchTerm('')}/></div>
+            </div>
+          }
           <Trigger caption='Search' icon='nc-icon-mini ui-1_zoom'
-            payload={() => this.props.updateState({search:{active: !this.props.search.active}})}/>
+            payload={() => this.props.updateState({search:{active: !this.props.search.active}}, true)}/>
           </FilterCategory>
       </FiltersGroup>
     </Header>

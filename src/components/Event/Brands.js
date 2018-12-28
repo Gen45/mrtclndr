@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 const Brand = (props) => {
   return (
-    <span className={`brand ${props.brand}${props.editable ? ' editable-field' : ''} `} title={props.brandsInfo[props.brand]["name"]} onClick={(e) => props.toggleBrand(props.brand, props.event, props.editable)}>
+    <span className={`brand ${props.brandsInfo[props.brand]["slug"]}${props.editable ? ' editable-field' : ''}${props.selected ? ' selected' : ''} `} title={props.brandsInfo[props.brand]["name"]} onClick={(e) => props.toggleBrand(props.brand, props.event, props.editable)}>
       <img src={props.brandsInfo[props.brand]["image"]} alt={props.brandsInfo[props.brand]["name"]} />
     </span>
   )
@@ -32,18 +32,15 @@ class Brands extends Component {
 
         {
           this.props.editingBrands &&
-          <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}> Unassigned Brands </div>
+          <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}> Click on a Brand to Select it </div>
         }
         {
           this.props.editingBrands &&
-          Object.keys(this.props.brandsInfo).filter((b) => brands.indexOf(this.props.brandsInfo[b].id) < 0).map((b, i) => 
-          <Brand key={i} brand={this.props.brandsInfo[b].id} brandsInfo={this.props.brandsInfo} editable={this.props.editable} event={this.props.event} toggleBrand={this.toggleBrand} />)
+          Object.keys(this.props.brandsInfo).map((b, i) => 
+          <Brand key={i} brand={this.props.brandsInfo[b].id} brandsInfo={this.props.brandsInfo} editable={this.props.editable} event={this.props.event} toggleBrand={this.toggleBrand} selected={brands.indexOf(this.props.brandsInfo[b].id) > -1} />)
         }
         {
-          this.props.editingBrands &&
-          <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}> Assigned Brands </div>
-        }
-        {
+          !this.props.editingBrands &&
           brands.map((b, i) => { return this.props.brandsInfo[b].slug !== 'no-brand' && 
             <Brand key={i} brand={b} brandsInfo={this.props.brandsInfo} editable={this.props.editingBrands} event={this.props.event} toggleBrand={this.toggleBrand} />
           })

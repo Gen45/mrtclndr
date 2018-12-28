@@ -18,7 +18,7 @@ export const FilterCategory = props => !props.disabled && <div className="filter
 export class FiltersGroup extends Component {
   render() {
     return (
-      <div>
+      <div className='filters-group'>
         {
           !this.props.disabled &&
           <nav className='filters-group'>
@@ -27,7 +27,7 @@ export class FiltersGroup extends Component {
               <TriggerBox title={this.props.title} icon={this.props.icon} width={250} draggable={false} align='left'>
                 {this.props.children}
               </TriggerBox> :
-              <div>{this.props.children}</div>
+              <div className='filters-group'>{this.props.children}</div>
             }
           </nav>
         }
