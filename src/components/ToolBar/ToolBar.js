@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 // import AwesomeDebouncePromise from 'awesome-debounce-promise';
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 
+// import Download from '../Helpers/DownloadExcel';
+
 import Title from './Title';
 import Pagination from './Pagination';
 import {FiltersGroup, FilterCategory, Header} from './Filters';
@@ -210,6 +212,7 @@ class ToolBar extends Component {
                 payload={() => console.log(this.props.getShareableLink())}>
                 Share Link
               </Trigger>
+              {/* <Download /> */}
             </div>
           </TriggerBox>
         </FilterCategory>
