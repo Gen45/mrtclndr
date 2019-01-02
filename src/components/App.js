@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
 import axios from 'axios';
+import { CSVDownload } from "react-csv";
 
 import Loading from './Helpers/Loading';
 
@@ -29,6 +30,12 @@ import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
+const csvData = [
+  ["firstname", "lastname", "email"],
+  ["Ahmed", "Tomi", "ah@smthing.co.com"],
+  ["Raed", "Labes", "rl@smthing.co.com"],
+  ["Yezzi", "Min l3b", "ymin@cocococo.com"]
+];
 
 class App extends Component {
 
@@ -38,7 +45,7 @@ class App extends Component {
 
   componentWillMount() {
 
-    this.setState({ ready: false });
+    this.setState({ ready: false, csv: false });
 
     const from = this.props.location.pathname;
     const authenticated = this.props.location.state ? this.props.location.state.isAuthenticated : false;
@@ -78,13 +85,7 @@ class App extends Component {
         headers: this.auth(),
       }).then(function (response) {
         
-        // console.log(response.data);
-
         self.user = { id: response.data.id, role: response.data.roles[0], state: response.data.description !== '' && response.data.description.length < 4000 ? response.data.description : '{}' };
-
-        // console.log('recibimos user state from db');
-        // console.log( self.user.state );
-
 
         if (self.readyLoad) {
 
@@ -223,6 +224,7 @@ class App extends Component {
       program_types,
       segments,
       campaign_groups,
+      csv,
       ...configurations
     } = this.state;
 
@@ -340,7 +342,6 @@ class App extends Component {
       });
 
     });
-
   };
 
   getShareableLink = () => {
@@ -642,6 +643,12 @@ class App extends Component {
       </Loading>
 
     }
+
+    {
+      this.state.csv && 
+      <CSVDownload data={csvData} target="_blank" />
+    }
+
     </div> 
     
     );

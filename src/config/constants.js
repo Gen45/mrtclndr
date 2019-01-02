@@ -8,7 +8,7 @@ export const _LOGO = {URL:'/images/logo.svg', ALT: 'Marriott Logo'};
 export const _MOBILEWIDTH = 720;
 export const _SIDEBAR = 300;
 export const _DEBOUNCE = 50;
-export const _CACHE = 'alsikjd';
+export const _CACHE = '11';
 export const _ISMOBILE = () => window.innerWidth < _MOBILEWIDTH;
 
 

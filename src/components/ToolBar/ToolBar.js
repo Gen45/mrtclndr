@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+
 // import AwesomeDebouncePromise from 'awesome-debounce-promise';
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -19,6 +20,7 @@ const send = (keyword, update) => {
   update(search, true);
   // console.log(search);
 };
+
 
 class ToolBar extends Component {
 
@@ -70,6 +72,8 @@ class ToolBar extends Component {
   }
 
   render() {
+
+
 
     const normalizeYear = year => year === _PREVIOUSYEAR - 1 ? _CURRENTYEAR : year;
 
@@ -212,7 +216,6 @@ class ToolBar extends Component {
                 payload={() => console.log(this.props.getShareableLink())}>
                 Share Link
               </Trigger>
-              {/* <Download /> */}
             </div>
           </TriggerBox>
         </FilterCategory>
