@@ -202,6 +202,21 @@
       .brand {
         display: flex;
 
+
+
+        &.preset {
+          padding: 0 10px;
+          min-height: $event-card-header;
+          height: auto;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+          color: $color-white;
+          align-items: center;
+          background: inherit;
+        }
+       
+
         img,
         svg {
           position: relative;
@@ -420,6 +435,20 @@
 
     .grid-view & {
       font-size: 20px;
+    }
+
+    + .similar {
+      color: $color-accent;
+      margin-top: -0.75em;
+      margin-bottom: 1.5em;
+      font-size: 90%;
+      letter-spacing: 0.05px;
+      &:before {
+        // content: 'Similar entries found: ';
+      }
+      span.pretext {
+        font-size: 90%;
+      }
     }
   }
 

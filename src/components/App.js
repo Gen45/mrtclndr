@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
 import axios from 'axios';
-import { CSVDownload } from "react-csv";
 
 import Loading from './Helpers/Loading';
 
@@ -30,12 +29,6 @@ import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
-const csvData = [
-  ["firstname", "lastname", "email"],
-  ["Ahmed", "Tomi", "ah@smthing.co.com"],
-  ["Raed", "Labes", "rl@smthing.co.com"],
-  ["Yezzi", "Min l3b", "ymin@cocococo.com"]
-];
 
 class App extends Component {
 
@@ -45,7 +38,7 @@ class App extends Component {
 
   componentWillMount() {
 
-    this.setState({ ready: false, csv: false });
+    this.setState({ ready: false });
 
     const from = this.props.location.pathname;
     const authenticated = this.props.location.state ? this.props.location.state.isAuthenticated : false;
@@ -86,6 +79,7 @@ class App extends Component {
       }).then(function (response) {
         
         self.user = { id: response.data.id, role: response.data.roles[0], state: response.data.description !== '' && response.data.description.length < 4000 ? response.data.description : '{}' };
+        // self.user = { id: response.data.id, role: response.data.roles[0], state: '{}' };
 
         if (self.readyLoad) {
 
@@ -95,6 +89,8 @@ class App extends Component {
 
           // CHECK IF METADATA IS IN STORAGE, IF NOT, DOWNLOAD IT
           if (RefLocalStorage_State === null || RefLocalStorage_Meta === null)  {
+
+            self.user.state = '{}';
 
             const _metaData = getMetaData();
             let filters = self.state.filtersList;
@@ -108,6 +104,8 @@ class App extends Component {
                 if (filters[t] !== undefined) {
                   filters[t]['items'] = {};
                 }
+
+                // console.log(data)
 
                 for (const i in data[t]) {
                   self.metaData[t][data[t][i].id] = data[t][i];
@@ -136,7 +134,7 @@ class App extends Component {
                   );
                   self.events = events;
 
-                  console.log(events);
+                  // console.log(events);
 
                   const userState = JSON.parse(self.user.state);
                   // console.log(userState)
@@ -224,7 +222,6 @@ class App extends Component {
       program_types,
       segments,
       campaign_groups,
-      csv,
       ...configurations
     } = this.state;
 
@@ -237,8 +234,9 @@ class App extends Component {
     // console.log(configurations);
     this.stateString = JSON.stringify(configurations);
 
+    // console.log(this.stateString);
     // console.log('cambia local state');
-    if (this.stateString.length < 4000 ) {
+    if (this.stateString.length < 8000 ) {
       localStorage.setItem('mrt_'+ _CACHE +'_State', this.stateString);
     } else {
       localStorage.removeItem('mrt_'+ _CACHE +'_State');
@@ -254,7 +252,7 @@ class App extends Component {
       url: _WP_URL + "/wp-json/wp/v2/users/" + this.user.id,
       headers: this.auth(),
       data: {
-        description: this.stateString.length < 4000 ? this.stateString : ''
+        description: this.stateString.length < 8000 ? this.stateString : ''
       // description: ''
       }
     }).then(function (response) {
@@ -299,8 +297,10 @@ class App extends Component {
 
     const latestEventsData = getLatestEventsData(10);
 
+    this.setState({refreshing: true});
+    
     latestEventsData.then(latestEvents => {
-
+      
       // console.log(latestEvents)
 
       let RefLocalStorage_Events = localStorage.getItem('mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()));
@@ -333,6 +333,9 @@ class App extends Component {
         ...this.metaData,
         events: this.events
       });
+
+      this.setState({refreshing: false});
+      this.updateEventOrder({ sortBy: ['date_modified', 'offer[0]["name"]', 'region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'modified', orderBy: ['desc', 'desc', 'desc'], orderDirection: 'DESCENDING' });
       
     }).then( () => {
 
@@ -371,6 +374,7 @@ class App extends Component {
   activeFilter = filterType => Object.keys(filterType).filter((f, i) => filterType[f].active === true);
 
   prepareEventList = (events, filter, field) => events.filter(e => {
+    // console.log(e, field, e[field]);
     return e[field].reduce((x, c) => {
       // console.log(typeof e[field][0], field)
       const eventList = x || (this.activeFilter(filter).indexOf(typeof e[field][0] === 'number' ? c.toString() : c.id.toString()) >= 0)
@@ -515,6 +519,8 @@ class App extends Component {
 
   render() {
 
+    // console.log(this.state.filtersList);
+
     let time = !_ISMOBILE() ? this.state.time : {...this.state.time, numberOfYears: 1 };
         time = time.Y === (_PREVIOUSYEAR - 1) && (this.state.view === 'timeline' || time.mode !== 'Y') ? {...time, Y: _CURRENTYEAR} : time;
 
@@ -538,6 +544,13 @@ class App extends Component {
         
           <div className={`content ${this.state.view}-view`}>
 
+            {
+             this.state.refreshing && 
+              <div className="refreshing">
+                <i class="nc-icon-mini arrows-1_refresh-69"></i>
+              </div>
+            }
+
             <ToolBar
               time={time}
               updateState={this.updateState}
@@ -549,6 +562,9 @@ class App extends Component {
               search={this.state.search}
               getShareableLink={this.getShareableLink}
               sidebarCollapse={this.state.sidebar.collapsed}
+              allEvents={this.events}
+              events={this.state.events}
+              helpers={{brands: this.state.brands, channels: this.state.channels}}
             />
 
             <div className={`overlay${this.state.modal.show && isValid(this.state.events[this.state.modal.modalEvent]) ? ' active' : ''}`}/>
@@ -614,6 +630,8 @@ class App extends Component {
               history={this.props.history}
               updateEventData={this.updateEventData}
               canEdit={this.canEdit(this.user)}
+              userId={this.user.id}
+              brandGroups={this.state.brand_groups}
             />
           }
         </div>
@@ -624,6 +642,7 @@ class App extends Component {
         brands={this.state.brands}
         brand_groups={this.state.brand_groups}
         offers={this.state.offers}
+        owners={this.state.owners}
         channels={this.state.channels}
         updateFilter={this.updateFilter}
         collapsed={this.state.sidebar.collapsed || false}
@@ -642,11 +661,6 @@ class App extends Component {
         </span>
       </Loading>
 
-    }
-
-    {
-      this.state.csv && 
-      <CSVDownload data={csvData} target="_blank" />
     }
 
     </div> 

@@ -4,16 +4,9 @@ import {Scrollbars} from 'react-custom-scrollbars';
 import Loading from '../Helpers/Loading';
 
 // COMPONENTS
-// import Search from './Search';
 import Filter from './Filter/Filter';
 import BrandsFilter from './Filter/BrandsFilter';
 
-// DATA
-// import regions from '../../config/regions.json';
-// import brands from '../../config/brands.json';
-// import brandGroups from '../../config/brandGroups.json';
-// import offers from '../../config/offers.json';
-// import channels from '../../config/channels.json';
 
 class Sidebar extends Component {
 
@@ -48,7 +41,6 @@ class Sidebar extends Component {
       {
         this.props.ready
           ? <div className="nano">
-              {/* <Search /> */}
               <Scrollbars thumbMinSize={100} universal={true} autoHide={true} style={{
                   height: '100%'
                 }}>
@@ -56,6 +48,7 @@ class Sidebar extends Component {
                 <BrandsFilter title={"Brands"} filtersList={this.props.filtersList} filterName={"brands"} filters={this.props.brands} icon={"nc-icon-outline objects_diamond"} filterCategories={this.props.brand_groups} updateFilter={this.props.updateFilter} tooltips={true} batchChange={this.props.batchChange}/>
                 <Filter title={"Offers"} filtersList={this.props.filtersList} filterName={"offers"} icon={"nc-icon-outline ui-1_check-circle-07"} filters={this.props.offers} updateFilter={this.props.updateFilter} tooltips={false} labelDot={true} batchChange={this.props.batchChange}/>
                 <Filter title={"Channels"} filtersList={this.props.filtersList} filterName={"channels"} icon={"nc-icon-outline ui-1_send"} filters={this.props.channels} updateFilter={this.props.updateFilter} tooltips={false} batchChange={this.props.batchChange}/>
+                <Filter title={"Owners"} filtersList={this.props.filtersList} filterName={"owners"} icon={"nc-icon-outline users_circle-09"} filters={this.props.owners} updateFilter={this.props.updateFilter} tooltips={false} batchChange={this.props.batchChange}/>
               </Scrollbars>
             </div>
           :

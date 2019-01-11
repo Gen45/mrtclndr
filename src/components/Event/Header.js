@@ -1,22 +1,25 @@
 import React, {Component} from 'react';
 import {Tooltip} from 'react-tippy';
-
-// import channelsInfo from '../../config/channels.json';
+import find from 'lodash/find';
+import TextareaAutosize from 'react-autosize-textarea';
 
 class Header extends Component {
 
   toggleChannel = (id, event) => {
     const index = event.channels.indexOf(id);
-    // console.log(event.channels);
     if (index > -1) {
       event.channels.splice(index, 1);
     } else {
       event.channels.push(id);
     }
-    // console.log(event.channels);
     this.setState({change: true});
   }
-
+  
+  handleOtherChannels = (value, field) =>  { 
+    this.props.keepEdits([...new Set([...this.props.channels, find(this.props.channelsInfo, x => x.slug === "other-channels").id])],'channels');
+    this.props.keepEdits(value, field);
+  }
+  
   render() {
 
     const putColor = color => color ? {backgroundColor: color}: {};
@@ -42,30 +45,31 @@ class Header extends Component {
         <span className={`channels${this.props.editingChannels? ' editable': ''}`} >
           {
             this.props.editingChannels &&
-            <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}> Unassigned Channels </div>
+            <div style={{ display: 'block', width: '100%', margin: '10px 0', textAlign: 'center', color: '#FFFFFF' }}> Click on a Channel name to Select it </div>
           }
           {
             this.props.editingChannels &&
-            Object.keys(this.props.channelsInfo).map((c, i) => 
-              <span key={i} className="channel editable-field" onClick={() => this.toggleChannel(this.props.channelsInfo[c].id, this.props.event)}><i className={`${this.props.channelsInfo[this.props.channelsInfo[c].id]["icon"]}`} /> {this.props.channelsInfo[this.props.channelsInfo[c].id]["name"]} </span>)
+            Object.keys(this.props.channelsInfo).filter(c => this.props.channelsInfo[c].slug !== 'no-channel' && this.props.channelsInfo[c].slug !== 'other-channels').map((c, i) => 
+              <span key={i} className={`channel editable-field${channels.indexOf(this.props.channelsInfo[c].id) > -1 ? ' selected' : ''}`} onClick={() => this.toggleChannel(this.props.channelsInfo[c].id, this.props.event)}>
+                <i className={`${this.props.channelsInfo[this.props.channelsInfo[c].id]["icon"]}`} /> {this.props.channelsInfo[this.props.channelsInfo[c].id]["name"]} 
+              </span>)
           }
           {
             this.props.editingChannels &&
-            <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}> Assigned Channels </div>
-          }          
+            <div style={{ display: 'block', width: '100%', margin: '10px 0', textAlign: 'center', color: '#FFFFFF' }}> Other Channels </div>
+          }
           {
             this.props.editingChannels &&
-            channels.map((c, i) => (this.props.channelsInfo[c].slug !== "other-channels" ) &&
-              <span key={i} className="channel editable-field" onClick={() => this.toggleChannel(c, this.props.event)}><i className={`${this.props.channelsInfo[c]["icon"]}`} /> {this.props.channelsInfo[c]["name"]} </span>
-          )}
+            <TextareaAutosize style={{ width: '90%' }} className="other-channels editable-field" placeholder="Other Channels" defaultValue={this.props.otherChannels} onChange={(e) => this.handleOtherChannels(e.target.value, 'otherChannels')} />
+          }
           {
             !this.props.editingChannels &&
-            channels.map(c => (this.props.channelsInfo[c].slug !== "other-channels") && c !== null &&
+            channels.map(c => (this.props.channelsInfo[c].slug !== "other-channels") && (this.props.channelsInfo[c].slug !== "no-channel") && c !== null &&
             withTooltip(this.props.channelsInfo[c]["name"], <i className={ this.props.channelsInfo[c]["icon"] }/>, this.props.channelsInfo[c].slug))
           }
           {
             !this.props.editingChannels &&
-            this.props.otherChannels !== "" && withTooltip(this.props.otherChannels, <i className="icon nc-icon-mini ui-2_menu-dots" /> )
+            this.props.otherChannels !== undefined && this.props.otherChannels !== "" && withTooltip(this.props.otherChannels, <i className="icon nc-icon-mini ui-2_menu-dots" /> )
           }
           {
             !this.props.editingChannels &&

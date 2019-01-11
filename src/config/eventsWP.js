@@ -16,6 +16,13 @@ import {
 const WP_URL = 'http://admin.marriottcalendar.com/wp-json/wp/v2/';
 const parameters = '/?per_page=100';
 
+const auth = () => {
+  const token = localStorage.getItem(`auth-${today()}`);
+  if (token) {
+    return { 'Authorization': "Bearer " + token }; //JSON.parse(decodeURIComponent(escape(atob(auth))));
+  }
+}
+
 export async function getMetaData() {
   try {
 
@@ -188,6 +195,23 @@ export const prepareEvent = (e, metaData) => {
   const _status = e.acf.status === undefined ? true : e.acf.status;
   // console.log(e.id, decodeHTML(e.title.rendered), _status);
 
+  // console.log(e);
+
+  // console.log(auth());
+
+  if (e.acf.status === false){
+    // console.log(e.acf.status);
+    axios({
+      method: 'delete',
+      url: WP_URL + "entry/" + e.id,
+      headers: auth(),
+      }).then(function (response) {
+        // console.log('updated', e.id);
+      }).catch(function (error) {
+        // console.log('failed', error);
+    });
+  }
+
   return {   
     id: e.id,
     wp_link: e.link,
@@ -218,6 +242,9 @@ export const prepareEvent = (e, metaData) => {
     dates: dates,
     earliestDay: getExtreme([dates.sell.start, dates.stay.start], 'left'),
     latestDay: getExtreme([dates.sell.end, dates.stay.end], 'right'),
-    status: _status
+    status: _status,
+    date_created: e.date,
+    date_modified: e.modified,
+    activity_log: e.acf.activity_log
   }
 }

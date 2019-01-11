@@ -34,6 +34,10 @@
     "brands": {
       "name": "brands",
       "active": true
+    },
+    "owners": {
+      "name": "owner",
+      "active": true
     }
   },
   "modal": {

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Tooltip} from 'react-tippy';
 import TextareaAutosize from 'react-autosize-textarea';
 import Select from 'react-select';
+// import stringSimilarity from 'string-similarity';
+import stringSimilarity from '../../helpers/compareStrings';
 
 import Header from './Header';
 import Brands from './Brands';
@@ -9,20 +11,17 @@ import Dates from './Dates';
 import Timelines from './Timelines';
 
 import {isMultidate, getExtreme, today} from '../../helpers/dates';
-import {isValid} from '../../helpers/misc';
+import {isValid, removeSearched} from '../../helpers/misc';
 
 import {_COLORS} from '../../config/constants';
-
-const removeSearched = (str) => {
-  return str
-    .replace(/<b class="searched">/g, '')
-    .replace(/<\/b>/g, '');
-}
 
 class Event extends Component {
 
   componentWillMount() {
-    this.setState({ addingBrands: false, addingChannels: false });
+    this.setState({ addingBrands: false, addingChannels: false, similar: [] });
+    if (this.props.isModal) {
+      this.checkSimilarities();
+    }
   }
 
   handleOpenModal = (targetId) => {
@@ -30,7 +29,9 @@ class Event extends Component {
   };
 
   keepEdits = (value, field) => {
-    // console.log(value, field, this.props.event[field]);
+    if (field === 'campaign_name') {
+      this.checkSimilarities();
+    }
     this.props.event[field] = value;
     this.setState({changed: true });
   }
@@ -38,6 +39,12 @@ class Event extends Component {
   cleanFilterInfo = (filterInfo) => {
     // console.log(filterInfo);
     return Object.keys(filterInfo).map( x => { return {label: filterInfo[x].name, value: filterInfo[x].id} } );
+  }
+  
+  checkSimilarities = () => {
+    let similarCampaignNames = this.props.events.filter(e => stringSimilarity.compareTwoStrings(this.props.event.campaign_name.toLowerCase(), e.campaign_name.toLowerCase()) > 0.95 && e.id !== this.props.event.id );
+    // console.log(similarCampaignNames);
+    this.setState({ similar: similarCampaignNames });
   }
 
   render() {
@@ -60,6 +67,7 @@ class Event extends Component {
     const HighLightedStyle = {boxShadow: '0 0 1px 5px rgba(160,160,160, 0.75)'};
 
     const tooltip_styles = { width: 250, fontSize: 14, textAlign: 'left' };
+
     // console.log(event);
 
     return (
@@ -79,6 +87,7 @@ class Event extends Component {
               editingChannels={this.props.editingChannels} 
               channelsInfo={this.props.channelsInfo}
               event={this.props.event}
+              keepEdits={this.keepEdits}
             />
         }
         {
@@ -93,7 +102,8 @@ class Event extends Component {
             <div className='activity'>
               {
                 this.props.editable 
-                ? <TextareaAutosize className="editable-field"  defaultValue={removeSearched(event.campaign_name)} onChange={(e) => this.keepEdits(e.target.value, 'campaign_name')} />
+                ? <TextareaAutosize className="editable-field" placeholder="Campaign Name" defaultValue={removeSearched(event.campaign_name)} 
+                    onChange={(e) => this.keepEdits(e.target.value, 'campaign_name')} />
                 : <span> 
                     {
                     this.props.view === 'timeline' && 
@@ -103,7 +113,23 @@ class Event extends Component {
                   </span>
               }
             </div>
-
+            {
+              this.state.similar.length > 0 &&
+              <div className='similar'>
+                {
+                  <span className="pretext">
+                        {`${this.state.similar.length} similar entr${this.state.similar.length > 1 ? 'ies' : 'y' } found: `}
+                  </span>
+                }
+                {
+                  this.state.similar.map((s, i) =>
+                    <span key={i} onClick={(e) => console.log(s.id)}>
+                      {removeSearched(s.campaign_name)}
+                  </span>
+                  )
+                }
+              </div>
+            }
           {
             this.props.view === 'grid' && !this.props.editable && 
             <div>
@@ -230,6 +256,22 @@ class Event extends Component {
                   </div>
               }
               {
+                event.activity_log !== undefined && event.activity_log.length > 0 && !this.props.editable &&
+                <div className="activity-log">
+                  {
+                    event.activity_log.reverse().map( (a, i) => 
+                      <div key={i} className="activity">
+                        <span className="action">{a['activity'].action}</span>
+                        <span>by</span>
+                        <span className="name">{a['activity'].user.display_name}</span>
+                        <span>on</span>
+                        <span className="date">{a['activity'].date}</span>
+                      </div>
+                    )
+                  }
+                </div>
+              }
+              {
                 !this.props.editingChannels &&
                   <Brands 
                     brands={event.brands} 
@@ -238,6 +280,7 @@ class Event extends Component {
                     event={event} 
                     editBrands={this.props.editBrands} 
                     editingBrands={this.props.editingBrands} 
+                    brandGroups={this.props.brandGroups}
                   />
               }
           </div>

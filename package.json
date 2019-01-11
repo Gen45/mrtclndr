@@ -23,7 +23,8 @@
     "react-router-auth": "^1.0.1",
     "react-router-dom": "^4.2.2",
     "react-select": "next",
-    "react-tippy": "^1.2.2"
+    "react-tippy": "^1.2.2",
+    "string-similarity": "^3.0.0"
   },
   "devDependencies": {
     "node-sass-chokidar": "^1.2.2",

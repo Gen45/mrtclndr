@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import Draggable from 'react-draggable';
 import findIndex from 'lodash/findIndex';
+import find from 'lodash/find';
 import axios from 'axios';
 
+import { removeSearched } from '../../helpers/misc';
 import { _PREV, _NEXT, _ISMOBILE, _WP_URL } from '../../config/constants';
 import { today } from '../../helpers/dates';
 
@@ -87,22 +89,51 @@ class Modal extends Component {
   }
 
   saveChanges = (id) => {
+
+    id = !this.props.modal.new ? id : ''; 
+
     const self = this;
     const newData = this.props.events[this.props.modal.modalEvent];
+    // console.log(id);
+    const newActivity = { activity: { date: new Date(), action: id !== '' ? 'edited' : 'created', user: this.props.userId } };
+    const activity_log = newData.activity_log !== undefined ? [ ...newData.activity_log, newActivity ] : [newActivity];
+    // console.log(activity_log);
 
     this.setState({saving: true});
 
-    id = !this.props.modal.new ? id : '';
+
+    const noChannelId = find(this.props.channelsInfo, x => x.slug === "no-channel").id;
+    const noBrandId = find(this.props.brandsInfo, x => x.slug === "no-brand").id;
+    const otherChannelsId = find(this.props.channelsInfo, x => x.slug === "other-channels").id;
+
+    const indexOfNoChannel = newData['channels'].indexOf(noChannelId);
+    const indexOfotherChannels = newData['channels'].indexOf(otherChannelsId);
+    const indexOfNoBrand = newData['brands'].indexOf(noBrandId);
+
+    // console.log(newData['brands']);
+
+    if (indexOfNoChannel > -1 && newData['channels'].length > 1) {
+      newData['channels'].splice(indexOfNoChannel, 1);
+    }
+
+    if (indexOfotherChannels > -1 && newData['otherChannels'] === "") {
+      newData['channels'].splice(indexOfotherChannels, 1);
+    }
+
+    if (indexOfNoBrand > -1 && newData['brands'].length > 1) {
+      newData['brands'].splice(indexOfNoBrand, 1);
+      // console.log(newData['brands']);
+    }
 
     axios({
       method: id !== '' ? 'put' : 'post',
       url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
       headers: this.auth(),
       data: {
-        title: newData['campaign_name'],
+        title: removeSearched(newData['campaign_name']),
         fields: {
-          campaign_name: newData['campaign_name'],
-          description: newData['description'],
+          campaign_name: removeSearched(newData['campaign_name']),
+          description: removeSearched(newData['description']),
           dates: {...newData['dates'], ongoing: newData['ongoing']},
           offer: newData['offer'][0]['id'],
           owner_subregion: newData['region'][0]['id'],
@@ -114,6 +145,9 @@ class Modal extends Component {
           owner: newData['owner'][0]['id'],
           brands: newData['brands'],
           channels: newData['channels'],
+          other_channels: newData['otherChannels'],
+          activity_log: activity_log,
+          status: true
         },
         status: 'publish'
       }
@@ -123,6 +157,7 @@ class Modal extends Component {
 
       // console.log('success', response);
       self.props.updateEventData();
+      
     })
     .catch(function (error) {
       // console.log('failed', error);
@@ -172,11 +207,13 @@ class Modal extends Component {
 
     const EventForModal = () =>
     <div className="modal-content">
-        <Event event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} 
-        brandsInfo={this.props.brandsInfo} 
-        channelsInfo={this.props.channelsInfo} 
-        editable={this.state.edit} updateState=
-          {this.props.updateState} saveChanges={this.saveChanges}
+        <Event 
+          event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} isModal={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} 
+          brandsInfo={this.props.brandsInfo} 
+          channelsInfo={this.props.channelsInfo} 
+          editable={this.state.edit} 
+          updateState= {this.props.updateState} 
+          saveChanges={this.saveChanges}
           offers={this.props.offers}
           regions={this.props.regions}
           featured_markets={this.props.featured_markets}
@@ -189,6 +226,9 @@ class Modal extends Component {
           editingChannels={this.state.editingChannels}
           editBrands={this.editBrands}
           editChannels={this.editChannels}
+          events={this.props.events}
+          isModal={true}
+          brandGroups={this.props.brandGroups}
         />
     </div>
 
@@ -243,6 +283,7 @@ class Modal extends Component {
                     height: 'calc(100vh - 50px)',
                     width: '100vw'
                   }}>
+                  
                   <EventForModal />
                 </Scrollbars>
                 :

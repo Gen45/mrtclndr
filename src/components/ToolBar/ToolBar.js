@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
+import { CSVLink } from "react-csv";
 
 // import AwesomeDebouncePromise from 'awesome-debounce-promise';
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-// import Download from '../Helpers/DownloadExcel';
 
 import Title from './Title';
 import Pagination from './Pagination';
@@ -14,13 +14,6 @@ import {getCoordinates} from '../../helpers/misc';
 
 import {_MONTHS, _QUARTERS, _THREEYEARS, _PREVIOUSYEAR, _CURRENTYEAR, _TIMELIMITS} from '../../helpers/dates';
 import {_ISMOBILE, _TRANSITIONTIME} from '../../config/constants';
-
-const send = (keyword, update) => {
-  const search = {search: {active: true, term:  keyword}};
-  update(search, true);
-  // console.log(search);
-};
-
 
 class ToolBar extends Component {
 
@@ -66,9 +59,63 @@ class ToolBar extends Component {
   };
 
   handleSearchTerm = (keyword) => {
-    // console.log(keyword);
-    // await AwesomeDebouncePromise(send, 100);
-    send(keyword, this.props.updateState);
+    const search = {search: {active: true, term: keyword}};
+    this.props.updateState(search, true);
+  }
+
+  // CSVHeaders = () => { 
+  //   let Headers = [];
+  //   Object.keys(this.props.helpers.channels).forEach(channel => {
+  //   });
+  // }
+
+  format2CSV = (events) => {
+    // console.log(JSON.stringify(events[0]));
+    const formatedEvents = events
+    .filter(e => e.status)    
+    .map( e => {     
+
+      const channelPresent = channel => {
+        // console.log(e.channels, channel);
+        return e.channels.indexOf(Number(channel)) > -1 ? 'Yes' : 'No';
+      }
+
+      let event = {};
+      event["ID"] = e.id || " ";
+      event["Owner"] = e.owner[0].name || " ";
+      event["Owner SubRegion"] = e.region[0].name || " ";
+      event["Campaign Group"] = e.campaign_group[0].name || " ";
+      event["Market Scope"] = e.market_scope[0].name || " ";
+      event["Destination - Featured Market"] = e.featured_market[0].name || " ";
+      event["Ongoing Campaign"] = e.ongoing ? "yes" : "no" || " ";
+      event["Program Type"] = e.program_type[0].name || " ";
+      event["Offer"] = e.offer[0].name || " ";
+      event["Segment"] = e.segment[0].name || " ";
+
+      event["Campaign Name"] = e.campaign_name || " ";
+      event["Description"] = e.description || " ";
+
+      event["Sell Start Date"] = e["dates"]["sell"]["start"] || " ";
+      event["Sell End Date"] = e["dates"]["sell"]["end"] || " ";
+      event["Stay Start Date"] = e["dates"]["stay"]["start"] || " ";
+      event["Stay End Date"] = e["dates"]["stay"]["end"] || " ";
+
+      event["Brand"] = e.brands.map(b => this.props.helpers.brands[b].abreviation).toString().replace(/\,/g, ', ') || " ";
+
+      Object.keys(this.props.helpers.channels).forEach(channel => {
+        if(channel !== '17' && channel !== '16') {
+          event[this.props.helpers.channels[channel].name.replace(/\./g, '-')] = channelPresent(channel);
+        }
+      });
+
+      event["Other Channels"] = e.otherChannels || " ";
+
+      return event;
+    });
+
+    // console.log(formatedEvents);
+
+    return formatedEvents;
   }
 
   render() {
@@ -174,6 +221,10 @@ class ToolBar extends Component {
           <TriggerBox title='Sort / Order' icon='nc-icon-mini arrows-2_direction' width={300} renderChildren={true} align='left'>
             <div className="group">
               <h4>Sort by</h4>
+              <Trigger propState={this.props.groupByType} propStateValue='modified' icon='nc-icon-outline ui-2_time-clock'
+                payload={() => this.props.updateEventOrder({sortBy: ['date_modified','offer[0]["name"]','region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'modified'})}>
+                MODIFIED
+              </Trigger>
               <Trigger propState={this.props.groupByType} propStateValue='date' icon='nc-icon-outline ui-1_calendar-57'
                 payload={() => this.props.updateEventOrder({sortBy: ['earliestDay','offer[0]["name"]','region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'date'})}>
                 DATE
@@ -185,6 +236,14 @@ class ToolBar extends Component {
               <Trigger propState={this.props.groupByType} propStateValue='region' icon='nc-icon-outline travel_world'
                 payload={() => this.props.updateEventOrder({sortBy: ['region[0]["name"]','earliestDay','offer[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'region'})}>
                 REGION
+              </Trigger>
+              <Trigger propState={this.props.groupByType} propStateValue='owner' icon='nc-icon-outline users_circle-09'
+                payload={() => this.props.updateEventOrder({sortBy: ['owner[0]["name"]','earliestDay','offer[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'owner'})}>
+                OWNER
+              </Trigger>
+              <Trigger propState={this.props.groupByType} propStateValue='alpha' icon='nc-icon-outline education_book-39'
+                payload={() => this.props.updateEventOrder({sortBy: ['campaign_name','earliestDay','offer[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'alpha'})}>
+                A-Z
               </Trigger>
               <hr/>
             </div>
@@ -206,16 +265,21 @@ class ToolBar extends Component {
         <FilterCategory disabled={false}>
           <TriggerBox title='Download' icon='nc-icon-mini arrows-1_download' width={200} renderChildren={true} align='left'>
             <div className="group">
-              <h4>File</h4>
-              {/* <Trigger icon='nc-icon-mini ui-1_calendar-57'
-                payload={() => this.props.updateEventOrder({sortBy: ['earliestDay','offer','region'], orderBy: this.props.orderBy, groupByType: 'date'})}>
-                PDF
-              </Trigger> */}
-              {/* <br/> */}
-              <Trigger icon=''
+              <h4>CSV File (for excel)</h4>
+
+              <Trigger icon='' disabled={true}
                 payload={() => console.log(this.props.getShareableLink())}>
                 Share Link
               </Trigger>
+
+              <CSVLink className="nav-trigger" filename={"marriott-calendar-all-entries" + new Date().getTime() +".csv"} target="_blank" data={this.format2CSV(this.props.allEvents)} style={{textDecoration: "none"}}>
+                <span className="trigger-box-title" > All entries </span>
+              </CSVLink>
+
+              <CSVLink className="nav-trigger" filename={"marriott-calendar-" + new Date().getTime() +".csv"} target="_blank" data={this.format2CSV(this.props.events)} style={{textDecoration: "none"}}>
+                <span className="trigger-box-title" > Filtered entries </span>
+              </CSVLink>
+
             </div>
           </TriggerBox>
         </FilterCategory>

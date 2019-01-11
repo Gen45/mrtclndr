@@ -22,3 +22,9 @@ export const decodeHTML =  (html) => {
   txt.innerHTML = html;
   return txt.value;
 };
+
+export const removeSearched = (str) => {
+  return str
+    .replace(/<b class="searched">/g, '')
+    .replace(/<\/b>/g, '');
+}

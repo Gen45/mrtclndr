@@ -16,9 +16,12 @@ class EventsWrapper extends Component {
 
       { itemSize > 0 ?
         <ReactList ref={(ReactList) => this.ReactListRef = ReactList} key={this.props.view} 
-          itemRenderer={(index, key) => <Event 
+          itemRenderer={(index, key) => 
+          <Event 
           key={key} 
           event={this.props.events[index]} 
+          events={this.props.events} 
+          isModal={false}
           view={this.props.view} 
           handleOpenModal={this.props.handleOpenModal} 
           time={this.props.time} 

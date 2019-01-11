@@ -197,6 +197,8 @@ textarea:focus, input:focus, button:focus {
   transition: transform 0.3s;
   z-index: 12;
   box-shadow: -4px 0 30px rgba(22, 22, 22, 0.5); }
+  .sidebar .nano {
+    height: calc(100% - 50px); }
   .sidebar.disabled {
     filter: grayscale(60%) contrast(60%) brightness(60%);
     pointer-events: none; }
@@ -1193,6 +1195,16 @@ body.activity-type .activity-type-group {
       flex-wrap: wrap; }
       .grid-view .event .brands .brand {
         display: flex; }
+        .grid-view .event .brands .brand.preset {
+          padding: 0 10px;
+          min-height: 30px;
+          height: auto;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+          color: #ffffff;
+          align-items: center;
+          background: inherit; }
         .grid-view .event .brands .brand img,
         .grid-view .event .brands .brand svg {
           position: relative;
@@ -1339,6 +1351,14 @@ body.activity-type .activity-type-group {
     padding: 0 10px; }
   .grid-view .event-info .activity {
     font-size: 20px; }
+  .event-info .activity + .similar {
+    color: #e4144a;
+    margin-top: -0.75em;
+    margin-bottom: 1.5em;
+    font-size: 90%;
+    letter-spacing: 0.05px; }
+    .event-info .activity + .similar span.pretext {
+      font-size: 90%; }
 
 .event-info .description {
   text-align: center;
@@ -1516,6 +1536,27 @@ body.activity-type .activity-type-group {
     .modal .event .more {
       display: none; }
 
+.activity-log {
+  background: gainsboro;
+  border-top: 1px solid #c2c2c2;
+  padding: 5px;
+  text-align: center; }
+  .activity-log h4 {
+    padding: 0 20px;
+    font-size: 80%;
+    font-weight: normal; }
+  .activity-log .activity {
+    padding: 5px; }
+    .activity-log .activity:not(:last-child) {
+      border-bottom: 1px solid #f5f5f5; }
+    .activity-log .activity span {
+      position: relative;
+      display: inline; }
+      .activity-log .activity span:after {
+        content: ' '; }
+    .activity-log .activity .name {
+      font-weight: bold; }
+
 ::-moz-selection {
   background: #333;
   color: #fff;
@@ -1616,6 +1657,58 @@ span.flatpickr-weekday {
   text-decoration: none;
   border-bottom: 1px solid #e4144a; }
 
+.refreshing {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000000; }
+  .refreshing:before {
+    background: #2b2b2b;
+    content: 'refreshing';
+    text-align: center;
+    display: flex;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    width: 60px;
+    left: calc(50% - 30px);
+    top: calc(25% - 30px);
+    position: absolute;
+    border-radius: 60px;
+    z-index: 2; }
+  .refreshing:after {
+    background: #e4144a;
+    content: '';
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    width: 60px;
+    left: calc(50% - 30px);
+    top: calc(25% - 30px);
+    position: absolute;
+    border-radius: 60px;
+    z-index: 1;
+    transform: scale(1.05);
+    animation: up_down 0.5s ease infinite; }
+
+@keyframes up_down {
+  0% {
+    transform: scale(1.05) translate(2%, 0); }
+  25% {
+    transform: scale(1.05) translate(0, 2%); }
+  50% {
+    transform: scale(1.05) translate(-2%, 0%); }
+  75% {
+    transform: scale(1.05) translate(0%, -2%); }
+  100% {
+    transform: scale(1.05) translate(2%, 0); } }
+
 .main-overlay {
   padding-top: 50px;
   display: flex;
@@ -1688,9 +1781,9 @@ span.flatpickr-weekday {
     margin: 1px 2px;
     cursor: pointer;
     text-align: center;
-    background: rgba(153, 153, 153, 0.2); }
+    background: rgba(153, 153, 153, 0.1); }
     .filter-tag input + label:hover {
-      background: rgba(153, 153, 153, 0.3); }
+      background: rgba(153, 153, 153, 0.2); }
   .brand-filters .filter-tag {
     height: 46px;
     width: 86px;
@@ -1723,41 +1816,9 @@ span.flatpickr-weekday {
       margin: 0 2px; }
 
 input:checked + label {
-  background-color: rgba(153, 153, 153, 0.8); }
+  background-color: rgba(153, 153, 153, 0.6); }
   input:checked + label:hover {
-    background: rgba(153, 153, 153, 0.9); }
-
-.US input:checked + label {
-  background-color: #4399c4;
-  border-color: #4399c4; }
-
-.US-EAST input:checked + label {
-  background-color: #3dc7ca;
-  border-color: #3dc7ca; }
-
-.US-WEST input:checked + label {
-  background-color: #3b79cb;
-  border-color: #3b79cb; }
-
-.CALA input:checked + label {
-  background-color: #70cb74;
-  border-color: #70cb74; }
-
-.CANADA input:checked + label {
-  background-color: #e85858;
-  border-color: #e85858; }
-
-.BRAND input:checked + label {
-  background-color: #ab528d;
-  border-color: #ab528d; }
-
-.PORTFOLIO input:checked + label {
-  background-color: #f49140;
-  border-color: #f49140; }
-
-.LOYALTY input:checked + label {
-  background-color: #4b4eb2;
-  border-color: #4b4eb2; }
+    background: rgba(153, 153, 153, 0.7); }
 
 input.search-box {
   width: 100%;
@@ -1876,6 +1937,7 @@ input.search-box {
 .contact.editable-field,
 .brand.editable-field,
 .channel.editable-field,
+.event-channels .editable-field,
 *.flatpickr-input {
   cursor: pointer;
   font-size: inherit;
@@ -1894,6 +1956,8 @@ input.search-box {
   .brand.editable-field .flatpickr-input.active,
   .channel.editable-field:focus,
   .channel.editable-field .flatpickr-input.active,
+  .event-channels .editable-field:focus,
+  .event-channels .editable-field .flatpickr-input.active,
   *.flatpickr-input:focus,
   *.flatpickr-input .flatpickr-input.active {
     outline: none !important;
@@ -1904,8 +1968,12 @@ input.search-box {
   .contact.editable-field.selected,
   .brand.editable-field.selected,
   .channel.editable-field.selected,
+  .event-channels .editable-field.selected,
   *.flatpickr-input.selected {
-    background: rgba(255, 255, 255, 0.15) !important; }
+    background: rgba(255, 255, 255, 0.25) !important; }
+
+.other-channels.editable-field {
+  color: #ffffff; }
 
 .description .editable-field,
 .activity .editable-field {
@@ -2060,6 +2128,7 @@ input.search-box {
       width: 20px;
       height: 20px;
       border-radius: 50px;
+      background: #404040;
       display: block; }
 
 .icon {
