@@ -14,7 +14,6 @@ import {
 } from '../helpers/misc';
 
 const WP_URL = 'http://admin.marriottcalendar.com/wp-json/wp/v2/';
-const parameters = '/?per_page=100';
 
 const auth = () => {
   const token = localStorage.getItem(`auth-${today()}`);
@@ -26,17 +25,17 @@ const auth = () => {
 export async function getMetaData() {
   try {
 
-    const channelPromise = axios(`${WP_URL}channel${parameters}`);
-    const brandPromise = axios(`${WP_URL}brand${parameters}`);
-    const offerPromise = axios(`${WP_URL}offer${parameters}`);
-    const regionPromise = axios(`${WP_URL}region${parameters}`);
-    const ownerPromise = axios(`${WP_URL}owner${parameters}`);
-    const campaign_groupPromise = axios(`${WP_URL}campaign_group${parameters}`);
-    const segmentPromise = axios(`${WP_URL}segment${parameters}`);
-    const market_scopePromise = axios(`${WP_URL}market_scope${parameters}`);
-    const featured_markets1Promise = axios(`${WP_URL}featured_markets${parameters}&page=1`);
-    const featured_markets2Promise = axios(`${WP_URL}featured_markets${parameters}&page=2`);
-    const program_typePromise = axios(`${WP_URL}program_type${parameters}`);
+    const channelPromise = axios(`${WP_URL}channel/?per_page=100`);
+    const brandPromise = axios(`${WP_URL}brand/?per_page=100`);
+    const offerPromise = axios(`${WP_URL}offer/?per_page=100`);
+    const regionPromise = axios(`${WP_URL}region/?per_page=100`);
+    const ownerPromise = axios(`${WP_URL}owner/?per_page=100`);
+    const campaign_groupPromise = axios(`${WP_URL}campaign_group/?per_page=100`);
+    const segmentPromise = axios(`${WP_URL}segment/?per_page=100`);
+    const market_scopePromise = axios(`${WP_URL}market_scope/?per_page=100`);
+    const featured_markets1Promise = axios(`${WP_URL}featured_markets/?per_page=100&page=1`);
+    const featured_markets2Promise = axios(`${WP_URL}featured_markets/?per_page=100&page=2`);
+    const program_typePromise = axios(`${WP_URL}program_type/?per_page=100`);
 
     const [ channel, brand, offer, region, owner, campaign_group, segment, market_scope, featured_markets1, featured_markets2, program_type ] =
       await Promise.all(
@@ -108,9 +107,73 @@ export async function getMetaData() {
   }
 }
 
+export async function getFirstEventsData(metaData) {
+  try {
+
+    const entry1Promise = axios(`${WP_URL}entry/?per_page=100&orderby=modified&page=1`);
+
+    const [
+      entry1
+    ] =
+      await Promise.all(
+        [
+          entry1Promise
+        ]);
+
+    const entriesALL = [
+      ...entry1.data   
+    ];
+
+    return entriesALL.map(e => prepareEvent(e, metaData));
+
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+export async function getRestEventsData(metaData) {
+  try {
+    const parameters = '/?per_page=100&orderby=modified';
+
+    const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE 1
+    const entry3Promise = axios(`${WP_URL}entry${parameters}&page=3`); // DISABLE 2
+    const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE 3
+    const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE 4
+
+    const [
+      entry2, // DISABLE 1
+      entry3, // DISABLE 2
+      entry4, // DISABLE 3
+      entry5,  // DISABLE 4
+    ] =
+      await Promise.all(
+        [
+          entry2Promise,  // DISABLE 1
+          entry3Promise,  // DISABLE 2
+          entry4Promise,  // DISABLE 3
+          entry5Promise,   // DISABLE 4
+        ]);
+
+    const entriesALL = [
+      ...entry2.data, // DISABLE 1
+      ...entry3.data, // DISABLE 2
+      ...entry4.data, // DISABLE 3
+      ...entry5.data // DISABLE 4       
+    ];
+
+    return entriesALL.map(e => prepareEvent(e, metaData));
+    
+
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 export async function getEventsData(metaData) {
   try {
+    const parameters = '/?per_page=100&orderby=modified';
 
     const entry1Promise = axios(`${WP_URL}entry${parameters}&page=1`); // DISABLE 0
     const entry2Promise = axios(`${WP_URL}entry${parameters}&page=2`); // DISABLE 1
@@ -127,7 +190,7 @@ export async function getEventsData(metaData) {
     ] =
       await Promise.all(
         [
-          entry1Promise, // DISABLE 0
+          entry1Promise,  // DISABLE 0
           entry2Promise,  // DISABLE 1
           entry3Promise,  // DISABLE 2
           entry4Promise,  // DISABLE 3
@@ -143,7 +206,7 @@ export async function getEventsData(metaData) {
     ];
 
     return entriesALL.map(e => prepareEvent(e, metaData));
-    
+
 
   } catch (e) {
     console.error(e);
@@ -206,9 +269,9 @@ export const prepareEvent = (e, metaData) => {
       url: WP_URL + "entry/" + e.id,
       headers: auth(),
       }).then(function (response) {
-        // console.log('updated', e.id);
+        console.log('deleted', e.id);
       }).catch(function (error) {
-        // console.log('failed', error);
+        console.log('failed', error);
     });
   }
 
@@ -233,7 +296,7 @@ export const prepareEvent = (e, metaData) => {
     market_scope: [{ id: _market_scopes.id, name: _market_scopes.name }],
     program_type: [{ id: _program_types.id, name: _program_types.name }],
     segment: [{ id: _segments.id, name: _segments.name }],
-    owner:  [{ id: _owners.id, name: _owners.name }],
+    owner: [{ id: _owners.id, name: _owners.name }],
 
     otherChannels: e.acf.other_channels || '',
     ongoing: e.acf.dates.ongoing,

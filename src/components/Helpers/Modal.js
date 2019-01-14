@@ -267,12 +267,12 @@ class Modal extends Component {
 
                 <span className={`modal-handle ${handle}`}></span>      
 
+                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_check' text={this.state.saving ? 'Saving' : 'Save'} disabled={!this.state.edit}
+                  payload={() => this.saveChanges(this.props.events[this.props.modal.modalEvent].id)} />
+                  
                 <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove' text='Cancel' disabled={!this.state.edit || this.state.saving}
                   payload={() => this.cancelEdit()} />              
                 
-                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_check' text={this.state.saving ? 'Saving' : 'Save'} disabled={!this.state.edit}
-                  payload={() => this.saveChanges(this.props.events[this.props.modal.modalEvent].id)}/>
-
                 <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-left' caption="Previous Entry"
                     payload={() => this.handleModalNav(_PREV)}/>
 

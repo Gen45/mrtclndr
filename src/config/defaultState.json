@@ -8,10 +8,10 @@
     "M": 1
   },
   "order": {
-    "sortBy": ["earliestDay", "offer", "region"],
-    "orderBy": ["asc"],
-    "groupByType": "date",
-    "orderDirection": "ASCENDING"
+    "sortBy": ["date_modified", "offer[0][\"name\"]", "region[0][\"name\"]"],
+    "orderBy": ["desc", "desc", "desc"],
+    "groupByType": "modified",
+    "orderDirection": "DESCENDING"
   },
   "vigency": {
     "past": true,

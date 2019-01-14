@@ -10,7 +10,7 @@ import '../styles/style.css';
 import 'react-tippy/dist/tippy.css';
 
 // DATA
-import { getMetaData, getEventsData, getLatestEventsData } from '../config/eventsWP';
+import { getMetaData, getLatestEventsData, getFirstEventsData, getRestEventsData } from '../config/eventsWP';
 import defaultState from '../config/defaultState.json';
 // import base from '../config/base';
 
@@ -122,26 +122,30 @@ class App extends Component {
 
               self.metaData['brands_data'] = data['brands_data'];
 
+              localStorage.removeItem(
+                'mrt_' + (_CACHE - 1) + '_Meta-' + month(today()) + "-" + year(today()),
+                JSON.stringify(self.metaData)
+              );
+
               localStorage.setItem(
                 'mrt_'+ _CACHE +'_Meta-' + month(today()) + "-" + year(today()),
                 JSON.stringify(self.metaData)
               );
-
               
               if (RefLocalStorage_Events === null) {
 
-                const eventsData = getEventsData(self.metaData);
+                const eventsData = getFirstEventsData(self.metaData);
                 eventsData.then(events => {
+                  localStorage.removeItem(
+                    'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today()),
+                    JSON.stringify(events)
+                  );
                   localStorage.setItem(
                     'mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()),
                     JSON.stringify(events)
                   );
                   self.events = events;
-
-                  // _DEBUG && console.log(events);
-
                   const userState = JSON.parse(self.user.state);
-                  // _DEBUG && console.log(userState)
 
                   self.setState({ 
                     ...self.metaData,
@@ -149,9 +153,35 @@ class App extends Component {
                     events: self.events
                   }, () => self.updateEventData());
 
-                  // _DEBUG && console.log(self.state);
-                  
+
+                  const eventsData = getRestEventsData(self.metaData);
+                  eventsData.then(events => {
+
+                    console.log( self.events )
+                    const allEvents = [...self.events, ...events];
+                    console.log( allEvents );
+
+                    self.events = allEvents;
+
+                    localStorage.removeItem(
+                      'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today()),
+                      JSON.stringify(self.events)
+                    );
+                    localStorage.setItem(
+                      'mrt_' + _CACHE + '_Events-' + month(today()) + "-" + year(today()),
+                      JSON.stringify(self.events)
+                    );
+                    // self.events = events;
+                    const userState = JSON.parse(self.user.state);
+
+                    self.setState({
+                      ...self.metaData,
+                      ...userState,
+                      events: self.events
+                    }, () => self.updateEventData());
+                  });
                 });
+                
               } else {
 
                 const events = JSON.parse(RefLocalStorage_Events);
@@ -172,30 +202,64 @@ class App extends Component {
             self.metaData = JSON.parse(RefLocalStorage_Meta);
 
             if (RefLocalStorage_Events === null) {
-              const eventsData = getEventsData(self.metaData);
 
-              eventsData.then(events => {
+                const eventsData = getFirstEventsData(self.metaData);
+                eventsData.then(events => {
+                  localStorage.removeItem(
+                    'mrt_'+ (_CACHE - 1) +'_Events-' + month(today()) + "-" + year(today()),
+                    JSON.stringify(events)
+                  );
+                  localStorage.setItem(
+                    'mrt_' + _CACHE + '_Events-' + month(today()) + "-" + year(today()),
+                    JSON.stringify(events)
+                  );
+                  self.events = events;
+                  const userState = JSON.parse(self.user.state);
 
-                localStorage.setItem(
-                  'mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()),
-                  JSON.stringify(events)
-                );
+                  self.setState({ 
+                    ...self.metaData,
+                    ...userState,
+                    events: self.events
+                  }, () => self.updateEventData());
 
-                self.events = events;
-                const userState = JSON.parse(self.user.state);
-                // _DEBUG && console.log(userState)
 
-                self.setState({
-                  ...self.metaData,
-                  ...userState,
-                  events: self.events
-                }, () => self.updateEventData());
+                  const eventsData = getRestEventsData(self.metaData);
+                  eventsData.then(events => {
 
-              });
+                    console.log( self.events )
+                    const allEvents = [...self.events, ...events];
+                    console.log( allEvents );
+
+                    self.events = allEvents;
+
+                    localStorage.removeItem(
+                      'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today()),
+                      JSON.stringify(self.events)
+                    );
+                    localStorage.setItem(
+                      'mrt_' + _CACHE + '_Events-' + month(today()) + "-" + year(today()),
+                      JSON.stringify(self.events)
+                    );
+
+                    // self.events = events;
+
+                    const userState = JSON.parse(self.user.state);
+
+                    self.setState({
+                      ...self.metaData,
+                      ...userState,
+                      events: self.events
+                    }, () => self.updateEventData());
+                  });
+                });
+
             } else {
               self.updateEventData();
             }
+
           }
+
+
           // KEEP UPDATING IN THE BACKGROUND
         }
 
@@ -254,6 +318,7 @@ class App extends Component {
       this.stateString = JSON.stringify(configurations);
 
       if (this.stateString.length < _STATE_STRING_MAX_LENGTH ) {
+        localStorage.removeItem('mrt_'+ (_CACHE - 1) +'_State', this.stateString);
         localStorage.setItem('mrt_'+ _CACHE +'_State', this.stateString);
       } else {
         localStorage.removeItem('mrt_'+ _CACHE +'_State');
@@ -336,6 +401,10 @@ class App extends Component {
         }
       });
 
+      localStorage.removeItem(
+        'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today()),
+        JSON.stringify(this.events)
+      );
       localStorage.setItem(
         'mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()),
         JSON.stringify(this.events)
@@ -348,7 +417,7 @@ class App extends Component {
       });
 
       this.setState({refreshing: false});
-      this.updateEventOrder({ sortBy: ['date_modified', 'offer[0]["name"]', 'region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'modified', orderDirection: 'DESCENDING' });
+      // this.updateEventOrder({ sortBy: ['date_modified', 'offer[0]["name"]', 'region[0]["name"]'], orderBy: ["desc", "desc", "desc"], groupByType: 'modified', orderDirection: 'DESCENDING' });
       
     }).then( () => {
 
@@ -562,7 +631,6 @@ class App extends Component {
             {
              this.state.refreshing && 
               <div className="refreshing">
-                <i className="nc-icon-mini arrows-1_refresh-69"></i>
               </div>
             }
 
