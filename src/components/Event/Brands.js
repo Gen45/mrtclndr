@@ -5,6 +5,10 @@ const Brand = (props) => {
     <span className={`brand ${props.brandsInfo[props.brand]["slug"]}${props.editable ? ' editable-field' : ''}${props.selected ? ' selected' : ''} `} title={props.brandsInfo[props.brand]["name"]} 
       onClick={(e) => props.toggleBrand(props.brand, props.event, props.editable)}>
       <img src={props.brandsInfo[props.brand]["image"]} alt={props.brandsInfo[props.brand]["name"]} />
+      {
+        props.editable &&
+        <span className="abrev">{props.brandsInfo[props.brand]["abreviation"]}</span>
+      }
     </span>
   )
 }

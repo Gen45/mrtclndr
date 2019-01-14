@@ -245,6 +245,6 @@ export const prepareEvent = (e, metaData) => {
     status: _status,
     date_created: e.date,
     date_modified: e.modified,
-    activity_log: e.acf.activity_log
+    activity_log: e.acf.activity_log !== undefined && typeof e.acf.activity_log === 'object' ? e.acf.activity_log : {}
   }
 }

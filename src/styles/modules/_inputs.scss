@@ -267,8 +267,9 @@ input.search-box {
     }
 }
 
-// $color-editable: $color-yellow;
 $color-editable: $color-medium-gray;
+// $color-editable: $color-yellow;
+// $color-editable: $color-PORTFOLIO;
 
 .modal .event-info *.editable-field,
 .contact.editable-field,
@@ -503,4 +504,8 @@ $color-editable: $color-medium-gray;
             display: block;
         }
     }
+}
+
+::-webkit-input-placeholder {
+    color: rgba(white, 0.35);
 }

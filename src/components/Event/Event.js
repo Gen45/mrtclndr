@@ -24,8 +24,8 @@ class Event extends Component {
     }
   }
 
-  handleOpenModal = (targetId) => {
-    !this.props.elevated && this.props.handleOpenModal(targetId);
+  handleOpenModal = (targetId, similar) => {
+    (!this.props.elevated || similar) && this.props.handleOpenModal(targetId);
   };
 
   keepEdits = (value, field) => {
@@ -42,7 +42,7 @@ class Event extends Component {
   }
   
   checkSimilarities = () => {
-    let similarCampaignNames = this.props.events.filter(e => stringSimilarity.compareTwoStrings(this.props.event.campaign_name.toLowerCase(), e.campaign_name.toLowerCase()) > 0.95 && e.id !== this.props.event.id );
+    let similarCampaignNames = this.props.events.filter(e => stringSimilarity.compareTwoStrings(this.props.event.campaign_name.toLowerCase(), e.campaign_name.toLowerCase()) > 0.9 && e.id !== this.props.event.id );
     // console.log(similarCampaignNames);
     this.setState({ similar: similarCampaignNames });
   }
@@ -72,10 +72,31 @@ class Event extends Component {
 
     return (
       <div className={eventClassName} onClick={() => {
-        this.handleOpenModal(event['id']);}}
+        this.handleOpenModal(event['id'])}}
         style={isHighLighted() ? HighLightedStyle : {}}
       >
         <div className='event-inner'>
+          {
+            this.state.similar.length > 0 &&
+            <div className='similar'>
+              {
+                <span className="pretext">
+                  {`${this.state.similar.length} similar entr${this.state.similar.length > 1 ? 'ies' : 'y'} found: `}
+                </span>
+              }
+              {
+                this.state.similar.map((s, i) =>
+                  <span className="similar-entry" key={i}
+                    onClick={() => {
+                      this.handleOpenModal(s['id'], true)
+                    }}>
+
+                    {`${removeSearched(s.campaign_name)}`}
+                  </span>
+                )
+              }
+            </div>
+          }
         {
           this.props.view === 'grid' && !this.props.editingBrands &&
             <Header 
@@ -113,23 +134,6 @@ class Event extends Component {
                   </span>
               }
             </div>
-            {
-              this.state.similar.length > 0 &&
-              <div className='similar'>
-                {
-                  <span className="pretext">
-                        {`${this.state.similar.length} similar entr${this.state.similar.length > 1 ? 'ies' : 'y' } found: `}
-                  </span>
-                }
-                {
-                  this.state.similar.map((s, i) =>
-                    <span key={i} onClick={(e) => console.log(s.id)}>
-                      {removeSearched(s.campaign_name)}
-                  </span>
-                  )
-                }
-              </div>
-            }
           {
             this.props.view === 'grid' && !this.props.editable && 
             <div>

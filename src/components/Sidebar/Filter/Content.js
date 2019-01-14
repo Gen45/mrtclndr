@@ -22,7 +22,6 @@ class Content extends Component {
           const filterName = this.props.filters[r]["name"];
           const filterIcon = this.props.filters[r]["icon"] || false;
           const filterImage = this.props.filters[r]["image"] || false;
-          {/* console.log(this.props.filtersList); */}
           const active = this.props.filtersList[this.props.filterName].items ? this.props.filtersList[this.props.filterName].items[r]['active'] : true; //this.props.filters[r]['active'];  
           const color = this.props.filters[r]["color"] || false;
           const labelDot = this.props.labelDot;

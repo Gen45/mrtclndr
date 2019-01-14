@@ -15,7 +15,7 @@ import defaultState from '../config/defaultState.json';
 // import base from '../config/base';
 
 // CONSTANTS
-import { _LOGO, _ISMOBILE, _BACKGROUNDIMAGES, _WP_URL, _CACHE } from '../config/constants';
+import { _LOGO, _ISMOBILE, _BACKGROUNDIMAGES, _WP_URL, _CACHE, _STATE_STRING_MAX_LENGTH, _DEBUG } from '../config/constants';
 
 // HELPERS
 import {getExtreme, getTimeRange, today, month, year, _PREVIOUSYEAR, _CURRENTYEAR} from '../helpers/dates';
@@ -71,14 +71,18 @@ class App extends Component {
 
     const self = this;
 
+    _DEBUG && console.log('calling me');
+
     if (this.auth() !== undefined) {
       axios({
         method: 'get',
         url: _WP_URL + "/wp-json/wp/v2/users/me",
         headers: this.auth(),
       }).then(function (response) {
+
+        // _DEBUG && console.log(response.data.description);
         
-        self.user = { id: response.data.id, role: response.data.roles[0], state: response.data.description !== '' && response.data.description.length < 4000 ? response.data.description : '{}' };
+        self.user = { id: response.data.id, role: response.data.roles[0], state: response.data.description !== '' && response.data.description.length < _STATE_STRING_MAX_LENGTH ? response.data.description : '{}' };
         // self.user = { id: response.data.id, role: response.data.roles[0], state: '{}' };
 
         if (self.readyLoad) {
@@ -105,7 +109,7 @@ class App extends Component {
                   filters[t]['items'] = {};
                 }
 
-                // console.log(data)
+                // _DEBUG && console.log(data)
 
                 for (const i in data[t]) {
                   self.metaData[t][data[t][i].id] = data[t][i];
@@ -134,10 +138,10 @@ class App extends Component {
                   );
                   self.events = events;
 
-                  // console.log(events);
+                  // _DEBUG && console.log(events);
 
                   const userState = JSON.parse(self.user.state);
-                  // console.log(userState)
+                  // _DEBUG && console.log(userState)
 
                   self.setState({ 
                     ...self.metaData,
@@ -145,7 +149,7 @@ class App extends Component {
                     events: self.events
                   }, () => self.updateEventData());
 
-                  // console.log(self.state);
+                  // _DEBUG && console.log(self.state);
                   
                 });
               } else {
@@ -153,7 +157,7 @@ class App extends Component {
                 const events = JSON.parse(RefLocalStorage_Events);
                 self.events = events;
                 const userState = JSON.parse(self.user.state);
-                // console.log(userState)
+                // _DEBUG && console.log(userState)
 
                 self.setState({
                   ...self.metaData,
@@ -179,7 +183,7 @@ class App extends Component {
 
                 self.events = events;
                 const userState = JSON.parse(self.user.state);
-                // console.log(userState)
+                // _DEBUG && console.log(userState)
 
                 self.setState({
                   ...self.metaData,
@@ -197,13 +201,15 @@ class App extends Component {
 
       })
       .catch(function (error) {
-        // console.log('failed', error);
+        // _DEBUG && console.log('failed', error);
       });
     }
   }
 
 
   componentDidUpdate() {
+
+    // _DEBUG && console.log('componentDidUpdate');
 
     const {
       events,
@@ -227,47 +233,54 @@ class App extends Component {
 
     const self = this;
 
-    // console.log(this.events);
+    // _DEBUG && console.log(this.events);
 
 
     configurations['modal'] = { ...this.state.modal, new: false, edit: false};
-    // console.log(configurations);
-    this.stateString = JSON.stringify(configurations);
+    // _DEBUG && console.log(configurations);
 
-    // console.log(this.stateString);
-    // console.log('cambia local state');
-    if (this.stateString.length < 8000 ) {
-      localStorage.setItem('mrt_'+ _CACHE +'_State', this.stateString);
-    } else {
-      localStorage.removeItem('mrt_'+ _CACHE +'_State');
-    }
+    const sameState = this.stateString === JSON.stringify(configurations);
+    
+    
+    if (!sameState) {
 
-    // console.log(this.stateString);
-    this.ready = false;
-
-    // console.log(this.stateString.length);
-
-    axios({
-      method: 'put',
-      url: _WP_URL + "/wp-json/wp/v2/users/" + this.user.id,
-      headers: this.auth(),
-      data: {
-        description: this.stateString.length < 8000 ? this.stateString : ''
-      // description: ''
-      }
-    }).then(function (response) {
-
+      const shareableLink = this.getShareableLink();
+      _DEBUG && console.log(shareableLink);
       
-      // console.log('now it should be ready', self.ready)
-      self.ready = true;
-      // console.log('now it should be ready', self.ready)
 
-      // console.log('success', response);
-      // console.log('success', response.data.description);
-    }).catch(function (error) {
-      // console.log('failed', error);
-    });  
+      // _DEBUG && console.log(this.stateString);
+      _DEBUG && console.log('state changed');
 
+      this.stateString = JSON.stringify(configurations);
+
+      if (this.stateString.length < _STATE_STRING_MAX_LENGTH ) {
+        localStorage.setItem('mrt_'+ _CACHE +'_State', this.stateString);
+      } else {
+        localStorage.removeItem('mrt_'+ _CACHE +'_State');
+      }
+
+      this.ready = false;
+
+      _DEBUG && console.log('calling user', 260);
+
+      axios({
+        method: 'put',
+        url: _WP_URL + "/wp-json/wp/v2/users/" + this.user.id,
+        headers: this.auth(),
+        data: {
+          description: this.stateString.length < _STATE_STRING_MAX_LENGTH ? this.stateString : ''
+        }
+      }).then(function (response) {
+        self.ready = true;
+        // _DEBUG && console.log('success', response.data.description);
+        _DEBUG && console.log('success saving user state online');
+      }).catch(function (error) {
+        _DEBUG && console.log('failed', error);
+      });  
+
+    } else {
+      _DEBUG && console.log('same state');
+    }
   }
 
   componentWillUnmount() {
@@ -290,7 +303,7 @@ class App extends Component {
 
   updateEventData = () => {
 
-    // console.log('updating');
+    // _DEBUG && console.log('updating');
     // this.setState({ready: false});
 
     const self = this;
@@ -301,7 +314,7 @@ class App extends Component {
     
     latestEventsData.then(latestEvents => {
       
-      // console.log(latestEvents)
+      // _DEBUG && console.log(latestEvents)
 
       let RefLocalStorage_Events = localStorage.getItem('mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()));
       let RefLocalStorage_Meta = localStorage.getItem('mrt_'+ _CACHE +'_Meta-' + month(today()) + "-" + year(today()));
@@ -335,7 +348,7 @@ class App extends Component {
       });
 
       this.setState({refreshing: false});
-      this.updateEventOrder({ sortBy: ['date_modified', 'offer[0]["name"]', 'region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'modified', orderBy: ['desc', 'desc', 'desc'], orderDirection: 'DESCENDING' });
+      this.updateEventOrder({ sortBy: ['date_modified', 'offer[0]["name"]', 'region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'modified', orderDirection: 'DESCENDING' });
       
     }).then( () => {
 
@@ -374,15 +387,17 @@ class App extends Component {
   activeFilter = filterType => Object.keys(filterType).filter((f, i) => filterType[f].active === true);
 
   prepareEventList = (events, filter, field) => events.filter(e => {
-    // console.log(e, field, e[field]);
+    // _DEBUG && console.log(e, field, e[field]);
     return e[field].reduce((x, c) => {
-      // console.log(typeof e[field][0], field)
+      // _DEBUG && console.log(typeof e[field][0], field)
       const eventList = x || (this.activeFilter(filter).indexOf(typeof e[field][0] === 'number' ? c.toString() : c.id.toString()) >= 0)
       return eventList
     }, false)
   });
 
   updateEventList = (events, update) => {
+
+    _DEBUG && console.log('updateEventList');
 
     const timeRange = getTimeRange(this.state.time);
     const dayOfTheYear = getExtreme([today()]);
@@ -513,13 +528,13 @@ class App extends Component {
     this.setState({events: currentEvents, modal: {modalEvent: currentEvents.length - 1, show: true, edit: true, new: true}});
   }
   
-  canEdit = (user) => ['editor', 'administrator'].indexOf(user.role) > -1;
+  canEdit = (user) => ['editor', 'author', 'administrator'].indexOf(user.role) > -1;
 
   canCreate = (user) => ['author', 'administrator'].indexOf(user.role) > -1;
 
   render() {
 
-    // console.log(this.state.filtersList);
+    // _DEBUG && console.log(this.state.filtersList);
 
     let time = !_ISMOBILE() ? this.state.time : {...this.state.time, numberOfYears: 1 };
         time = time.Y === (_PREVIOUSYEAR - 1) && (this.state.view === 'timeline' || time.mode !== 'Y') ? {...time, Y: _CURRENTYEAR} : time;
@@ -547,7 +562,7 @@ class App extends Component {
             {
              this.state.refreshing && 
               <div className="refreshing">
-                <i class="nc-icon-mini arrows-1_refresh-69"></i>
+                <i className="nc-icon-mini arrows-1_refresh-69"></i>
               </div>
             }
 
@@ -556,7 +571,10 @@ class App extends Component {
               updateState={this.updateState}
               view={this.state.view}
               groupByType={this.state.order.groupByType}
-              orderDirection={this.state.order.orderDirection} sortBy={this.state.order.sortBy} orderBy={this.state.order.orderBy} vigency={this.state.vigency}
+              orderDirection={this.state.order.orderDirection} 
+              sortBy={this.state.order.sortBy} 
+              orderBy={this.state.order.orderBy}
+              vigency={this.state.vigency}
               updateEventOrder={this.updateEventOrder}
               starred={this.state.starred}
               search={this.state.search}
@@ -610,6 +628,7 @@ class App extends Component {
               ref={(Modal) => {this.ModalRef = Modal}}
               modalPosition={this.state.modal.position}
               handleCloseModal={this.handleCloseModal}
+              handleOpenModal={this.handleOpenModal}
               handleModalNav={this.handleModalNav}
               handleToggleStar={this.handleToggleStar}
               modal={this.state.modal}

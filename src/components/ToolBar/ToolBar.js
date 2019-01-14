@@ -81,7 +81,17 @@ class ToolBar extends Component {
       }
 
       let event = {};
+
+      if (typeof e.activity_log !== 'object') 
+        console.log(e.id, e.campaign_name, typeof e.activity_log);
+
+      // const activity_log = e.activity_log !==
+
+
       event["ID"] = e.id || " ";
+      event["Date Created"] = e.date_created || " ";
+      event["Date Modified"] = e.date_modified || " ";
+      event["Last Modified by"] = e.activity_log.length > 0 ? e.activity_log[e.activity_log.length - 1].activity.user.display_name : " ";
       event["Owner"] = e.owner[0].name || " ";
       event["Owner SubRegion"] = e.region[0].name || " ";
       event["Campaign Group"] = e.campaign_group[0].name || " ";
@@ -93,14 +103,14 @@ class ToolBar extends Component {
       event["Segment"] = e.segment[0].name || " ";
 
       event["Campaign Name"] = e.campaign_name || " ";
-      event["Description"] = e.description || " ";
+      event["Description"] = e.description.replace(/<br \/>/g, '') || " ";
 
       event["Sell Start Date"] = e["dates"]["sell"]["start"] || " ";
       event["Sell End Date"] = e["dates"]["sell"]["end"] || " ";
       event["Stay Start Date"] = e["dates"]["stay"]["start"] || " ";
       event["Stay End Date"] = e["dates"]["stay"]["end"] || " ";
 
-      event["Brand"] = e.brands.map(b => this.props.helpers.brands[b].abreviation).toString().replace(/\,/g, ', ') || " ";
+      event["Brand"] = e.brands.map(b => this.props.helpers.brands[b].abreviation).toString().replace(/,/g, ', ') || " ";
 
       Object.keys(this.props.helpers.channels).forEach(channel => {
         if(channel !== '17' && channel !== '16') {
@@ -217,48 +227,48 @@ class ToolBar extends Component {
 
         { this.state.collapsed && <hr/> }
 
-        <FilterCategory>
-          <TriggerBox title='Sort / Order' icon='nc-icon-mini arrows-2_direction' width={300} renderChildren={true} align='left'>
-            <div className="group">
-              <h4>Sort by</h4>
-              <Trigger propState={this.props.groupByType} propStateValue='modified' icon='nc-icon-outline ui-2_time-clock'
-                payload={() => this.props.updateEventOrder({sortBy: ['date_modified','offer[0]["name"]','region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'modified'})}>
-                MODIFIED
-              </Trigger>
-              <Trigger propState={this.props.groupByType} propStateValue='date' icon='nc-icon-outline ui-1_calendar-57'
-                payload={() => this.props.updateEventOrder({sortBy: ['earliestDay','offer[0]["name"]','region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'date'})}>
-                DATE
-              </Trigger>
-              <Trigger propState={this.props.groupByType} propStateValue='offer' icon='nc-icon-outline ui-1_check-circle-07'
-                payload={() => this.props.updateEventOrder({sortBy: ['offer[0]["name"]','earliestDay','region[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'offer'})}>
-                OFFER
-              </Trigger>
-              <Trigger propState={this.props.groupByType} propStateValue='region' icon='nc-icon-outline travel_world'
-                payload={() => this.props.updateEventOrder({sortBy: ['region[0]["name"]','earliestDay','offer[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'region'})}>
-                REGION
-              </Trigger>
-              <Trigger propState={this.props.groupByType} propStateValue='owner' icon='nc-icon-outline users_circle-09'
-                payload={() => this.props.updateEventOrder({sortBy: ['owner[0]["name"]','earliestDay','offer[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'owner'})}>
-                OWNER
-              </Trigger>
-              <Trigger propState={this.props.groupByType} propStateValue='alpha' icon='nc-icon-outline education_book-39'
-                payload={() => this.props.updateEventOrder({sortBy: ['campaign_name','earliestDay','offer[0]["name"]'], orderBy: this.props.orderBy, groupByType: 'alpha'})}>
-                A-Z
-              </Trigger>
-              <hr/>
-            </div>
+          <FilterCategory>
+            <TriggerBox title="Sort / Order" icon="nc-icon-mini arrows-2_direction" width={300} renderChildren={true} align="left">
+              <div className='group'>
+                <h4>Sort by</h4>
+                <Trigger propState={this.props.groupByType} propStateValue="modified" icon="nc-icon-outline ui-2_time-clock"
+                  payload={() => this.props.updateEventOrder({sortBy: ["date_modified","offer[0]['name']","region[0]['name']"], orderBy: this.props.orderBy, groupByType: "modified"})}>
+                  MODIFIED
+                </Trigger>
+                <Trigger propState={this.props.groupByType} propStateValue="date" icon="nc-icon-outline ui-1_calendar-57"
+                  payload={() => this.props.updateEventOrder({sortBy: ["earliestDay","offer[0]['name']","region[0]['name']"], orderBy: this.props.orderBy, groupByType: "date"})}>
+                  DATE
+                </Trigger>
+                <Trigger propState={this.props.groupByType} propStateValue="offer" icon="nc-icon-outline ui-1_check-circle-07"
+                  payload={() => this.props.updateEventOrder({sortBy: ["offer[0]['name']","earliestDay","region[0]['name']"], orderBy: this.props.orderBy, groupByType: "offer"})}>
+                  OFFER
+                </Trigger>
+                <Trigger propState={this.props.groupByType} propStateValue="region" icon="nc-icon-outline travel_world"
+                  payload={() => this.props.updateEventOrder({sortBy: ["region[0]['name']","earliestDay","offer[0]['name']"], orderBy: this.props.orderBy, groupByType: "region"})}>
+                  REGION
+                </Trigger>
+                <Trigger propState={this.props.groupByType} propStateValue="owner" icon="nc-icon-outline users_circle-09"
+                  payload={() => this.props.updateEventOrder({sortBy: ["owner[0]['name']","earliestDay","offer[0]['name']"], orderBy: this.props.orderBy, groupByType: "owner"})}>
+                  OWNER
+                </Trigger>
+                <Trigger propState={this.props.groupByType} propStateValue="alpha" icon="nc-icon-outline education_book-39"
+                  payload={() => this.props.updateEventOrder({sortBy: ["campaign_name","earliestDay","offer[0]['name']"], orderBy: this.props.orderBy, groupByType: "alpha"})}>
+                  A-Z
+                </Trigger>
+                <hr/>
+              </div>
 
-            <h4>Order by</h4>
-            <Trigger propState={this.props.orderDirection} propStateValue='ASCENDING' icon='nc-icon-mini arrows-1_small-triangle-up'
-              payload={() => this.props.updateEventOrder({sortBy: this.props.sortBy, orderBy: ['asc','asc','asc'], orderDirection: 'ASCENDING'})}>
-              ASCENDING
-            </Trigger>
-            <Trigger propState={this.props.orderDirection} propStateValue='DESCENDING' icon='nc-icon-mini arrows-1_small-triangle-down'
-              payload={() => this.props.updateEventOrder({sortBy: this.props.sortBy, orderBy: ['desc','desc','desc'], orderDirection: 'DESCENDING'})}>
-              DESCENDING
-            </Trigger>
-          </TriggerBox>
-        </FilterCategory>
+              <h4>Order by</h4>
+              <Trigger propState={this.props.orderDirection} propStateValue="ASCENDING" icon="nc-icon-mini arrows-1_small-triangle-up"
+                payload={() => this.props.updateEventOrder({sortBy: this.props.sortBy, orderBy: ["asc","asc","asc"], orderDirection: "ASCENDING"})}>
+                ASCENDING
+              </Trigger>
+              <Trigger propState={this.props.orderDirection} propStateValue="DESCENDING" icon="nc-icon-mini arrows-1_small-triangle-down"
+                payload={() => this.props.updateEventOrder({sortBy: this.props.sortBy, orderBy: ["desc","desc","desc"], orderDirection: "DESCENDING"})}>
+                DESCENDING
+              </Trigger>
+            </TriggerBox>
+          </FilterCategory>
 
         { this.state.collapsed && <hr/> }
 

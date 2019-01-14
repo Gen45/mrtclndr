@@ -65,9 +65,29 @@ $modal-nav-height: 50px;
             justify-content: center;
             align-items: center;
             height: $modal-nav-height;
-            width: $modal-nav-height;
+            min-width: $modal-nav-height;
             padding: 0;
             font-size: 1em;
+            // border: 1px solid transparent;
+            // border-radius: 25px;
+            
+            &:hover {
+                // border: 1px solid darken($color-accent, 5%);
+                opacity: 0.9;
+            }
+
+            span.text {
+                font-size: 13px;
+                padding-right: $padding;
+                line-height: 1;
+                margin-left: -$padding/2;
+                padding-left: $padding/4;
+            }
+
+            i {
+                min-width: 50px;
+                text-align: center;
+            }
 
             // border-radius: $modal-nav-height/2;
             cursor: pointer;
@@ -136,10 +156,10 @@ $modal-nav-height: 50px;
     .activity {
         // display: flex;
         // justify-content: center;
-        padding: $padding / 4;
+        padding: $padding / 8;
 
         &:not(:last-child()) {
-            border-bottom: 1px solid $color-lightest-gray;
+            // border-bottom: 1px solid $color-lightest-gray;
         }
 
         span {

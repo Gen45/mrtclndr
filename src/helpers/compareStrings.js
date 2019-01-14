@@ -60,9 +60,9 @@ function findBestMatch(mainString, targetStrings) {
   return { ratings, bestMatch, bestMatchIndex };
 }
 
-function flattenDeep(arr) {
-  return Array.isArray(arr) ? arr.reduce((a, b) => a.concat(flattenDeep(b)), []) : [arr];
-}
+// function flattenDeep(arr) {
+//   return Array.isArray(arr) ? arr.reduce((a, b) => a.concat(flattenDeep(b)), []) : [arr];
+// }
 
 function areArgsValid(mainString, targetStrings) {
   if (typeof mainString !== 'string') return false;
@@ -72,13 +72,13 @@ function areArgsValid(mainString, targetStrings) {
   return true;
 }
 
-function letterPairs(str) {
-  const pairs = [];
-  for (let i = 0, max = str.length - 1; i < max; i++) pairs[i] = str.substring(i, i + 2);
-  return pairs;
-}
+// function letterPairs(str) {
+//   const pairs = [];
+//   for (let i = 0, max = str.length - 1; i < max; i++) pairs[i] = str.substring(i, i + 2);
+//   return pairs;
+// }
 
-function wordLetterPairs(str) {
-  const pairs = str.toUpperCase().split(' ').map(letterPairs);
-  return flattenDeep(pairs);
-}
+// function wordLetterPairs(str) {
+//   const pairs = str.toUpperCase().split(' ').map(letterPairs);
+//   return flattenDeep(pairs);
+// }

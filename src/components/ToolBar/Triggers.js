@@ -63,12 +63,15 @@ export class Trigger extends Component {
           !this.props.disabled &&
           <Tooltip title={this.props.caption} trigger="mouseenter" delay={500} arrow={true} distance={5} theme="light" size="big" disabled={!this.props.caption}>
             <a className={`${triggerClass} ${active}`} onClick={() => this.handleClick(this.props.payload)}>
-              <i className={icon} /> 
-                { this.props.children &&
-                  <span className="trigger-box-title">  
-                    {this.props.children}
-                  </span>
-                }
+              <i className={icon} />
+              {this.props.text &&
+                <span className="text">{this.props.text}</span>
+              }
+              { this.props.children &&
+                <span className="trigger-box-title">  
+                  {this.props.children}
+                </span>
+              }
             </a>
           </Tooltip>
         }
