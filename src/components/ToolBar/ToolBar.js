@@ -332,7 +332,7 @@ class ToolBar extends Component {
           {
             this.props.search.active &&
             <div className="searchInput" >
-              <input type="text" placeholder="Enter keywords" value={this.props.search.term} onChange={e => this.handleSearchTerm(e.target.value)} />
+              <input type="text" placeholder="Filter by keyword" value={this.props.search.term} onChange={e => this.handleSearchTerm(e.target.value)} />
               <div className="erase" onClick={() => this.handleSearchTerm('')}><i className="nc-icon-mini ui-1_simple-remove" onClick={() => this.handleSearchTerm('')} /></div>
             </div>
           }

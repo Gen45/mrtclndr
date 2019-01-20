@@ -15,7 +15,7 @@ class Header extends Component {
         <div className="logo">
           <img src={_LOGO.URL} alt={_LOGO.ALT}/>
         </div>
-        <h1 className="title">Calendar</h1>
+        {/* <h1 className="title">2019</h1> */}
         {
           this.props.canCreate && 
           <a className="addEntry" onClick={this.props.addEntry}>

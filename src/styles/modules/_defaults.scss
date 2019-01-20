@@ -57,10 +57,12 @@ textarea:focus, input:focus, button:focus{
     }
     input {
         padding: 20px;
+        &[type="text"],
         &[type="password"] {
             border: none !important;
             border-bottom: solid 2px $color-medium-gray !important;
         }
+
     }
     input, button {
         margin-left: 0;
@@ -77,13 +79,21 @@ textarea:focus, input:focus, button:focus{
         }
     }
     button {
+        // display: flex;
+        justify-content: center;
+        align-items: center;
         // border: none;
         margin-left: 0;
         width: 50px;
         transform: translate(0,2px);
         border-radius: 50%;
+        padding: 0;
 
         cursor: pointer;
+        i {
+            line-height: 46px;
+            font-size: 16px;
+        }
         &:hover {
         	border-color: $color-light-gray;
         }
@@ -93,3 +103,17 @@ textarea:focus, input:focus, button:focus{
     }
 
 }
+
+/* Change Autocomplete styles in Chrome*/
+// input:-webkit-autofill,
+// input:-webkit-autofill:hover, 
+// input:-webkit-autofill:focus
+// textarea:-webkit-autofill,
+// textarea:-webkit-autofill:hover
+// textarea:-webkit-autofill:focus,
+// select:-webkit-autofill,
+// select:-webkit-autofill:hover,
+// select:-webkit-autofill:focus {
+//     background-color: none !important;
+
+// }

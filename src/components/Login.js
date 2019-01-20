@@ -8,7 +8,8 @@ import { today } from '../helpers/dates';
 class Login extends Component {
 
   state = {
-    error: false
+    error: false,
+    loading: false
   }
 
   componentDidMount(){
@@ -25,6 +26,9 @@ class Login extends Component {
   }
 
   login = (e) => {
+
+    this.setState({loading: true});
+
     e.preventDefault();
 
     const self = this;
@@ -39,6 +43,8 @@ class Login extends Component {
       url: _WP_URL + "/wp-json/jwt-auth/v1/token/",
       data: auth
     }).then(function (response) {
+
+      
       
       if(response.status === 200){
 
@@ -50,11 +56,11 @@ class Login extends Component {
         self.props.history.push(self.from.path, { isAuthenticated: true, key });
 
       } else {
-        self.setState({error : true});
+        self.setState({error: true, loading: false});
       }
 
     }).catch(function (error) {
-      self.setState({ error: true });
+      self.setState({ error: true, loading: false });
       // console.log('failed', error);
     });
   };
@@ -70,11 +76,19 @@ class Login extends Component {
       <form onSubmit={(e) => this.login(e)}>
           <input ref={(input) => this.username = input} placeholder="User Name" type="text" name="Username" autoComplete="Username" />
           <input ref={(input) => this.passCode = input} placeholder="Password" type="password" name="code" autoComplete="passCode" />
-        <button type="submit" className={this.state.error === true ? 'error' : ''}>
-          <i className="nc-icon-outline arrows-1_tail-right"></i>
-        </button>
+            <button type="submit" className={this.state.error === true ? 'error' : ''}>
+          {
+            !this.state.loading 
+            ?
+              <i className="nc-icon-outline arrows-1_tail-right"></i>
+            :
+              <i className="nc-icon-outline arrows-1_refresh-69 circle-anim"></i>
+
+          }
+            </button>
+
           <p style={{paddingTop: 20}}>{this.state.error ? 'Invalid information, please try again.' : <br/>}</p>
-          <p><a target="_blank" href="http://admin.marriottcalendar.com/wp-login.php?action=lostpassword" style={{color:'white',fontSize:12}}>Lost your Password?</a></p>
+          <p><a target="_blank" rel="noopener" href="http://admin.marriottcalendar.com/wp-login.php?action=lostpassword" style={{color:'white',fontSize:12}}>Lost your Password?</a></p>
       </form>
     </div>)
   }

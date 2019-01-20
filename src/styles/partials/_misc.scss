@@ -188,6 +188,10 @@ span.flatpickr-weekday {
     }
 }
 
+.circle-anim {
+    animation: circle-anim 2s ease infinite;
+}
+
 @keyframes up_down {
     0% {
         transform: scale(1.05) translate(2%, 0);
@@ -207,5 +211,20 @@ span.flatpickr-weekday {
 
     100% {
         transform: scale(1.05) translate(2%, 0);
+    }
+}
+
+@keyframes circle-anim {
+    0% {
+        transform: rotate(0);
+    }
+
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg)
     }
 }

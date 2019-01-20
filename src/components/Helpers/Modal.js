@@ -290,7 +290,8 @@ class Modal extends Component {
 
                 <span className={`modal-handle ${handle}`}></span>      
 
-                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_check' text={this.state.saving ? this.state.savingMessage : 'Save'} 
+                <Trigger triggerClass="modal-nav-trigger" icon={this.state.saving ? 'nc-icon-outline arrows-1_refresh-69 circle-anim' : 'nc-icon-mini ui-1_check'}
+                 text={this.state.saving ? this.state.savingMessage : 'Save'} 
                   disabled={!this.state.edit || this.state.editingBrands || this.state.editingChannels}
                   payload={() => this.saveChanges(this.props.events[this.props.modal.modalEvent].id)} />
                   
