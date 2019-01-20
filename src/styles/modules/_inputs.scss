@@ -12,6 +12,7 @@
     }
 
     input + label {
+        white-space: nowrap;
         position: relative;
         display: inline-block;
         font-size: 10px;
@@ -96,8 +97,6 @@ input:checked + label {
 
     .brand-filters & {}
 }
-
-
 
 input.search-box {
     width: 100%;
@@ -268,10 +267,12 @@ input.search-box {
 }
 
 $color-editable: $color-medium-gray;
+
 // $color-editable: $color-yellow;
 // $color-editable: $color-PORTFOLIO;
 
 .modal .event-info *.editable-field,
+.tippy-tooltip-content *.editable-field,
 .contact.editable-field,
 .brand.editable-field,
 .channel.editable-field,
@@ -298,6 +299,17 @@ $color-editable: $color-medium-gray;
     &.selected {
         background: rgba(lighten($color-lightest-gray, 15%), 0.25) !important;
     }
+}
+
+.tag.editable-field {
+    // max-width: 49%;
+    // width: 49%;
+    min-width: 25%;
+
+    // &.region,
+    // &.market_scope,
+    // &.segment {
+    // }
 }
 
 .other-channels.editable-field {
@@ -381,7 +393,6 @@ $color-editable: $color-medium-gray;
         content: "Campaign Name";
     }
 }
-
 
 .add-brand,
 .edit-channels {
@@ -506,6 +517,7 @@ $color-editable: $color-medium-gray;
     }
 }
 
-::-webkit-input-placeholder {
+:not(.editable-field)::-webkit-input-placeholder,
+.editable-field.other-channels::-webkit-input-placeholder {
     color: rgba(white, 0.35);
 }

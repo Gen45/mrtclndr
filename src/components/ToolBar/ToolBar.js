@@ -10,7 +10,7 @@ import Pagination from './Pagination';
 import {FiltersGroup, FilterCategory, Header} from './Filters';
 import {TriggerBox, Trigger} from './Triggers';
 
-import {getCoordinates} from '../../helpers/misc';
+import { getCoordinates, removeSearched} from '../../helpers/misc';
 
 import {_MONTHS, _QUARTERS, _THREEYEARS, _PREVIOUSYEAR, _CURRENTYEAR, _TIMELIMITS} from '../../helpers/dates';
 import {_ISMOBILE, _TRANSITIONTIME} from '../../config/constants';
@@ -97,13 +97,14 @@ class ToolBar extends Component {
       event["Campaign Group"] = e.campaign_group[0].name || " ";
       event["Market Scope"] = e.market_scope[0].name || " ";
       event["Destination - Featured Market"] = e.featured_market[0].name || " ";
+      event["Markets more"] = e.market_more || " ";
       event["Ongoing Campaign"] = e.ongoing ? "yes" : "no" || " ";
       event["Program Type"] = e.program_type[0].name || " ";
       event["Offer"] = e.offer[0].name || " ";
       event["Segment"] = e.segment[0].name || " ";
 
-      event["Campaign Name"] = e.campaign_name || " ";
-      event["Description"] = e.description.replace(/<br \/>/g, '') || " ";
+      event["Campaign Name"] = removeSearched(e.campaign_name.replace(/<br \/>/g, '')) || " ";
+      event["Description"] = removeSearched(e.description.replace(/<br \/>/g, '')) || " ";
 
       event["Sell Start Date"] = e["dates"]["sell"]["start"] || " ";
       event["Sell End Date"] = e["dates"]["sell"]["end"] || " ";
@@ -119,6 +120,8 @@ class ToolBar extends Component {
       });
 
       event["Other Channels"] = e.otherChannels || " ";
+      event["LANDING PAGE URL"] = e.landing_page_url || " ";
+      event["CREATIVE URL"] = e.creative_url || " ";
 
       return event;
     });
@@ -147,7 +150,7 @@ class ToolBar extends Component {
       <FiltersGroup ref={FiltersGroup => this.mainFiltersGroupRef = FiltersGroup}
         title='Settings' icon='nc-icon-mini ui-1_settings-gear-65' disabled={false} collapsed={this.state.collapsed } >
         <FilterCategory>
-          <TriggerBox title='Time Frame' icon='nc-icon-mini ui-1_calendar-60' width={270} renderChildren={true} align='left'>
+          <TriggerBox title='Time Frame' icon='nc-icon-mini ui-1_calendar-60' width={270} renderChildren={true} align='left' showTitle={false}>
             <div className='group'>
               <h4>MODE</h4>
               <Trigger propState={this.props.time.mode} propStateValue='Y'
@@ -282,11 +285,11 @@ class ToolBar extends Component {
                 Share Link
               </Trigger>
 
-              <CSVLink className="nav-trigger" filename={"marriott-calendar-all-entries" + new Date().getTime() +".csv"} target="_blank" data={this.format2CSV(this.props.allEvents)} style={{textDecoration: "none"}}>
+              <CSVLink target="_self" className="nav-trigger" filename={"marriott-calendar-all-entries" + new Date().getTime() +".csv"} data={this.format2CSV(this.props.allEvents)} style={{textDecoration: "none"}}>
                 <span className="trigger-box-title" > All entries </span>
               </CSVLink>
 
-              <CSVLink className="nav-trigger" filename={"marriott-calendar-" + new Date().getTime() +".csv"} target="_blank" data={this.format2CSV(this.props.events)} style={{textDecoration: "none"}}>
+              <CSVLink target="_self" className="nav-trigger" filename={"marriott-calendar-" + new Date().getTime() +".csv"} data={this.format2CSV(this.props.events)} style={{textDecoration: "none"}}>
                 <span className="trigger-box-title" > Filtered entries </span>
               </CSVLink>
 
@@ -335,6 +338,14 @@ class ToolBar extends Component {
           }
         </FilterCategory>
       </FiltersGroup>
+
+      <FiltersGroup title=' 'disabled={false}>
+        <FilterCategory>
+            <Trigger caption='Help' icon='nc-icon-mini ui-2_alert'
+              payload={() => window.open('https://www.useloom.com/share/folder/a7e80fc335b042fb90b24a8dfb3b672c', '_blank')}/>
+        </FilterCategory>
+      </FiltersGroup>
+
     </Header>
     )
   }

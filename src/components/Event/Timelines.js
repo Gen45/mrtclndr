@@ -46,12 +46,13 @@ export class Timeline extends Component {
     const color = this.props.color;
 
     return (<div className={`timeline-wrapper${this.timeline2(this.props.multidate)}`}>
-      <div className={`event-timeline${this.oneMonth(dates)}${this.dotted(dates)}`.trim()}
+      <div className={`event-timeline${this.oneMonth(dates)}${this.dotted(this.props.dates)}`.trim()}
         style={{
           // left: this.getLineStart(dates.start, Y, timespan) + '%',
           left: this.getLineStart(add(dates.start, -offset, 'months'), Y, timespan) + '%',
           width: this.getLineWidth(dates, Y, timespan) + '%',
-          backgroundColor: color
+          backgroundColor: this.dotted(this.props.dates) !== '' ? 'transparent' : color,
+          borderColor: this.dotted(this.props.dates) === '' ? 'transparent' : color,
         }}>
         <Dot position='start' date={dates.start} color={color}/>
         <Dot position='end' date={dates.end} color={color}/>

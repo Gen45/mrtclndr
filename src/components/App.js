@@ -157,9 +157,9 @@ class App extends Component {
                   const eventsData = getRestEventsData(self.metaData);
                   eventsData.then(events => {
 
-                    console.log( self.events )
+                    // console.log( self.events )
                     const allEvents = [...self.events, ...events];
-                    console.log( allEvents );
+                    // console.log( allEvents );
 
                     self.events = allEvents;
 
@@ -568,17 +568,22 @@ class App extends Component {
     this.setState({modal:{ ...OpenModal(targetId, this.state.events)}});
   }
 
+  isStarred = (id) => {
+    return this.state.starred.items.indexOf(id) > -1;
+  }
+
   addEntry = () => {
 
     let currentEvents = this.state.events;
 
     const newEvent= { 
       id: Date.now(),
-      campaign_name: 'Campaign Name',
-      description: 'Description',
+      campaign_name: "",
+      description: "",
       region: [{id:0, name: 'select', color: '#222'}],
       offer: [{id:0, name: 'select', color: '#222'}],
       featured_market: [{id:0, name: 'select'}], 
+      market_more: "", 
       market_scope: [{ id: 437, name: 'select'}], 
       campaign_group: [{id:0, name: 'select'}], 
       program_type: [{id:0, name: 'select'}], 
@@ -588,8 +593,8 @@ class App extends Component {
       channels: [],
       other_channels: "",
       dates: {
-        sell: { start: today(), end: today()},
-        stay: { start: today(), end: today()}
+        sell: { start: "", end: ""},
+        stay: { start: "", end: ""}
       }
     };
 
@@ -671,12 +676,11 @@ class App extends Component {
                   view={this.state.view}
                   handleOpenModal={this.handleOpenModal}
                   time={time}
-                  //modalEventId={isValid(this.state.modal.modalEvent) ? this.state.events[this.state.modal.modalEvent].id : null}
                   modalEventId={isValid(this.state.events[this.state.modal.modalEvent]) ? this.state.events[this.state.modal.modalEvent].id : null}
-                  //modal={this.state.modal}
                   modal={isValid(this.state.events[this.state.modal.modalEvent]) ? this.state.modal : {show: false}}
                   brandsInfo={this.state.brands}
                   channelsInfo={this.state.channels}
+                  isStarred={this.isStarred}
                 /> :
                 <Loading>
                   <span>
@@ -719,6 +723,7 @@ class App extends Component {
               canEdit={this.canEdit(this.user)}
               userId={this.user.id}
               brandGroups={this.state.brand_groups}
+              isStarred={this.isStarred}
             />
           }
         </div>

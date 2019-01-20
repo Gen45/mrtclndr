@@ -48,9 +48,9 @@
             flex-direction: column;
             justify-content: space-between;
 
-            .similar {
+            .warning {
                 text-align: center;
-                background: rgba(darken($color-accent, 30%), 0.9);
+                background: rgba(darken($color-accent, 10%), 0.9);
                 color: $color-white;
 
                 // color: $color-accent;
@@ -61,7 +61,7 @@
 
                 span.pretext {
                     display: block;
-                    font-size: 10px;
+                    font-size: 11px;
                 }
 
                 .similar-entry {
@@ -239,6 +239,12 @@
             justify-content: center;
             flex-wrap: wrap;
 
+            & > div > div {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
             .brand {
                 display: flex;
                 justify-content: flex-start;
@@ -295,6 +301,14 @@
             // top: $event-card-header + $padding/3;
             width: 100%;
             z-index: 10;
+
+            &.problem{
+                color: $color-accent !important;
+                .flatpickr-input {
+                    color: $color-accent !important;
+                    background: rgba($color-accent, 0.1) !important;
+                }
+            }
 
             .end,
             .start {
@@ -674,4 +688,5 @@
 
 .editable .brands {
     // background: $color-light-gray !important;
+
 }

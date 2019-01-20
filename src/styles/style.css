@@ -294,7 +294,7 @@ textarea:focus, input:focus, button:focus {
       height: 0; }
     .sidebar .filter footer {
       box-shadow: inset 0 2px 2px rgba(43, 43, 43, 0.3);
-      width: 320px;
+      width: calc(300px + 20px);
       margin-left: -10px;
       background: rgba(51, 51, 51, 0.2);
       height: 0;
@@ -312,7 +312,7 @@ textarea:focus, input:focus, button:focus {
   .collapsed .sidebar > header {
     background: #1f1f1f;
     border-radius: 50px 0 0 50px;
-    width: 400px;
+    width: calc(300px + 100px);
     transform: translateX(-125px); }
     @media only screen and (max-width: 679px) {
       .collapsed .sidebar > header {
@@ -1084,24 +1084,24 @@ body.activity-type .activity-type-group {
       display: flex;
       flex-direction: column;
       justify-content: space-between; }
-      .grid-view .event .event-inner .similar {
+      .grid-view .event .event-inner .warning {
         text-align: center;
-        background: rgba(87, 8, 28, 0.9);
+        background: rgba(181, 16, 59, 0.9);
         color: #ffffff;
         padding: 5px;
         line-height: 1.2;
         font-size: 90%;
         letter-spacing: 0.05px; }
-        .grid-view .event .event-inner .similar span.pretext {
+        .grid-view .event .event-inner .warning span.pretext {
           display: block;
-          font-size: 10px; }
-        .grid-view .event .event-inner .similar .similar-entry {
+          font-size: 11px; }
+        .grid-view .event .event-inner .warning .similar-entry {
           font-size: 12px;
           display: inline-block;
           white-space: nowrap;
           text-decoration: underline;
           margin: 0 2.5px; }
-          .grid-view .event .event-inner .similar .similar-entry:hover {
+          .grid-view .event .event-inner .warning .similar-entry:hover {
             opacity: 0.9; }
     .grid-view .event .event-channels {
       background: inherit; }
@@ -1212,6 +1212,10 @@ body.activity-type .activity-type-group {
       align-items: center;
       justify-content: center;
       flex-wrap: wrap; }
+      .grid-view .event .brands > div > div {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; }
       .grid-view .event .brands .brand {
         display: flex;
         justify-content: flex-start;
@@ -1251,6 +1255,11 @@ body.activity-type .activity-type-group {
       top: 6.66667px;
       width: 100%;
       z-index: 10; }
+      .grid-view .event .event-dates.problem {
+        color: #e4144a !important; }
+        .grid-view .event .event-dates.problem .flatpickr-input {
+          color: #e4144a !important;
+          background: rgba(228, 20, 74, 0.1) !important; }
       .grid-view .event .event-dates .end,
       .grid-view .event .event-dates .start {
         position: absolute;
@@ -1512,7 +1521,7 @@ body.activity-type .activity-type-group {
     height: auto;
     position: relative;
     display: block;
-    min-width: 460px; }
+    min-width: 610px; }
     @media screen and (max-width: 940px) {
       .modal .modal-content {
         width: 100vw;
@@ -1554,12 +1563,14 @@ body.activity-type .activity-type-group {
   .modal .event {
     position: relative;
     width: 100% !important;
-    max-width: 500px;
+    max-width: 650px;
     overflow: hidden;
     height: auto;
     border-radius: 0;
     margin: 5px;
     margin-top: 0; }
+    .modal .event .event-inner .event-info {
+      min-height: 370px; }
     @media screen and (max-width: 940px) {
       .modal .event {
         margin: 0;
@@ -1802,6 +1813,7 @@ span.flatpickr-weekday {
   .filter-tag input[type=checkbox], .filter-tag input[type=radio] {
     display: none; }
   .filter-tag input + label {
+    white-space: nowrap;
     position: relative;
     display: inline-block;
     font-size: 10px;
@@ -1968,6 +1980,7 @@ input.search-box {
     min-width: 100%; }
 
 .modal .event-info *.editable-field,
+.tippy-tooltip-content *.editable-field,
 .contact.editable-field,
 .brand.editable-field,
 .channel.editable-field,
@@ -1984,6 +1997,8 @@ input.search-box {
   border-radius: 4px; }
   .modal .event-info *.editable-field:focus,
   .modal .event-info *.editable-field .flatpickr-input.active,
+  .tippy-tooltip-content *.editable-field:focus,
+  .tippy-tooltip-content *.editable-field .flatpickr-input.active,
   .contact.editable-field:focus,
   .contact.editable-field .flatpickr-input.active,
   .brand.editable-field:focus,
@@ -1999,12 +2014,16 @@ input.search-box {
     box-shadow: 0 0 30px 0 rgba(102, 102, 102, 0.3), inset 0 0 0 1px rgba(67, 153, 196, 0.5) !important;
     background: rgba(255, 255, 255, 0.15) !important; }
   .modal .event-info *.editable-field.selected,
+  .tippy-tooltip-content *.editable-field.selected,
   .contact.editable-field.selected,
   .brand.editable-field.selected,
   .channel.editable-field.selected,
   .event-channels .editable-field.selected,
   *.flatpickr-input.selected {
     background: rgba(255, 255, 255, 0.25) !important; }
+
+.tag.editable-field {
+  min-width: 25%; }
 
 .other-channels.editable-field {
   color: #ffffff; }
@@ -2165,7 +2184,8 @@ input.search-box {
       background: #404040;
       display: block; }
 
-::-webkit-input-placeholder {
+:not(.editable-field)::-webkit-input-placeholder,
+.editable-field.other-channels::-webkit-input-placeholder {
   color: rgba(255, 255, 255, 0.35); }
 
 .icon {

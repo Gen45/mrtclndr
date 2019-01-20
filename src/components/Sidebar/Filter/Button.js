@@ -45,7 +45,13 @@ class Button extends Component {
           <label htmlFor={`filter-${filter}`} style={putColor(color)} >
             {labelDot && <span className='label-dot' style={{backgroundColor: color}}/> }
             {filterIcon && <i className={filterIcon} />}{" "}
-            {filterImage ? <img src={filterImage} alt={filterName}/> : `${filterName.toUpperCase()}`}
+            {filterImage 
+              ? 
+              <img src={filterImage} alt={filterName}/> 
+              : 
+              //`${filterName.toUpperCase()} (${this.props.count})`
+              `${filterName.toUpperCase()}`
+            }
           </label>
         </span>
       </Tooltip>

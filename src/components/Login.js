@@ -74,6 +74,7 @@ class Login extends Component {
           <i className="nc-icon-outline arrows-1_tail-right"></i>
         </button>
           <p style={{paddingTop: 20}}>{this.state.error ? 'Invalid information, please try again.' : <br/>}</p>
+          <p><a target="_blank" href="http://admin.marriottcalendar.com/wp-login.php?action=lostpassword" style={{color:'white',fontSize:12}}>Lost your Password?</a></p>
       </form>
     </div>)
   }

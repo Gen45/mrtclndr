@@ -1,15 +1,29 @@
 import React, {Component} from 'react';
+import { Tooltip } from 'react-tippy';
+
 
 const Brand = (props) => {
+
   return (
-    <span className={`brand ${props.brandsInfo[props.brand]["slug"]}${props.editable ? ' editable-field' : ''}${props.selected ? ' selected' : ''} `} title={props.brandsInfo[props.brand]["name"]} 
-      onClick={(e) => props.toggleBrand(props.brand, props.event, props.editable)}>
-      <img src={props.brandsInfo[props.brand]["image"]} alt={props.brandsInfo[props.brand]["name"]} />
-      {
-        props.editable &&
-        <span className="abrev">{props.brandsInfo[props.brand]["abreviation"]}</span>
-      }
-    </span>
+    <Tooltip 
+      title={props.brandsInfo[props.brand]["name"]}
+      trigger="mouseenter"
+      delay={200}
+      arrow={true}
+      distance={30}
+      theme="light"
+      size="big"
+      position="bottom"
+    >
+      <span className={`brand ${props.brandsInfo[props.brand]["slug"]}${props.editable ? ' editable-field' : ''}${props.selected ? ' selected' : ''} `} 
+        onClick={(e) => props.toggleBrand(props.brand, props.event, props.editable)}>
+        <img src={props.brandsInfo[props.brand]["image"]} alt={props.brandsInfo[props.brand]["name"]} />
+        {
+          props.editable &&
+          <span className="abrev">{props.brandsInfo[props.brand]["abreviation"]}</span>
+        }
+      </span>
+    </Tooltip>
   )
 }
 
@@ -24,22 +38,22 @@ class Brands extends Component {
   toggleBrand = (id, event, editable) => {
     if (editable) {
       const index = event.brands.indexOf(id);
-      console.log(event.brands);
+      // console.log(event.brands);
       if (index > -1) {
         event.brands.splice(index, 1);
       } else {
         event.brands.push(id);
       }
-      console.log(event.brands);
+      // console.log(event.brands);
       this.setState({change: true});
     }
   }
 
   handlePreset = (id, event) => {
-    console.log(event.brands);
+    // console.log(event.brands);
     event.brands.length = 0;
     event.brands.push(...this.props.brandGroups[id].brands);
-    console.log(event.brands);
+    // console.log(event.brands);
     this.setState({ change: true });
   }
 

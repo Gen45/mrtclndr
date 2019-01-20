@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Tooltip} from 'react-tippy';
 import TextareaAutosize from 'react-autosize-textarea';
+import { Scrollbars } from 'react-custom-scrollbars';
 import Select from 'react-select';
 // import stringSimilarity from 'string-similarity';
 import stringSimilarity from '../../helpers/compareStrings';
@@ -10,7 +11,7 @@ import Brands from './Brands';
 import Dates from './Dates';
 import Timelines from './Timelines';
 
-import {isMultidate, getExtreme, today} from '../../helpers/dates';
+import {isMultidate, getExtreme, today, compareDates} from '../../helpers/dates';
 import {isValid, removeSearched} from '../../helpers/misc';
 
 import {_COLORS} from '../../config/constants';
@@ -29,11 +30,12 @@ class Event extends Component {
   };
 
   keepEdits = (value, field) => {
+    // console.log(this.props.event);
     if (field === 'campaign_name') {
       this.checkSimilarities();
     }
     this.props.event[field] = value;
-    this.setState({changed: true });
+    this.setState({changed: true});
   }
   
   cleanFilterInfo = (filterInfo) => {
@@ -77,8 +79,8 @@ class Event extends Component {
       >
         <div className='event-inner'>
           {
-            this.state.similar.length > 0 &&
-            <div className='similar'>
+            this.state.similar.length > 0 && !this.props.editable &&
+            <div className='warning'>
               {
                 <span className="pretext">
                   {`${this.state.similar.length} similar entr${this.state.similar.length > 1 ? 'ies' : 'y'} found: `}
@@ -97,6 +99,29 @@ class Event extends Component {
               }
             </div>
           }
+
+          {
+            !compareDates(this.props.event.dates.stay.end, this.props.event.dates.stay.start) && this.props.view !== 'timeline' && 
+            <div className='warning'>
+              {
+                <span className="pretext">
+                  Problem with date: STAY END DATE CANNOT BE LOWER THAN STAY START DATE
+                </span>
+              }
+            </div>
+          }
+
+          {
+            !compareDates(this.props.event.dates.sell.end, this.props.event.dates.sell.start) && this.props.view !== 'timeline' && 
+            <div className='warning'>
+              {
+                <span className="pretext">
+                  Problem with date: SELL END DATE CANNOT BE LOWER THAN SELL START DATE
+                </span>
+              }
+            </div>
+          }
+
         {
           this.props.view === 'grid' && !this.props.editingBrands &&
             <Header 
@@ -109,6 +134,8 @@ class Event extends Component {
               channelsInfo={this.props.channelsInfo}
               event={this.props.event}
               keepEdits={this.keepEdits}
+              starred={this.props.isStarred(event.id)}
+              isModal={this.props.isModal}
             />
         }
         {
@@ -116,14 +143,14 @@ class Event extends Component {
         <div className={`event-info`}>
         {
           this.props.view === 'grid' && 
-          <Dates dates={event.dates} editable={this.props.editable} event={this.props.event}/>        
+          <Dates dates={event.dates} editable={this.props.editable} event={this.props.event} />        
         }
 
           <div className='info-wrapper'>
             <div className='activity'>
               {
                 this.props.editable 
-                ? <TextareaAutosize className="editable-field" placeholder="Campaign Name" defaultValue={removeSearched(event.campaign_name)} 
+                      ? <TextareaAutosize ref={input => this.campaign_name = input} className="editable-field" placeholder="Campaign Name" defaultValue={removeSearched(event.campaign_name)} 
                     onChange={(e) => this.keepEdits(e.target.value, 'campaign_name')} />
                 : <span> 
                     {
@@ -149,10 +176,11 @@ class Event extends Component {
                 {
                       [
                         { name: "Region", val: event.region[0].name },
-                        { name: "Featured Market", val: event.featured_market[0].name },
                         { name: "Market Scope", val: event.market_scope[0].name },
-                        { name: "Campaign Group", val: event.campaign_group[0].name }, 
+                        { name: "Featured Market", val: `${event.featured_market[0].id !== 502 ? event.featured_market[0].name : event.market_more !== "" ? 'Other' : 'None' }` },
+                        { name: "Other Markets", val: event.market_more }, 
                         { name: "Program Type", val: event.program_type[0].name }, 
+                        { name: "Campaign Group", val: event.campaign_group[0].name }, 
                         { name: "Segment", val: event.segment[0].name },
                         { name: "Ongoing", val: event.ongoing ? 'Yes' : 'No' },
                       ].map((e, i)=> isValid(e.val) ?
@@ -168,48 +196,53 @@ class Event extends Component {
           {
             this.props.view === 'grid' && this.props.editable && 
             <div>
-              <div className='tags'>
-                <Tooltip key={'offer-key'} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive html={(
-                  <div key={'offer-key'} style={tooltip_styles}>
-                    <Select key={'offer-key'} placeholder={offerName} options={this.cleanFilterInfo(this.props.offers)} onChange={opt => this.keepEdits([this.props.offers[opt.value]], 'offer')} /></div> )} >
-                  <span className="tag editable-field" tabIndex={0}> 
-                    <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
-                    {offerName} 
-                    <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
-                  </span>
-                </Tooltip>
-              </div>
+
               <div className='tags'>
                 {
                   [
+                    { field:'offer', name: "Offer", val: event.offer[0].name, options: this.cleanFilterInfo(this.props.offers)},
                     { field:'region', name: "Region", val: event.region[0].name, options: this.cleanFilterInfo(this.props.regions)},
-                    { field:'featured_market', name: "Featured Market", val: event.featured_market[0].name, options: this.cleanFilterInfo(this.props.featured_markets), isSearchable: true },
                     { field:'market_scope', name: "Market Scope", val: event.market_scope[0].name, options: this.cleanFilterInfo(this.props.market_scopes)},
-                    { field:'campaign_group', name: "Campaign Group", val: event.campaign_group[0].name, options: this.cleanFilterInfo(this.props.campaign_groups)}, 
+                    { field:'featured_market', name: "Featured Market", val: event.featured_market[0].name, options: this.cleanFilterInfo(this.props.featured_markets), isSearchable: true },
+                    { field:'market_more', name: 'Other Markets', val: event.market_more },
                     { field:'program_type', name: "Program Type", val: event.program_type[0].name, options: this.cleanFilterInfo(this.props.program_types)}, 
-                    { field:'segment', name: "Segment", val: event.segment[0].name, options: this.cleanFilterInfo(this.props.segments)}
-                  ].map((e, i)=> isValid(e.val) 
+                    { field:'campaign_group', name: "Campaign Group", val: event.campaign_group[0].name, options: this.cleanFilterInfo(this.props.campaign_groups)}, 
+                    { field:'segment', name: "Segment", val: event.segment[0].name, options: this.cleanFilterInfo(this.props.segments)},
+                  ].map((e, i) => true
                   ?
-                    <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
-                          html={(
-                            <div style={tooltip_styles}>
-                              <Select 
-                                placeholder={e.field !== 'ongoing' ? event[e.field][0].name : event.ongoing ? 'Yes' : 'No' } 
-                                options={e.options} 
-                                onChange={opt => this.keepEdits([this.props[e.field + 's'][opt.value]], e.field)} 
-                              />
-                            </div> )} isSearchable={e.isSearchable} >
-                      <span className="tag editable-field" tabIndex={0}> 
-                        <span style={{color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
-                      </span>
-                    </Tooltip>
+                    e.field !== 'market_more' 
+                    ?
+                      <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                        html={(
+                          <div style={tooltip_styles}>
+                            <Select
+                              placeholder={e.field !== 'ongoing' ? event[e.field][0].name : event.ongoing ? 'Yes' : 'No'}
+                              options={e.options}
+                              onChange={opt => this.keepEdits([this.props[e.field + 's'][opt.value]], e.field)} isSearchable={e.isSearchable} />
+                          </div>)} >
+                        <span className={`tag editable-field ${e.field}`} tabIndex={0}>
+                          <span className="field" style={{ color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
+                        </span>
+                      </Tooltip>
+                    :
+                      <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                        html={(
+                          
+                            <TextareaAutosize autoFocus className="editable-field" tabIndex={0} placeholder={e.name} defaultValue={event.market_more}
+                              onChange={(ev) => this.keepEdits(ev.target.value, e.field)} style={{width:300}} />
+                          )} >
+                        <span className="tag editable-field" tabIndex={0}>
+                          <span style={{ color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
+                        </span>
+                      </Tooltip>
                   : null
                   )
                 }
-                    <span className="tag editable-field" tabIndex={0} onClick={(e) => this.keepEdits(!event.ongoing, 'ongoing')}> 
+                <span className="tag editable-field" tabIndex={0} onClick={(e) => this.keepEdits(!event.ongoing, 'ongoing')}> 
                   <span style={{ color: _COLORS.LIGHTGRAY }}>Ongoing: </span> {event.ongoing ? 'Yes' : 'No'}
                 </span>
               </div>
+
             </div>            
           }          
 
@@ -218,8 +251,9 @@ class Event extends Component {
             <div>
             {
               this.props.editable 
-              ? <p className='description'><TextareaAutosize className="editable-field" defaultValue={removeSearched(event.description)} onChange={(e) => this.keepEdits(e.target.value, 'description')} /> </p>
-              : <p className='description' dangerouslySetInnerHTML={{ __html: event.description }} />
+                        ? 
+                          <p className='description'><TextareaAutosize rows={2} maxRows={4} className="editable-field" placeholder="Description" defaultValue={removeSearched(event.description).replace(/<br \/>/g, '')} onChange={(e) => this.keepEdits(e.target.value.replace(/<br \/>/g, ''), 'description')} /> </p>
+                        : <p className='description' dangerouslySetInnerHTML={{ __html: event.description }} />
             }
             </div>
           }
@@ -262,17 +296,21 @@ class Event extends Component {
               {
                 event.activity_log !== undefined && event.activity_log.length > 0 && !this.props.editable &&
                 <div className="activity-log">
+                  <Scrollbars thumbMinSize={100} universal={true} autoHide={true} style={{
+                      maxHeight: 65, height: 25 * event.activity_log.length
+                  }}>
                   {
                     event.activity_log.reverse().map( (a, i) => 
                       <div key={i} className="activity">
                         <span className="action">{a['activity'].action}</span>
                         <span>by</span>
-                        <span className="name">{a['activity'].user.display_name}</span>
+                        <span className="name">{a['activity'].user.display_name !== undefined ? a['activity'].user.display_name : 'DELETED USER'}</span>
                         <span>on</span>
                         <span className="date">{a['activity'].date}</span>
                       </div>
                     )
                   }
+                  </Scrollbars>
                 </div>
               }
               {

@@ -5,10 +5,10 @@ export const _NEXT = 1;
 // export const _BASEURL = 'http://localhost:3000';
 export const _LOGO = {URL:'/images/logo.svg', ALT: 'Marriott Logo'};
 
-export const _MOBILEWIDTH = 720;
+export const _MOBILEWIDTH = 650;
 export const _SIDEBAR = 300;
 export const _DEBOUNCE = 50;
-export const _CACHE = '43';
+export const _CACHE = '48';
 export const _STATE_STRING_MAX_LENGTH = 6500;
 export const _ISMOBILE = () => window.innerWidth < _MOBILEWIDTH;
 
@@ -41,4 +41,5 @@ export const _COLORS = {
   SUCCESS: "#70cb74"
 };
 
+// export const _WP_URL = 'http://admin.marriottcalendar.com';
 export const _WP_URL = 'http://admin.marriottcalendar.com';

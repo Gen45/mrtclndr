@@ -22,13 +22,21 @@ class Modal extends Component {
 
 
   componentWillMount() {
-    this.setState({ saving: false, editingBrands: false, editingChannels: false, changes: 0, delete: false });
+    this.setState({ saving: false, editingBrands: false, editingChannels: false, changes: 0, delete: false, valid: true });
   }
 
   componentDidMount() {
     if (this.props.modal.new && this.props.modal.edit && this.props.modal.modalEvent !== null ) {
       this.handleEdit();
     }
+  }
+
+  // componentDidUpdate() {
+  //   console.log(this.props.event);
+  // }
+
+  valid = (valid) => {
+    this.setState({valid});
   }
 
   editBrands = (editingBrands) => {
@@ -92,76 +100,87 @@ class Modal extends Component {
 
     id = !this.props.modal.new ? id : ''; 
 
-    const self = this;
-    const newData = this.props.events[this.props.modal.modalEvent];
-    // console.log(id);
-    const newActivity = { activity: { date: new Date(), action: id !== '' ? 'edited' : 'created', user: this.props.userId } };
-    const activity_log = newData.activity_log !== undefined ? [ ...newData.activity_log, newActivity ] : [newActivity];
-    // console.log(activity_log);
+    if (removeSearched(this.props.events[this.props.modal.modalEvent]['campaign_name']).length > 4) {
 
-    this.setState({saving: true});
+      this.setState({ valid: true });
 
+      const self = this;
+      const newData = this.props.events[this.props.modal.modalEvent];
+      // console.log(id);
+      const newActivity = { activity: { date: new Date(), action: id !== '' ? 'edited' : 'created', user: this.props.userId } };
+      const activity_log = newData.activity_log !== undefined ? [ ...newData.activity_log, newActivity ] : [newActivity];
+      // console.log(activity_log);
 
-    const noChannelId = find(this.props.channelsInfo, x => x.slug === "no-channel").id;
-    const noBrandId = find(this.props.brandsInfo, x => x.slug === "no-brand").id;
-    const otherChannelsId = find(this.props.channelsInfo, x => x.slug === "other-channels").id;
+      this.setState({saving: true, savingMessage: 'Saving Changes...'});
 
-    const indexOfNoChannel = newData['channels'].indexOf(noChannelId);
-    const indexOfotherChannels = newData['channels'].indexOf(otherChannelsId);
-    const indexOfNoBrand = newData['brands'].indexOf(noBrandId);
+      const noChannelId = find(this.props.channelsInfo, x => x.slug === "no-channel").id;
+      const noBrandId = find(this.props.brandsInfo, x => x.slug === "no-brand").id;
+      const otherChannelsId = find(this.props.channelsInfo, x => x.slug === "other-channels").id;
 
-    // console.log(newData['brands']);
+      const indexOfNoChannel = newData['channels'].indexOf(noChannelId);
+      const indexOfotherChannels = newData['channels'].indexOf(otherChannelsId);
+      const indexOfNoBrand = newData['brands'].indexOf(noBrandId);
 
-    if (indexOfNoChannel > -1 && newData['channels'].length > 1) {
-      newData['channels'].splice(indexOfNoChannel, 1);
-    }
-
-    if (indexOfotherChannels > -1 && newData['otherChannels'] === "") {
-      newData['channels'].splice(indexOfotherChannels, 1);
-    }
-
-    if (indexOfNoBrand > -1 && newData['brands'].length > 1) {
-      newData['brands'].splice(indexOfNoBrand, 1);
       // console.log(newData['brands']);
+
+      if (indexOfNoChannel > -1 && newData['channels'].length > 1) {
+        newData['channels'].splice(indexOfNoChannel, 1);
+      }
+
+      if (indexOfotherChannels > -1 && newData['otherChannels'] === "") {
+        newData['channels'].splice(indexOfotherChannels, 1);
+      }
+
+      if (indexOfNoBrand > -1 && newData['brands'].length > 1) {
+        newData['brands'].splice(indexOfNoBrand, 1);
+        // console.log(newData['brands']);
+      }
+
+
+
+      axios({
+        method: id !== '' ? 'put' : 'post',
+        url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
+        headers: this.auth(),
+        data: {
+          title: removeSearched(newData['campaign_name']),
+          fields: {
+            campaign_name: removeSearched(newData['campaign_name']),
+            description: removeSearched(newData['description']).replace(/<br \/>/g, ''),
+            dates: {...newData['dates'], ongoing: newData['ongoing']},
+            offer: newData['offer'][0]['id'],
+            owner_subregion: newData['region'][0]['id'],
+            featured_markets: newData['featured_market'][0]['id'],
+            market_more: newData['market_more'],
+            campaign_group: newData['campaign_group'][0]['id'],
+            market_scope: newData['market_scope'][0]['id'],
+            program_type: newData['program_type'][0]['id'],
+            segment: newData['segment'][0]['id'],
+            owner: newData['owner'][0]['id'],
+            brands: newData['brands'],
+            channels: newData['channels'],
+            other_channels: newData['otherChannels'],
+            activity_log: activity_log,
+            status: true
+          },
+          status: 'publish'
+        }
+      }).then(function (response) {
+        self.setState({ saving: false, edit: false, editingBrands: false, editingChannels: false });
+        self.props.updateState({ modal: { new: false, edit: false, show: false } }, true);
+
+        // console.log('success', response);
+        self.props.updateEventData();
+
+      })
+      .catch(function (error) {
+        // console.log('failed', error);
+      });    
+
+    } else {
+      this.setState({valid: false});
     }
 
-    axios({
-      method: id !== '' ? 'put' : 'post',
-      url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
-      headers: this.auth(),
-      data: {
-        title: removeSearched(newData['campaign_name']),
-        fields: {
-          campaign_name: removeSearched(newData['campaign_name']),
-          description: removeSearched(newData['description']),
-          dates: {...newData['dates'], ongoing: newData['ongoing']},
-          offer: newData['offer'][0]['id'],
-          owner_subregion: newData['region'][0]['id'],
-          featured_markets: newData['featured_market'][0]['id'],
-          campaign_group: newData['campaign_group'][0]['id'],
-          market_scope: newData['market_scope'][0]['id'],
-          program_type: newData['program_type'][0]['id'],
-          segment: newData['segment'][0]['id'],
-          owner: newData['owner'][0]['id'],
-          brands: newData['brands'],
-          channels: newData['channels'],
-          other_channels: newData['otherChannels'],
-          activity_log: activity_log,
-          status: true
-        },
-        status: 'publish'
-      }
-    }).then(function (response) {
-      self.setState({ saving: false, edit: false, editingBrands: false, editingChannels: false });
-      self.props.updateState({ modal: { new: false, edit: false, show: false } }, true);
-
-      // console.log('success', response);
-      self.props.updateEventData();
-      
-    })
-    .catch(function (error) {
-      // console.log('failed', error);
-    });    
   }
   
   confirmTrashEvent = (id) => {
@@ -171,7 +190,7 @@ class Modal extends Component {
   trashEvent = (id) => {
     const self = this;
 
-    this.setState({ saving: true, delete: false });
+    this.setState({ saving: true, savingMessage: 'Deleting Entry...'});
 
     axios({
       method: 'put',
@@ -234,6 +253,8 @@ class Modal extends Component {
           isModal={true}
           brandGroups={this.props.brandGroups}
           handleOpenModal={this.props.handleOpenModal}
+          valid={this.valid}
+          isStarred={this.props.isStarred}
         />
     </div>
 
@@ -246,17 +267,19 @@ class Modal extends Component {
             <div className={`modal-wrapper${this.state.edit ? ' editable' : '' }`}>
               <nav className="modal-nav">
 
+                {
+                  !this.state.valid && !this.state.editingBrands && !this.state.editingChannels &&
+                  <span className="modal-nav-trigger" style={{ color: '#e4144a', fontSize: 14, fontWeight: 'normal', paddingLeft: 20}}>Please type a campaign name</span>
+                }
                 
                 <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash' text="Delete"
                   disabled={this.props.modal.new || !this.state.edit || this.state.editingBrands || this.state.editingChannels || this.state.saving || this.state.delete} 
                   payload={() => this.confirmTrashEvent()} />
                 
-                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash' text="Click again to Confirm"
+                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_trash' text="Click again to DELETE"
                   disabled={this.props.modal.new || !this.state.edit || this.state.editingBrands || this.state.editingChannels || this.state.saving || !this.state.delete}
                   payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
                 
-
-
                 <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} 
                   icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
 
@@ -267,10 +290,11 @@ class Modal extends Component {
 
                 <span className={`modal-handle ${handle}`}></span>      
 
-                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_check' text={this.state.saving ? 'Saving' : 'Save'} disabled={!this.state.edit}
+                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_check' text={this.state.saving ? this.state.savingMessage : 'Save'} 
+                  disabled={!this.state.edit || this.state.editingBrands || this.state.editingChannels}
                   payload={() => this.saveChanges(this.props.events[this.props.modal.modalEvent].id)} />
                   
-                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove' text='Cancel' disabled={!this.state.edit || this.state.saving}
+                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove' text='Cancel' disabled={!this.state.edit || this.state.saving || this.state.editingBrands || this.state.editingChannels}
                   payload={() => this.cancelEdit()} />              
                 
                 <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_minimal-left' caption="Previous Entry"

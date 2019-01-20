@@ -83,6 +83,10 @@ class Header extends Component {
             this.props.editingChannels &&
             <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}>  </div>
           }
+          {
+            this.props.starred && !this.props.isModal &&
+            <span><i className="nc-icon-mini ui-2_favourite-31" style={{ color: '#ddaa33'}} /></span>
+          }
         </span>
 
         

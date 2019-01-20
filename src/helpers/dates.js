@@ -21,6 +21,14 @@ export const daysInMonth = date => moment(date, _DATEFORMAT).daysInMonth();
 export const dayOfYear = date => moment(date, _DATEFORMAT).dayOfYear();
 export const daysOfYear = date => moment("12/31/" + moment(date, _DATEFORMAT).format('YY'), _DATEFORMAT).dayOfYear();
 
+export const compareDates = (date1, date2) => { 
+  if( date1 === '' || date2 === '') {
+    return true;
+  } else {
+    return moment(date1, _DATEFORMAT) >= moment(date2, _DATEFORMAT);
+  }
+};
+
 export const _TODAY = today();
 export const _CURRENTYEAR = Number(year(_TODAY));
 export const _PREVIOUSYEAR = _CURRENTYEAR + _PREV;

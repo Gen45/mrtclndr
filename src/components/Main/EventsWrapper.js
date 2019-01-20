@@ -12,6 +12,7 @@ class EventsWrapper extends Component {
     const itemSize = isValid(this.props.events) ? this.props.events.length : 0;
     // console.log('itemsize: ',itemSize);
     // console.log(this.props.events);
+    console.log(this.props.isStarred)
     return (<div className={`events-wrapper`}>
 
       { itemSize > 0 ?
@@ -27,6 +28,7 @@ class EventsWrapper extends Component {
           time={this.props.time} 
           modalEventId={this.props.modalEventId} 
           brandsInfo={this.props.brandsInfo} 
+          isStarred={this.props.isStarred}
           channelsInfo={this.props.channelsInfo}  />} 
           length={itemSize} type={this.props.view === 'grid' ? 'uniform' : 'variable'} useTranslate3d={true} pageSize={40} /> :
         <p style = {{
