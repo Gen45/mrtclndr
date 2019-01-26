@@ -58,7 +58,7 @@ class Event extends Component {
     const regionColor = this.props.event['region'][0].color;
     const offerColor = this.props.event['offer'][0].color;
     
-    const ownerName = this.props.event['owner'][0].name;
+    // const this.props.event['owner'][0].name = this.props.event['owner'][0].name;
     const offerName = this.props.event['offer'][0].name || 'No offer especified';
     const time = this.props.time;
     const multidate = isMultidate(event.dates);
@@ -267,18 +267,18 @@ class Event extends Component {
       }
 
       {
-        this.props.elevated && this.props.view === 'grid' &&
+        this.props.view === 'grid' &&
         <div className='tabs'>
           <div className={`tab-content t1 ${this.props.elevated
               ? ' active'
               : ''}`}>
 
               {
-                  !this.props.editingBrands && !this.props.editingChannels &&
+                !this.props.editingBrands && !this.props.editingChannels &&
                   <div>
                     { 
                       !this.props.editable
-                        ? <p className='contact ' title={ownerName}><i className='nc-icon-mini users_circle-09' style={{ color: regionColor }} /> {ownerName}</p>
+                        ? <p className='contact '><i className='nc-icon-mini users_circle-09' style={{ color: regionColor }} /> <span dangerouslySetInnerHTML={{ __html: this.props.event['owner'][0].name }} ></span></p>
                         : <Tooltip key={'owner-key'} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
                             html={(
                               <div key={'owner-key'} style={tooltip_styles}>
@@ -286,15 +286,15 @@ class Event extends Component {
                               </div> 
                             )} 
                           >
-                          <p tabIndex={0} className='editable-field contact ' title={ownerName}>
-                            <i className='nc-icon-mini users_circle-09' style={{ color: _COLORS.LIGHTGRAY }} /> {ownerName}
+                          <p tabIndex={0} className='editable-field contact ' title={removeSearched(this.props.event['owner'][0].name)}>
+                            <i className='nc-icon-mini users_circle-09' style={{ color: _COLORS.LIGHTGRAY }} /> {removeSearched(this.props.event['owner'][0].name)}
                           </p>
                         </Tooltip>
                     }
                   </div>
               }
               {
-                event.activity_log !== undefined && event.activity_log.length > 0 && !this.props.editable &&
+                this.props.elevated && event.activity_log !== undefined && event.activity_log.length > 0 && !this.props.editable &&
                 <div className="activity-log">
                   <Scrollbars thumbMinSize={100} universal={true} autoHide={true} style={{
                       maxHeight: 65, height: 25 * event.activity_log.length
@@ -314,7 +314,7 @@ class Event extends Component {
                 </div>
               }
               {
-                !this.props.editingChannels &&
+                this.props.elevated && !this.props.editingChannels &&
                   <Brands 
                     brands={event.brands} 
                     brandsInfo={this.props.brandsInfo} 

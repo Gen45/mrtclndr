@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@u-wave/react-vimeo": "^0.6.0",
     "axios": "^0.18.0",
     "clipboard": "^1.7.1",
     "downloadjs": "^1.4.7",
@@ -24,6 +25,7 @@
     "react-router-dom": "^4.2.2",
     "react-select": "next",
     "react-tippy": "^1.2.2",
+    "react-vimeo": "^2.0.0",
     "string-similarity": "^3.0.0"
   },
   "devDependencies": {

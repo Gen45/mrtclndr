@@ -113,6 +113,9 @@ $modal-width: 650px;
         .event-inner {
            .event-info {
                 min-height: 370px;
+                &:before {
+                    display: none;
+                }
            }
         }
 

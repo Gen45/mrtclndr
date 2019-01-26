@@ -17,7 +17,7 @@ class Button extends Component {
     const filterImage = this.props.filterImage || false;
     const active = this.props.active;
     const labelDot = this.props.labelDot;
-    const color = active || labelDot ? this.props.color : "rgba(153, 153, 153, 0.3)" || false;
+    const color = active || labelDot ? this.props.color : "rgba(153, 153, 153, 0.1)" || false;
 
     const putColor = color => color && !labelDot ? {backgroundColor: color, borderColor: color}: {};
 

@@ -547,6 +547,26 @@ textarea:focus, input:focus, button:focus {
         top: 0;
         height: 100vh; } }
 
+.more-tools {
+  padding: 1px 10px;
+  text-align: right;
+  vertical-align: middle;
+  color: #999999; }
+  .more-tools span {
+    color: #c2c2c2;
+    font-size: 10px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    vertical-align: middle;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-bottom: 1px solid transparent; }
+    .more-tools span:hover {
+      border-bottom: 1px solid #e4144a; }
+
 .filters-group {
   display: flex;
   position: relative;
@@ -1162,16 +1182,10 @@ body.activity-type .activity-type-group {
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 40px;
+        height: 70px;
         z-index: 100;
-        background: -moz-linear-gradient(top, rgba(239, 239, 239, 0) 0%, #efefef 100%);
-        /* FF3.6-15 */
-        background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0) 0%, #efefef 100%);
-        /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom, rgba(239, 239, 239, 0) 0%, #efefef 100%);
-        /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 );
-        /* IE6-9 */ }
+        background: linear-gradient(to bottom, rgba(239, 239, 239, 0) 0%, #efefef 50%, #efefef 100%);
+        /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */ }
         .grid-view .event .event-info:before .modal-on {
           display: none; }
       .grid-view .event .event-info .event-date {
@@ -1453,8 +1467,16 @@ body.activity-type .activity-type-group {
   transform: rotate(180deg); }
 
 .tabs {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 29px;
   font-size: 12px;
-  text-align: center; }
+  text-align: center;
+  z-index: 1000; }
+  .modal .tabs {
+    position: relative;
+    height: auto; }
   .tabs ul {
     position: relative;
     margin: 0;
@@ -1476,7 +1498,6 @@ body.activity-type .activity-type-group {
         border-color: gainsboro; }
   .tabs .tab-content {
     text-align: justify;
-    display: none;
     line-height: 1.5; }
     .tabs .tab-content.active {
       display: block; }
@@ -1578,6 +1599,8 @@ body.activity-type .activity-type-group {
     margin-top: 0; }
     .modal .event .event-inner .event-info {
       min-height: 370px; }
+      .modal .event .event-inner .event-info:before {
+        display: none; }
     @media screen and (max-width: 940px) {
       .modal .event {
         margin: 0;
@@ -1772,56 +1795,37 @@ span.flatpickr-weekday {
   100% {
     transform: rotate(360deg); } }
 
-.main-overlay {
-  padding-top: 50px;
+.help .videos {
+  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(34, 34, 34, 0.85);
-  z-index: 100; }
-
-.enter-data-wrapper {
-  display: block;
-  width: calc(100% - 40px);
-  height: calc(100% - 40px);
-  border-radius: 10px;
-  background: #333333;
-  box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.75); }
-
-.enter-data-header,
-.enter-data-body,
-.enter-data-footer {
+  flex-wrap: wrap;
+  justify-content: flex-start;
   padding: 20px; }
-
-.enter-data-header {
-  background: #222;
-  border-radius: 10px 10px 0 0; }
-
-.enter-data-body {
-  display: flex;
-  flex-wrap: wrap; }
-  .enter-data-body .row {
-    display: flex;
-    flex-wrap: wrap; }
-  .enter-data-body .col {
-    margin-right: 2em; }
-  .enter-data-body .col-full {
-    width: calc(90% + 2em); }
-  .enter-data-body .col-50 {
-    width: calc(50% - 1em);
-    margin-right: 1em; }
-  .enter-data-body .col-end {
-    margin-right: 0;
-    margin-left: 1em; }
-  .enter-data-body .col-1 {
-    width: 30%; }
-  .enter-data-body .col-2 {
-    width: 60%; }
+  .help .videos .video {
+    position: relative;
+    min-width: 300px;
+    width: calc(50% - 20px);
+    margin: 10px; }
+    @media screen and (min-width: 1580px) {
+      .help .videos .video {
+        width: 32%;
+        margin: 10px; } }
+    @media screen and (max-width: 1080px) {
+      .help .videos .video {
+        width: 100%; } }
+    .help .videos .video iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%; }
+    .help .videos .video .thumb {
+      position: relative;
+      height: 0;
+      width: 100%;
+      padding-top: 56%; }
+    .help .videos .video .title {
+      color: #ffffff; }
 
 .filter .content {
   text-align: center; }

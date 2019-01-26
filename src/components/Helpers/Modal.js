@@ -209,7 +209,8 @@ class Modal extends Component {
       self.props.updateEventData();
     })
     .catch(function (error) {
-      // console.log('failed', error);
+
+      console.log('failed', error);
     });
   }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 import { isValid } from '../helpers/misc';
 import { _LOGO, _WP_URL} from '../config/constants';
@@ -83,12 +84,11 @@ class Login extends Component {
               <i className="nc-icon-outline arrows-1_tail-right"></i>
             :
               <i className="nc-icon-outline arrows-1_refresh-69 circle-anim"></i>
-
           }
             </button>
 
           <p style={{paddingTop: 20}}>{this.state.error ? 'Invalid information, please try again.' : <br/>}</p>
-          <p><a target="_blank" rel="noopener" href="http://admin.marriottcalendar.com/wp-login.php?action=lostpassword" style={{color:'white',fontSize:12}}>Lost your Password?</a></p>
+          <p><a target="_blank" rel="noopener noreferrer" href="http://admin.marriottcalendar.com/wp-login.php?action=lostpassword" style={{ color: 'white', fontSize: 12 }}>Lost your Password?</a> | <Link style={{ color: 'white', fontSize: 12 }} to="/help">Help</Link></p>
       </form>
     </div>)
   }

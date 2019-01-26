@@ -213,3 +213,28 @@
         }
     }
 }
+
+.more-tools {
+     padding: 1px 10px;
+     text-align: right;
+     vertical-align: middle;
+     color: $color-light-gray;
+     
+     span {
+        color: $color-lighter-gray;
+        font-size: 10px;
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        vertical-align: middle;
+        margin-left: 5px;
+        margin-right: 5px;
+        border-bottom: 1px solid transparent;
+
+        &:hover {
+            border-bottom: 1px solid $color-accent;
+        }
+     }
+}

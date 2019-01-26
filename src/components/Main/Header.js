@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import { Link } from 'react-router-dom';
 import {_LOGO} from '../../config/constants';
 
 
@@ -13,7 +13,7 @@ class Header extends Component {
     return (
       <header className="header" role="banner">
         <div className="logo">
-          <img src={_LOGO.URL} alt={_LOGO.ALT}/>
+          <Link to="/"><img src={_LOGO.URL} alt={_LOGO.ALT} /></Link>
         </div>
         {/* <h1 className="title">2019</h1> */}
         {
@@ -25,13 +25,17 @@ class Header extends Component {
             </span>
           </a>  
         }
+
+        {
+          !this.props.noLogout && 
+          <a className="logout" onClick={this.props.logout}>
+            <i className="nc-icon-outline media-1_button-power" /> 
+            <span>
+              Log Out
+            </span>
+          </a>
+        }
       
-        <a className="logout" onClick={this.props.logout}>
-          <i className="nc-icon-outline media-1_button-power" /> 
-          <span>
-            Log Out
-          </span>
-        </a>
       </header>
     )
   }

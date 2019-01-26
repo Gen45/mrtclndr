@@ -123,8 +123,7 @@ class App extends Component {
               self.metaData['brands_data'] = data['brands_data'];
 
               localStorage.removeItem(
-                'mrt_' + (_CACHE - 1) + '_Meta-' + month(today()) + "-" + year(today()),
-                JSON.stringify(self.metaData)
+                'mrt_' + (_CACHE - 1) + '_Meta-' + month(today()) + "-" + year(today())
               );
 
               localStorage.setItem(
@@ -137,8 +136,7 @@ class App extends Component {
                 const eventsData = getFirstEventsData(self.metaData);
                 eventsData.then(events => {
                   localStorage.removeItem(
-                    'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today()),
-                    JSON.stringify(events)
+                    'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today())
                   );
                   localStorage.setItem(
                     'mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()),
@@ -164,8 +162,7 @@ class App extends Component {
                     self.events = allEvents;
 
                     localStorage.removeItem(
-                      'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today()),
-                      JSON.stringify(self.events)
+                      'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today())
                     );
                     localStorage.setItem(
                       'mrt_' + _CACHE + '_Events-' + month(today()) + "-" + year(today()),
@@ -206,8 +203,7 @@ class App extends Component {
                 const eventsData = getFirstEventsData(self.metaData);
                 eventsData.then(events => {
                   localStorage.removeItem(
-                    'mrt_'+ (_CACHE - 1) +'_Events-' + month(today()) + "-" + year(today()),
-                    JSON.stringify(events)
+                    'mrt_'+ (_CACHE - 1) +'_Events-' + month(today()) + "-" + year(today())
                   );
                   localStorage.setItem(
                     'mrt_' + _CACHE + '_Events-' + month(today()) + "-" + year(today()),
@@ -233,8 +229,7 @@ class App extends Component {
                     self.events = allEvents;
 
                     localStorage.removeItem(
-                      'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today()),
-                      JSON.stringify(self.events)
+                      'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today())
                     );
                     localStorage.setItem(
                       'mrt_' + _CACHE + '_Events-' + month(today()) + "-" + year(today()),
@@ -318,7 +313,7 @@ class App extends Component {
       this.stateString = JSON.stringify(configurations);
 
       if (this.stateString.length < _STATE_STRING_MAX_LENGTH ) {
-        localStorage.removeItem('mrt_'+ (_CACHE - 1) +'_State', this.stateString);
+        localStorage.removeItem('mrt_'+ (_CACHE - 1) +'_State');
         localStorage.setItem('mrt_'+ _CACHE +'_State', this.stateString);
       } else {
         localStorage.removeItem('mrt_'+ _CACHE +'_State');
@@ -402,8 +397,7 @@ class App extends Component {
       });
 
       localStorage.removeItem(
-        'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today()),
-        JSON.stringify(this.events)
+        'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today())
       );
       localStorage.setItem(
         'mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()),
@@ -448,10 +442,12 @@ class App extends Component {
     } else {
       key = Object.keys(shortLinks)[index];
     }
-    return {path: `/${key}`, key: key} ;
+    return {key};
   };
 
   logout = () => this.props.history.push('/login', {});
+
+  help = () => this.props.history.push('/help', {});
 
   activeFilter = filterType => Object.keys(filterType).filter((f, i) => filterType[f].active === true);
 
@@ -496,19 +492,29 @@ class App extends Component {
 
       events = events.filter(e => {
         const toSearch = this.state.search.term;
-        const o = { campaign_name: e.campaign_name, description: e.description };
+        const o = { campaign_name: e.campaign_name, description: e.description, owner: e.owner[0].name };
         const result = Object.keys(o).filter(i => o[i].toLowerCase().indexOf(toSearch.toLowerCase()) !== -1)
         return result.length > 0;
       }).map( e => {
         const toSearch = this.state.search.term;
         const toReplace = new RegExp(toSearch, "gi"); 
-        const o = { campaign_name: e.campaign_name, description: e.description };
+        // console.log(e)
+        const o = { campaign_name: e.campaign_name, description: e.description, owner: e.owner };
         Object.keys(o).forEach( i => {
-          o[i] = o[i].replace(toReplace, x => `<b class="searched">${x}</b>`);
+          // console.log(typeof o[i], i);
+          if( typeof o[i] === 'string') {
+            o[i] = o[i].replace(toReplace, x => `<b class="searched">${x}</b>`);
+          } else {
+            console.log(o[i][0]['name']);
+            o[i][0]['name'] = o[i][0]['name'].replace(toReplace, x => `<b class="searched">${x}</b>`);
+          }
+          // console.log(e, o);
           e = { ...e, ...o };
         });
         return e;
       });
+
+      console.log(events, events.length);
     }
 
     // ORDER
@@ -606,6 +612,25 @@ class App extends Component {
 
   canCreate = (user) => ['author', 'administrator'].indexOf(user.role) > -1;
 
+  handleResetFilters = () => {
+
+    let newfiltersList = this.state.filtersList;
+
+    Object.keys(this.state.filtersList).forEach(x => {
+      Object.keys(this.state.filtersList[x].items).forEach(y => {
+        newfiltersList[x].items[y].active = true;
+      })
+    })
+
+    this.updateState({ ...this.state, ...defaultState, order: this.state.order, view: this.state.view, filtersList: newfiltersList, starred: {items: this.state.starred.items, show: false} }, true);
+  }
+
+  handleRefreshCache = () => {
+    localStorage.removeItem('mrt_' + (_CACHE) + '_Meta-'   + month(today()) + "-" + year(today()) );
+    localStorage.removeItem('mrt_' + (_CACHE) + '_State', this.stateString);
+    window.location.reload();
+  }
+
   render() {
 
     // _DEBUG && console.log(this.state.filtersList);
@@ -638,6 +663,21 @@ class App extends Component {
               <div className="refreshing">
               </div>
             }
+
+            <div className="more-tools">
+              {
+                this.canEdit(this.user) && this.canCreate(this.user) &&
+                <span onClick={() => window.open('http://admin.marriottcalendar.com/wp-admin', '_blank')}> <i className="nc-icon-mini media-2_knob"></i> Admin</span>
+              }
+              {
+              this.canEdit(this.user) && this.canCreate(this.user) &&
+               "|"
+              }   
+              <span onClick={e => console.log(this.getShareableLink())}> <i className="nc-icon-mini ui-2_share-bold"></i> Copy Link</span>|
+              <span onClick={e => this.handleRefreshCache()}> <i className="nc-icon-mini arrows-e_refresh-20"></i> Reload</span> 
+              <span onClick={e => this.handleResetFilters()}> <i className="nc-icon-mini arrows-e_refresh-19"></i> Reset Filters</span> 
+              <span onClick={() => window.open('/Help', '_blank')}><i className="nc-icon-mini ui-e_round-e-help"></i> Help</span>
+            </div>
 
             <ToolBar
               time={time}
@@ -681,6 +721,7 @@ class App extends Component {
                   brandsInfo={this.state.brands}
                   channelsInfo={this.state.channels}
                   isStarred={this.isStarred}
+                  handleResetFilters={this.handleResetFilters}
                 /> :
                 <Loading>
                   <span>

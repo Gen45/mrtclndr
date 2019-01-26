@@ -12,7 +12,6 @@ class EventsWrapper extends Component {
     const itemSize = isValid(this.props.events) ? this.props.events.length : 0;
     // console.log('itemsize: ',itemSize);
     // console.log(this.props.events);
-    console.log(this.props.isStarred)
     return (<div className={`events-wrapper`}>
 
       { itemSize > 0 ?
@@ -31,16 +30,18 @@ class EventsWrapper extends Component {
           isStarred={this.props.isStarred}
           channelsInfo={this.props.channelsInfo}  />} 
           length={itemSize} type={this.props.view === 'grid' ? 'uniform' : 'variable'} useTranslate3d={true} pageSize={40} /> :
-        <p style = {{
+        <div style = {{
           position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -80%)',
-          textAlign: 'center',
-          opacity: 0.25
+          textAlign: 'center'
         }}>
-        <img width={200} src={_LOGO.URL} alt={_LOGO.ALT} style={{display: 'block', margin: '20px auto',}}/>
-         There are no entries for the current selection</p>
+        <img width={200} src={_LOGO.URL} alt={_LOGO.ALT} style={{display: 'block', margin: '20px auto', opacity: 0.5}} />
+          <p style={{opacity: 0.5}}>There are no entries for the current selection</p>
+          <p style={{ opacity: 1, cursor: 'pointer' }} onClick={(e) => this.props.handleResetFilters() }>Reset Filters</p>
+
+         </div>
       }
     </div>)
   }

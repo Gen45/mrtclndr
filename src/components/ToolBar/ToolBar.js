@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { CSVLink } from "react-csv";
 
+
 // import AwesomeDebouncePromise from 'awesome-debounce-promise';
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -41,7 +42,7 @@ class ToolBar extends Component {
     if(this.sidebarCollapse !== this.props.sidebarCollapse){
       this.sidebarCollapse = this.props.sidebarCollapse;
       setTimeout(() => {
-        console.log(''); 
+        // console.log(''); 
         this.updateDimensions()
       }, _TRANSITIONTIME*3);
     } else {
@@ -62,12 +63,6 @@ class ToolBar extends Component {
     const search = {search: {active: true, term: keyword}};
     this.props.updateState(search, true);
   }
-
-  // CSVHeaders = () => { 
-  //   let Headers = [];
-  //   Object.keys(this.props.helpers.channels).forEach(channel => {
-  //   });
-  // }
 
   format2CSV = (events) => {
     // console.log(JSON.stringify(events[0]));
@@ -339,10 +334,10 @@ class ToolBar extends Component {
         </FilterCategory>
       </FiltersGroup>
 
-      <FiltersGroup title=' 'disabled={false}>
+      <FiltersGroup title=' 'disabled={true}>
         <FilterCategory>
             <Trigger caption='Help' icon='nc-icon-mini ui-2_alert'
-              payload={() => window.open('https://www.useloom.com/share/folder/a7e80fc335b042fb90b24a8dfb3b672c', '_blank')}/>
+              payload={() => window.open('/Help', '_blank')}/>
         </FilterCategory>
       </FiltersGroup>
 
