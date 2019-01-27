@@ -167,7 +167,7 @@ class Event extends Component {
               <p className='tags'>
                 <span className="tag"> 
                   <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
-                  {offerName} 
+                  <u dangerouslySetInnerHTML={{ __html: offerName }} />
                   <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
                 </span>
               </p>
@@ -185,7 +185,7 @@ class Event extends Component {
                         { name: "Ongoing", val: event.ongoing ? 'Yes' : 'No' },
                       ].map((e, i)=> isValid(e.val) ?
                     <span key={i} className='tag'>
-                      <span style={{color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
+                      <span style={{color: _COLORS.LIGHTGRAY }}>{e.name}: </span> <u dangerouslySetInnerHTML={{ __html: e.val }} />
                     </span>
                   : null
                   )
@@ -251,9 +251,9 @@ class Event extends Component {
             <div>
             {
               this.props.editable 
-                        ? 
-                          <p className='description'><TextareaAutosize rows={2} maxRows={4} className="editable-field" placeholder="Description" defaultValue={removeSearched(event.description).replace(/<br \/>/g, '')} onChange={(e) => this.keepEdits(e.target.value.replace(/<br \/>/g, ''), 'description')} /> </p>
-                        : <p className='description' dangerouslySetInnerHTML={{ __html: event.description }} />
+              ? 
+                <p className='description'><TextareaAutosize rows={2} maxRows={4} className="editable-field" placeholder="Description" defaultValue={removeSearched(event.description).replace(/<br \/>/g, '')} onChange={(e) => this.keepEdits(e.target.value.replace(/<br \/>/g, ''), 'description')} /> </p>
+              : <p className='description' dangerouslySetInnerHTML={{ __html: event.description }} />
             }
             </div>
           }

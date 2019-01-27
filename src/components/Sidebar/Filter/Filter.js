@@ -25,11 +25,20 @@ class Filters extends Component {
 
   render() {
 
+    let activeFilters = {};
+    [...new Set(
+      this.props.events
+        .map(e => e[this.props.filtersList[this.props.filterName].name]
+        .map(x => 
+          typeof x === 'object' ? x.id : x  
+          )).flat(2))].forEach(x => activeFilters[x] = this.props.filters[x]);
+    // console.log(this.props.filters, activeFilters);
+
     return (<div className={`filter ${this.state.collapsed
                 ? 'collapsed'
                 : ''}`}>
               <Header handleCollapse={this.handleCollapse} icon={this.props.icon} title={this.props.title}/>
-              <Content filterName={this.props.filterName} filters={this.props.filters} handleChange={this.handleChange} labelDot={this.props.labelDot} TooltipTheme='light' tooltips={this.props.tooltips} filtersList={this.props.filtersList} />
+              <Content filterName={this.props.filterName} filters={activeFilters} handleChange={this.handleChange} labelDot={this.props.labelDot} TooltipTheme='light' tooltips={this.props.tooltips} filtersList={this.props.filtersList} />
               <Footer filterName={this.props.filterName} filters={this.props.filters} batchChange={this.props.batchChange}/>
             </div>)
   }

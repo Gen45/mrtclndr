@@ -16,7 +16,9 @@ class Content extends Component {
         ? '-inner'
         : ''}`}>
       {
-        Object.keys(this.props.filters ? this.props.filters : {}).filter(r => this.props.filters[r]["count"] > 0 ).map((r, i) => {
+        Object.keys(this.props.filters ? this.props.filters : {})
+        //.filter(r => this.props.filters[r]["count"] > 0 )
+        .map((r, i) => {
 
           const filter = this.props.filters[r]["id"];
           const filterName = this.props.filters[r]["name"];

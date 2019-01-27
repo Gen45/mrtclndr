@@ -29,6 +29,7 @@ import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
+const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'featured_market', 'market_more', 'program_type', 'campaign_group', 'segment'];
 
 class App extends Component {
 
@@ -489,32 +490,41 @@ class App extends Component {
 
     // FILTER BY KEYWORDS
     if (this.state.search.active && isValid(this.state.search.term)){
-
+      
       events = events.filter(e => {
         const toSearch = this.state.search.term;
-        const o = { campaign_name: e.campaign_name, description: e.description, owner: e.owner[0].name };
+        let o = {};
+        _SEARCHABLE.forEach(x => 
+          typeof e[x] === 'string'
+            ? o[x] = e[x]
+            : o[x] = e[x][0].name);
+        // console.log(o);
+        // const o = { campaign_name: e.campaign_name, description: e.description, owner: e.owner[0].name };
         const result = Object.keys(o).filter(i => o[i].toLowerCase().indexOf(toSearch.toLowerCase()) !== -1)
         return result.length > 0;
       }).map( e => {
+        // console.log(e);
+        
         const toSearch = this.state.search.term;
         const toReplace = new RegExp(toSearch, "gi"); 
         // console.log(e)
-        const o = { campaign_name: e.campaign_name, description: e.description, owner: e.owner };
+        // const o = { campaign_name: e.campaign_name, description: e.description, owner: e.owner };
+        let o = {};
+        _SEARCHABLE.forEach(x => o[x] = e[x]);
         Object.keys(o).forEach( i => {
           // console.log(typeof o[i], i);
           if( typeof o[i] === 'string') {
             o[i] = o[i].replace(toReplace, x => `<b class="searched">${x}</b>`);
           } else {
-            console.log(o[i][0]['name']);
-            o[i][0]['name'] = o[i][0]['name'].replace(toReplace, x => `<b class="searched">${x}</b>`);
+            const newName = o[i][0]['name'];
+            o[i][0]['name'] = newName.replace(toReplace, x => `<b class="searched">${x}</b>`);
           }
           // console.log(e, o);
           e = { ...e, ...o };
         });
+        // console.log(e);
         return e;
       });
-
-      console.log(events, events.length);
     }
 
     // ORDER
@@ -541,6 +551,7 @@ class App extends Component {
   };
 
   updateState = (newState, updateEvents) => {
+    this.events = JSON.parse(localStorage.getItem('mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()))).filter(e => e.status);
     this.setState({
       ...this.state,
       ...newState
@@ -784,6 +795,7 @@ class App extends Component {
         batchChange={this.batchChange}
         disabled={this.state.modal.show && isValid(this.state.events[this.state.modal.modalEvent])}
         filtersList={this.state.filtersList}
+        events={this.events}
       />
     </div>
     :
