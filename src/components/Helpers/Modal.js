@@ -159,7 +159,7 @@ class Modal extends Component {
             owner: newData['owner'][0]['id'],
             brands: newData['brands'],
             channels: newData['channels'],
-            other_channels: newData['otherChannels'],
+            other_channels: removeSearched(newData['otherChannels']),
             activity_log: activity_log,
             status: true
           },

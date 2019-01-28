@@ -3,6 +3,8 @@ import {Tooltip} from 'react-tippy';
 import find from 'lodash/find';
 import TextareaAutosize from 'react-autosize-textarea';
 
+import { removeSearched } from '../../helpers/misc';
+
 class Header extends Component {
 
   toggleChannel = (id, event) => {
@@ -60,7 +62,7 @@ class Header extends Component {
           }
           {
             this.props.editingChannels &&
-            <TextareaAutosize style={{ width: '90%' }} className="other-channels editable-field" placeholder="Click here to add 'Other Channels'" defaultValue={this.props.otherChannels} onChange={(e) => this.handleOtherChannels(e.target.value, 'otherChannels')} />
+            <TextareaAutosize style={{ width: '90%' }} className="other-channels editable-field" placeholder="Click here to add 'Other Channels'" defaultValue={removeSearched(this.props.otherChannels)} onChange={(e) => this.handleOtherChannels(e.target.value, 'otherChannels')} />
           }
           {
             !this.props.editingChannels &&

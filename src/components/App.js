@@ -29,7 +29,7 @@ import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
-const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'featured_market', 'market_more', 'program_type', 'campaign_group', 'segment'];
+const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'featured_market', 'market_more', 'program_type', 'campaign_group', 'segment', 'otherChannels'];
 
 class App extends Component {
 
@@ -337,6 +337,18 @@ class App extends Component {
         _DEBUG && console.log('success saving user state online');
       }).catch(function (error) {
         _DEBUG && console.log('failed', error);
+      });  
+
+      axios({
+        method: 'post',
+        url: _WP_URL + "/wp-json/acf/v3/options/options/",
+        headers: this.auth(),
+        data: {
+        }
+      }).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);
       });  
 
     } else {

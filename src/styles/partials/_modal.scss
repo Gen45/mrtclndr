@@ -27,7 +27,8 @@ $modal-width: 650px;
         animation: open_modal 0.25s ease 1;
 
         &.editable {
-            animation: pulse-shadow 2s infinite;
+            animation: pulse-shadow 2s infinite,
+                        open_modal 0.25s ease 1;
         }
 
         @media screen and (max-width: $desktop-min) {
