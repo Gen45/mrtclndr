@@ -45,8 +45,6 @@ class Login extends Component {
       data: auth
     }).then(function (response) {
 
-      
-      
       if(response.status === 200){
 
         const token = response.data.token;
@@ -62,7 +60,7 @@ class Login extends Component {
 
     }).catch(function (error) {
       self.setState({ error: true, loading: false });
-      // console.log('failed', error);
+      console.log('failed', error);
     });
   };
 

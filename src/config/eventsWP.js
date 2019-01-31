@@ -254,9 +254,13 @@ export const prepareEvent = (e, metaData) => {
 
   const _brands = e.brand.length > 0 ? e.brand : [find(metaData.brands_data, x => x.slug === 'no-brand').id];
   const _channels = e.channel.length > 0 ? e.channel : [find(metaData.channels, x => x.slug === 'no-channel').id];
+  // const _featured_markets = e.featured_markets.length > 0 ? e.featured_markets : [find(metaData.featured_markets, x => x.slug === 'no-featured_markets').id];
+
+  // console.log(_featured_markets);
+
+  const _featured_markets = e.featured_markets[0] ? find(metaData.featured_markets, x => x.id === e.featured_markets[0]) : find(metaData.featured_markets, x => x.slug === 'no-featured-market');
 
   const _offers = e.offer[0] ? find(metaData.offers, x => x.id === e.offer[0]) : find(metaData.offers, x => x.slug === 'no-offer');
-  const _featured_markets = e.featured_markets[0] ? find(metaData.featured_markets, x => x.id === e.featured_markets[0]) : find(metaData.featured_markets, x => x.slug === 'no-featured-market');
   const _campaign_groups = e.campaign_group[0] ? find(metaData.campaign_groups, x => x.id === e.campaign_group[0]) : find(metaData.campaign_groups, x => x.slug === 'no-campaign-group');
   const _market_scopes = e.market_scope[0] ? find(metaData.market_scopes, x => x.id === e.market_scope[0]) : find(metaData.market_scopes, x => x.slug === 'no-market-scope');
   const _program_types = e.program_type[0] ? find(metaData.program_types, x => x.id === e.program_type[0]) : find(metaData.program_types, x => x.slug === 'no-program-type');
@@ -264,6 +268,7 @@ export const prepareEvent = (e, metaData) => {
   const _regions = e.region[0] ? find(metaData.regions, x => x.id === e.region[0]) : find(metaData.regions, x => x.slug === 'no-region');
   const _segments = e.segment[0] ? find(metaData.segments, x => x.id === e.segment[0]) : find(metaData.segments, x => x.slug === 'no-segment');
   const _status = e.acf.status === undefined ? true : e.acf.status;
+  
   // console.log(e.id, decodeHTML(e.title.rendered), _status);
 
   // console.log(e);
@@ -301,6 +306,7 @@ export const prepareEvent = (e, metaData) => {
     channels: _channels,
     offer: [{ id: _offers.id, name: _offers.name, color: _offers.color }],
     featured_market: [{ id: _featured_markets.id, name: _featured_markets.name }],
+    // featured_market: _featured_markets,
     market_more: e.acf.market_more,
     landing_page_url: e.acf.landing_page_url,
     creative_url: e.acf.creative_url,

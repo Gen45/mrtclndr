@@ -5,6 +5,7 @@ import range from 'lodash/range';
 import {_PREV, _NEXT} from '../config/constants';
 
 export const _DATEFORMAT = "MM/DD/YYYY";
+export const _DATETIMEFORMAT = "MM/DD/YYYY h:mm:ss a";
 
 export const _QUARTERS = [1, 2, 3, 4];
 export const _MONTHS = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
@@ -20,6 +21,8 @@ export const thisYear = () => moment().format('YY');
 export const daysInMonth = date => moment(date, _DATEFORMAT).daysInMonth();
 export const dayOfYear = date => moment(date, _DATEFORMAT).dayOfYear();
 export const daysOfYear = date => moment("12/31/" + moment(date, _DATEFORMAT).format('YY'), _DATEFORMAT).dayOfYear();
+
+export const dateTime = date => moment(date).format(_DATETIMEFORMAT);
 
 export const compareDates = (date1, date2) => { 
   if( date1 === '' || date2 === '') {

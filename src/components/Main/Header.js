@@ -15,26 +15,28 @@ class Header extends Component {
         <div className="logo">
           <Link to="/"><img src={_LOGO.URL} alt={_LOGO.ALT} /></Link>
         </div>
-        {/* <h1 className="title">2019</h1> */}
-        {
-          this.props.canCreate && 
-          <a className="addEntry" onClick={this.props.addEntry}>
-            <i className="nc-icon-mini ui-1_bold-add" /> 
-            <span>
-              Add Entry
+        <div className="buttons">
+          {
+            this.props.canCreate &&
+            <a className="addEntry" onClick={this.props.addEntry}>
+              <i className="nc-icon-mini ui-1_bold-add" />
+              <span>
+                Add Entry
             </span>
-          </a>  
-        }
+            </a>
+          }
 
-        {
-          !this.props.noLogout && 
-          <a className="logout" onClick={this.props.logout}>
-            <i className="nc-icon-outline media-1_button-power" /> 
-            <span>
-              Log Out
+          {
+            !this.props.noLogout &&
+            <a className="logout" onClick={this.props.logout}>
+              <i className="nc-icon-outline media-1_button-power" />
+              <span>
+                Log Out
             </span>
-          </a>
-        }
+            </a>
+          }
+        </div>
+
       
       </header>
     )

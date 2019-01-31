@@ -557,6 +557,25 @@
         display: inline-block;
         width: auto;
         margin-bottom: $padding - $padding / 4;
+        a {
+            text-decoration: none;
+            color: $color-black;
+            // border-bottom: 1px solid $color-lighter-gray;
+            font-weight: normal;
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            &:before {
+                content: '';
+                z-index: -1;
+                display: block;
+                bottom: 1px;
+                position: absolute;
+                width: 100%;
+                height: auto;
+                border-bottom: 1px dotted $color-accent;
+            }
+        }
     }
 
     .tag {

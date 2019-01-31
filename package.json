@@ -24,9 +24,11 @@
     "react-router-auth": "^1.0.1",
     "react-router-dom": "^4.2.2",
     "react-select": "next",
+    "react-timeago": "^4.3.0",
     "react-tippy": "^1.2.2",
     "react-vimeo": "^2.0.0",
-    "string-similarity": "^3.0.0"
+    "string-similarity": "^3.0.0",
+    "timeago.js": "^4.0.0-beta.2"
   },
   "devDependencies": {
     "node-sass-chokidar": "^1.2.2",

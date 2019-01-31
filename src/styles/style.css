@@ -99,54 +99,56 @@ textarea:focus, input:focus, button:focus {
   padding-bottom: 2px;
   display: flex;
   align-items: center; }
+  .header .buttons {
+    position: absolute;
+    right: 10px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; }
+    .header .buttons a {
+      width: auto; }
+    .collapsed .header .buttons {
+      right: 125px; }
+    @media only screen and (max-width: 679px) {
+      .header .buttons {
+        right: 50px; }
+        .collapsed .header .buttons {
+          right: 50px; } }
   .header .logout,
   .header .addEntry {
     align-items: center;
     display: flex;
     justify-content: space-between;
-    height: 50px;
-    width: 114px;
     white-space: nowrap;
     vertical-align: middle;
-    position: absolute;
-    right: 10px;
-    top: 0px;
     justify-content: flex-end;
     text-align: right;
     cursor: pointer;
-    padding: 0 15px;
+    padding: 5px 15px;
+    border-radius: 50px;
     font-size: 14px;
     color: #999999; }
     .header .logout i,
     .header .addEntry i {
       margin-right: 10px; }
-    .collapsed .header .logout, .collapsed
-    .header .addEntry {
-      right: 125px; }
     .header .logout:hover,
     .header .addEntry:hover {
       color: #c2c2c2; }
     @media only screen and (max-width: 679px) {
       .header .logout,
       .header .addEntry {
-        width: 50px;
-        right: 50px; }
+        width: 50px; }
         .header .logout i,
         .header .addEntry i {
           margin-right: 0; }
         .header .logout span,
         .header .addEntry span {
-          display: none; }
-        .collapsed .header .logout, .collapsed
-        .header .addEntry {
-          right: 50px; } }
+          display: none; } }
   .header .addEntry {
-    right: 100px; }
-    .collapsed .header .addEntry {
-      right: 225px; }
-    @media only screen and (max-width: 679px) {
-      .header .addEntry {
-        right: 85px !important; } }
+    border: 1px solid #e4144a;
+    font-weight: bold; }
   .collapsed .header {
     width: calc( 100% - 1px); }
   @media screen and (max-width: 679px) {
@@ -1433,6 +1435,22 @@ body.activity-type .activity-type-group {
   display: inline-block;
   width: auto;
   margin-bottom: 15px; }
+  .event-info .tags a {
+    text-decoration: none;
+    color: #161616;
+    font-weight: normal;
+    position: relative;
+    display: inline-block;
+    z-index: 1; }
+    .event-info .tags a:before {
+      content: '';
+      z-index: -1;
+      display: block;
+      bottom: 1px;
+      position: absolute;
+      width: 100%;
+      height: auto;
+      border-bottom: 1px dotted #e4144a; }
 
 .event-info .tag {
   display: inline-block;

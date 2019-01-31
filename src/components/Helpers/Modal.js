@@ -22,7 +22,7 @@ class Modal extends Component {
 
 
   componentWillMount() {
-    this.setState({ saving: false, editingBrands: false, editingChannels: false, changes: 0, delete: false, valid: true });
+    this.setState({ saving: false, editingBrands: false, editingChannels: false, changes: 0, delete: false, valid: true, clone: false });
   }
 
   componentDidMount() {
@@ -96,6 +96,10 @@ class Modal extends Component {
     this.eventBackUp = JSON.stringify(eventBackUp);
   }
 
+  handleClone = () => {
+    this.saveChanges('');
+  }
+
   saveChanges = (id) => {
 
     id = !this.props.modal.new ? id : ''; 
@@ -111,7 +115,7 @@ class Modal extends Component {
       const activity_log = newData.activity_log !== undefined ? [ ...newData.activity_log, newActivity ] : [newActivity];
       // console.log(activity_log);
 
-      this.setState({saving: true, savingMessage: 'Saving Changes...'});
+      this.setState({saving: true, savingMessage: id === '' ? 'Creating Entry...' :'Saving Changes...'});
 
       const noChannelId = find(this.props.channelsInfo, x => x.slug === "no-channel").id;
       const noBrandId = find(this.props.brandsInfo, x => x.slug === "no-brand").id;
@@ -121,7 +125,7 @@ class Modal extends Component {
       const indexOfotherChannels = newData['channels'].indexOf(otherChannelsId);
       const indexOfNoBrand = newData['brands'].indexOf(noBrandId);
 
-      // console.log(newData['brands']);
+      // console.log(newData);
 
       if (indexOfNoChannel > -1 && newData['channels'].length > 1) {
         newData['channels'].splice(indexOfNoChannel, 1);
@@ -135,8 +139,6 @@ class Modal extends Component {
         newData['brands'].splice(indexOfNoBrand, 1);
         // console.log(newData['brands']);
       }
-
-
 
       axios({
         method: id !== '' ? 'put' : 'post',
@@ -160,6 +162,8 @@ class Modal extends Component {
             brands: newData['brands'],
             channels: newData['channels'],
             other_channels: removeSearched(newData['otherChannels']),
+            landing_page_url: newData['landing_page_url'],
+            creative_url: newData['creative_url'],
             activity_log: activity_log,
             status: true
           },
@@ -289,7 +293,11 @@ class Modal extends Component {
                   payload={() => this.goBack()}
                 />
 
-                <span className={`modal-handle ${handle}`}></span>      
+                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini design_path-unite' text="Duplicate"
+                disabled={this.props.modal.new || !this.state.edit || this.state.editingBrands || this.state.editingChannels || this.state.saving || this.state.delete} 
+                payload={() => this.handleClone()} />
+
+                <span className={`modal-handle ${handle}`}></span>     
 
                 <Trigger triggerClass="modal-nav-trigger" icon={this.state.saving ? 'nc-icon-outline arrows-1_refresh-69 circle-anim' : 'nc-icon-mini ui-1_check'}
                  text={this.state.saving ? this.state.savingMessage : 'Save'} 

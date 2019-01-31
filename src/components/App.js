@@ -29,7 +29,8 @@ import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
-const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'featured_market', 'market_more', 'program_type', 'campaign_group', 'segment', 'otherChannels'];
+// const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'program_type', 'campaign_group', 'segment', 'otherChannels']; //'featured_market', 
+const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'featured_market', 'program_type', 'campaign_group', 'segment', 'otherChannels']; 
 
 class App extends Component {
 
@@ -72,7 +73,7 @@ class App extends Component {
 
     const self = this;
 
-    _DEBUG && console.log('calling me');
+    // _DEBUG && console.log('calling me');
 
     if (this.auth() !== undefined) {
       axios({
@@ -81,7 +82,7 @@ class App extends Component {
         headers: this.auth(),
       }).then(function (response) {
 
-        // _DEBUG && console.log(response.data.description);
+        _DEBUG && console.log(response.data.description);
         
         self.user = { id: response.data.id, role: response.data.roles[0], state: response.data.description !== '' && response.data.description.length < _STATE_STRING_MAX_LENGTH ? response.data.description : '{}' };
         // self.user = { id: response.data.id, role: response.data.roles[0], state: '{}' };
@@ -146,7 +147,7 @@ class App extends Component {
                   self.events = events;
                   const userState = JSON.parse(self.user.state);
 
-                  self.setState({ 
+                  self.setState({
                     ...self.metaData,
                     ...userState,
                     events: self.events
@@ -156,9 +157,7 @@ class App extends Component {
                   const eventsData = getRestEventsData(self.metaData);
                   eventsData.then(events => {
 
-                    // console.log( self.events )
                     const allEvents = [...self.events, ...events];
-                    // console.log( allEvents );
 
                     self.events = allEvents;
 
@@ -223,9 +222,9 @@ class App extends Component {
                   const eventsData = getRestEventsData(self.metaData);
                   eventsData.then(events => {
 
-                    console.log( self.events )
+                    // console.log( self.events )
                     const allEvents = [...self.events, ...events];
-                    console.log( allEvents );
+                    // console.log( allEvents );
 
                     self.events = allEvents;
 
@@ -250,18 +249,52 @@ class App extends Component {
                 });
 
             } else {
-              self.updateEventData();
+
+              const firstEvents = JSON.parse(RefLocalStorage_Events);
+
+              if (firstEvents.length <= 100 ) {
+
+                const eventsData = getRestEventsData(self.metaData);
+                eventsData.then(events => {
+
+                  const allEvents = [...firstEvents, ...events];
+
+                  self.events = allEvents;
+
+                  console.log()
+
+                  localStorage.removeItem(
+                    'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today())
+                  );
+                  localStorage.setItem(
+                    'mrt_' + _CACHE + '_Events-' + month(today()) + "-" + year(today()),
+                    JSON.stringify(self.events)
+                  );
+                  // self.events = events;
+                  const userState = JSON.parse(self.user.state);
+
+                  self.setState({
+                    ...self.metaData,
+                    ...userState,
+                    events: self.events
+                  }, () => self.updateEventData());
+                });
+                
+
+              } else {
+                // console.log(JSON.parse(RefLocalStorage_Events).length);
+                self.updateEventData();
+              }
+
             }
-
           }
-
 
           // KEEP UPDATING IN THE BACKGROUND
         }
 
       })
       .catch(function (error) {
-        // _DEBUG && console.log('failed', error);
+        _DEBUG && console.log('failed', error);
       });
     }
   }
@@ -339,17 +372,22 @@ class App extends Component {
         _DEBUG && console.log('failed', error);
       });  
 
-      axios({
-        method: 'post',
-        url: _WP_URL + "/wp-json/acf/v3/options/options/",
-        headers: this.auth(),
-        data: {
-        }
-      }).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
-        console.log(error);
-      });  
+      // console.log(this.auth());
+
+      // axios({
+      //   method: 'get',
+      //   // url: _WP_URL + "/wp-json/acf/v3/options/options/",
+      //   url: _WP_URL + "/wp-json/wp/v2/links/",
+      //   headers: this.auth(),
+      //   // data: {
+      //   //   name: 'hola',
+      //   //   url: 'jkldsajkldas'
+      //   // }
+      // }).then(function (response) {
+      //   console.log(response);
+      // }).catch(function (error) {
+      //   console.log(error);
+      // });  
 
     } else {
       _DEBUG && console.log('same state');
@@ -633,7 +671,7 @@ class App extends Component {
   
   canEdit = (user) => ['editor', 'author', 'administrator'].indexOf(user.role) > -1;
 
-  canCreate = (user) => ['author', 'administrator'].indexOf(user.role) > -1;
+  canCreate = (user) => ['author', 'editor', 'administrator'].indexOf(user.role) > -1;
 
   handleResetFilters = () => {
 
@@ -682,7 +720,7 @@ class App extends Component {
           <div className={`content ${this.state.view}-view`}>
 
             {
-             this.state.refreshing && 
+             (this.state.refreshing || this.events.length <= 100) &&
               <div className="refreshing">
               </div>
             }
@@ -696,7 +734,8 @@ class App extends Component {
               this.canEdit(this.user) && this.canCreate(this.user) &&
                "|"
               }   
-              <span onClick={e => console.log(this.getShareableLink())}> <i className="nc-icon-mini ui-2_share-bold"></i> Copy Link</span>|
+              {// <span onClick={e => console.log(this.getShareableLink())}> <i className="nc-icon-mini ui-2_share-bold"></i> Copy Link</span>|
+              }
               <span onClick={e => this.handleRefreshCache()}> <i className="nc-icon-mini arrows-e_refresh-20"></i> Reload</span> 
               <span onClick={e => this.handleResetFilters()}> <i className="nc-icon-mini arrows-e_refresh-19"></i> Reset Filters</span> 
               <span onClick={() => window.open('/Help', '_blank')}><i className="nc-icon-mini ui-e_round-e-help"></i> Help</span>
@@ -808,6 +847,7 @@ class App extends Component {
         disabled={this.state.modal.show && isValid(this.state.events[this.state.modal.modalEvent])}
         filtersList={this.state.filtersList}
         events={this.events}
+        smartFilters={this.events.length > 100}
       />
     </div>
     :

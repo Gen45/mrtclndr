@@ -5,14 +5,15 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Select from 'react-select';
 // import stringSimilarity from 'string-similarity';
 import stringSimilarity from '../../helpers/compareStrings';
+import TimeAgo from 'react-timeago'
 
 import Header from './Header';
 import Brands from './Brands';
 import Dates from './Dates';
 import Timelines from './Timelines';
 
-import {isMultidate, getExtreme, today, compareDates} from '../../helpers/dates';
-import {isValid, removeSearched} from '../../helpers/misc';
+import { isMultidate, getExtreme, today, compareDates, dateTime} from '../../helpers/dates';
+import { isValid, removeSearched, urlify} from '../../helpers/misc';
 
 import {_COLORS} from '../../config/constants';
 
@@ -105,7 +106,7 @@ class Event extends Component {
             <div className='warning'>
               {
                 <span className="pretext">
-                  Problem with date: STAY END DATE CANNOT BE LOWER THAN STAY START DATE
+                  Problem with date: STAY END DATE CANNOT BE EARLIER THAN STAY START DATE
                 </span>
               }
             </div>
@@ -116,7 +117,7 @@ class Event extends Component {
             <div className='warning'>
               {
                 <span className="pretext">
-                  Problem with date: SELL END DATE CANNOT BE LOWER THAN SELL START DATE
+                  Problem with date: SELL END DATE CANNOT BE EARLIER THAN SELL START DATE
                 </span>
               }
             </div>
@@ -191,6 +192,21 @@ class Event extends Component {
                   )
                 }
               </p>
+              <p className='tags'>
+                {
+                  isValid(event.landing_page_url) &&
+                  <span className='tag'>
+                    <span style={{ color: _COLORS.LIGHTGRAY }}>Landing Page URL: </span> <u dangerouslySetInnerHTML={{ __html: urlify(event.landing_page_url) }} />
+                  </span>
+                }
+                {
+                  isValid(event.creative_url) &&
+                  <span className='tag'>
+                    <span style={{ color: _COLORS.LIGHTGRAY }}>Creative URL: </span> <u dangerouslySetInnerHTML={{ __html: urlify(event.creative_url) }} />
+                  </span>
+                }
+                
+              </p>
             </div>
           }
           {
@@ -242,6 +258,29 @@ class Event extends Component {
                   <span style={{ color: _COLORS.LIGHTGRAY }}>Ongoing: </span> {event.ongoing ? 'Yes' : 'No'}
                 </span>
               </div>
+
+
+              <div className="tags">
+                <Tooltip  title="Landing Page URL" delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                  html={(<TextareaAutosize autoFocus className="editable-field" tabIndex={0} placeholder="Landing Page URL" defaultValue={event.landing_page_url}
+                    onChange={(ev) => this.keepEdits(ev.target.value, 'landing_page_url')} style={{width:300}} />
+                    )} >
+                  <span className="tag editable-field" tabIndex={0}>
+                  <span style={{ color: _COLORS.LIGHTGRAY }}>Landing Page URL: </span> {event.landing_page_url}
+                  </span>
+                </Tooltip>
+                
+                <Tooltip  title="Creative URL" delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                  html={(<TextareaAutosize autoFocus className="editable-field" tabIndex={0} placeholder="Creative URL" defaultValue={event.creative_url}
+                    onChange={(ev) => this.keepEdits(ev.target.value, 'creative_url')} style={{width:300}} />
+                    )} >
+                  <span className="tag editable-field" tabIndex={0}>
+                  <span style={{ color: _COLORS.LIGHTGRAY }}>Creative URL: </span> {event.creative_url}
+                  </span>
+                </Tooltip>
+              </div>
+
+
 
             </div>            
           }          
@@ -305,8 +344,21 @@ class Event extends Component {
                         <span className="action">{a['activity'].action}</span>
                         <span>by</span>
                         <span className="name">{a['activity'].user.display_name !== undefined ? a['activity'].user.display_name : 'DELETED USER'}</span>
-                        <span>on</span>
-                        <span className="date">{a['activity'].date}</span>
+                        <span></span>
+                        <span className="date">
+                          <Tooltip 
+                            title={`${dateTime(new Date(`${a['activity'].date} UTC`))}`}
+                            trigger="mouseenter"
+                            delay={200}
+                            arrow={true}
+                            distance={30}
+                            theme="light"
+                            size="big"
+                            position="bottom"
+                          >
+                          <TimeAgo title="" date={`${a['activity'].date} UTC`}  />
+                          </Tooltip>
+                        </span>
                       </div>
                     )
                   }

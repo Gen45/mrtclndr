@@ -24,7 +24,22 @@ export const decodeHTML =  (html) => {
 };
 
 export const removeSearched = (str) => {
-  return str
-    .replace(/<b class="searched">/g, '')
-    .replace(/<\/b>/g, '');
+  if (typeof str === 'string'){
+    return str
+      .replace(/<b class="searched">/g, '')
+      .replace(/<\/b>/g, '');
+  } else {
+    return '';
+  }
+}
+
+export const urlify = (text) => {
+    var wwwRegex = /^(www\.[^\s]+)/g;
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(wwwRegex, function(url) {
+      return 'http://' + url;
+    })    
+    .replace(urlRegex, function(url) {
+      return '<a target="_blank" rel="noopener noreferrer" href="' + url + '">' + url + '</a>';
+    })
 }
