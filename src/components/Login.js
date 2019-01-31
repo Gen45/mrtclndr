@@ -48,7 +48,7 @@ class Login extends Component {
       if(response.status === 200){
 
         const token = response.data.token;
-        localStorage.setItem('auth-'+today(), token);
+        sessionStorage.setItem('auth-'+today(), token);
         self.setState({error : false});
         const key = isValid(self.from) ? self.from.key : '';
         // console.log(response);
@@ -86,7 +86,7 @@ class Login extends Component {
             </button>
 
           <p style={{paddingTop: 20}}>{this.state.error ? 'Invalid information, please try again.' : <br/>}</p>
-          <p><a target="_blank" rel="noopener noreferrer" href="http://admin.marriottcalendar.com/wp-login.php?action=lostpassword" style={{ color: 'white', fontSize: 12 }}>Lost your Password?</a> | <Link style={{ color: 'white', fontSize: 12 }} to="/help">Help</Link></p>
+          <p><a target="_blank" rel="noopener noreferrer" href="https://marriottcalendar.com/backend/wp-login.php?action=lostpassword" style={{ color: 'white', fontSize: 12 }}>Lost your Password?</a> | <Link style={{ color: 'white', fontSize: 12 }} to="/help">Help</Link></p>
       </form>
     </div>)
   }

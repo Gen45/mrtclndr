@@ -29,8 +29,8 @@ import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
-const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'program_type', 'campaign_group', 'segment', 'otherChannels']; //'featured_market', 
-// const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'featured_market', 'program_type', 'campaign_group', 'segment', 'otherChannels']; 
+// const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'program_type', 'campaign_group', 'segment', 'otherChannels']; //'featured_market', 
+const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'featured_market', 'program_type', 'campaign_group', 'segment', 'otherChannels']; 
 
 class App extends Component {
 
@@ -54,6 +54,10 @@ class App extends Component {
       this.readyLoad = true;
     } else {
       reject();
+    }
+
+    if (localStorage.length >= 6) {
+      localStorage.clear();
     }
  
     const RefLocalStorage_State = localStorage.getItem('mrt_'+ _CACHE +'_State');
@@ -404,7 +408,7 @@ class App extends Component {
   }
 
   auth = () => {
-    const token = localStorage.getItem(`auth-${today()}`);
+    const token = sessionStorage.getItem(`auth-${today()}`);
     if (token) {
       return { 'Authorization': "Bearer " + token };
     } else {
@@ -432,12 +436,14 @@ class App extends Component {
       this.metaData = JSON.parse(RefLocalStorage_Meta);
       // this.metaData = JSON.parse(atob(RefLocalStorage_Meta));
 
-      this.events = JSON.parse(RefLocalStorage_Events);
+      this.events = JSON.parse(RefLocalStorage_Events); //.filter(e => e.status);
       let eventsIds = {};
+
 
       Object.keys(this.events).forEach(e => { 
         eventsIds[this.events[e].id] = e;
       });
+      
 
       Object.keys(latestEvents).forEach(e => {
         if (eventsIds[latestEvents[e].id] !== undefined) {
@@ -513,13 +519,13 @@ class App extends Component {
 
   updateEventList = (events, update) => {
 
-    _DEBUG && console.log('updateEventList');
+    _DEBUG && console.log('updateEventList'); 
 
     const timeRange = getTimeRange(this.state.time);
     const dayOfTheYear = getExtreme([today()]);
 
     // FILTER BY STATUS
-    events = events.filter(e => e.status);
+    events = events.filter(e => e.status); 
 
     // FILTER BY TIME
     events = events.filter(e => !(e.latestDay < timeRange.earliestDay || e.earliestDay > timeRange.latestDay));
@@ -728,7 +734,7 @@ class App extends Component {
             <div className="more-tools">
               {
                 this.canEdit(this.user) && this.canCreate(this.user) &&
-                <span onClick={() => window.open('http://admin.marriottcalendar.com/wp-admin', '_blank')}> <i className="nc-icon-mini media-2_knob"></i> Admin</span>
+                <span onClick={() => window.open('https://marriottcalendar.com/backend/wp-admin', '_blank')}> <i className="nc-icon-mini media-2_knob"></i> Admin</span>
               }
               {
               this.canEdit(this.user) && this.canCreate(this.user) &&

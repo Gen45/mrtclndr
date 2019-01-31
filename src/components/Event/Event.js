@@ -163,8 +163,9 @@ class Event extends Component {
               }
             </div>
           {
-            this.props.view === 'grid' && !this.props.editable && 
+            this.props.view === 'grid' && !this.props.editable &&
             <div>
+
               <p className='tags'>
                 <span className="tag"> 
                   <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
@@ -178,13 +179,13 @@ class Event extends Component {
                       [
                         { name: "Region", val: event.region[0].name },
                         { name: "Market Scope", val: event.market_scope[0].name },
-                        { name: "Featured Market", val: `${event.featured_market[0].id !== 502 ? event.featured_market[0].name : event.market_more !== "" ? 'Other' : 'None' }` },
-                        { name: "Other Markets", val: event.market_more }, 
+                        { name: "Featured Markets", 
+                    val: event.featured_market.reduceRight((a, i) => `${i.name === 'No Featured Market' ? '' : i.name}${a === '' ? '': (i.name === 'No Featured Market' ? '': ', ') + a }`, event.market_more)  },
                         { name: "Program Type", val: event.program_type[0].name }, 
                         { name: "Campaign Group", val: event.campaign_group[0].name }, 
                         { name: "Segment", val: event.segment[0].name },
                         { name: "Ongoing", val: event.ongoing ? 'Yes' : 'No' },
-                      ].map((e, i)=> isValid(e.val) ?
+                      ].map((e, i) => isValid(e.val) && e.val !== `No ${e.name}` ?
                     <span key={i} className='tag'>
                       <span style={{color: _COLORS.LIGHTGRAY }}>{e.name}: </span> <u dangerouslySetInnerHTML={{ __html: e.val }} />
                     </span>

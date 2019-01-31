@@ -13,10 +13,10 @@ import {
   decodeHTML
 } from '../helpers/misc';
 
-const WP_URL = 'http://admin.marriottcalendar.com/wp-json/wp/v2/';
+const WP_URL = 'https://marriottcalendar.com/backend/wp-json/wp/v2/';
 
 const auth = () => {
-  const token = localStorage.getItem(`auth-${today()}`);
+  const token = sessionStorage.getItem(`auth-${today()}`);
   if (token) {
     return { 'Authorization': "Bearer " + token }; //JSON.parse(decodeURIComponent(escape(atob(auth))));
   }
@@ -256,9 +256,16 @@ export const prepareEvent = (e, metaData) => {
   const _channels = e.channel.length > 0 ? e.channel : [find(metaData.channels, x => x.slug === 'no-channel').id];
   // const _featured_markets = e.featured_markets.length > 0 ? e.featured_markets : [find(metaData.featured_markets, x => x.slug === 'no-featured_markets').id];
 
+  // console.log(e.featured_markets)
+
+  const _featured_markets = e.featured_markets.length > 0 
+  ? e.featured_markets.map(fm => find(metaData.featured_markets, x => x.id === fm) ) 
+  : [find(metaData.featured_markets, x => x.slug === 'no-featured-market')];
+
+
   // console.log(_featured_markets);
 
-  const _featured_markets = e.featured_markets[0] ? find(metaData.featured_markets, x => x.id === e.featured_markets[0]) : find(metaData.featured_markets, x => x.slug === 'no-featured-market');
+  // const _featured_markets = e.featured_markets[0] ? find(metaData.featured_markets, x => x.id === e.featured_markets[0]) : find(metaData.featured_markets, x => x.slug === 'no-featured-market');
 
   const _offers = e.offer[0] ? find(metaData.offers, x => x.id === e.offer[0]) : find(metaData.offers, x => x.slug === 'no-offer');
   const _campaign_groups = e.campaign_group[0] ? find(metaData.campaign_groups, x => x.id === e.campaign_group[0]) : find(metaData.campaign_groups, x => x.slug === 'no-campaign-group');
@@ -275,8 +282,8 @@ export const prepareEvent = (e, metaData) => {
 
   // console.log(auth());
 
-  // if (false){
-  if (e.acf.status === false){
+  if (false){
+  // if (e.acf.status === false){
     // console.log(e.acf.status);
     axios({
       method: 'delete',
@@ -305,8 +312,8 @@ export const prepareEvent = (e, metaData) => {
     ,[]))],
     channels: _channels,
     offer: [{ id: _offers.id, name: _offers.name, color: _offers.color }],
-    featured_market: [{ id: _featured_markets.id, name: _featured_markets.name }],
-    // featured_market: _featured_markets,
+    // featured_market: [{ id: _featured_markets.id, name: _featured_markets.name }],
+    featured_market: _featured_markets,
     market_more: e.acf.market_more,
     landing_page_url: e.acf.landing_page_url,
     creative_url: e.acf.creative_url,

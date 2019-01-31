@@ -1433,7 +1433,7 @@ body.activity-type .activity-type-group {
 
 .event-info .tags {
   display: inline-block;
-  width: auto;
+  width: 100%;
   margin-bottom: 15px; }
   .event-info .tags a {
     text-decoration: none;
@@ -1451,6 +1451,12 @@ body.activity-type .activity-type-group {
       width: 100%;
       height: auto;
       border-bottom: 1px dotted #e4144a; }
+  .event-info .tags:before {
+    content: '';
+    display: block;
+    position: relative;
+    width: 100%;
+    min-width: 310px; }
 
 .event-info .tag {
   display: inline-block;
@@ -1560,7 +1566,7 @@ body.activity-type .activity-type-group {
     background-color: rgba(22, 22, 22, 0.75);
     animation: open_modal 0.25s ease 1; }
     .modal .modal-wrapper.editable {
-      animation: pulse-shadow 2s infinite, open_modal 0.25s ease 1; }
+      animation: pulse-shadow 2s infinite, open_modal 0.25s ease 1; }
     @media screen and (max-width: 940px) {
       .modal .modal-wrapper {
         border-radius: 0;

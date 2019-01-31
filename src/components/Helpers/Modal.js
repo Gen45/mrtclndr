@@ -54,7 +54,7 @@ class Modal extends Component {
   }
 
   auth = () => {
-    const token = localStorage.getItem(`auth-${today()}`);
+    const token = sessionStorage.getItem(`auth-${today()}`);
     if (token) {
       return { 'Authorization': "Bearer " + token }; //JSON.parse(decodeURIComponent(escape(atob(auth))));
     } else {
@@ -239,7 +239,7 @@ class Modal extends Component {
           event={this.props.events[this.props.modal.modalEvent]} view='grid' elevated={true} handleCloseModal={this.props.handleCloseModal} time={this.props.time} 
           brandsInfo={this.props.brandsInfo} 
           channelsInfo={this.props.channelsInfo} 
-          editable={this.state.edit} 
+          editable={this.state.edit && !this.state.saving}
           updateState= {this.props.updateState} 
           saveChanges={this.saveChanges}
           offers={this.props.offers}

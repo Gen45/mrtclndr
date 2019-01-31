@@ -555,7 +555,7 @@
 
     .tags {
         display: inline-block;
-        width: auto;
+        width: 100%;
         margin-bottom: $padding - $padding / 4;
         a {
             text-decoration: none;
@@ -575,6 +575,13 @@
                 height: auto;
                 border-bottom: 1px dotted $color-accent;
             }
+        }
+        &:before {
+            content: '';
+            display: block;
+            position: relative;
+            width: 100%;
+            min-width: 310px;
         }
     }
 

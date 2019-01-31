@@ -6,7 +6,7 @@ import {_LOGO} from '../../config/constants';
 
 class Header extends Component {
 
-  newEntry = () => window.open('http://admin.marriottcalendar.com/wp-admin/post-new.php?post_type=entry', '_blank');
+  newEntry = () => window.open('https://marriottcalendar.com/backend/wp-admin/post-new.php?post_type=entry', '_blank');
 
   render() {
 
