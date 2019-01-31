@@ -29,8 +29,8 @@ import EventsWrapper from './Main/EventsWrapper';
 import Sidebar from './Sidebar/Sidebar';
 import Modal, {OpenModal} from './Helpers/Modal';
 
-// const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'program_type', 'campaign_group', 'segment', 'otherChannels']; //'featured_market', 
-const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'featured_market', 'program_type', 'campaign_group', 'segment', 'otherChannels']; 
+const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'program_type', 'campaign_group', 'segment', 'otherChannels']; //'featured_market', 
+// const _SEARCHABLE = ['campaign_name', 'description', 'owner', 'offer', 'region', 'market_scope', 'market_more', 'featured_market', 'program_type', 'campaign_group', 'segment', 'otherChannels']; 
 
 class App extends Component {
 
