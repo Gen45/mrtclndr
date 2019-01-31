@@ -734,7 +734,7 @@ class App extends Component {
             <div className="more-tools">
               {
                 this.canEdit(this.user) && this.canCreate(this.user) &&
-                <span onClick={() => window.open('https://marriottcalendar.com/backend/wp-admin', '_blank')}> <i className="nc-icon-mini media-2_knob"></i> Admin</span>
+                <span onClick={() => window.open('http://marriottcalendar.com/backend/wp-admin', '_blank')}> <i className="nc-icon-mini media-2_knob"></i> Admin</span>
               }
               {
               this.canEdit(this.user) && this.canCreate(this.user) &&
