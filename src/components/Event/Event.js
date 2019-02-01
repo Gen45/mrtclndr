@@ -45,7 +45,7 @@ class Event extends Component {
   }
   
   checkSimilarities = () => {
-    let similarCampaignNames = this.props.events.filter(e => stringSimilarity.compareTwoStrings(this.props.event.campaign_name.toLowerCase(), e.campaign_name.toLowerCase()) > 0.9 && e.id !== this.props.event.id );
+    let similarCampaignNames = this.props.events.filter(e => stringSimilarity.compareTwoStrings(this.props.event.campaign_name.toLowerCase(), e.campaign_name.toLowerCase()) > 0.8 && e.id !== this.props.event.id );
     // console.log(similarCampaignNames);
     this.setState({ similar: similarCampaignNames });
   }

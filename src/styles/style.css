@@ -497,6 +497,12 @@ textarea:focus, input:focus, button:focus {
     .main {
       width: 100%; } }
 
+@media screen and (max-width: 940px) {
+  .main .content.grid-view > header h2.title {
+    margin-left: 20px; }
+  .more-tools {
+    text-align: center !important; } }
+
 .pagination {
   min-width: 60px;
   margin-left: -10px;
@@ -689,7 +695,8 @@ textarea:focus, input:focus, button:focus {
   padding: 40px 20px 20px;
   text-align: center;
   z-index: 999;
-  transition: opacity 0.3s ease 0, width 0 ease 0; }
+  transition: opacity 0.3s ease 0, width 0 ease 0;
+  animation: open_modal 0.25s ease 1; }
   .trigger-box-children .trigger-box-children {
     background: rgba(94, 94, 94, 0.98); }
   .trigger-box-children h4 {
@@ -1103,11 +1110,13 @@ body.activity-type .activity-type-group {
     margin: 5px;
     position: relative;
     vertical-align: top;
+    transition: opacity 0.15s;
     display: inline-block;
     color: #666666 !important;
     overflow: hidden;
     height: 300px;
-    border-radius: 5px; }
+    border-radius: 5px;
+    animation: tile 0.3s ease 1; }
     .grid-view .event .event-inner {
       height: 100%;
       display: flex;
@@ -1433,7 +1442,7 @@ body.activity-type .activity-type-group {
 
 .event-info .tags {
   display: inline-block;
-  width: 100%;
+  width: 90%;
   margin-bottom: 15px; }
   .event-info .tags a {
     text-decoration: none;
@@ -1566,7 +1575,7 @@ body.activity-type .activity-type-group {
     background-color: rgba(22, 22, 22, 0.75);
     animation: open_modal 0.25s ease 1; }
     .modal .modal-wrapper.editable {
-      animation: pulse-shadow 2s infinite, open_modal 0.25s ease 1; }
+      animation: pulse-shadow 2s infinite, open_modal 0.25s ease 1; }
     @media screen and (max-width: 940px) {
       .modal .modal-wrapper {
         border-radius: 0;
@@ -1623,7 +1632,8 @@ body.activity-type .activity-type-group {
     height: auto;
     border-radius: 0;
     margin: 5px;
-    margin-top: 0; }
+    margin-top: 0;
+    animation: none; }
     .modal .event .event-inner .event-info {
       min-height: 370px; }
       .modal .event .event-inner .event-info:before {
@@ -1752,7 +1762,7 @@ span.flatpickr-weekday {
 
 .PAST-EVENT {
   filter: grayscale(40%);
-  opacity: 0.8; }
+  opacity: 0.9; }
 
 .searched {
   font-weight: normal;
@@ -1760,7 +1770,7 @@ span.flatpickr-weekday {
   border-bottom: 1px solid #e4144a; }
 
 .refreshing {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.75);
   position: absolute;
   top: 0;
   left: 0;
@@ -1778,7 +1788,7 @@ span.flatpickr-weekday {
     height: 60px;
     width: 60px;
     left: calc(50% - 30px);
-    top: calc(25% - 30px);
+    top: calc(50% - 30px);
     position: absolute;
     border-radius: 60px;
     z-index: 2; }
@@ -1792,7 +1802,7 @@ span.flatpickr-weekday {
     height: 60px;
     width: 60px;
     left: calc(50% - 30px);
-    top: calc(25% - 30px);
+    top: calc(50% - 30px);
     position: absolute;
     border-radius: 60px;
     z-index: 1;
@@ -1827,6 +1837,16 @@ span.flatpickr-weekday {
     transform: scale(0.85);
     opacity: 0; }
   100% {
+    transform: scale(1);
+    opacity: 1; } }
+
+@keyframes tile {
+  0% {
+    border-radius: 20px;
+    transform: scale(0.95);
+    opacity: 0.75; }
+  100% {
+    border-radius: 5px;
     transform: scale(1);
     opacity: 1; } }
 
@@ -2082,8 +2102,21 @@ input.search-box {
 .tag.editable-field {
   min-width: 25%; }
 
-.other-channels.editable-field {
-  color: #ffffff; }
+.other-channels.editable-field,
+.tippy-tooltip-content textarea.editable-field {
+  background: #eeeeee !important;
+  color: #000000 !important;
+  height: 35px;
+  line-height: 35px;
+  text-align: left;
+  padding: 0 10px;
+  margin: 0; }
+  .other-channels.editable-field:focus,
+  .tippy-tooltip-content textarea.editable-field:focus {
+    background: #eeeeee !important; }
+
+.tippy-tooltip-content textarea.editable-field {
+  margin-bottom: -5px; }
 
 .description .editable-field,
 .activity .editable-field {
@@ -2243,7 +2276,7 @@ input.search-box {
 
 :not(.editable-field)::-webkit-input-placeholder,
 .editable-field.other-channels::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.35); }
+  color: rgba(170, 170, 170, 0.75); }
 
 .icon {
   width: 30px;

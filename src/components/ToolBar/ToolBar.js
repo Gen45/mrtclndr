@@ -145,7 +145,7 @@ class ToolBar extends Component {
       <FiltersGroup ref={FiltersGroup => this.mainFiltersGroupRef = FiltersGroup}
         title='Settings' icon='nc-icon-mini ui-1_settings-gear-65' disabled={false} collapsed={this.state.collapsed } >
         <FilterCategory>
-          <TriggerBox title='Time Frame' icon='nc-icon-mini ui-1_calendar-60' width={270} renderChildren={true} align='left' showTitle={false}>
+          <TriggerBox title='Time' icon='nc-icon-mini ui-1_calendar-60' width={270} renderChildren={true} align='left' showTitle={false}>
             <div className='group'>
               <h4>MODE</h4>
               <Trigger propState={this.props.time.mode} propStateValue='Y'
@@ -226,7 +226,7 @@ class ToolBar extends Component {
         { this.state.collapsed && <hr/> }
 
           <FilterCategory>
-            <TriggerBox title="Sort / Order" icon="nc-icon-mini arrows-2_direction" width={300} renderChildren={true} align="left">
+            <TriggerBox title="Sort/Order" icon="nc-icon-mini arrows-2_direction" width={300} renderChildren={true} align="left">
               <div className='group'>
                 <h4>Sort by</h4>
                 <Trigger propState={this.props.groupByType} propStateValue="modified" icon="nc-icon-outline ui-2_time-clock"

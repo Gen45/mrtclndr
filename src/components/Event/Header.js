@@ -58,11 +58,11 @@ class Header extends Component {
           }
           {
             this.props.editingChannels &&
-            <div style={{ display: 'block', width: '100%', margin: '10px 0', textAlign: 'center', color: '#FFFFFF' }}> Other Channels </div>
+            <div style={{ display: 'block', width: '100%', margin: '10px 0', textAlign: 'center', color: '#FFFFFF' }}> Other Channels: </div>
           }
           {
             this.props.editingChannels &&
-            <TextareaAutosize style={{ width: '90%' }} className="other-channels editable-field" placeholder="Click here to add 'Other Channels'" defaultValue={removeSearched(this.props.otherChannels)} onChange={(e) => this.handleOtherChannels(e.target.value, 'otherChannels')} />
+            <TextareaAutosize style={{ width: '90%' }} className="other-channels editable-field" placeholder="Click here to type 'Other Channels'" defaultValue={removeSearched(this.props.otherChannels)} onChange={(e) => this.handleOtherChannels(e.target.value, 'otherChannels')} />
           }
           {
             !this.props.editingChannels &&
@@ -79,11 +79,11 @@ class Header extends Component {
           }
           {
             this.props.editable && !this.props.editingChannels &&
-            <span className="edit-channels" onClick={() => { this.props.editChannels(true) }}><i className="nc-icon-mini ui-1_pencil" ></i> Edit Channels</span>
+            <span className="edit-channels" onClick={() => { this.props.editChannels(true) }}><i className="nc-icon-mini ui-1_pencil"></i> Edit Channels</span>
           }
           {
             this.props.editingChannels &&
-            <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign:'center', color: '#FFFFFF'}}>  </div>
+            <div style={{display: 'block', width: '100%', margin: '10px 0', textAlign: 'center', color: '#FFFFFF'}}>  </div>
           }
           {
             this.props.starred && !this.props.isModal &&

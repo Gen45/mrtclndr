@@ -341,8 +341,8 @@ class App extends Component {
     
     if (!sameState) {
 
-      const shareableLink = this.getShareableLink();
-      _DEBUG && console.log(shareableLink);
+      // const shareableLink = this.getShareableLink();
+      // _DEBUG && console.log(shareableLink);
       
 
       // _DEBUG && console.log(this.stateString);
@@ -394,7 +394,7 @@ class App extends Component {
       // });  
 
     } else {
-      _DEBUG && console.log('same state');
+      _DEBUG && console.log('same state'); 
     }
   }
 
@@ -416,7 +416,7 @@ class App extends Component {
     }
   }
 
-  updateEventData = () => {
+  updateEventData = (openThisModal) => {
 
     // _DEBUG && console.log('updating');
     // this.setState({ready: false});
@@ -476,6 +476,11 @@ class App extends Component {
       self.setState({
         ready: true
       });
+
+
+      if( openThisModal !== undefined ){
+        this.setState({modal:{ ...OpenModal(openThisModal, this.state.events), edit: true}});
+      }
 
     });
   };
@@ -814,6 +819,7 @@ class App extends Component {
               handleToggleStar={this.handleToggleStar}
               modal={this.state.modal}
               events={this.state.events}
+              allTheEvents={this.events}
               time={time}
               updateState={this.updateState}
               starred={this.state.starred}

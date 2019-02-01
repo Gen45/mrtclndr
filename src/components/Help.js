@@ -18,6 +18,7 @@ const videos = [
   { id: 312451622, name: 'ADD NEW ENTRY' },
   { id: 312451739, name: 'EDIT ENTRY' },
   { id: 312451714, name: 'DELETE ENTRY' },
+  { id: 314576853, name: 'DUPLICATE ENTRY' },
   { id: 312580849, name: 'ADDING ENTRY FROM BACKEND' },
   { id: 312456827, name: 'TIME FRAME TOOLS' },
   { id: 312456803, name: 'SORT - ORDER' },

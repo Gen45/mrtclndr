@@ -20,9 +20,8 @@ export const OpenModal = (targetId, events)=> {
 
 class Modal extends Component {
 
-
   componentWillMount() {
-    this.setState({ saving: false, editingBrands: false, editingChannels: false, changes: 0, delete: false, valid: true, clone: false });
+    this.setState({ saving: false, editingBrands: false, editingChannels: false, changes: 0, delete: false, valid: true, clone: false, edit: this.props.modal.edit });
   }
 
   componentDidMount() {
@@ -30,10 +29,6 @@ class Modal extends Component {
       this.handleEdit();
     }
   }
-
-  // componentDidUpdate() {
-  //   console.log(this.props.event);
-  // }
 
   valid = (valid) => {
     this.setState({valid});
@@ -97,10 +92,13 @@ class Modal extends Component {
   }
 
   handleClone = () => {
-    this.saveChanges('');
+    this.setState({edit: true});
+    this.saveChanges('', true);
   }
 
-  saveChanges = (id) => {
+  saveChanges = (id, duplicate) => {
+
+    duplicate === undefined ? false : duplicate;
 
     id = !this.props.modal.new ? id : ''; 
 
@@ -111,11 +109,12 @@ class Modal extends Component {
       const self = this;
       const newData = this.props.events[this.props.modal.modalEvent];
       // console.log(id);
-      const newActivity = { activity: { date: new Date(), action: id !== '' ? 'edited' : 'created', user: this.props.userId } };
-      const activity_log = newData.activity_log !== undefined ? [ ...newData.activity_log, newActivity ] : [newActivity];
+      const newActivity = { activity: { date: new Date(), action: duplicate ? 'Cloned' : (id !== '' ? 'Edited' : 'Created'), user: this.props.userId } };
+      // const activity_log = newData.activity_log !== undefined || id !== '' ? [ ...newData.activity_log, newActivity ] : [newActivity];
+      const activity_log = newData.activity_log !== undefined && id !== '' ? [ ...newData.activity_log, newActivity ] : [newActivity];
       // console.log(activity_log);
 
-      this.setState({saving: true, savingMessage: id === '' ? 'Creating Entry...' :'Saving Changes...'});
+      this.setState({saving: true, savingMessage: duplicate ? 'Duplicating...' : (id === '' ? 'Creating Entry...' :'Saving Changes...')});
 
       const noChannelId = find(this.props.channelsInfo, x => x.slug === "no-channel").id;
       const noBrandId = find(this.props.brandsInfo, x => x.slug === "no-brand").id;
@@ -124,8 +123,6 @@ class Modal extends Component {
       const indexOfNoChannel = newData['channels'].indexOf(noChannelId);
       const indexOfotherChannels = newData['channels'].indexOf(otherChannelsId);
       const indexOfNoBrand = newData['brands'].indexOf(noBrandId);
-
-      // console.log(newData);
 
       if (indexOfNoChannel > -1 && newData['channels'].length > 1) {
         newData['channels'].splice(indexOfNoChannel, 1);
@@ -137,17 +134,20 @@ class Modal extends Component {
 
       if (indexOfNoBrand > -1 && newData['brands'].length > 1) {
         newData['brands'].splice(indexOfNoBrand, 1);
-        // console.log(newData['brands']);
       }
+
+      // console.log(duplicate);
+      
+      const newCampaignName = removeSearched(newData['campaign_name']) + (duplicate !== undefined ? ' (copy)' : ''); 
 
       axios({
         method: id !== '' ? 'put' : 'post',
         url: _WP_URL + "/wp-json/wp/v2/entry/" + id,
         headers: this.auth(),
         data: {
-          title: removeSearched(newData['campaign_name']),
+          title: newCampaignName,
           fields: {
-            campaign_name: removeSearched(newData['campaign_name']),
+            campaign_name: newCampaignName,
             description: removeSearched(newData['description']).replace(/<br \/>/g, ''),
             dates: {...newData['dates'], ongoing: newData['ongoing']},
             offer: newData['offer'][0]['id'],
@@ -165,16 +165,20 @@ class Modal extends Component {
             landing_page_url: newData['landing_page_url'],
             creative_url: newData['creative_url'],
             activity_log: activity_log,
+            original: duplicate ? newData['id'] : null,
             status: true
           },
           status: 'publish'
         }
       }).then(function (response) {
+
         self.setState({ saving: false, edit: false, editingBrands: false, editingChannels: false });
-        self.props.updateState({ modal: { new: false, edit: false, show: false } }, true);
+        self.props.updateState({
+          //  order: { sortBy: ["date_modified", "offer[0][\"name\"]", "region[0][\"name\"]"], orderBy: ["desc", "desc", "desc"], groupByType: "modified", orderDirection: "DESCENDING" },
+         modal: { new: false, edit: duplicate, show: duplicate }}, true);
 
         // console.log('success', response);
-        self.props.updateEventData();
+        self.props.updateEventData( duplicate ? response.data.id : undefined ); // open modal
 
       })
       .catch(function (error) {
@@ -219,15 +223,19 @@ class Modal extends Component {
   }
 
   cancelEdit = (id) => {
-    this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
+    if (this.eventBackUp !== undefined) {
+      this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
+    }
     this.setState({edit:false, editingChannels: false, editingBrands: false});
     if(this.props.modal.new) {
       this.props.updateState({ modal: { new: false, edit: false, show: false }}, true);
     }
   }
 
-  goBack = () => {
-    // this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
+  goBack = (cancel) => {
+    if (cancel) {
+      this.props.events[this.props.modal.modalEvent] = JSON.parse(this.eventBackUp);
+    }
     this.setState({editingChannels: false, editingBrands: false});
   }
 
@@ -288,16 +296,20 @@ class Modal extends Component {
                 <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} 
                   icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
 
-                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_tail-left' text="Back"
-                  disabled={!this.state.editingBrands && !this.state.editingChannels} 
-                  payload={() => this.goBack()}
-                />
-
                 <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini design_path-unite' text="Duplicate"
-                disabled={this.props.modal.new || !this.state.edit || this.state.editingBrands || this.state.editingChannels || this.state.saving || this.state.delete} 
+                disabled={!this.props.canEdit || this.state.edit || this.props.modal.new || this.state.editingBrands || this.state.editingChannels || this.state.saving || this.state.delete} 
                 payload={() => this.handleClone()} />
 
+                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_tail-left' text='Go Back Without Saving'
+                  disabled={!this.state.editingBrands && !this.state.editingChannels}
+                  payload={() => this.goBack(true)}
+                />
+               
                 <span className={`modal-handle ${handle}`}></span>     
+
+                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini design_path-unite' text="Save as Copy"
+                disabled={true || !this.state.edit || this.props.modal.new || this.state.editingBrands || this.state.editingChannels || this.state.saving || this.state.delete} 
+                payload={() => this.handleClone()} />
 
                 <Trigger triggerClass="modal-nav-trigger" icon={this.state.saving ? 'nc-icon-outline arrows-1_refresh-69 circle-anim' : 'nc-icon-mini ui-1_check'}
                  text={this.state.saving ? this.state.savingMessage : 'Save'} 
@@ -318,6 +330,11 @@ class Modal extends Component {
 
                 <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" icon='nc-icon-mini ui-1_simple-remove'
                     payload={() => this.handleCloseModal()}/>
+
+                <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini nc-icon-mini ui-1_check' text={`Save ${this.state.editingBrands ? 'Brands' : 'Channels'}`}
+                  disabled={!this.state.editingBrands && !this.state.editingChannels}
+                  payload={() => this.goBack()}
+                />
                     
               </nav>
               {
