@@ -408,7 +408,7 @@ class App extends Component {
   }
 
   auth = () => {
-    const token = sessionStorage.getItem(`auth-${today()}`);
+    const token = sessionStorage.getItem(`auth-mrt`);
     if (token) {
       return { 'Authorization': "Bearer " + token };
     } else {

@@ -16,7 +16,7 @@ import {
 const WP_URL = 'https://marriottcalendar.com/backend/wp-json/wp/v2/';
 
 const auth = () => {
-  const token = sessionStorage.getItem(`auth-${today()}`);
+  const token = sessionStorage.getItem(`auth-mrt`);
   if (token) {
     return { 'Authorization': "Bearer " + token }; //JSON.parse(decodeURIComponent(escape(atob(auth))));
   }

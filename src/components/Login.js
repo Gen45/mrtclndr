@@ -48,7 +48,7 @@ class Login extends Component {
       if(response.status === 200){
 
         const token = response.data.token;
-        sessionStorage.setItem('auth-'+today(), token);
+        sessionStorage.setItem('auth-mrt', token);
         self.setState({error : false});
         const key = isValid(self.from) ? self.from.key : '';
         // console.log(response);
