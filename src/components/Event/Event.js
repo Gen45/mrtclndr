@@ -71,6 +71,11 @@ class Event extends Component {
 
     const tooltip_styles = { width: 250, fontSize: 14, textAlign: 'left' };
 
+    
+    const getFeaturedMarkets = (featured_markets) => {
+      return featured_markets.reduceRight((a, i) => `${i.name === 'No Featured Market' ? '' : i.name}${a === '' ? '' : (i.name === 'No Featured Market' ? '' : '; ') + a}`, event.market_more);
+    }
+
     // console.log(event);
 
     return (
@@ -179,8 +184,7 @@ class Event extends Component {
                       [
                         { name: "Region", val: event.region[0].name },
                         { name: "Market Scope", val: event.market_scope[0].name },
-                        { name: "Featured Markets", 
-                    val: event.featured_market.reduceRight((a, i) => `${i.name === 'No Featured Market' ? '' : i.name}${a === '' ? '': (i.name === 'No Featured Market' ? '': ', ') + a }`, event.market_more)  },
+                        { name: "Featured Markets", val: getFeaturedMarkets(event.featured_market) },
                         { name: "Program Type", val: event.program_type[0].name }, 
                         { name: "Campaign Group", val: event.campaign_group[0].name }, 
                         { name: "Segment", val: event.segment[0].name },
@@ -217,10 +221,10 @@ class Event extends Component {
               <div className='tags'>
                 {
                   [
-                    { field:'offer', name: "Offer", val: event.offer[0].name, options: this.cleanFilterInfo(this.props.offers)},
+                    { field:'offer', name: "Offer", val: event.offer[0].name, options: this.cleanFilterInfo(this.props.offers), isSearchable: true},
                     { field:'region', name: "Region", val: event.region[0].name, options: this.cleanFilterInfo(this.props.regions)},
                     { field:'market_scope', name: "Market Scope", val: event.market_scope[0].name, options: this.cleanFilterInfo(this.props.market_scopes)},
-                    { field:'featured_market', name: "Featured Market", val: event.featured_market[0].name, options: this.cleanFilterInfo(this.props.featured_markets), isSearchable: true },
+                    { field:'featured_market', name: "Featured Market", val: getFeaturedMarkets(event.featured_market), options: this.cleanFilterInfo(this.props.featured_markets), isSearchable: true, isMulti: true},
                     { field:'market_more', name: 'Other Markets', val: event.market_more },
                     { field:'program_type', name: "Program Type", val: event.program_type[0].name, options: this.cleanFilterInfo(this.props.program_types)}, 
                     { field:'campaign_group', name: "Campaign Group", val: event.campaign_group[0].name, options: this.cleanFilterInfo(this.props.campaign_groups)}, 
@@ -231,11 +235,18 @@ class Event extends Component {
                     ?
                       <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
                         html={(
-                          <div style={tooltip_styles}>
+                          <div style={e.isMulti === true ? { ...tooltip_styles, width: 388 } : tooltip_styles }>
                             <Select
-                              placeholder={e.field !== 'ongoing' ? event[e.field][0].name : event.ongoing ? 'Yes' : 'No'}
+                              defaultValue={event[e.field].map(x => {return { label: x.name, value: x.id }})}
                               options={e.options}
-                              onChange={opt => this.keepEdits([this.props[e.field + 's'][opt.value]], e.field)} isSearchable={e.isSearchable} />
+                              onChange={opt => {
+                                if (e.isMulti === true) {
+                                  this.keepEdits(opt.map(x => this.props[e.field + 's'][x.value]), e.field);
+                                } else {
+                                  this.keepEdits([this.props[e.field + 's'][opt.value]], e.field);
+                                }
+                                }
+                              } isSearchable={e.isSearchable !== undefined ? true : false} isMulti={e.isMulti !== undefined ? true : false} />
                           </div>)} >
                         <span className={`tag editable-field ${e.field}`} tabIndex={0}>
                           <span className="field" style={{ color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
@@ -303,6 +314,7 @@ class Event extends Component {
           this.props.view === 'grid' &&
           <i className='more'/>
         }
+
         </div>
       }
 
@@ -322,7 +334,9 @@ class Event extends Component {
                         : <Tooltip key={'owner-key'} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
                             html={(
                               <div key={'owner-key'} style={tooltip_styles}>
-                                <Select key={'owner-key'} options={this.cleanFilterInfo(this.props.owners)} onChange={opt => this.keepEdits([this.props.owners[opt.value]], 'owner')} /> 
+                                <Select key={'owner-key'} 
+                                  defaultValue={event['owner'].map(x => { return { label: x.name, value: x.id } })}
+                                  options={this.cleanFilterInfo(this.props.owners)} onChange={opt => this.keepEdits([this.props.owners[opt.value]], 'owner')} /> 
                               </div> 
                             )} 
                           >
@@ -337,11 +351,15 @@ class Event extends Component {
                 this.props.elevated && event.activity_log !== undefined && event.activity_log.length > 0 && !this.props.editable &&
                 <div className="activity-log">
                   <Scrollbars thumbMinSize={100} universal={true} autoHide={true} style={{
-                      maxHeight: 65, height: 25 * event.activity_log.length
+                      maxHeight: 100, height: 40 * event.activity_log.length
                   }}>
                   {
                     event.activity_log.reverse().map( (a, i) => 
                       <div key={i} className="activity">
+                        {
+                          a['activity'].message.length > 0 &&
+                          <span className="message">" {a['activity'].message} "</span>
+                        }
                         <span className="action">{a['activity'].action}</span>
                         <span>by</span>
                         <span className="name">{a['activity'].user.display_name !== undefined ? a['activity'].user.display_name : 'DELETED USER'}</span>
@@ -378,6 +396,7 @@ class Event extends Component {
                     brandGroups={this.props.brandGroups}
                   />
               }
+
           </div>
         </div>
       }

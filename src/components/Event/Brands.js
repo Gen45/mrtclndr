@@ -8,10 +8,10 @@ const Brand = (props) => {
     <Tooltip 
       title={props.brandsInfo[props.brand]["name"]}
       trigger="mouseenter"
-      delay={200}
+      delay={50}
       arrow={true}
-      distance={30}
-      theme="light"
+      distance={3}
+      theme="dark"
       size="big"
       position="bottom"
     >
@@ -50,8 +50,10 @@ class Brands extends Component {
   }
 
   handlePreset = (id, event) => {
-    // console.log(event.brands);
-    event.brands.length = 0;
+    console.log(this.props.brandGroups[id].brands);
+    if (this.props.brandGroups[id].brands.length === 1) {
+      event.brands.length = 0;
+    }
     event.brands.push(...this.props.brandGroups[id].brands);
     // console.log(event.brands);
     this.setState({ change: true });

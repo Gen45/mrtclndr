@@ -273,6 +273,13 @@
                     align-items: center;
                     background: inherit;
 
+                    &:hover {
+                        background: $color-light-gray !important;
+                    }
+                    &:active {
+                        background: darken($color-light-gray, 3%) !important;
+                    }
+
                     .abrev {
                         display: none;
                     }

@@ -1272,6 +1272,10 @@ body.activity-type .activity-type-group {
           color: #ffffff;
           align-items: center;
           background: inherit; }
+          .grid-view .event .brands .brand.preset:hover {
+            background: #999999 !important; }
+          .grid-view .event .brands .brand.preset:active {
+            background: #919191 !important; }
           .grid-view .event .brands .brand.preset .abrev {
             display: none; }
         .grid-view .event .brands .brand img,
@@ -1660,14 +1664,40 @@ body.activity-type .activity-type-group {
     font-size: 80%;
     font-weight: normal; }
   .activity-log .activity {
-    padding: 2.5px; }
+    padding: 2.5px;
+    background: rgba(194, 194, 194, 0.4);
+    display: block;
+    margin: 0 3px 6px;
+    width: calc(100% - 6px);
+    padding: 3px;
+    border-radius: 5px; }
+    .activity-log .activity:not(:last-child) {
+      margin-bottom: 5px; }
     .activity-log .activity span {
       position: relative;
-      display: inline; }
+      display: inline;
+      text-transform: lowercase; }
       .activity-log .activity span:after {
         content: ' '; }
     .activity-log .activity .name {
       font-weight: bold; }
+    .activity-log .activity .message {
+      font-size: 120%;
+      padding-bottom: 5px;
+      display: block;
+      margin: auto;
+      max-width: 60%;
+      text-transform: none; }
+
+.leaveMessage {
+  padding: 20px 20px 10px; }
+  .leaveMessage textarea {
+    padding-bottom: 0;
+    margin: 0;
+    font-size: 14px;
+    color: #c2c2c2; }
+    .leaveMessage textarea::-webkit-input-placeholder {
+      color: rgba(170, 170, 170, 0.75); }
 
 ::-moz-selection {
   background: #333;
@@ -2056,6 +2086,7 @@ input.search-box {
     padding: 3px 10px;
     min-width: 100%; }
 
+.editable-field,
 .modal .event-info *.editable-field,
 .tippy-tooltip-content *.editable-field,
 .contact.editable-field,
@@ -2072,6 +2103,8 @@ input.search-box {
   text-align: center;
   line-height: inherit;
   border-radius: 4px; }
+  .editable-field:focus,
+  .editable-field .flatpickr-input.active,
   .modal .event-info *.editable-field:focus,
   .modal .event-info *.editable-field .flatpickr-input.active,
   .tippy-tooltip-content *.editable-field:focus,
@@ -2090,6 +2123,7 @@ input.search-box {
     border: none !important;
     box-shadow: 0 0 30px 0 rgba(102, 102, 102, 0.3), inset 0 0 0 1px rgba(67, 153, 196, 0.5) !important;
     background: rgba(255, 255, 255, 0.15) !important; }
+  .editable-field.selected,
   .modal .event-info *.editable-field.selected,
   .tippy-tooltip-content *.editable-field.selected,
   .contact.editable-field.selected,

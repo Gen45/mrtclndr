@@ -4,6 +4,7 @@ import Draggable from 'react-draggable';
 import findIndex from 'lodash/findIndex';
 import find from 'lodash/find';
 import axios from 'axios';
+import TextareaAutosize from 'react-autosize-textarea';
 
 import { removeSearched } from '../../helpers/misc';
 import { _PREV, _NEXT, _ISMOBILE, _WP_URL } from '../../config/constants';
@@ -109,10 +110,12 @@ class Modal extends Component {
       const self = this;
       const newData = this.props.events[this.props.modal.modalEvent];
       // console.log(id);
-      const newActivity = { activity: { date: new Date(), action: duplicate ? 'Cloned' : (id !== '' ? 'Edited' : 'Created'), user: this.props.userId } };
+      const newActivity = { activity: { date: new Date(), action: duplicate ? 'Cloned' : (id !== '' ? 'Edited' : 'Created'), user: this.props.userId, message: this.state.message } };
       // const activity_log = newData.activity_log !== undefined || id !== '' ? [ ...newData.activity_log, newActivity ] : [newActivity];
       const activity_log = newData.activity_log !== undefined && id !== '' ? [ ...newData.activity_log, newActivity ] : [newActivity];
       // console.log(activity_log);
+
+
 
       this.setState({saving: true, savingMessage: duplicate ? 'Duplicating...' : (id === '' ? 'Creating Entry...' :'Saving Changes...')});
 
@@ -152,7 +155,7 @@ class Modal extends Component {
             dates: {...newData['dates'], ongoing: newData['ongoing']},
             offer: newData['offer'][0]['id'],
             owner_subregion: newData['region'][0]['id'],
-            featured_markets: newData['featured_market'][0]['id'],
+            featured_markets: newData['featured_market'].map(x => x.id),
             market_more: newData['market_more'],
             campaign_group: newData['campaign_group'][0]['id'],
             market_scope: newData['market_scope'][0]['id'],
@@ -343,11 +346,17 @@ class Modal extends Component {
                     height: 'calc(100vh - 50px)',
                     width: '100vw'
                   }}>
-                  
                   <EventForModal />
                 </Scrollbars>
                 :
                 <EventForModal />
+              }
+              {
+                this.state.edit &&
+                <div className="leaveMessage">
+                  <TextareaAutosize rows={2} maxRows={4} className="editable-field" placeholder="Leave a Message..." style={{ width: '100%' }}
+                    onChange={(e) => this.setState({ message: e.target.value.replace(/<br \/>/g, '') })} />
+                </div>
               }
             </div>
           </Draggable>
