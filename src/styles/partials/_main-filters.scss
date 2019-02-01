@@ -175,6 +175,7 @@
   text-align: center;
   z-index: 999;
   transition: opacity 0.3s ease 0, width 0 ease 0;
+  animation: open_modal 0.25s ease 1;
 
   .trigger-box-children {
     background: rgba(lighten($color-darker-gray, 20%), 0.98);

@@ -145,6 +145,15 @@
     }
 }
 
+@media screen and (max-width: $desktop-min) {
+    .main .content.grid-view > header h2.title {
+            margin-left: 20px;
+    }
+    .more-tools {
+        text-align: center !important;
+    }
+}
+
 .pagination {
     min-width: 60px;
     margin-left: -10px;

@@ -31,7 +31,7 @@
         position: relative;
         vertical-align: top;
 
-        // transition: $transition-time;
+        transition: opacity $transition-time;
         display: inline-block;
 
         // color: $color-dark-gray;
@@ -41,6 +41,7 @@
         // height: 450px;
         height: 300px;
         border-radius: 5px;
+        animation: tile 2*$transition-time ease 1;
 
         .event-inner {
             height: 100%;
@@ -555,7 +556,7 @@
 
     .tags {
         display: inline-block;
-        width: 100%;
+        width: 90%;
         margin-bottom: $padding - $padding / 4;
         a {
             text-decoration: none;

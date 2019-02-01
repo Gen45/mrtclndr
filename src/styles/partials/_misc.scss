@@ -122,7 +122,7 @@ span.flatpickr-weekday {
 
 .PAST-EVENT {
     filter: grayscale(40%);
-    opacity: 0.8;
+    opacity: 0.9;
 
     // &:hover {
     //   transition: $transition-time;
@@ -139,7 +139,7 @@ span.flatpickr-weekday {
 }
 
 .refreshing {
-    background: rgba(0,0,0,.5);
+    background: rgba(0,0,0,.75);
     position: absolute;
     // height: 200px;
     // width: 200px;
@@ -164,7 +164,7 @@ span.flatpickr-weekday {
         height: 60px;
         width: 60px;
         left: calc(50% - 30px);
-        top: calc(25% - 30px);
+        top: calc(50% - 30px);
         position: absolute;
         border-radius: 60px;
         z-index: 2;
@@ -179,7 +179,7 @@ span.flatpickr-weekday {
         height: 60px;
         width: 60px;
         left: calc(50% - 30px);
-        top: calc(25% - 30px);
+        top: calc(50% - 30px);
         position: absolute;
         border-radius: 60px;
         z-index: 1;
@@ -237,6 +237,20 @@ span.flatpickr-weekday {
     }
 
     100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes tile {
+    0% {
+        border-radius: 20px;
+        transform: scale(0.95);
+        opacity: 0.75;
+    }
+
+    100% {
+        border-radius: 5px;
         transform: scale(1);
         opacity: 1;
     }

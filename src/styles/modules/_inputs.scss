@@ -312,8 +312,23 @@ $color-editable: $color-medium-gray;
     // }
 }
 
-.other-channels.editable-field {
-    color: $color-white;
+.other-channels.editable-field,
+.tippy-tooltip-content textarea.editable-field {
+    background: #eeeeee !important;
+    color: #000000 !important;
+    height: 35px;
+    line-height: 35px;
+    text-align: left;
+    padding: 0 $padding/2;
+    margin: 0;
+    &:focus {
+        background: #eeeeee !important;
+    }
+}
+
+
+.tippy-tooltip-content textarea.editable-field {
+    margin-bottom: -5px;
 }
 
 .description,
@@ -517,7 +532,8 @@ $color-editable: $color-medium-gray;
     }
 }
 
+
 :not(.editable-field)::-webkit-input-placeholder,
 .editable-field.other-channels::-webkit-input-placeholder {
-    color: rgba(white, 0.35);
+    color: rgba(#AAAAAA, 0.75);
 }
