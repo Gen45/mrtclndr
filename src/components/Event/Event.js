@@ -351,10 +351,10 @@ class Event extends Component {
                 this.props.elevated && event.activity_log !== undefined && event.activity_log.length > 0 && !this.props.editable &&
                 <div className="activity-log">
                   <Scrollbars thumbMinSize={100} universal={true} autoHide={true} style={{
-                      maxHeight: 100, height: 40 * event.activity_log.length
+                      maxHeight: 150, height: 55 * event.activity_log.length
                   }}>
                   {
-                    event.activity_log.reverse().map( (a, i) => 
+                    event.activity_log.filter(x=>x).reverse().map( (a, i) => 
                       <div key={i} className="activity">
                         {
                           a['activity'].message.length > 0 &&

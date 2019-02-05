@@ -67,7 +67,7 @@ class Header extends Component {
           {
             !this.props.editingChannels &&
             channels.map(c => (this.props.channelsInfo[c].slug !== "other-channels") && (this.props.channelsInfo[c].slug !== "no-channel") && c !== null &&
-            withTooltip(this.props.channelsInfo[c]["name"], <i className={ this.props.channelsInfo[c]["icon"] }/>, this.props.channelsInfo[c].slug))
+              withTooltip(this.props.channelsInfo[c]["name"], <span className="channel"><i className={`channel-icon ${this.props.channelsInfo[c]["icon"]}`} />{false && this.props.editable && this.props.channelsInfo[c]["name"]} </span>, this.props.channelsInfo[c].slug))
           }
           {
             !this.props.editingChannels &&

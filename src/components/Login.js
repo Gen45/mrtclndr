@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 
 import { isValid } from '../helpers/misc';
 import { _LOGO, _WP_URL} from '../config/constants';
-import { today } from '../helpers/dates';
 
 class Login extends Component {
 
@@ -71,7 +70,6 @@ class Login extends Component {
       <div className="logo">
         <img src={_LOGO.URL} alt={_LOGO.ALT}/>
       </div>
-      <h1>Please enter your pass code:</h1>
       <form onSubmit={(e) => this.login(e)}>
           <input ref={(input) => this.username = input} placeholder="User Name" type="text" name="Username" autoComplete="Username" />
           <input ref={(input) => this.passCode = input} placeholder="Password" type="password" name="code" autoComplete="passCode" />
@@ -85,7 +83,7 @@ class Login extends Component {
           }
             </button>
 
-          <p style={{paddingTop: 20}}>{this.state.error ? 'Invalid information, please try again.' : <br/>}</p>
+          <p className="error">{this.state.error ? 'Invalid information, please try again.' : <br/>}</p>
           <p><a target="_blank" rel="noopener noreferrer" href="http://marriottcalendar.com/backend/wp-login.php?action=lostpassword" style={{ color: 'white', fontSize: 12 }}>Lost your Password?</a> | <Link style={{ color: 'white', fontSize: 12 }} to="/help">Help</Link></p>
       </form>
     </div>)

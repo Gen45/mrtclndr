@@ -61,6 +61,9 @@ textarea:focus, input:focus, button:focus{
         &[type="password"] {
             border: none !important;
             border-bottom: solid 2px $color-medium-gray !important;
+            &:focus {
+                border-bottom-color: $color-accent !important;
+            }
         }
 
     }
@@ -74,7 +77,7 @@ textarea:focus, input:focus, button:focus{
         border-radius: 2px;
         border: solid 2px $color-medium-gray;
         color: $color-lighter-gray;
-        &.error {
+        &:focus {
             border-color: $color_accent;
         }
     }
@@ -83,7 +86,7 @@ textarea:focus, input:focus, button:focus{
         justify-content: center;
         align-items: center;
         // border: none;
-        margin-left: 0;
+        margin-left: $padding/2;
         width: 50px;
         transform: translate(0,2px);
         border-radius: 50%;
@@ -99,6 +102,7 @@ textarea:focus, input:focus, button:focus{
         }
     }
     p.error {
+        padding: $padding 0;
     	color: $color_accent;
     }
 

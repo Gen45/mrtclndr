@@ -282,8 +282,8 @@ export const prepareEvent = (e, metaData) => {
 
   // console.log(auth());
 
-  // if (false){
-  if (e.acf.status === false){
+  if (false){
+  // if (e.acf.status === false){
     // console.log(e.acf.status);
     axios({
       method: 'delete',

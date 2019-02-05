@@ -8,7 +8,6 @@ import TextareaAutosize from 'react-autosize-textarea';
 
 import { removeSearched } from '../../helpers/misc';
 import { _PREV, _NEXT, _ISMOBILE, _WP_URL } from '../../config/constants';
-import { today } from '../../helpers/dates';
 
 import {Trigger} from '../ToolBar/Triggers';
 import Event from '../Event/Event';
@@ -99,7 +98,7 @@ class Modal extends Component {
 
   saveChanges = (id, duplicate) => {
 
-    duplicate === undefined ? false : duplicate;
+    duplicate = duplicate === undefined ? false : duplicate;
 
     id = !this.props.modal.new ? id : ''; 
 
@@ -141,7 +140,7 @@ class Modal extends Component {
 
       // console.log(duplicate);
       
-      const newCampaignName = removeSearched(newData['campaign_name']) + (duplicate !== undefined ? ' (copy)' : ''); 
+      const newCampaignName = removeSearched(newData['campaign_name']) + (duplicate ? ' (copy)' : ''); 
 
       axios({
         method: id !== '' ? 'put' : 'post',
@@ -352,7 +351,7 @@ class Modal extends Component {
                 <EventForModal />
               }
               {
-                this.state.edit &&
+                this.state.edit && !this.state.editingBrands && !this.state.editingChannels && !this.state.saving &&
                 <div className="leaveMessage">
                   <TextareaAutosize rows={2} maxRows={4} className="editable-field" placeholder="Leave a Message..." style={{ width: '100%' }}
                     onChange={(e) => this.setState({ message: e.target.value.replace(/<br \/>/g, '') })} />

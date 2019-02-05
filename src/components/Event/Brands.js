@@ -50,7 +50,7 @@ class Brands extends Component {
   }
 
   handlePreset = (id, event) => {
-    console.log(this.props.brandGroups[id].brands);
+    // console.log(this.props.brandGroups[id].brands);
     if (this.props.brandGroups[id].brands.length === 1) {
       event.brands.length = 0;
     }
