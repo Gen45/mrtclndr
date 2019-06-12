@@ -23,12 +23,10 @@ $modal-width: 650px;
         box-shadow: 0 5px 30px 15px rgba(0, 0, 0, 0.25);
         border-radius: 3px;
         background-color: rgba($color-black, 0.75);
-
         animation: open_modal 0.25s ease 1;
 
         &.editable {
-            animation: pulse-shadow 2s infinite,
-                        open_modal 0.25s ease 1;
+            animation: pulse-shadow 2s infinite, open_modal 0.25s ease 1;
         }
 
         @media screen and (max-width: $desktop-min) {
@@ -69,7 +67,7 @@ $modal-width: 650px;
             min-width: $modal-nav-height;
             padding: 0;
             font-size: 1em;
-            
+
             &:hover {
                 opacity: 0.9;
             }
@@ -78,8 +76,8 @@ $modal-width: 650px;
                 font-size: 13px;
                 padding-right: $padding;
                 line-height: 1;
-                margin-left: -$padding/2;
-                padding-left: $padding/4;
+                margin-left: -$padding / 2;
+                padding-left: $padding / 4;
             }
 
             i {
@@ -114,13 +112,15 @@ $modal-width: 650px;
         margin: 5px;
         margin-top: 0;
         animation: none;
+
         .event-inner {
-           .event-info {
+            .event-info {
                 min-height: 370px;
+
                 &:before {
                     display: none;
                 }
-           }
+            }
         }
 
         // pointer-events: auto;
@@ -147,10 +147,12 @@ $modal-width: 650px;
 .activity-log {
     position: relative;
     background: lighten($color-lighter-gray, 10%);
+
     // border-top: 1px solid $color-lighter-gray;
     text-align: center;
     max-height: 40px;
-    transition: all $transition-time*2 ease;
+    transition: all ($transition-time * 2) ease;
+
     // box-shadow: inset 0 0 10px 3px rgba($color-black, 0.5);
     // opacity: 0.5;
 
@@ -165,13 +167,16 @@ $modal-width: 650px;
         left: 0;
         height: 10px;
         opacity: 0.25;
+
         // transition: opacity $transition-time*2 ease;
+   
     }
 
     &:before {
         top: 0;
         background: linear-gradient(0deg, rgba(51, 51, 51, 0) 0%, rgba(51, 51, 51, 0.75) 100%);
     }
+
     &:after {
         bottom: 0;
         background: linear-gradient(180deg, rgba(51, 51, 51, 0) 0%, rgba(51, 51, 51, 0.75) 100%);
@@ -179,9 +184,12 @@ $modal-width: 650px;
 
     &:hover {
         max-height: 200px;
+
         // box-shadow: inset 0 0px 0px 0px rgba($color-black, 0);
         // opacity: 1;
+   
     }
+
     // overflow-y: auto;
     // max-height: 8rem;
 
@@ -197,6 +205,7 @@ $modal-width: 650px;
 
     .activity {
         position: relative;
+
         // display: flex;
         // justify-content: center;
         padding: $padding / 8;
@@ -206,7 +215,6 @@ $modal-width: 650px;
         width: calc(100% - 6px);
         padding: 3px;
         border-radius: 5px;
-        
 
         &:not(:last-child()) {
             // border-bottom: 1px solid $color-lightest-gray;
@@ -222,6 +230,7 @@ $modal-width: 650px;
             position: relative;
             display: inline;
             text-transform: lowercase;
+
             // margin-right: 1rem;
 
             &:after {
@@ -241,31 +250,36 @@ $modal-width: 650px;
             margin: auto;
             max-width: 60%;
             text-transform: none;
-
         }
     }
 }
 
 .leaveMessage {
     // background: $color-black;
-    // border-top: 1px solid #000;
-    padding: $padding/2 $padding $padding/1.5;
+    padding: 5px 10px 3px;
+
     textarea {
-        background: rgba($color-white, 0.9) !important;
-        padding-bottom: 0;
+        // border: 1px solid transparent;
+        border: 1px solid $color-medium-gray;
+        background: rgba($color-darker-gray, 0.9) !important;
         margin: 0;
         text-align: left;
         padding: 10px;
+        padding-bottom: 0;
         font-size: 14px;
-        color: $color-black;
+        color: $color-white; 
+        // color: $color-black; 
+        border-radius: 3 !important;
+
         &:focus {
-            background:rgba( $color-white, 0.9) !important;
+            background: rgba($color-darker-gray, 0.9) !important;
             box-shadow: none !important;
-            border-radius: inherit inherit 0 0 !important;
+            // border-radius: inherit inherit 0 0 !important;
             border: 1px solid $color-accent !important;
         }
+
         &::-webkit-input-placeholder {
-            color: rgba(#333333, 0.75);
+            color: rgba($color-white, 0.75);
         }
     }
 }
