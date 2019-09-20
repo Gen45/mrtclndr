@@ -8,9 +8,14 @@ export const _LOGO = {URL:'/images/logo.svg', ALT: 'Marriott Logo'};
 export const _MOBILEWIDTH = 650;
 export const _SIDEBAR = 300;
 export const _DEBOUNCE = 50;
-export const _CACHE = '0002';
+
+export const _CACHE = '022';
+
 export const _STATE_STRING_MAX_LENGTH = 6500;
 export const _ISMOBILE = () => window.innerWidth < _MOBILEWIDTH;
+
+// export const _FILTER_FEATURED_MARKETS = false;
+export const _FILTER_FEATURED_MARKETS = true;
 
 export const _DEBUG = false;
 // export const _DEBUG = true;

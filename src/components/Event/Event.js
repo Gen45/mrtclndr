@@ -6,6 +6,7 @@ import Select from 'react-select';
 // import stringSimilarity from 'string-similarity';
 import stringSimilarity from '../../helpers/compareStrings';
 import TimeAgo from 'react-timeago'
+import orderBy from 'lodash/orderBy';
 
 import Header from './Header';
 import Brands from './Brands';
@@ -15,7 +16,7 @@ import Timelines from './Timelines';
 import { isMultidate, getExtreme, today, compareDates, dateTime} from '../../helpers/dates';
 import { isValid, removeSearched, urlify} from '../../helpers/misc';
 
-import {_COLORS} from '../../config/constants';
+import { _COLORS } from '../../config/constants';
 
 class Event extends Component {
 
@@ -53,18 +54,25 @@ class Event extends Component {
   render() {
 
     const event = this.props.event;
-    
+   
     // console.log(event);
 
     const regionColor = this.props.event['region'][0].color;
-    const offerColor = this.props.event['offer'][0].color;
+    // console.log(this.props.event['offer']);
+    // const offerColor = this.props.event['offer'][0].color;
+    // console.log(this.props.event['offer']);
+    const offerColors = this.props.event['offer'].filter(x => x !== undefined).map(x => x.color);
     
     // const this.props.event['owner'][0].name = this.props.event['owner'][0].name;
-    const offerName = this.props.event['offer'][0].name || 'No offer especified';
+    // const offerName = this.props.event['offer'][0].name || 'No offer especified';
+    const offerNames = this.props.event['offer'].filter(x => x !== undefined).map(x => x.name || 'No offer especified');
     const time = this.props.time;
     const multidate = isMultidate(event.dates);
     const isPastEvent = event.latestDay < getExtreme([today()],'right');
     const eventClassName = `event${multidate ? ' MULTIDATE' : ''}${this.props.isModal ? ' grid-view' : ''}${isPastEvent ? ' PAST-EVENT' : ''}`;
+
+    // console.log(offerColors, offerNames);
+    // console.log(event.program_type[0]);
 
     const isHighLighted = () => this.props.modalEventId === event.id;
     const HighLightedStyle = {boxShadow: '0 0 1px 5px rgba(160,160,160, 0.75)'};
@@ -72,8 +80,25 @@ class Event extends Component {
     const tooltip_styles = { width: 250, fontSize: 14, textAlign: 'left' };
 
     
-    const getFeaturedMarkets = (featured_markets) => {
-      return featured_markets.reduceRight((a, i) => `${i.name === 'No Featured Market' ? '' : i.name}${a === '' ? '' : (i.name === 'No Featured Market' ? '' : '; ') + a}`, event.market_more);
+    const getFeaturedMarkets = (featured_markets, editable) => {
+      return featured_markets.reduceRight((a, i) => {
+        return i === undefined 
+          ? a : `${i.name === 'None' ? '' : i.name}${a === '' ? '' : (i.name === 'None' ? '' : '; ') + a}`
+      }, editable ? '' : event.market_more);
+    }
+
+    const getMarketScopes = (market_scope) => {
+      return market_scope.reduceRight((a, i) => {
+        return i === undefined
+          ? a : `${i.name === 'None' ? '' : i.name}${a === '' ? '' : (i.name === 'None' ? '' : '; ') + a}`
+      }, '');
+    }
+
+    const getOffers = (offer) => {
+      return offer.reduceRight((a, i) => {
+        return i === undefined
+          ? a : `${i.name === 'None' ? '' : i.name}${a === '' ? '' : (i.name === 'None' ? '' : '; ') + a}`
+      }, '');
     }
 
     // console.log(event);
@@ -149,7 +174,7 @@ class Event extends Component {
         <div className={`event-info`}>
         {
           this.props.view === 'grid' && 
-          <Dates dates={event.dates} editable={this.props.editable} event={this.props.event} />        
+          <Dates dates={event.dates} editable={this.props.editable} event={this.props.event} />
         }
 
           <div className='info-wrapper'>
@@ -161,7 +186,9 @@ class Event extends Component {
                 : <span> 
                     {
                     this.props.view === 'timeline' && 
-                      <span className='label-dot' style={{ backgroundColor: offerColor, marginRight: '10px' }} /> 
+                      offerColors.map( (x, i) => 
+                        <span key={i} className='label-dot' style={{ backgroundColor: x, marginRight: '10px' }} /> 
+                      )
                     }
                     <span dangerouslySetInnerHTML={{ __html: event.campaign_name }} />
                   </span>
@@ -172,24 +199,31 @@ class Event extends Component {
             <div>
 
               <p className='tags'>
-                <span className="tag"> 
-                  <span style={{ color: _COLORS.LIGHTGRAY }}>Offer: </span>
-                  <u dangerouslySetInnerHTML={{ __html: offerName }} />
-                  <span className='label-dot' style={{ backgroundColor: offerColor, marginLeft: '5px' }} /> 
-                </span>
+                {
+                  this.props.event['offer'].map( (x, i) => 
+                    <span key={i} className="tag"> 
+                      <span style={{ color: _COLORS.LIGHTGRAY }}>{this.props.cala ? "Initiative:" : "Offer:"} </span>
+                      <u dangerouslySetInnerHTML={{ __html: offerNames[i] }} />
+                      <span className='label-dot' style={{ backgroundColor: offerColors[i], marginLeft: '5px' }} />  
+                    </span>
+                  )
+                }
               </p>
 
               <p className='tags'>
                 {
                       [
                         { name: "Region", val: event.region[0].name },
-                        { name: "Market Scope", val: event.market_scope[0].name },
+                        { name: "Market Scope", val: getMarketScopes(event.market_scope) },
                         { name: "Featured Markets", val: getFeaturedMarkets(event.featured_market) },
                         { name: "Program Type", val: event.program_type[0].name }, 
                         { name: "Campaign Group", val: event.campaign_group[0].name }, 
                         { name: "Segment", val: event.segment[0].name },
                         { name: "Ongoing", val: event.ongoing ? 'Yes' : 'No' },
-                      ].map((e, i) => isValid(e.val) && e.val !== `No ${e.name}` ?
+                      ]
+                      .filter(x => !(event.region[0].name === 'CALA' && x.name === "Program Type") )
+                      .map((e, i) => isValid(e.val) && e.val !== `No ${e.name}` 
+                  ?
                     <span key={i} className='tag'>
                       <span style={{color: _COLORS.LIGHTGRAY }}>{e.name}: </span> <u dangerouslySetInnerHTML={{ __html: e.val }} />
                     </span>
@@ -221,46 +255,87 @@ class Event extends Component {
               <div className='tags'>
                 {
                   [
-                    { field:'offer', name: "Offer", val: event.offer[0].name, options: this.cleanFilterInfo(this.props.offers), isSearchable: true},
-                    { field:'region', name: "Region", val: event.region[0].name, options: this.cleanFilterInfo(this.props.regions)},
-                    { field:'market_scope', name: "Market Scope", val: event.market_scope[0].name, options: this.cleanFilterInfo(this.props.market_scopes)},
-                    { field:'featured_market', name: "Featured Market", val: getFeaturedMarkets(event.featured_market), options: this.cleanFilterInfo(this.props.featured_markets), isSearchable: true, isMulti: true},
+                    { field: 'region', name: "Region", val: event.region[0].name, options: this.cleanFilterInfo(this.props.regions)},
+                    {
+                      field: 'offer', name: "Offer", val: getOffers(event.offer), options: orderBy( this.cleanFilterInfo(this.props.offers), 'label'), isSearchable: true, isMulti: true
+                    },
+                    {
+                      field: 'market_scope', name: "Market Scope", val: getMarketScopes(event.market_scope), options: orderBy(
+                        this.cleanFilterInfo(this.props.market_scopes).filter(x => {
+                          const result = this.props.market_scopes[x.value].regions.indexOf(event.region[0].id) >= 0;
+                          return result
+                        }
+                        )
+                        , 'label'), isSearchable: true, isMulti: true
+                    },
+                    { 
+                      field: 'featured_market', name: "Featured Market", val: getFeaturedMarkets(event.featured_market, true), options: orderBy( 
+                        this.cleanFilterInfo(this.props.featured_markets).filter(x => 
+                        {
+                          const result = this.props.featured_markets[x.value].regions.indexOf(event.region[0].id) >= 0;
+                          return result
+                        }
+                        )
+                        , 'label'), isSearchable: true, isMulti: true
+                    },
                     { field:'market_more', name: 'Other Markets', val: event.market_more },
                     { field:'program_type', name: "Program Type", val: event.program_type[0].name, options: this.cleanFilterInfo(this.props.program_types)}, 
                     { field:'campaign_group', name: "Campaign Group", val: event.campaign_group[0].name, options: this.cleanFilterInfo(this.props.campaign_groups)}, 
                     { field:'segment', name: "Segment", val: event.segment[0].name, options: this.cleanFilterInfo(this.props.segments)},
-                  ].map((e, i) => true
+                  ]
+                  //.filter(x => !(event.region[0].name === 'CALA' && x.field === "program_type" ))
+                  .map((e, i) => true
                   ?
-                    e.field !== 'market_more' 
+                    e.field !== 'market_more'
                     ?
                       <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
+                        disabled={(event.region[0].name === 'CALA' && e.field === "program_type")}
+                        unmountHTMLWhenHide={true}
                         html={(
-                          <div style={e.isMulti === true ? { ...tooltip_styles, width: 388 } : tooltip_styles }>
-                            <Select
-                              defaultValue={event[e.field].map(x => {return { label: x.name, value: x.id }})}
-                              options={e.options}
-                              onChange={opt => {
-                                if (e.isMulti === true) {
-                                  this.keepEdits(opt.map(x => this.props[e.field + 's'][x.value]), e.field);
-                                } else {
-                                  this.keepEdits([this.props[e.field + 's'][opt.value]], e.field);
-                                }
-                                }
-                              } isSearchable={e.isSearchable !== undefined ? true : false} isMulti={e.isMulti !== undefined ? true : false} />
-                          </div>)} >
-                        <span className={`tag editable-field ${e.field}`} tabIndex={0}>
-                          <span className="field" style={{ color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
-                        </span>
+                            <div style={e.isMulti === true ? { ...tooltip_styles, width: 388 } : tooltip_styles }>
+                              <Select
+                                defaultValue={
+                                  e.isMulti && event[e.field] === undefined
+                                  ? 
+                                    {} 
+                                  :
+                                  event[e.field].map(x => {
+                                    return x !== undefined 
+                                      ? { label: removeSearched(x.name), value: x.id } 
+                                      : {} }) 
+                                  }
+                                options={e.options}
+                                onChange={opt => {
+                                  if (e.isMulti === true) {
+                                    this.keepEdits(opt.map(x => this.props[e.field + 's'][x.value]), e.field);
+                                  } else {
+                                    this.keepEdits([this.props[e.field + 's'][opt.value]], e.field);
+                                  }
+                                  }
+                                } 
+                                isSearchable={e.isSearchable !== undefined ? true : false} 
+                                closeMenuOnSelect={!e.isMulti}
+                                isMulti={e.isMulti !== undefined ? true : false} />
+                            </div>
+                          )} >
+                          {
+                            !(event.region[0].name === 'CALA' && e.field === "program_type") 
+                            ?
+                              <span className={`tag editable-field ${e.field}`} tabIndex={0}>
+                                <span className="field" style={{ color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {removeSearched(e.val)}
+                              </span>
+                            : 
+                              <div />
+                          }
                       </Tooltip>
                     :
                       <Tooltip key={i} title={e.name} delay={0} arrow={true} distance={10} theme="light" size="big" trigger="click" interactive
                         html={(
-                          
-                            <TextareaAutosize autoFocus className="editable-field" tabIndex={0} placeholder={e.name} defaultValue={event.market_more}
+                            <TextareaAutosize autoFocus className="editable-field" tabIndex={0} placeholder={e.name} defaultValue={removeSearched(event.market_more)}
                               onChange={(ev) => this.keepEdits(ev.target.value, e.field)} style={{width:300}} />
                           )} >
                         <span className="tag editable-field" tabIndex={0}>
-                          <span style={{ color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {e.val}
+                          <span style={{ color: _COLORS.LIGHTGRAY }}>{e.name}: </span> {removeSearched(e.val)}
                         </span>
                       </Tooltip>
                   : null
@@ -348,10 +423,10 @@ class Event extends Component {
                   </div>
               }
               {
-                this.props.elevated && event.activity_log !== undefined && event.activity_log.length > 0 && !this.props.editable &&
+                this.props.elevated && event.activity_log !== undefined && event.activity_log.length > 0 && !this.props.editable && !this.props.cala &&
                 <div className="activity-log">
                   <Scrollbars thumbMinSize={100} universal={true} autoHide={true} style={{
-                      maxHeight: 150, height: 55 * event.activity_log.length
+                      maxHeight: 150, height: 150
                   }}>
                   {
                     event.activity_log.filter(x=>x).reverse().map( (a, i) => 

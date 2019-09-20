@@ -139,6 +139,8 @@ class Modal extends Component {
       }
 
       // console.log(duplicate);
+      // console.log(newData['market_scope']);
+      // console.log(newData['brands']);
       
       const newCampaignName = removeSearched(newData['campaign_name']) + (duplicate ? ' (copy)' : ''); 
 
@@ -152,12 +154,13 @@ class Modal extends Component {
             campaign_name: newCampaignName,
             description: removeSearched(newData['description']).replace(/<br \/>/g, ''),
             dates: {...newData['dates'], ongoing: newData['ongoing']},
-            offer: newData['offer'][0]['id'],
+            offer: newData['offer'].map(x => x.id), // newData['offer'][0]['id'],
             owner_subregion: newData['region'][0]['id'],
             featured_markets: newData['featured_market'].map(x => x.id),
             market_more: newData['market_more'],
             campaign_group: newData['campaign_group'][0]['id'],
-            market_scope: newData['market_scope'][0]['id'],
+            market_scope: newData['market_scope'].map(x => x.id),
+            // market_scope: newData['market_scope'][0]['id'],
             program_type: newData['program_type'][0]['id'],
             segment: newData['segment'][0]['id'],
             owner: newData['owner'][0]['id'],
@@ -270,6 +273,7 @@ class Modal extends Component {
           handleOpenModal={this.props.handleOpenModal}
           valid={this.valid}
           isStarred={this.props.isStarred}
+          cala={this.props.cala}
         />
     </div>
 
@@ -295,7 +299,7 @@ class Modal extends Component {
                   disabled={this.props.modal.new || !this.state.edit || this.state.editingBrands || this.state.editingChannels || this.state.saving || !this.state.delete}
                   payload={() => this.trashEvent(this.props.events[this.props.modal.modalEvent].id)} />
                 
-                <Trigger disabled={this.state.edit} triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} 
+                <Trigger disabled={this.state.edit || this.props.cala} triggerClass="modal-nav-trigger" propState={this.props.starred.items.indexOf(this.props.events[this.props.modal.modalEvent].id) > -1} propStateValue={true} 
                   icon='nc-icon-outline ui-2_favourite-31' iconActive='nc-icon-mini ui-2_favourite-31' payload={() => this.handleToggleStar(this.props.modal)}/>
 
                 <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini design_path-unite' text="Duplicate"

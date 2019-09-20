@@ -39,6 +39,7 @@ textarea:focus, input:focus, button:focus {
   position: absolute;
   padding: 20px;
   margin-bottom: 15px;
+  margin-top: 80px;
   font-size: 14px;
   top: 50%;
   left: 50%;
@@ -89,6 +90,13 @@ textarea:focus, input:focus, button:focus {
   .login-form p.error {
     padding: 20px 0;
     color: #e4144a; }
+
+.guest-login {
+  margin: -20px;
+  padding: 19px;
+  border: 1px solid #666666;
+  border-radius: 4px;
+  background-color: rgba(43, 43, 43, 0.5); }
 
 /* Change Autocomplete styles in Chrome*/
 .header {
@@ -1582,7 +1590,7 @@ body.activity-type .activity-type-group {
     background-color: rgba(22, 22, 22, 0.75);
     animation: open_modal 0.25s ease 1; }
     .modal .modal-wrapper.editable {
-      animation: pulse-shadow 2s infinite, open_modal 0.25s ease 1; }
+      animation: pulse-shadow 2s infinite, open_modal 0.25s ease 1; }
     @media screen and (max-width: 940px) {
       .modal .modal-wrapper {
         border-radius: 0;
@@ -1714,22 +1722,23 @@ body.activity-type .activity-type-group {
       text-transform: none; }
 
 .leaveMessage {
-  padding: 10px 20px 13.33333px; }
+  padding: 5px 10px 3px; }
   .leaveMessage textarea {
-    background: rgba(255, 255, 255, 0.9) !important;
-    padding-bottom: 0;
+    border: 1px solid #666666;
+    background: rgba(43, 43, 43, 0.9) !important;
     margin: 0;
     text-align: left;
     padding: 10px;
+    padding-bottom: 0;
     font-size: 14px;
-    color: #161616; }
+    color: #ffffff;
+    border-radius: 3 !important; }
     .leaveMessage textarea:focus {
-      background: rgba(255, 255, 255, 0.9) !important;
+      background: rgba(43, 43, 43, 0.9) !important;
       box-shadow: none !important;
-      border-radius: inherit inherit 0 0 !important;
       border: 1px solid #e4144a !important; }
     .leaveMessage textarea::-webkit-input-placeholder {
-      color: rgba(51, 51, 51, 0.75); }
+      color: rgba(255, 255, 255, 0.75); }
 
 ::-moz-selection {
   background: #333;

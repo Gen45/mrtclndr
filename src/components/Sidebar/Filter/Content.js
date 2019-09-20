@@ -20,8 +20,10 @@ class Content extends Component {
         //.filter(r => this.props.filters[r]["count"] > 0 )
         .map((r, i) => {
 
+          // console.log(this.props.filters);
+
           const filter = this.props.filters[r]["id"];
-          const filterName = this.props.filters[r]["name"];
+          const filterName = this.props.cala ? (this.props.filters[r]["cala_alternative"] ? this.props.filters[r]["cala_alternative"] : this.props.filters[r]["name"]) : this.props.filters[r]["name"];
           const filterIcon = this.props.filters[r]["icon"] || false;
           const filterImage = this.props.filters[r]["image"] || false;
           const active = this.props.filtersList[this.props.filterName].items ? this.props.filtersList[this.props.filterName].items[r]['active'] : true; //this.props.filters[r]['active'];  

@@ -33,10 +33,11 @@ export async function getMetaData() {
     const campaign_groupPromise = axios(`${WP_URL}campaign_group/?per_page=100`);
     const segmentPromise = axios(`${WP_URL}segment/?per_page=100`);
     const market_scopePromise = axios(`${WP_URL}market_scope/?per_page=100`);
-    const featured_marketPromise = axios(`${WP_URL}featured_markets/?per_page=100`);
+    const featured_marketPromise = axios(`${WP_URL}featured_markets/?per_page=100&page=1`);
+    const featured_marketPromise2 = axios(`${WP_URL}featured_markets/?per_page=100&page=2`);
     const program_typePromise = axios(`${WP_URL}program_type/?per_page=100`);
 
-    const [ channel, brand, offer, region, owner, campaign_group, segment, market_scope, featured_market, program_type ] =
+    const [channel, brand, offer, region, owner, campaign_group, segment, market_scope, featured_market, featured_market2, program_type ] =
       await Promise.all(
         [channelPromise,
           brandPromise,
@@ -47,6 +48,7 @@ export async function getMetaData() {
           segmentPromise,
           market_scopePromise,
           featured_marketPromise,
+          featured_marketPromise2,
           program_typePromise
         ]);
 
@@ -59,7 +61,7 @@ export async function getMetaData() {
     });
 
     const offers = offer.data.map((o) => {
-      return { id: o.id, slug: o.slug, count: o.count, name: decodeHTML(o.name), color: o.acf.color }
+      return { id: o.id, slug: o.slug, count: o.count, name: decodeHTML(o.name), color: o.acf.color, cala_alternative: o.acf.cala_alternative, regions: o.acf.regions }
     });
 
     const brands = brand.data.filter((b) => { return b.acf.group === false; }).map((b) => {
@@ -70,8 +72,8 @@ export async function getMetaData() {
       return { id: bg.id, slug: bg.slug, count: bg.count, name: decodeHTML(bg.name), preset: bg.acf.preset, brands: bg.acf.sub_brands.map(b => find(brand.data, i => i.id === b).id) }
     });
 
-    const featured_markets = featured_market.data.map((b) => {
-      return { id: b.id, slug: b.slug, count: b.count, name: decodeHTML(b.name) }
+    const featured_markets = [...featured_market.data, ...featured_market2.data].map((b) => {
+      return { id: b.id, slug: b.slug, count: b.count, name: decodeHTML(b.name), regions: b.acf.regions, type: b.acf.type, sub_regions: b.acf['sub-region'] }
     });
 
     const campaign_groups = campaign_group.data.map((o) => {
@@ -79,7 +81,7 @@ export async function getMetaData() {
     });
 
     const market_scopes = market_scope.data.map((o) => {
-      return { id: o.id, slug: o.slug, count: o.count, name: decodeHTML(o.name) }
+      return { id: o.id, slug: o.slug, count: o.count, name: decodeHTML(o.name), regions: o.acf.regions }
     });
 
     const program_types = program_type.data.map((o) => {
@@ -138,6 +140,7 @@ export async function getRestEventsData(metaData) {
     const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE 3
     const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE 4
     const entry6Promise = axios(`${WP_URL}entry${parameters}&page=6`); // DISABLE 4
+    const entry7Promise = axios(`${WP_URL}entry${parameters}&page=7`); // DISABLE 4
 
     const [
       entry2, // DISABLE 1
@@ -145,6 +148,7 @@ export async function getRestEventsData(metaData) {
       entry4, // DISABLE 3
       entry5,  // DISABLE 4
       entry6,  // DISABLE 4
+      entry7,  // DISABLE 4
     ] =
       await Promise.all(
         [
@@ -153,6 +157,7 @@ export async function getRestEventsData(metaData) {
           entry4Promise,  // DISABLE 3
           entry5Promise,   // DISABLE 4
           entry6Promise,   // DISABLE 4
+          entry7Promise,   // DISABLE 4
         ]);
 
     const entriesALL = [
@@ -160,7 +165,8 @@ export async function getRestEventsData(metaData) {
       ...entry3.data, // DISABLE 2
       ...entry4.data, // DISABLE 3
       ...entry5.data, // DISABLE 4       
-      ...entry6.data // DISABLE 4       
+      ...entry6.data, // DISABLE 4       
+      ...entry7.data // DISABLE 4       
     ];
 
     return entriesALL.map(e => prepareEvent(e, metaData));
@@ -181,6 +187,7 @@ export async function getEventsData(metaData) {
     const entry4Promise = axios(`${WP_URL}entry${parameters}&page=4`); // DISABLE 3
     const entry5Promise = axios(`${WP_URL}entry${parameters}&page=5`); // DISABLE 4
     const entry6Promise = axios(`${WP_URL}entry${parameters}&page=6`); // DISABLE 4
+    const entry7Promise = axios(`${WP_URL}entry${parameters}&page=7`); // DISABLE 4
 
     const [
       entry1, // DISABLE 0
@@ -189,6 +196,7 @@ export async function getEventsData(metaData) {
       entry4, // DISABLE 3
       entry5,  // DISABLE 4
       entry6,  // DISABLE 4
+      entry7,  // DISABLE 4
     ] =
       await Promise.all(
         [
@@ -198,6 +206,7 @@ export async function getEventsData(metaData) {
           entry4Promise,  // DISABLE 3
           entry5Promise,   // DISABLE 4
           entry6Promise,   // DISABLE 4
+          entry7Promise,   // DISABLE 4
         ]);
 
     const entriesALL = [
@@ -206,7 +215,8 @@ export async function getEventsData(metaData) {
       ...entry3.data, // DISABLE 2
       ...entry4.data, // DISABLE 3
       ...entry5.data, // DISABLE 4       
-      ...entry6.data // DISABLE 4       
+      ...entry6.data, // DISABLE 4       
+      ...entry7.data, // DISABLE 4       
     ];
 
     return entriesALL.map(e => prepareEvent(e, metaData));
@@ -258,32 +268,41 @@ export const prepareEvent = (e, metaData) => {
 
   // console.log(e.featured_markets)
 
-  const _featured_markets = e.featured_markets.length > 0 
-  ? e.featured_markets.map(fm => find(metaData.featured_markets, x => x.id === fm) ) 
-  : [find(metaData.featured_markets, x => x.slug === 'no-featured-market')];
+  const _featured_markets = e.featured_markets.length > 0
+    ? e.featured_markets.map(fm => find(metaData.featured_markets, x => x.id === fm))
+    : [find(metaData.featured_markets, x => x.slug === 'no-featured-market')];
 
+  const _market_scopes = e.market_scope.length > 0
+    ? e.market_scope.map(fm => find(metaData.market_scopes, x => x.id === fm))
+    : [find(metaData.market_scopes, x => x.slug === 'no-market-scope')];
+
+  const _offers = e.offer.length > 0
+    ? e.offer.map(fm => find(metaData.offers, x => x.id === fm))
+    : [find(metaData.offers, x => x.slug === 'no-offer')];
+
+  // console.log(_market_scopes);
+  // console.log(_offers);
+
+  // console.log(_market_scopes, e.market_scope);
 
   // console.log(_featured_markets);
 
   // const _featured_markets = e.featured_markets[0] ? find(metaData.featured_markets, x => x.id === e.featured_markets[0]) : find(metaData.featured_markets, x => x.slug === 'no-featured-market');
 
-  const _offers = e.offer[0] ? find(metaData.offers, x => x.id === e.offer[0]) : find(metaData.offers, x => x.slug === 'no-offer');
+  // const _offers = e.offer[0] ? find(metaData.offers, x => x.id === e.offer[0]) : find(metaData.offers, x => x.slug === 'no-offer');
+
   const _campaign_groups = e.campaign_group[0] ? find(metaData.campaign_groups, x => x.id === e.campaign_group[0]) : find(metaData.campaign_groups, x => x.slug === 'no-campaign-group');
-  const _market_scopes = e.market_scope[0] ? find(metaData.market_scopes, x => x.id === e.market_scope[0]) : find(metaData.market_scopes, x => x.slug === 'no-market-scope');
+
+  // const _market_scopes = e.market_scope[0] ? find(metaData.market_scopes, x => x.id === e.market_scope[0]) : find(metaData.market_scopes, x => x.slug === 'no-market-scope');
+
   const _program_types = e.program_type[0] ? find(metaData.program_types, x => x.id === e.program_type[0]) : find(metaData.program_types, x => x.slug === 'no-program-type');
   const _owners = e.owner[0] ? find(metaData.owners, x => x.id === e.owner[0]) : find(metaData.owners, x => x.slug === 'no-owner');
   const _regions = e.region[0] ? find(metaData.regions, x => x.id === e.region[0]) : find(metaData.regions, x => x.slug === 'no-region');
+  // console.log(_regions);
   const _segments = e.segment[0] ? find(metaData.segments, x => x.id === e.segment[0]) : find(metaData.segments, x => x.slug === 'no-segment');
   const _status = e.acf.status === undefined ? true : e.acf.status;
   
-  // console.log(e.id, decodeHTML(e.title.rendered), _status);
-
-  // console.log(e);
-
-  // console.log(auth());
-
-  if (false){
-  // if (e.acf.status === false){
+  if (e.acf.status === false){
     // console.log(e.acf.status);
     axios({
       method: 'delete',
@@ -295,6 +314,46 @@ export const prepareEvent = (e, metaData) => {
         console.log('failed', error);
     });
   }
+
+  if(false) {
+    var agregar613 = false;
+
+    const searchAndDestroy = (toRemove) => {
+      if (_brands.indexOf(toRemove) > -1) {
+        console.log(_brands, agregar613);
+        _brands.splice(_brands.indexOf(toRemove), 1);
+        agregar613 = true;
+      }
+    }
+
+    searchAndDestroy(49)
+    searchAndDestroy(59)
+    searchAndDestroy(62)
+
+    if (agregar613 === true) {
+      _brands.push(613);
+      console.log(_brands);
+
+      axios({
+        method: 'put',
+        url: WP_URL + "entry/" + e.id,
+        headers: auth(),
+        data: {
+          fields: {
+            brands: _brands
+          },
+          status: 'publish'
+        }
+      }).then(function (response) {
+        console.log('se agregó', e.id);
+      }).catch(function (error) {
+        console.log('failed', error);
+      });
+    }
+  }
+
+
+
 
   return {   
     id: e.id,
@@ -311,14 +370,16 @@ export const prepareEvent = (e, metaData) => {
     }
     ,[]))],
     channels: _channels,
-    offer: [{ id: _offers.id, name: _offers.name, color: _offers.color }],
+    offer: _offers,
+    // offer: [{ id: _offers.id, name: _offers.name, color: _offers.color }],
     // featured_market: [{ id: _featured_markets.id, name: _featured_markets.name }],
     featured_market: _featured_markets,
     market_more: e.acf.market_more,
     landing_page_url: e.acf.landing_page_url,
     creative_url: e.acf.creative_url,
     campaign_group: [{ id: _campaign_groups.id, name: _campaign_groups.name }],
-    market_scope: [{ id: _market_scopes.id, name: _market_scopes.name }],
+    market_scope: _market_scopes,
+    // market_scope: [{ id: _market_scopes.id, name: _market_scopes.name }],
     program_type: [{ id: _program_types.id, name: _program_types.name }],
     segment: [{ id: _segments.id, name: _segments.name }],
     owner: [{ id: _owners.id, name: _owners.name }],

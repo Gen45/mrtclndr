@@ -13,7 +13,7 @@ import {TriggerBox, Trigger} from './Triggers';
 
 import { getCoordinates, removeSearched} from '../../helpers/misc';
 
-import {_MONTHS, _QUARTERS, _THREEYEARS, _PREVIOUSYEAR, _CURRENTYEAR, _TIMELIMITS} from '../../helpers/dates';
+import { _MONTHS, _QUARTERS, _THREEYEARS, _PREVIOUSYEAR, _CURRENTYEAR, _TIMELIMITS, dateTime} from '../../helpers/dates';
 import {_ISMOBILE, _TRANSITIONTIME} from '../../config/constants';
 
 class ToolBar extends Component {
@@ -80,8 +80,6 @@ class ToolBar extends Component {
       if (typeof e.activity_log !== 'object') 
         console.log(e.id, e.campaign_name, typeof e.activity_log);
 
-      // const activity_log = e.activity_log !==
-
 
       event["ID"] = e.id || " ";
       event["Date Created"] = e.date_created || " ";
@@ -117,6 +115,12 @@ class ToolBar extends Component {
       event["Other Channels"] = e.otherChannels || " ";
       event["LANDING PAGE URL"] = e.landing_page_url || " ";
       event["CREATIVE URL"] = e.creative_url || " ";
+
+      if (e.activity_log.length > 0) {
+        event["RECENT ACTIVITY"] = 
+        e.activity_log.filter(x => x['activity'].message.length > 0).reverse().map((a, i) => 
+          `${a['activity'].message.replace(/"/g, '')} \n- ${a['activity'].user.display_name !== undefined ? a['activity'].user.display_name : 'DELETED USER'} \n${dateTime(new Date(`${a['activity'].date} UTC`))}`);
+      }
 
       return event;
     });
@@ -314,10 +318,13 @@ class ToolBar extends Component {
 
         { this.state.collapsed && <hr/> }
 
-        <FilterCategory>
-          <Trigger caption='Starred items' propState={this.props.starred.show} propStateValue={true} icon='nc-icon-mini ui-2_favourite-31'
-            payload={() => this.props.updateState({starred:{...this.props.starred, show: !this.props.starred.show}}, true)}/>
-        </FilterCategory>
+        {
+          !this.props.cala &&
+          <FilterCategory>
+            <Trigger caption='Starred items' propState={this.props.starred.show} propStateValue={true} icon='nc-icon-mini ui-2_favourite-31'
+              payload={() => this.props.updateState({starred:{...this.props.starred, show: !this.props.starred.show}}, true)}/>
+          </FilterCategory>
+        }
       </FiltersGroup>
 
       <FiltersGroup title=' ' icon='nc-icon-mini ui-1_zoom' disabled={false}>
@@ -331,13 +338,6 @@ class ToolBar extends Component {
               <div className="erase" onClick={() => this.handleSearchTerm('')}><i className="nc-icon-mini ui-1_simple-remove" onClick={() => this.handleSearchTerm('')} /></div>
             </div>
           }
-        </FilterCategory>
-      </FiltersGroup>
-
-      <FiltersGroup title=' 'disabled={true}>
-        <FilterCategory>
-            <Trigger caption='Help' icon='nc-icon-mini ui-2_alert'
-              payload={() => window.open('/Help', '_blank')}/>
         </FilterCategory>
       </FiltersGroup>
 

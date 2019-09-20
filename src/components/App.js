@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Scrollbars} from 'react-custom-scrollbars';
 import orderBy from 'lodash/orderBy';
 import axios from 'axios';
+import { CSVLink } from "react-csv";
 
 import Loading from './Helpers/Loading';
 
@@ -44,6 +45,7 @@ class App extends Component {
 
     const from = this.props.location.pathname;
     const authenticated = this.props.location.state ? this.props.location.state.isAuthenticated : false;
+    this.cala = this.props.location.state ? this.props.location.state.cala : false;
 
     const reject = () => {
       this.props.history.push('/login', { from });
@@ -56,8 +58,9 @@ class App extends Component {
       reject();
     }
 
-    if (localStorage.length >= 6) {
+    if (localStorage.getItem('current') !== _CACHE || localStorage.length >= 6) {
       localStorage.clear();
+      localStorage.setItem('current', _CACHE);
     }
  
     const RefLocalStorage_State = localStorage.getItem('mrt_'+ _CACHE +'_State');
@@ -89,6 +92,7 @@ class App extends Component {
         _DEBUG && console.log(response.data.description);
         
         self.user = { id: response.data.id, role: response.data.roles[0], state: response.data.description !== '' && response.data.description.length < _STATE_STRING_MAX_LENGTH ? response.data.description : '{}' };
+
         // self.user = { id: response.data.id, role: response.data.roles[0], state: '{}' };
 
         if (self.readyLoad) {
@@ -292,10 +296,8 @@ class App extends Component {
 
             }
           }
-
-          // KEEP UPDATING IN THE BACKGROUND
+          // KEEP UPDATING IN THE BACKGROUND          
         }
-
       })
       .catch(function (error) {
         _DEBUG && console.log('failed', error);
@@ -416,6 +418,20 @@ class App extends Component {
     }
   }
 
+  soloCALA = (data) => {
+    // console.log(data);
+    let STATE = this.state;
+    const CALA_FL = {21: STATE.filtersList.regions.items[21]};
+    const CALA = {21: data.regions[21]};
+    let FILTERLIST = STATE.filtersList;
+    FILTERLIST.regions.items = CALA_FL;
+    data.regions = CALA;
+    this.setState({ filtersList: FILTERLIST });
+    // console.log(this.state);
+    // console.log(STATE, CALA_FL);
+    return(data)
+  }
+
   updateEventData = (openThisModal) => {
 
     // _DEBUG && console.log('updating');
@@ -433,7 +449,14 @@ class App extends Component {
 
       let RefLocalStorage_Events = localStorage.getItem('mrt_'+ _CACHE +'_Events-' + month(today()) + "-" + year(today()));
       let RefLocalStorage_Meta = localStorage.getItem('mrt_'+ _CACHE +'_Meta-' + month(today()) + "-" + year(today()));
+
+
       this.metaData = JSON.parse(RefLocalStorage_Meta);
+
+      if (this.user.role === "calaguest" && true) {
+        this.metaData = this.soloCALA(this.metaData);
+        localStorage.setItem('mrt_' + _CACHE + '_Meta-' + month(today()) + "-" + year(today()), JSON.stringify(this.metaData));
+      }
       // this.metaData = JSON.parse(atob(RefLocalStorage_Meta));
 
       this.events = JSON.parse(RefLocalStorage_Events); //.filter(e => e.status);
@@ -444,14 +467,17 @@ class App extends Component {
         eventsIds[this.events[e].id] = e;
       });
       
+      // console.log(latestEvents);
 
-      Object.keys(latestEvents).forEach(e => {
-        if (eventsIds[latestEvents[e].id] !== undefined) {
-          this.events[eventsIds[latestEvents[e].id]] = latestEvents[e];
-        } else {
-          this.events.push(latestEvents[e]);
-        }
-      });
+      if (latestEvents !== undefined ){
+        Object.keys(latestEvents).forEach(e => {
+          if (eventsIds[latestEvents[e].id] !== undefined) {
+            this.events[eventsIds[latestEvents[e].id]] = latestEvents[e];
+          } else {
+            this.events.push(latestEvents[e]);
+          }
+        });
+      }
 
       localStorage.removeItem(
         'mrt_' + (_CACHE - 1) + '_Events-' + month(today()) + "-" + year(today())
@@ -485,6 +511,8 @@ class App extends Component {
     });
   };
 
+
+
   getShareableLink = () => {
     const encodedState = btoa(this.stateString);
     let shortLinks = this.state.shortLinks;
@@ -506,6 +534,25 @@ class App extends Component {
     }
     return {key};
   };
+
+  downloadMarkets = () => {
+    return Object.keys(this.state.featured_markets).map(x => { 
+      let fm = {};
+
+      fm["id"] = this.state.featured_markets[x].id;
+      fm["name"] = this.state.featured_markets[x].name;
+      fm["type"] = this.state.featured_markets[x].type;
+      fm["sub regions"] = this.state.featured_markets[x].sub_regions;
+      // fm["region"] = this.state.featured_markets[x].regions.map(x => this.state.regions[x].name);
+      fm["count"] = this.state.featured_markets[x].count;
+      fm[" - "] = "";
+      Object.keys(this.state.regions).forEach(y =>
+        // console.log(this.state.featured_markets[x].regions, y.toString(), this.state.featured_markets[x].regions.indexOf(Number(y)) > -1 )
+        fm[this.state.regions[y].name] = this.state.featured_markets[x].regions.indexOf(Number(y)) > -1 ? "X" : ""
+      );
+      return fm;
+    });
+  }
 
   logout = () => this.props.history.push('/login', {});
 
@@ -658,15 +705,17 @@ class App extends Component {
       id: Date.now(),
       campaign_name: "",
       description: "",
-      region: [{id:0, name: 'select', color: '#222'}],
-      offer: [{id:0, name: 'select', color: '#222'}],
-      featured_market: [{id:0, name: 'select'}], 
+      region: [{id:0, name: '', color: '#222'}],
+      offer: [],
+      // offer: [{id:0, name: '', color: '#222'}],
+      featured_market: [], 
       market_more: "", 
-      market_scope: [{ id: 437, name: 'select'}], 
-      campaign_group: [{id:0, name: 'select'}], 
-      program_type: [{id:0, name: 'select'}], 
-      segment: [{id:0, name: 'select'}], 
-      owner: [{id:0, name: 'select'}], 
+      market_scope: [], 
+      // market_scope: [{ id: 437, name: ''}], 
+      campaign_group: [{id:0, name: ''}], 
+      program_type: [{id:0, name: ''}], 
+      segment: [{id:0, name: ''}], 
+      owner: [{id:0, name: ''}], 
       brands: [],
       channels: [],
       other_channels: "",
@@ -745,11 +794,19 @@ class App extends Component {
               this.canEdit(this.user) && this.canCreate(this.user) &&
                "|"
               }   
-              {// <span onClick={e => console.log(this.getShareableLink())}> <i className="nc-icon-mini ui-2_share-bold"></i> Copy Link</span>|
+              {
+                this.user.id === 1 &&
+
+                <CSVLink target="_self" filename={"marriott-calendar-featured-markets" + new Date().getTime() + ".csv"} data={this.downloadMarkets()} style={{textDecoration: "none"}}>
+                  <span> <i className="nc-icon-mini arrows-e_refresh-20"></i> Download Markets</span> 
+                </CSVLink>
               }
               <span onClick={e => this.handleRefreshCache()}> <i className="nc-icon-mini arrows-e_refresh-20"></i> Reload</span> 
               <span onClick={e => this.handleResetFilters()}> <i className="nc-icon-mini arrows-e_refresh-19"></i> Reset Filters</span> 
-              <span onClick={() => window.open('/Help', '_blank')}><i className="nc-icon-mini ui-e_round-e-help"></i> Help</span>
+              {
+                !this.cala &&
+                <span onClick={() => window.open('/Help', '_blank')}><i className="nc-icon-mini ui-e_round-e-help"></i> Help</span>
+              }
             </div>
 
             <ToolBar
@@ -769,6 +826,7 @@ class App extends Component {
               allEvents={this.events}
               events={this.state.events}
               helpers={{brands: this.state.brands, channels: this.state.channels}}
+              cala={this.cala}
             />
 
             <div className={`overlay${this.state.modal.show && isValid(this.state.events[this.state.modal.modalEvent]) ? ' active' : ''}`}/>
@@ -795,6 +853,7 @@ class App extends Component {
                   channelsInfo={this.state.channels}
                   isStarred={this.isStarred}
                   handleResetFilters={this.handleResetFilters}
+                  cala={this.cala}
                 /> :
                 <Loading>
                   <span>
@@ -839,6 +898,7 @@ class App extends Component {
               userId={this.user.id}
               brandGroups={this.state.brand_groups}
               isStarred={this.isStarred}
+              cala={this.cala}
             />
           }
         </div>
@@ -860,6 +920,7 @@ class App extends Component {
         filtersList={this.state.filtersList}
         events={this.events}
         smartFilters={this.events.length > 100}
+        cala={this.cala}
       />
     </div>
     :
@@ -867,6 +928,7 @@ class App extends Component {
         <span>
           <img className="pulse" width={200} src={_LOGO.URL} alt={_LOGO.ALT} style={{display: 'block', margin: '20px auto',}}/>
           <span>Loading... please wait</span>
+          <span style={{fontSize: 9, display: 'block', opacity: 0.3}}>v 1.{_CACHE}</span>
         </span>
       </Loading>
 
