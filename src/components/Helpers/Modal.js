@@ -282,7 +282,11 @@ class Modal extends Component {
     return (
       <div className="modal grid-view">
         <OutsideAlerter event={this.handleCloseModal}>
-          <Draggable ref={(modalDraggable) => {this.modalDraggableRef = modalDraggable}} disabled={_ISMOBILE()} handle={`.${handle}`} >
+          <Draggable ref={(modalDraggable) => {this.modalDraggableRef = modalDraggable}} 
+              disabled={_ISMOBILE()} 
+              handle={`.${handle}`} 
+              allowAnyClick={true} 
+              enableUserSelectHack={false} >
             <div className={`modal-wrapper${this.state.edit ? ' editable' : '' }`}>
               <nav className="modal-nav">
 
@@ -308,10 +312,9 @@ class Modal extends Component {
 
                 <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini arrows-1_tail-left' text='Go Back Without Saving'
                   disabled={!this.state.editingBrands && !this.state.editingChannels}
-                  payload={() => this.goBack(true)}
-                />
+                  payload={() => this.goBack(true)} />
                
-                <span className={`modal-handle ${handle}`}></span>     
+                <span className={`modal-handle ${handle}`}></span>
 
                 <Trigger triggerClass="modal-nav-trigger" icon='nc-icon-mini design_path-unite' text="Save as Copy"
                 disabled={true || !this.state.edit || this.props.modal.new || this.state.editingBrands || this.state.editingChannels || this.state.saving || this.state.delete} 

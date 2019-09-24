@@ -108,7 +108,7 @@ class Event extends Component {
         this.handleOpenModal(event['id'])}}
         style={isHighLighted() ? HighLightedStyle : {}}
       >
-        <div className='event-inner'>
+        <div className={`event-inner handle-${event.id}`} >
           {
             this.state.similar.length > 0 && !this.props.editable &&
             <div className='warning'>
