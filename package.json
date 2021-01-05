@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@u-wave/react-vimeo": "^0.6.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "clipboard": "^1.7.1",
     "downloadjs": "^1.4.7",
     "global": "^4.3.2",
